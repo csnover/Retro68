@@ -962,7 +962,7 @@ m32rle-*-elf*)
 m68k-*-elf* | fido-*-elf)
 	tmake_file="$tmake_file m68k/t-floatlib"
 	;;
-m68k-*-macos)
+m68k-*-macos | m68k-*-palmos)
 	extra_parts="crtbegin.o crtend.o"
 	tmake_file="$tmake_file m68k/t-floatlib"
 	;;
