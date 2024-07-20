@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #   Copyright 2014 Wolfgang Thaller.
 #
 #   This file is part of Retro68.
@@ -16,6 +16,7 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Retro68.  If not, see <http://www.gnu.org/licenses/>.
 
+set -ueo pipefail
 shopt -s nullglob
 
 function locateInterfaceThing()
@@ -23,10 +24,11 @@ function locateInterfaceThing()
     local varname=$1
     local name=$2
     printf "Searching for %-25s" "$name..."
-    local found=`find -L "$INTERFACES_DIR"/ -name ".*" -prune -o -name $name -print`
+    local found
+    found="$(find -L "$INTERFACES_DIR"/ -name ".*" -prune -o -name "$name" -print)"
     if [ -n "$found" ]; then
         eval "$varname=\$found"
-        echo ${found#$INTERFACES_DIR/}
+        echo "${found#"$INTERFACES_DIR/"}"
         return 0    # success
     else
         echo "NOT FOUND"
@@ -81,7 +83,7 @@ function locateAndCheckInterfacesAndLibraries()
     echo "Looking for various files in $INTERFACES_DIR/..."
 
     if locateInterfaceThing CONDITIONALMACROS_H ConditionalMacros.h; then
-        CINCLUDES=`dirname "$CONDITIONALMACROS_H"`
+        CINCLUDES="$(dirname "$CONDITIONALMACROS_H")"
     else
         echo "Could not find ConditionalMacros.h anywhere inside $INTERFACES_DIR"
         echo
@@ -90,7 +92,7 @@ function locateAndCheckInterfacesAndLibraries()
     fi
 
     if locateInterfaceThing CONDITIONALMACROS_R ConditionalMacros.r; then
-        RINCLUDES=`dirname "$CONDITIONALMACROS_R"`
+        RINCLUDES="$(dirname "$CONDITIONALMACROS_R")"
     else
         echo "Could not find ConditionalMacros.r anywhere inside $INTERFACES_DIR"
         echo
@@ -98,12 +100,12 @@ function locateAndCheckInterfacesAndLibraries()
         return
     fi
 
-    if [ $BUILD_68K != false ]; then
+    if [[ $BUILD_68K ]]; then
 
         if locateInterfaceThing INTERFACE_O Interface.o; then
-            M68KLIBRARIES=`dirname "$INTERFACE_O"`
+            M68KLIBRARIES="$(dirname "$INTERFACE_O")"
         elif locateInterfaceThing INTERFACELIB_68K libInterface.a; then
-            M68KLIBRARIES=`dirname "$INTERFACELIB_68K"`
+            M68KLIBRARIES="$(dirname "$INTERFACELIB_68K")"
         else
             echo "Could not find Interface.o anywhere inside $INTERFACES_DIR"
             echo "(This file is required for 68K support only)"
@@ -114,26 +116,26 @@ function locateAndCheckInterfacesAndLibraries()
 
     fi
 
-    if [ $BUILD_PPC != false ]; then
+    if [[ $BUILD_PPC ]]; then
 
         if locateInterfaceThing INTERFACELIB InterfaceLib; then
-            SHAREDLIBRARIES=`dirname "$INTERFACELIB"`
+            SHAREDLIBRARIES="$(dirname "$INTERFACELIB")"
         else
-            SHAREDLIBRARIES=""
+            SHAREDLIBRARIES=
             echo "Could not find InterfaceLib, using included import libraries."
         fi
 
         if locateInterfaceThing OPENTRANSPORTAPPPPC OpenTransportAppPPC.o; then
-            PPCLIBRARIES=`dirname "$OPENTRANSPORTAPPPPC"`
+            PPCLIBRARIES="$(dirname "$OPENTRANSPORTAPPPPC")"
         else
             echo "Could not find OpenTransportAppPPC.o anywhere inside $INTERFACES_DIR"
             echo "(This file is required for OpenTransport on PPC only)"
         fi
     fi
 
-    if [ $BUILD_CARBON != false ]; then
+    if [[ $BUILD_CARBON ]]; then
         if locateInterfaceThing CARBON_H Carbon.h; then
-            carbondir=`dirname "$CARBON_H"`
+            carbondir="$(dirname "$CARBON_H")"
             if [ "$carbondir" != "$CINCLUDES" ]; then
                 echo "Carbon.h found, but not in the same directory as ConditionalMacros.h."
                 echo "This is confusing."
@@ -149,7 +151,7 @@ function locateAndCheckInterfacesAndLibraries()
             return
         fi
         if locateInterfaceThing CARBONLIB CarbonLib; then
-            carbondir=`dirname "$CARBONLIB"`
+            carbondir=$(dirname "$CARBONLIB")
             if [ "$carbondir" != "$SHAREDLIBRARIES" ]; then
                 echo "CarbonLib found, but not in the same directory as InterfaceLib."
                 echo "This is confusing."
@@ -196,7 +198,7 @@ function removeConflictingHeaders()
 function unlinkThings()
 {
     for file  in "$1/"*; do
-        if [[ `readlink "$file"` == $2/* ]]; then
+        if [[ "$(readlink "$file")" == $2/* ]]; then
             rm "$file"
         fi
     done
@@ -206,14 +208,14 @@ function linkInterfacesAndLibraries()
 {
     linkThings "../$1/RIncludes" "$PREFIX/RIncludes" "*.r"
     
-    if [ $BUILD_68K != false ]; then
+    if [[ $BUILD_68K ]]; then
         ln -sf ../RIncludes "$PREFIX/m68k-apple-macos/RIncludes"
         removeConflictingHeaders "$PREFIX/m68k-apple-macos/include"
         linkThings "../../$1/CIncludes" "$PREFIX/m68k-apple-macos/include" "*.h"
         linkThings "../../$1/lib68k" "$PREFIX/m68k-apple-macos/lib" "*.a"
     fi
 
-    if [ $BUILD_PPC != false ]; then
+    if [[ $BUILD_PPC ]]; then
         ln -sf ../RIncludes "$PREFIX/powerpc-apple-macos/RIncludes"
         removeConflictingHeaders "$PREFIX/powerpc-apple-macos/include"
         linkThings "../../$1/CIncludes" "$PREFIX/powerpc-apple-macos/include" "*.h"
@@ -239,14 +241,14 @@ function setup68KLibraries()
     mkdir -p "$DEST/lib68k"
     for macobj in "${M68KLIBRARIES}/"*.o; do
         if [ -r "$macobj" ]; then
-            libname=`basename "$macobj"`
+            libname="$(basename "$macobj")"
             libname=${libname%.o}
-            printf "    %30s => %-30s\n" ${libname}.o lib${libname}.a
+            printf "    %30s => %-30s\n" "${libname}.o" "lib${libname}.a"
             asm="$DEST/lib68k/$libname.s"
             obj="$DEST/lib68k/$libname.o"
             lib="$DEST/lib68k/lib${libname}.a"
 
-            rm -f $lib
+            rm -f "$lib"
 
             if ConvertObj "$macobj" > "$asm"; then
                 m68k-apple-macos-as "$asm" -o "$obj"
@@ -261,21 +263,21 @@ function setupPPCLibraries()
 {
     DEST=${1:-"$PREFIX/universal"}
     mkdir -p "$DEST/libppc"
-    case `ResInfo -n "$INTERFACELIB" 2> /dev/null || echo 0` in
+    case "$(ResInfo -n "$INTERFACELIB" 2> /dev/null || echo 0)" in
         0)
             if [ -n "$INTERFACELIB" ]; then
                 echo "WARNING: Couldn't read resource fork for \"$INTERFACELIB\"."
                 echo "         Falling back to included import libraries."
             fi
             echo "Copying readymade PowerPC import libraries..."
-            cp $PREFIX/multiversal/libppc/*.a $DEST/libppc/
+            cp "$PREFIX/multiversal/libppc/"*.a "$DEST/libppc/"
             ;;
         *)
             echo "Building PowerPC import libraries..."
             for shlib in "${SHAREDLIBRARIES}/"*; do
-                libname=`basename "$shlib"`
+                libname="$(basename "$shlib")"
                 implib=lib${libname%.bin}.a
-                printf "    %30s => %-30s\n" ${libname} ${implib}
+                printf "    %30s => %-30s\n" "$libname" "$implib"
                 MakeImport "$shlib" "$DEST/libppc/$implib" || true
             done
             ;;
@@ -287,9 +289,9 @@ function setupPPCLibraries()
             if [ -r "$obj" ]; then
                 # copy the library:
                 cp "$obj" "$DEST/libppc/"
-                basename=`basename "${obj%.o}"`
+                basename="$(basename "${obj%.o}")"
                 # and wrap it in a .a archive for convenience
-                lib="$DEST"/libppc/lib$basename.a
+                lib="$DEST/libppc/lib$basename.a"
                 rm -f "$lib"
                 powerpc-apple-macos-ar cqs "$lib" "$obj"
             fi
@@ -299,7 +301,7 @@ function setupPPCLibraries()
 
 function setUpInterfacesAndLibraries()
 {
-    DEST=${1:-"$PREFIX/universal"}
+    DEST="$PREFIX/universal"
     rm -rf "$DEST"
     mkdir "$DEST"
 
@@ -311,11 +313,11 @@ function setUpInterfacesAndLibraries()
     mkdir "$DEST/RIncludes"
     sh "$SRC/prepare-rincludes.sh" "$RINCLUDES" "$DEST/RIncludes"
 
-    if [ $BUILD_68K != false ]; then
+    if [[ $BUILD_68K ]]; then
         setup68KLibraries "$DEST"
     fi
 
-    if [ $BUILD_PPC != false ]; then
+    if [[ $BUILD_PPC ]]; then
         setupPPCLibraries "$DEST"
     fi
 }
@@ -340,10 +342,10 @@ else
 
     PREFIX="$1"
     INTERFACES_DIR="$2"
-    BUILD_68K=${3:-true}
-    BUILD_PPC=${4:-true}
-    BUILD_CARBON=${5:-true}
-    SRC=$(cd `dirname $0` && pwd -P)
+    BUILD_68K=${3:-1}
+    BUILD_PPC=${4:-1}
+    BUILD_CARBON=${5:-1}
+    SRC="$(cd "$(dirname "$0")" && pwd -P)"
     export PATH="$PREFIX/bin:$PATH"
 
     if [ "${INTERFACES_DIR}" = "--remove" ]; then
