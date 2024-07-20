@@ -779,6 +779,9 @@ static void m68k_init_arch (void);
    branch and we are in pcrel mode.  We generate a bne/beq pair.  */
 #define BRANCHBWPL	10      /* Branch byte, word or pair of longs
 				   */
+/* This relaxation is required for branches where there is no long
+   branch and we are in pcrel mode.  We generate a pea/pea/addi.l/rts quad.  */
+#define BRANCHSUB	11      /* Branch byte, word or long to subroutine   */
 
 /* Note that calls to frag_var need to specify the maximum expansion
    needed; this is currently 12 bytes for bne/beq pair.  */
@@ -846,6 +849,11 @@ relax_typeS md_relax_table[] =
   {   127,   -128,  0, TAB (BRANCHBWPL, SHORT) },
   { 32767, -32768,  2, TAB (BRANCHBWPL, LONG) },
   {     0,	0,  10, 0 },
+  {     1,	1,  0, 0 },
+
+  {   127,   -128,  0, TAB (BRANCHSUB, SHORT) },
+  { 32767, -32768,  2, TAB (BRANCHSUB, LONG) },
+  {     0,	0,  14, 0 },
   {     1,	1,  0, 0 },
 };
 
@@ -2384,6 +2392,7 @@ m68k_ip (char *instring)
     {
       int have_disp = 0;
       int use_pl = 0;
+      int emulate_mode = 0;
 
       /* This switch is a doozy.
 	 Watch the first step; it's a big one! */
@@ -2568,15 +2577,9 @@ m68k_ip (char *instring)
 	      if (!issword (nextword)
 		  || (isvar (&opP->disp)
 		      && ((opP->disp.size == SIZE_UNSPEC
-			   && flag_short_refs == 0
-			   && cpu_of_arch (current_architecture) >= m68020
-			   && ! arch_coldfire_p (current_architecture))
+			   && flag_short_refs == 0)
 			  || opP->disp.size == SIZE_LONG)))
 		{
-		  if (cpu_of_arch (current_architecture) < m68020
-		      || arch_coldfire_p (current_architecture))
-		    opP->error =
-		      _("displacement too large for this architecture; needs 68020 or higher");
 		  if (opP->reg == PC)
 		    tmpreg = 0x3B;	/* 7.3 */
 		  else
@@ -2585,10 +2588,11 @@ m68k_ip (char *instring)
 		    {
 		      if (opP->reg == PC)
 			{
-			  if (opP->disp.size == SIZE_LONG
+			  if (HAVE_LONG_DISP(current_architecture)
+                              && (opP->disp.size == SIZE_LONG
 			      /* If the displacement needs pic
 				 relocation it cannot be relaxed.  */
-			      || opP->disp.pic_reloc != pic_none)
+			      || opP->disp.pic_reloc != pic_none))
 			    {
 			      addword (0x0170);
 			      add_fix ('l', &opP->disp, 1, 2);
@@ -2610,6 +2614,9 @@ m68k_ip (char *instring)
 		  else
 		    addword (0x0170);
 		  addword (nextword >> 16);
+		  if (!HAVE_LONG_DISP(current_architecture))
+		    opP->error =
+		      _("displacement too large for this architecture; needs 68020 or higher");
 		}
 	      else
 		{
@@ -3061,10 +3068,12 @@ m68k_ip (char *instring)
 	    case 'b': /* Unconditional branch */
 	      have_disp = HAVE_LONG_BRANCH (current_architecture);
 	      use_pl = LONG_BRANCH_VIA_COND (current_architecture);
+	      emulate_mode = use_pl ? 0 : 1;
 	      goto var_branch;
 
 	    case 's': /* Unconditional subroutine */
 	      have_disp = HAVE_LONG_CALL (current_architecture);
+	      emulate_mode = 2;
 
 	      var_branch:
 	      if (subs (&opP->disp)	/* We can't relax it.  */
@@ -3102,10 +3111,11 @@ m68k_ip (char *instring)
 	      /* Now we know it's going into the relaxer.  Now figure
 		 out which mode.  We try in this order of preference:
 		 long branch, absolute jump, byte/word branches only.  */
-	      if (have_disp)
+	      if (emulate_mode || have_disp)
 		add_frag (adds (&opP->disp),
 			  SEXT (offs (&opP->disp)),
-			  TAB (BRANCHBWL, SZ_UNDEF));
+			  (emulate_mode == 2 ? TAB (BRANCHSUB, SZ_UNDEF)
+                           : TAB (BRANCHBWL, SZ_UNDEF)));
 	      else if (! flag_keep_pcrel)
 		{
 		  if ((the_ins.opcode[0] == 0x6000)
@@ -4926,6 +4936,7 @@ md_convert_frag_1 (fragS *fragP)
     case TAB (BRABSJCOND, BYTE):
     case TAB (BRANCHBW, BYTE):
     case TAB (BRANCHBWPL, BYTE):
+    case TAB (BRANCHSUB, BYTE):
       know (issbyte (disp));
       if (disp == 0)
 	as_bad_where (fragP->fr_file, fragP->fr_line,
@@ -4939,16 +4950,51 @@ md_convert_frag_1 (fragS *fragP)
     case TAB (BRABSJCOND, SHORT):
     case TAB (BRANCHBW, SHORT):
     case TAB (BRANCHBWPL, SHORT):
+    case TAB (BRANCHSUB, SHORT):
       fragP->fr_opcode[1] = 0x00;
       fixP = fix_new (fragP, fragP->fr_fix, 2, fragP->fr_symbol,
 		      fragP->fr_offset, 1, RELAX_RELOC_PC16);
       fragP->fr_fix += 2;
       break;
+    case TAB (BRANCHSUB, LONG):
+      if (!HAVE_LONG_BRANCH (current_architecture))
+        {
+          // pea (14,%pc); pea (4,%pc); addi.l #disp,(%sp); rts
+          // The last 3 instructions will be emitted and fr_opcode will be
+          // changed to pea after falling through to the next case
+          *buffer_address++ = 0x00;         /* PC offset = 14.  */
+          *buffer_address++ = 0x0e;
+          *buffer_address++ = 0x48;         /* pea */
+          *buffer_address++ = 0x7a;
+          fragP->fr_fix += 4;
+        }
+        // fall through
     case TAB (BRANCHBWL, LONG):
-      fragP->fr_opcode[1] = (char) 0xFF;
+      if (HAVE_LONG_BRANCH (current_architecture))
+        {
+          fragP->fr_opcode[1] = (char) 0xFF;
+        }
+      else
+        {
+          // pea (4,%pc); addi.l #disp,(%sp); rts
+          fragP->fr_opcode[0] = 0x48;       /* pea */
+          fragP->fr_opcode[1] = 0x7a;
+          *buffer_address++ = 0x00;         /* PC offset = 4.  */
+          *buffer_address++ = 0x04;
+          *buffer_address++ = 0x06;         /* Put in addi long (0x0697).  */
+          *buffer_address++ = (char) 0x97;  /* Long, Mode 7.PC */
+          fragP->fr_fix += 4;
+        }
       fixP = fix_new (fragP, fragP->fr_fix, 4, fragP->fr_symbol,
 		      fragP->fr_offset, 1, RELAX_RELOC_PC32);
       fragP->fr_fix += 4;
+      if (!HAVE_LONG_BRANCH (current_architecture))
+        {
+          buffer_address += 4;
+          *buffer_address++ = 0x4e;         /* rts */
+          *buffer_address++ = 0x75;
+          fragP->fr_fix += 2;
+        }
       break;
     case TAB (BRANCHBWPL, LONG):
       /* Here we are converting an unconditional branch into a pair of
@@ -5080,11 +5126,34 @@ md_convert_frag_1 (fragS *fragP)
       fragP->fr_fix += 2;
       break;
     case TAB (PCREL1632, LONG):
-      /* Already set to mode 7.3; this indicates: PC indirect with
-	 suppressed index, 32-bit displacement.  */
-      *buffer_address++ = 0x01;
-      *buffer_address++ = 0x70;
-      fragP->fr_fix += 2;
+      if (HAVE_LONG_DISP (current_architecture))
+        {
+          /* Already set to mode 7.3; this indicates: PC indirect with
+	     suppressed index, 32-bit displacement.  */
+          *buffer_address++ = 0x01;
+          *buffer_address++ = 0x70;
+          fragP->fr_fix += 2;
+        }
+      else
+        {
+          fragP->fr_opcode[1] &= ~0x3f;
+          fragP->fr_opcode[1] |= 0x3a;      /* Mode 7.2 */
+          *buffer_address++ = 0x00;         /* PC offset = 4.  */
+          *buffer_address++ = 0x04;
+          *buffer_address++ = 0x06;         /* Put in addi long (0x0697).  */
+          *buffer_address = (char) 0x90;    /* Long, Mode 7.x */
+          if (fragP->fr_opcode[0] == 0x48
+              && fragP->fr_opcode[1] == 0x7a) /* PEA */
+            *buffer_address++ |= 0x07;      /* SP register */
+          else if ((fragP->fr_opcode[0] & ~0xe) == 0x41
+              && fragP->fr_opcode[1] == (char) 0xfa) /* LEA */
+            *buffer_address++ |= (fragP->fr_opcode[0] >> 1) & 7;
+          else
+            as_bad_where (fragP->fr_file, fragP->fr_line,
+	      _("Conversion of PC relative displacement to addi.l: %x"),
+                fragP->fr_opcode[0] << 8 | fragP->fr_opcode[1]);
+          fragP->fr_fix += 4;
+        }
       fixP = fix_new (fragP, (int) (fragP->fr_fix), 4, fragP->fr_symbol,
 		      fragP->fr_offset, 1, RELAX_RELOC_PC32);
       fixP->fx_pcrel_adjust = 2;
@@ -5161,6 +5230,7 @@ md_estimate_size_before_relax (fragS *fragP, segT segment)
     {
     case TAB (BRANCHBWL, SZ_UNDEF):
     case TAB (BRANCHBWPL, SZ_UNDEF):
+    case TAB (BRANCHSUB, SZ_UNDEF):
     case TAB (BRABSJUNC, SZ_UNDEF):
     case TAB (BRABSJCOND, SZ_UNDEF):
       {
@@ -7539,7 +7609,11 @@ m68k_init_arch (void)
 
   if (cpu_of_arch (current_architecture) < m68020
       || arch_coldfire_p (current_architecture))
-    md_relax_table[TAB (PCINDEX, BYTE)].rlx_more = 0;
+    {
+      md_relax_table[TAB (PCINDEX, BYTE)].rlx_more = 0;
+      md_relax_table[TAB (PCREL1632, LONG)].rlx_length += 2;
+      md_relax_table[TAB (BRANCHBWL, LONG)].rlx_length += 6;
+    }
 
   initialized = 1;
 }

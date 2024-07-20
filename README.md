@@ -344,6 +344,7 @@ Various patches and hacks:
 - added `__attribute__((regparam("...")))` to specify custom register calling conventions
 - added `#pragma parameter` to specify custom register calling conventions
 - added support for the `= { 0x1234 }` syntax for inline machine code.
+- added support for pcrel jumps >32k on m68000/010
 
 PowerPC specific:
 - New flag -carbon that makes gcc link with `-lCarbonLib` instead of `-lInterfaceLib`

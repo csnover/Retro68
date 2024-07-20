@@ -623,11 +623,6 @@ m68k_option_override (void)
   if (TARGET_SEP_DATA || TARGET_ID_SHARED_LIBRARY)
     flag_pic = 2;
 
-  /* -mpcrel -fPIC uses 32-bit pc-relative displacements.  Raise an
-     error if the target does not support them.  */
-  if (TARGET_PCREL && !TARGET_68020 && flag_pic == 2)
-    error ("%<-mpcrel%> %<-fPIC%> is not currently supported on selected cpu");
-
   /* ??? A historic way of turning on pic, or is this intended to
      be an embedded thing that doesn't have the same name binding
      significance that it does on hosted ELF systems?  */
@@ -643,7 +638,7 @@ m68k_option_override (void)
   else if (TARGET_ID_SHARED_LIBRARY)
     /* All addresses must be loaded from the GOT.  */
     ;
-  else if (TARGET_68020 || TARGET_ISAB || TARGET_ISAC)
+  else
     {
       if (TARGET_PCREL)
 	m68k_symbolic_call_var = M68K_SYMBOLIC_CALL_BSR_C;
@@ -653,17 +648,15 @@ m68k_option_override (void)
       if (TARGET_ISAC)
 	/* No unconditional long branch */;
       else if (TARGET_PCREL)
-	m68k_symbolic_jump = "bra%.l %c0";
+        m68k_symbolic_jump = "jra %c0";
       else
-	m68k_symbolic_jump = "bra%.l %p0";
+        m68k_symbolic_jump = "jra %p0";
       /* Turn off function cse if we are doing PIC.  We always want
 	 function call to be done as `bsr foo@PLTPC'.  */
       /* ??? It's traditional to do this for -mpcrel too, but it isn't
 	 clear how intentional that is.  */
       flag_no_function_cse = 1;
     }
-  else if(TARGET_PCREL)
-    m68k_symbolic_call_var = M68K_SYMBOLIC_CALL_BSRW_C;
 
   switch (m68k_symbolic_call_var)
     {
@@ -672,15 +665,11 @@ m68k_option_override (void)
       break;
 
     case M68K_SYMBOLIC_CALL_BSR_C:
-      m68k_symbolic_call = "bsr%.l %c0";
+      m68k_symbolic_call = "jra %c0";
       break;
 
     case M68K_SYMBOLIC_CALL_BSR_P:
-      m68k_symbolic_call = "bsr%.l %p0";
-      break;
-
-    case M68K_SYMBOLIC_CALL_BSRW_C:
-      m68k_symbolic_call = "bsr%.w %c0";
+      m68k_symbolic_call = "jra %p0";
       break;
 
     case M68K_SYMBOLIC_CALL_NONE:
@@ -5364,7 +5353,7 @@ print_operand_address (FILE *file, rtx addr)
 	  /* (d16,PC) or (bd,PC,Xn) (with suppressed index register).  */
 	  fputc ('(', file);
 	  output_addr_const (file, addr);
-	  asm_fprintf (file, flag_pic == 1 ? ":w,%Rpc)" : ":l,%Rpc)");
+	  asm_fprintf (file, flag_pic == 1 ? ":w,%Rpc)" : ",%Rpc)");
 	}
       else
 	{
