@@ -39,7 +39,7 @@ Note: There is now experimental support for the [Nix Package Manager](www.nixos.
 
 For Ubuntu Linux, the following should help a bit:
 
-    sudo apt-get install cmake libgmp-dev libmpfr-dev libmpc-dev libboost-all-dev bison flex texinfo ruby
+    sudo apt-get install cmake libgmp-dev libmpfr-dev libmpc-dev libboost-filesystem-dev libboost-regex-dev libboost-thread-dev libboost-wave-dev libboost-test-dev libboost-program-options-dev libboost-dev bison flex makeinfo texinfo
 
 For Arch Linux, this should do the trick:
 
