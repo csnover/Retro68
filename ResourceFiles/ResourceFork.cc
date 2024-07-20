@@ -2,7 +2,6 @@
 #include "BinaryIO.h"
 
 #include <iostream>
-#include <map>
 #include <vector>
 
 void Resources::addResources(const Resources& res)
@@ -160,3 +159,58 @@ Resources::Resources(std::istream &in)
         }
     }
 }
+
+#ifdef PALMOS
+Resources::Resources(std::istream &in, prc_t)
+{
+    auto numRecords = word(in);
+
+    struct Record { ResType type; int id; int offset; };
+    std::vector<Record> records(numRecords + 1);
+    for (auto i = 0; i < numRecords; ++i)
+    {
+        auto type = ostype(in);
+        auto id = word(in);
+        auto offset = longword(in);
+        records.emplace_back(Record { type, id, offset });
+    }
+
+    in.seekg(0, std::ios_base::end);
+    records.emplace_back(Record { ResType(), 0, int(in.tellg()) });
+
+    for (auto i = 0; i < numRecords; ++i)
+    {
+        const auto &record = records[i];
+        auto size = records[i + 1].offset - record.offset;
+        std::vector<char> tmp(size);
+        in.seekg(record.offset);
+        in.read(tmp.data(), size);
+        // TODO: std::string is inappropriate storage type for raw bytes since
+        // the standard requires the data to end with a null terminator
+        std::string data(tmp.data(), size);
+        addResource(Resource(record.type, record.id, data));
+    }
+}
+
+void Resources::writeFork(std::ostream& out, int offset, const std::vector<char>& appInfo, const std::vector<char>& sortInfo) const
+{
+    for (const auto &[_, resource] : resources)
+    {
+        ostype(out, resource.getType());
+        word(out, resource.getID());
+        longword(out, offset);
+        offset += resource.getData().size();
+    }
+
+    word(out, 0);
+
+    out.write(appInfo.data(), appInfo.size());
+    out.write(sortInfo.data(), sortInfo.size());
+
+    for (const auto &[_, resource] : resources)
+    {
+        const auto &data = resource.getData();
+        out.write(data.data(), data.size());
+    }
+}
+#endif

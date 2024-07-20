@@ -17,6 +17,9 @@ public:
 #ifdef __APPLE__
         real,
 #endif
+#ifdef PALMOS
+        prc,
+#endif
         macbin,
         diskimage,
         basilisk,
@@ -35,6 +38,11 @@ public:
 
     static bool isSingleFork(Format f);
 
+#ifdef PALMOS
+    std::string name;
+    int attributes = 1, version = 1;
+    std::vector<char> appInfo, sortInfo;
+#endif
     ResType type;
     ResType creator;
     Resources resources;

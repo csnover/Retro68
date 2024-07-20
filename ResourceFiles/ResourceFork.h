@@ -3,6 +3,9 @@
 
 #include <string>
 #include <map>
+#ifdef PALMOS
+#include <vector>
+#endif
 #include "ResType.h"
 
 class Resource
@@ -44,6 +47,19 @@ public:
     void addResources(const Resources& res);
 
     unsigned countResources() const { return resources.size(); }
+
+#ifdef PALMOS
+    enum {
+        // Actually 0x4e but there is always a 0u16 at the end of the record
+        // list
+        PrcHeaderSize = 0x50,
+
+        PrcEntrySize = 10
+    };
+    static constexpr class prc_t {} prc = {};
+    Resources(std::istream& in, prc_t);
+    void writeFork(std::ostream& out, int dataOffset, const std::vector<char>& appInfo, const std::vector<char>& sortInfo) const;
+#endif
 };
 
 #endif // RESOURCEFORK_H

@@ -11,6 +11,9 @@
 #ifdef __APPLE__
 #include <sys/xattr.h>
 #endif
+#ifdef PALMOS
+#include <cctype>
+#endif
 extern "C" {
 #include "hfs.h"
 }
@@ -65,6 +68,25 @@ static unsigned short CalculateCRC(unsigned short CRC, const char* dataBlock, in
     return CRC;
 }
 
+static uint32_t MacTime()
+{
+    auto timestamp = std::invoke([&] -> std::chrono::system_clock::time_point {
+        const char *sourceDateEpochEnvVar = getenv("SOURCE_DATE_EPOCH");
+        if (sourceDateEpochEnvVar && *sourceDateEpochEnvVar)
+            return std::chrono::system_clock::from_time_t((time_t)std::atoll(sourceDateEpochEnvVar));
+        else
+            return std::chrono::system_clock::now();
+    });
+
+    // Calculate Mac-style timestamp (seconds since 1 January 1904 00:00:00)
+    std::tm mac_epoch_tm = {
+        0, 0, 0, // 00:00:00
+        1, 0, 4  // 1 January 1904
+    };
+    auto mac_epoch = std::chrono::system_clock::from_time_t(std::mktime(&mac_epoch_tm));
+    return std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - mac_epoch).count();
+}
+
 static void writeMacBinary(std::ostream& out, std::string filename,
                            ResType type, ResType creator,
                            const Resources& rsrc, const std::string& data)
@@ -80,21 +102,7 @@ static void writeMacBinary(std::ostream& out, std::string filename,
     // takes the time from the $SOURCE_DATE_EPOCH environment variable instead of the system clock.
     // When building under `nix`, this is automatically set to the modification date of the newest source
     // file.
-    auto timestamp = std::invoke([&] -> std::chrono::system_clock::time_point {
-        const char *sourceDateEpochEnvVar = getenv("SOURCE_DATE_EPOCH");
-        if (sourceDateEpochEnvVar && *sourceDateEpochEnvVar)
-            return std::chrono::system_clock::from_time_t((time_t)std::atoll(sourceDateEpochEnvVar));
-        else
-            return std::chrono::system_clock::now();
-    });
-
-    // Calculate Mac-style timestamp (seconds since 1 January 1904 00:00:00)
-    std::tm mac_epoch_tm = {
-        0, 0, 0, // 00:00:00
-        1, 0, 4  // 1 January 1904
-    };
-    auto mac_epoch = std::chrono::system_clock::from_time_t(std::mktime(&mac_epoch_tm));
-    uint32_t mac_time = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - mac_epoch).count();
+    auto mac_time = MacTime();
 
     std::ostringstream header;
     byte(header, 0);
@@ -173,6 +181,11 @@ bool ResourceFile::assign(std::string pathstring, ResourceFile::Format f)
     format = f;
     if(format == Format::autodetect)
     {
+#ifdef PALMOS
+        if(path.extension() == ".prc")
+            format = Format::prc;
+        else
+#endif
         if(path.extension() == ".bin")
             format = Format::macbin;
         else if(path.extension() == ".as")
@@ -219,6 +232,8 @@ bool ResourceFile::assign(std::string pathstring, ResourceFile::Format f)
     {
 #ifdef __APPLE__
         format = Format::real;
+#elif defined(PALMOS)
+        format = Format::prc;
 #else
         format = Format::basilisk;
 #endif
@@ -227,10 +242,129 @@ bool ResourceFile::assign(std::string pathstring, ResourceFile::Format f)
     return true;
 }
 
+#ifdef PALMOS
+static bool IsPrintable(const char *str)
+{
+    for (unsigned char c; (c = static_cast<unsigned char>(*str)) != '\0'; ++c)
+        if (!std::isprint(c))
+            return false;
+    return true;
+}
+
+// Based on the BFD validation logic from prc-tools
+static bool CheckPRC(std::istream& in)
+{
+    in.seekg(0, std::ios_base::end);
+    auto size = in.tellg();
+    if (size < 0x4e)
+        return false;
+
+    char buf[0x21];
+
+    in.seekg(0);
+    in.read(buf, 0x20);
+    buf[0x20] = '\0';
+    if (!IsPrintable(buf))
+        return false;
+
+    if ((word(in) & 1) == 0)
+        return false;
+
+    in.seekg(0x34);
+    auto appInfoOffset = longword(in);
+    auto sortInfoOffset = longword(in);
+    if (appInfoOffset != 0 && sortInfoOffset != 0 && sortInfoOffset < appInfoOffset)
+        return false;
+
+    in.read(buf, 4);
+    buf[4] = '\0';
+    if (!IsPrintable(buf))
+        return false;
+    in.read(buf, 4);
+    if (!IsPrintable(buf))
+        return false;
+
+    in.seekg(0x48);
+    if (longword(in) != 0)
+        return false;
+
+    auto numRecords = word(in);
+    auto lastOffset = sortInfoOffset == 0 ? appInfoOffset : sortInfoOffset;
+    for (auto i = 0; i < numRecords; ++i)
+    {
+        in.seekg(6, std::ios_base::cur);
+        auto offset = longword(in);
+        if (offset < lastOffset || offset > size)
+            return false;
+        lastOffset = offset;
+    }
+
+    return true;
+}
+#endif
+
 bool ResourceFile::read(std::istream& in, Format f)
 {
     switch(f)
     {
+#ifdef PALMOS
+        case Format::prc:
+            {
+                if (!CheckPRC(in))
+                    return false;
+
+                in.seekg(0);
+                char c;
+                while (in.tellg() < 0x20 && (c = in.get()) != '\0')
+                    name.push_back(c);
+
+                in.seekg(0x20);
+                attributes = word(in);
+                version = word(in);
+
+                in.seekg(0x34);
+                auto appInfoOffset = longword(in);
+                auto sortInfoOffset = longword(in);
+                type = ostype(in);
+                creator = ostype(in);
+
+                if (appInfoOffset || sortInfoOffset)
+                {
+                    in.seekg(0x4c);
+                    auto numResources = word(in);
+                    int firstResourceOffset;
+                    if (numResources)
+                    {
+                        in.seekg(0x54);
+                        firstResourceOffset = longword(in);
+                    }
+                    else
+                    {
+                        in.seekg(0, std::ios_base::end);
+                        firstResourceOffset = in.tellg();
+                    }
+
+                    auto offset = appInfoOffset;
+                    auto nextOffset = sortInfoOffset ? sortInfoOffset : firstResourceOffset;
+                    for (int i = 0; i < 2; ++i)
+                    {
+                        if (offset)
+                        {
+                            in.seekg(offset);
+                            auto size = nextOffset - offset;
+                            appInfo.resize(size);
+                            in.read(appInfo.data(), size);
+                        }
+                        offset = sortInfoOffset;
+                        nextOffset = firstResourceOffset;
+                    }
+                }
+
+                in.seekg(0x4c);
+                resources = Resources(in, Resources::prc);
+            }
+            break;
+#endif
         case Format::applesingle:
             {
                 if(longword(in) != 0x00051600)
@@ -406,6 +540,39 @@ bool ResourceFile::write(std::ostream& out, Format f)
 {
     switch(f)
     {
+#ifdef PALMOS
+        case Format::prc:
+            {
+                {
+                    auto pos = 0u;
+                    for (; pos < std::min<size_t>(0x20, name.size()); ++pos)
+                        byte(out, name[pos]);
+                    for (; pos < 0x20; ++pos)
+                        byte(out, 0);
+                }
+                word(out, attributes);
+                word(out, version);
+                auto now = MacTime();
+                longword(out, now);
+                longword(out, now);
+                longword(out, 0);
+                longword(out, 0);
+
+                auto numResources = resources.countResources();
+                auto offset = Resources::PrcHeaderSize + numResources * Resources::PrcEntrySize;
+                longword(out, appInfo.empty() ? 0 : offset);
+                offset += appInfo.size();
+                longword(out, sortInfo.empty() ? 0 : offset);
+                offset += sortInfo.size();
+                ostype(out, type);
+                ostype(out, creator);
+                longword(out, 0);
+                longword(out, 0);
+                word(out, numResources);
+                resources.writeFork(out, offset, appInfo, sortInfo);
+            }
+            break;
+#endif
         case Format::macbin:
             {
                 writeMacBinary(out, filename, type, creator, resources, data);
@@ -581,6 +748,9 @@ bool ResourceFile::hasPlainDataFork(ResourceFile::Format f)
 #ifdef __APPLE__
         case Format::real:
 #endif
+#ifdef PALMOS
+        case Format::prc:
+#endif
         case Format::basilisk:
         case Format::underscore_appledouble:
         case Format::percent_appledouble:
@@ -601,6 +771,9 @@ bool ResourceFile::isSingleFork(Format f)
     {
         case Format::macbin:
         case Format::applesingle:
+#ifdef PALMOS
+        case Format::prc:
+#endif
             return true;
         default:
             return false;
