@@ -21,7 +21,14 @@
 #    see the files COPYING and COPYING.RUNTIME respectively.  If not, see
 #    <http://www.gnu.org/licenses/>.
 
-if(CMAKE_SYSTEM_NAME MATCHES Retro68)
+if(CMAKE_SYSTEM_NAME MATCHES RetroPalm)
+    set(ARCH_FILES
+        start.c
+        relocate.c
+        PoorMansDebugging.h
+        MultiSegApp.c
+    )
+elseif(CMAKE_SYSTEM_NAME MATCHES Retro68)
     enable_language(ASM)
     set(ARCH_FILES
         Retro68Runtime.h

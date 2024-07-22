@@ -24,7 +24,14 @@
 */
 
 #include <stdint.h>
+
+#ifdef PALMOS
+#include <PalmTypes.h>
+typedef MemPtr Ptr;
+typedef MemHandle Handle;
+#else
 #include <Types.h>
+#endif
 
 #define _RETRO68_GET_DISPLACEMENT(DISPLACEMENT, STRIP) \
     do {    \
@@ -47,7 +54,11 @@
 // StripAddress24 must not be used on 32-bit systems, or the resulting crashes
 // will be even more mysterious.
 
+#ifdef PALMOS
+#define StripAddress24
+#else
 #define StripAddress24(x) ((char*) ((unsigned long)(x) & 0x00FFFFFF))
+#endif
 #define RETRO68_GET_DISPLACEMENT_STRIP24(DISPLACEMENT) \
     _RETRO68_GET_DISPLACEMENT(DISPLACEMENT, StripAddress24)
 
@@ -63,6 +74,9 @@
     } while(0)
 
 void Retro68Relocate(void);
+#ifdef PALMOS
+void Retro68CallPreinit(uint16_t flags);
+#endif
 void Retro68CallConstructors(void);
 void Retro68CallDestructors(void);
 void Retro68FreeGlobals(void);

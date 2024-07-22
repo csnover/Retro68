@@ -26,12 +26,17 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#ifdef PALMOS
+#include <SystemMgr.h>
+#define StripAddress
+#else
 #include <Processes.h>
 #include <Sound.h>
 #include <Memory.h>
 #include <OSUtils.h>
 #include <Traps.h>
 #include <Resources.h>
+#endif
 
 #include "Retro68Runtime.h"
 #include "PoorMansDebugging.h"
@@ -48,6 +53,8 @@ extern uint8_t _MULTISEG_APP __attribute__ ((weak));
 
 // section boundaries
 extern uint8_t _stext, _etext, _sdata, _edata, _sbss, _ebss;
+// pre-initialization list:
+extern uint8_t __preinit_section, __preinit_section_end;
 // constructor list:
 extern uint8_t __init_section, __init_section_end;
 // destructor list:
@@ -65,6 +72,13 @@ Retro68RelocState relocState __attribute__ ((section(".relocvars"))) = {
 };
 
 
+#ifdef PALMOS
+#define GET_VIRTUAL_ADDRESS(NAME, SYM) \
+    do {    \
+        __asm__( "\tlea " #SYM ", %0\n"    \
+                 : "=a"(NAME) );    \
+    } while(0)
+#else
 #define GET_VIRTUAL_ADDRESS(NAME, SYM) \
     do {    \
         __asm__( "\tlea " #SYM ", %0\n"    \
@@ -74,7 +88,7 @@ Retro68RelocState relocState __attribute__ ((section(".relocvars"))) = {
         else                    \
             NAME = StripAddress24(NAME);    \
     } while(0)
-
+#endif
 #define READ_UNALIGNED_LONGWORD(ptr)    \
     (((((((ptr)[0] << 8) | (ptr)[1]) << 8) | (ptr)[2]) << 8) | (ptr)[3])
 #define WRITE_UNALIGNED_LONGWORD(ptr, val)    \
@@ -150,6 +164,7 @@ void Retro68ApplyRelocations(uint8_t *base, uint32_t size, void *relocations, ui
 
 void Retro68Relocate()
 {
+#ifndef PALMOS
     // memory address to retrieve the ROM type (64K or a later ROM)
     // see for details http://www.mac.linux-m68k.org/devel/macalmanac.php
     short* ROM85      = (short*) 0x028E;
@@ -170,6 +185,7 @@ void Retro68Relocate()
         hasStripAddr = (trapStripAddr != trapUnimpl);
         hasFlushCodeCache = (trapFlushCodeCache != trapUnimpl);
     }
+#endif
                     
     // Figure out the displacement
     // what is the difference between the addresses in our program code
@@ -325,6 +341,21 @@ void Retro68Relocate()
     // Someone still needs to invoke Retro68CallConstructors
     // ... but that's the job of _start(). 
 }
+
+#ifdef PALMOS
+void Retro68CallPreinit(uint16_t flags)
+{
+    typedef void (*preinitFunction)(uint16_t);
+
+    uint8_t *p = &__preinit_section;
+    uint8_t *e = &__preinit_section_end;
+    while (p < e)
+    {
+        (*(preinitFunction)(*(long*)p))(flags);
+        p += 4;
+    }
+}
+#endif
 
 void Retro68CallConstructors()
 {
