@@ -36,6 +36,7 @@ HOST_C_COMPILER=
 HOST_CXX_COMPILER=
 INTERFACES_KIND=multiversal
 PREFIX="$DEFAULT_PREFIX"
+VERBOSE=
 
 function usage()
 {
@@ -55,6 +56,7 @@ function usage()
 	echo "    --palm                    enable support for 68K PalmOS"
 	echo "    --prefix=                 the path to install the toolchain to"
 	echo "    --universal               use Apple's universal interfaces (default: autodetect)"
+	echo "    --verbose                 increase verbosity of the script"
 }
 
 for ARG in "$@"; do
@@ -102,6 +104,9 @@ for ARG in "$@"; do
 			;;
 		--universal)
 			INTERFACES_KIND=universal
+			;;
+		--verbose)
+			VERBOSE=1
 			;;
 		*)
 			echo "unknown option $ARG"
@@ -223,12 +228,16 @@ function build_binutils()
 
 	mkdir -p "$directory"
 	pushd "$directory" >/dev/null
+	[[ $VERBOSE ]] && set -x
 	"$SRC/binutils/configure" "--prefix=$PREFIX" --disable-doc "$@"
 	make "-j$BUILD_JOBS"
 	make install
+	[[ $VERBOSE ]] && set +x
 	popd >/dev/null
 
 	[[ $CLEAN_AFTER_BUILD ]] && rm -rf "$directory"
+
+	echo "Built binutils"
 }
 
 function build_gcc()
@@ -242,15 +251,19 @@ function build_gcc()
 
 	mkdir -p "$directory"
 	pushd "$directory" >/dev/null
+	[[ $VERBOSE ]] && set -x
 	export target_configargs="--disable-nls --enable-libstdcxx-dual-abi=no --disable-libstdcxx-verbose"
 	"$SRC/gcc/configure" "--prefix=$PREFIX" --enable-languages=c,c++ --disable-libssp "$@" MAKEINFO=missing
 	# There seems to be a build failure in parallel builds; ignore any errors and try again without -j8.
 	make "-j$BUILD_JOBS" || make
 	make install
 	unset target_configargs
+	[[ $VERBOSE ]] && set +x
 	popd >/dev/null
 
 	[[ $CLEAN_AFTER_BUILD ]] && rm -rf "$directory"
+
+	echo "Built gcc"
 }
 
 function enable_elf2mac()
@@ -259,10 +272,14 @@ function enable_elf2mac()
 
 	# Move the real linker aside and install symlinks to Elf2Mac
 	# (Elf2Mac is built by cmake below)
+	[[ $VERBOSE ]] && set -x
 	mv "$PREFIX/bin/$target-ld" "$PREFIX/bin/$target-ld.real"
 	mv "$PREFIX/$target/bin/ld" "$PREFIX/$target/bin/ld.real"
 	ln -s Elf2Mac "$PREFIX/bin/$target-ld"
 	ln -s ../../bin/Elf2Mac "$PREFIX/$target/bin/ld"
+	[[ $VERBOSE ]] && set +x
+
+	echo "Enabled Elf2Mac"
 }
 
 if [[ $BUILD_THIRDPARTY ]]; then
@@ -318,12 +335,16 @@ if [[ $BUILD_THIRDPARTY ]]; then
 		mkdir -p "$PREFIX/share/man/man1"
 		mkdir hfsutils
 		pushd hfsutils >/dev/null
+		[[ $VERBOSE ]] && set -x
 		"$SRC/hfsutils/configure" "--prefix=$PREFIX" "--mandir=$PREFIX/share/man" --enable-devlibs
 		make
 		make install
+		[[ $VERBOSE ]] && set +x
 		popd >/dev/null
 
 		[[ $CLEAN_AFTER_BUILD ]] && rm -rf hfsutils
+
+		echo "Built hfsutils"
 	fi
 elif [[ $BUILD_MAC ]]; then # SKIP_THIRDPARTY
 	removeInterfacesAndLibraries
@@ -335,11 +356,13 @@ echo "Building host-based tools..."
 
 mkdir build-host
 pushd build-host >/dev/null
+[[ $VERBOSE ]] && set -x
 cmake "$SRC" "-DCMAKE_INSTALL_PREFIX=$PREFIX" -DCMAKE_BUILD_TYPE=Debug "${HOST_CMAKE_FLAGS[@]}" "$CMAKE_GENERATOR"
+cmake --build . --target install
+[[ $VERBOSE ]] && set +x
 popd >/dev/null
-cmake --build build-host --target install
-
 echo 'subdirs("build-host")' > CTestTestfile.cmake
+echo "Built host-based tools"
 
 # make tools (such as MakeImport and the compilers) available for later commands
 export PATH="$PREFIX/bin:$PATH"
@@ -348,7 +371,7 @@ export PATH="$PREFIX/bin:$PATH"
 
 if [[ $BUILD_MAC ]]; then
 	if [[ "$INTERFACES_KIND" = "multiversal" ]]; then
-		(cd "$SRC/multiversal" && ruby make-multiverse.rb -G CIncludes -o "$PREFIX/multiversal")
+		([[ $VERBOSE ]] && set -x ; cd "$SRC/multiversal" && ruby make-multiverse.rb -G CIncludes -o "$PREFIX/multiversal")
 		mkdir -p "$PREFIX/multiversal/libppc"
 		cp "$SRC/ImportLibraries"/*.a "$PREFIX/multiversal/libppc/"
 	fi
@@ -375,13 +398,16 @@ function build_cmake()
 	mkdir -p "$directory"
 	pushd "$directory" >/dev/null
 
+	[[ $VERBOSE ]] && set -x
 	cmake "$SRC" "-DCMAKE_TOOLCHAIN_FILE=../build-host/cmake/intree$toolchain.toolchain.cmake" \
 				 -DCMAKE_BUILD_TYPE=Release \
 				 -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY \
 				 "$CMAKE_GENERATOR"
+	cmake --build . --target install
+	[[ $VERBOSE ]] && set -x
 	popd >/dev/null
-	cmake --build "$directory" --target install
 	echo "subdirs(\"$directory\")" >> CTestTestfile.cmake
+	echo "Built target $kind libraries and samples"
 }
 
 [[ $BUILD_68K ]] && build_cmake 68K build-target
