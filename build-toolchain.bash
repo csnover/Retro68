@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# shellcheck enable=all disable=SC2310
 #   Copyright 2014 Wolfgang Thaller.
 #
 #   This file is part of Retro68.
@@ -30,13 +31,15 @@ BUILD_PALM=
 BUILD_PPC=1
 BUILD_THIRDPARTY=1
 CLEAN_AFTER_BUILD=
-CMAKE_GENERATOR=
 HOST_CMAKE_FLAGS=()
 HOST_C_COMPILER=
 HOST_CXX_COMPILER=
 INTERFACES_KIND=multiversal
-PREFIX="$DEFAULT_PREFIX"
+OVERWRITE=
+PREFIX="${DEFAULT_PREFIX}"
+USE_NINJA=
 VERBOSE=
+YES=
 
 function usage()
 {
@@ -53,14 +56,16 @@ function usage()
 	echo "    --no-carbon               disable Carbon CFM support"
 	echo "    --no-ppc                  disable classic PowerPC CFM support"
 	echo "    --no-thirdparty           do not rebuild gcc & third party libraries"
+	echo "    --overwrite               allow builds on top of existing prefix"
 	echo "    --palm                    enable support for 68K PalmOS"
 	echo "    --prefix=                 the path to install the toolchain to"
 	echo "    --universal               use Apple's universal interfaces (default: autodetect)"
 	echo "    --verbose                 increase verbosity of the script"
+	echo "    --yes                     build without confirmation prompt"
 }
 
 for ARG in "$@"; do
-	case "$ARG" in
+	case "${ARG}" in
 		--clean-after-build)
 			CLEAN_AFTER_BUILD=1
 			;;
@@ -80,7 +85,7 @@ for ARG in "$@"; do
 			INTERFACES_KIND=multiversal
 			;;
 		--ninja)
-			CMAKE_GENERATOR=-GNinja
+			USE_NINJA=1
 			;;
 		--no-68k)
 			BUILD_68K=
@@ -95,12 +100,15 @@ for ARG in "$@"; do
 		--no-thirdparty)
 			BUILD_THIRDPARTY=
 			;;
+		--overwrite)
+			OVERWRITE=1
+			;;
 		--palm)
 			BUILD_PALM=1
 			;;
 		--prefix=*)
 			PREFIX="${ARG#*=}"
-			which realpath >/dev/null 2>&1 && PREFIX="$(realpath "$PREFIX")"
+			command -v realpath >/dev/null && PREFIX="$(realpath "${PREFIX}")"
 			;;
 		--universal)
 			INTERFACES_KIND=universal
@@ -108,20 +116,23 @@ for ARG in "$@"; do
 		--verbose)
 			VERBOSE=1
 			;;
+		--yes)
+			YES=1
+			;;
 		*)
-			echo "unknown option $ARG"
+			echo "unknown option ${ARG}"
 			usage
 			exit 1
 			;;
 	esac
 done
 
-BUILD_MAC=$BUILD_68K$BUILD_PPC
+BUILD_MAC=${BUILD_68K}${BUILD_PPC}
 
 ##################### Prerequisites check
 
-if [[ $BUILD_MAC && "$INTERFACES_KIND" = "multiversal" && ! -d "$SRC/multiversal" ]]; then
-	echo "Could not find directory '$SRC/multiversal'."
+if [[ -n ${BUILD_MAC} && "${INTERFACES_KIND}" = "multiversal" && ! -d "${SRC}/multiversal" ]]; then
+	echo "Could not find directory '${SRC}/multiversal'."
 	echo "It looks like you did not clone the git submodules."
 	echo "Please run:"
 	echo "    git submodule update --init"
@@ -130,42 +141,49 @@ fi
 
 ##################### Sanity checks
 
-if [[ "$(pwd -P)" = "$SRC" ]]; then
+if [[ "$(pwd -P || true)" = "${SRC}" ]]; then
 	echo "Please do not invoke $(basename "$0") from the source directory."
 	echo "Instead, create a separate build directory:"
 	echo "    cd .."
 	echo "    mkdir Retro68-build"
 	echo "    cd Retro68-build"
-	echo "    ../$(basename "$SRC")/$(basename "$0")"
+	echo "    ../$(basename "${SRC}")/$(basename "$0")"
 	exit 1
 fi
 
-if [[ "$PREFIX" != "$DEFAULT_PREFIX" && -d "$PREFIX" && $BUILD_THIRDPARTY ]]; then
-	if [[ ! -w "$PREFIX" ]]; then
-		echo "$PREFIX is not writable, cannot install to there."
+if [[ "${PREFIX}" != "${DEFAULT_PREFIX}" && -d "${PREFIX}" && -n ${BUILD_THIRDPARTY} ]]; then
+	if [[ ! -w "${PREFIX}" ]]; then
+		echo "${PREFIX} is not writable, cannot install to there."
 		exit 1
-	elif [[ "$(ls -A "$PREFIX")" ]]; then
-		echo "$PREFIX is not empty, cannot install to there."
+	elif [[ -z ${OVERWRITE} && -n "$(ls -A "${PREFIX}" || true)" ]]; then
+		echo "${PREFIX} is not empty, cannot install to there."
 		exit 1
 	fi
 fi
 
-[[ ! $BUILD_THIRDPARTY ]] && if \
-	[[ ! -d "$PREFIX" ]] \
-	|| [[ $BUILD_PALM && ( ! -d binutils-build-palm || ! -d gcc-build-palm ) ]] \
-	|| [[ $BUILD_68K  && ( ! -d binutils-build      || ! -d gcc-build      ) ]] \
-	|| [[ $BUILD_PPC  && ( ! -d binutils-build-ppc  || ! -d gcc-build-ppc  ) ]] \
-	|| [[ $BUILD_MAC  &&   ! -d hfsutils ]]; then
+function missing_tools()
+{
+	local check="$1"
+	local target="$2"
+	[[ -n ${check} && ( ! -x "${PREFIX}/${target}/bin/nm" || ! -x "${PREFIX}/bin/${target}-gcc" ) ]]
+}
+
+[[ -z ${BUILD_THIRDPARTY} ]] && if \
+	[[ ! -d "${PREFIX}" ]] \
+	|| missing_tools "${BUILD_PALM}" m68k-none-palmos \
+	|| missing_tools "${BUILD_68K}" m68k-apple-macos \
+	|| missing_tools "${BUILD_PPC}" powerpc-apple-macos \
+	|| [[ -n ${BUILD_MAC} && ! -x "${PREFIX}/bin/hfsutil" ]]; then
 	BUILD_THIRDPARTY=1
 	echo "Not all third-party components have been built yet, ignoring --no-thirdparty."
 fi
 
 ### Running on a Power Mac (tested with 10.4 Tiger)
-if [ "$(uname -m)" = "Power Macintosh" ]; then
+if [[ "$(uname -m || true)" = "Power Macintosh" ]]; then
 	# The default compiler won't work,
 	# check whether the compiler has been explictly specified
 	# on the command line
-	if [[ ! $BUILD_THIRDPARTY && ( -z "$HOST_CXX_COMPILER" || -z "$HOST_C_COMPILER" ) ]]; then
+	if [[ -z ${BUILD_THIRDPARTY} && ( -z ${HOST_CXX_COMPILER} || -z ${HOST_C_COMPILER} ) ]]; then
 		echo "**** Apple's version of GCC on Power Macs is too old."
 		echo "**** Please explicitly specify the C and C++ compilers"
 		echo "**** using the --host-c-compiler and --host-cxx-compiler options."
@@ -179,7 +197,7 @@ fi
 
 ##################### Locate and check Interfaces & Libraries
 
-if [[ -d "$SRC/CIncludes" || -d "$SRC/RIncludes" ]]; then
+if [[ -d "${SRC}/CIncludes" || -d "${SRC}/RIncludes" ]]; then
 	echo
 	echo "### WARNING:"
 	echo "### Different from previous versions, Retro68 now expects to find"
@@ -187,56 +205,71 @@ if [[ -d "$SRC/CIncludes" || -d "$SRC/RIncludes" ]]; then
 	echo
 fi
 
-if [[ $BUILD_MAC ]]; then
-	. "$SRC/interfaces-and-libraries.sh"
-	INTERFACES_DIR="$SRC/InterfacesAndLibraries" locateAndCheckInterfacesAndLibraries
+if [[ -n ${BUILD_MAC} ]]; then
+	. "${SRC}/interfaces-and-libraries.sh"
+	INTERFACES_DIR="${SRC}/InterfacesAndLibraries" locateAndCheckInterfacesAndLibraries
 fi
 
 ##################### Final confirmation
 
+function yes_no()
+{
+	[[ -n $1 ]] && echo "Yes" || echo "No"
+}
+
 echo "Confirm configuration"
 echo "====================="
 (
-	b="${BUILD_68K:+ 68K,}${BUILD_PPC:+ PPC,}${BUILD_CARBON:+ Carbon,}${BUILD_PALM:+ Palm,}"
-	echo "Build:${b%%,}${BUILD_THIRDPARTY:+ (including third-party)}"
+	b="${BUILD_68K:+" 68K,"}${BUILD_PPC:+" PPC,"}${BUILD_CARBON:+" Carbon,"}${BUILD_PALM:+" Palm,"}"
+	echo "Build:${b%%,}${BUILD_THIRDPARTY:+" (including third-party)"}"
 )
-echo -n "Clean after build: " ; [[ $CLEAN_AFTER_BUILD ]] && echo "Yes" || echo "No"
-echo "Host C compiler: ${HOST_C_COMPILER:-Default}"
-echo "Host C++ compiler: ${HOST_CXX_COMPILER:-Default}"
-[[ $BUILD_MAC ]] && echo "Interface kind: $INTERFACES_KIND"
-echo "Install prefix: $PREFIX"
-echo -n "Use Ninja for CMake: " ; [[ $CMAKE_GENERATOR ]] && echo "Yes" || echo "No"
+echo "Clean after build: $(yes_no "${CLEAN_AFTER_BUILD}" || true)"
+echo "Host C compiler: ${HOST_C_COMPILER:-"Default"}"
+echo "Host C++ compiler: ${HOST_CXX_COMPILER:-"Default"}"
+[[ -n ${BUILD_MAC} ]] && echo "Interface kind: ${INTERFACES_KIND}"
+echo "Install prefix: ${PREFIX}"
+echo "Use Ninja for CMake: $(yes_no "${USE_NINJA}" || true)"
 echo
-echo "Press 'y' to continue, or any other key to abort."
-read -r -s -n 1
 
-if [ "$REPLY" != "y" ]; then
-	echo "Aborted."
-	exit 0
+if [[ -z ${YES} ]]; then
+	echo "Press 'y' to continue, or any other key to abort."
+	read -r -s -n 1
+
+	if [[ ${REPLY} != "y" ]]; then
+		echo "Aborted."
+		exit 0
+	fi
 fi
 
 ##################### Third-Party components: binutils, gcc, hfsutils
+
+function start_build()
+{
+	local directory="$1"
+	[[ ! -d "${directory}" ]] && mkdir -p "${directory}"
+	pushd "${directory}" >/dev/null
+	[[ -n ${VERBOSE} ]] && set -x
+}
+
+function end_build()
+{
+	local directory="$1"
+	[[ -n ${VERBOSE} ]] && set +x
+	popd >/dev/null
+	[[ -n ${CLEAN_AFTER_BUILD} ]] && rm -rf "${directory}"
+}
 
 function build_binutils()
 {
 	local directory="$1"
 	shift
-	if [[ -z "$directory" ]]; then
-		echo "Missing directory for binutils build"
-		exit 1
-	fi
 
-	mkdir -p "$directory"
-	pushd "$directory" >/dev/null
-	[[ $VERBOSE ]] && set -x
-	"$SRC/binutils/configure" "--prefix=$PREFIX" --disable-doc "$@"
-	make "-j$BUILD_JOBS"
+	echo "Building binutils..."
+	start_build "${directory}"
+	[[ ! -f Makefile ]] && "${SRC}/binutils/configure" "--prefix=${PREFIX}" --disable-doc "$@"
+	make "-j${BUILD_JOBS}"
 	make install
-	[[ $VERBOSE ]] && set +x
-	popd >/dev/null
-
-	[[ $CLEAN_AFTER_BUILD ]] && rm -rf "$directory"
-
+	end_build "${directory}"
 	echo "Built binutils"
 }
 
@@ -244,25 +277,17 @@ function build_gcc()
 {
 	local directory="$1"
 	shift
-	if [[ -z "$directory" ]]; then
-		echo "Missing directory for gcc build"
-		exit 1
-	fi
 
-	mkdir -p "$directory"
-	pushd "$directory" >/dev/null
-	[[ $VERBOSE ]] && set -x
+	echo "Building gcc..."
+	start_build "${directory}"
 	export target_configargs="--disable-nls --enable-libstdcxx-dual-abi=no --disable-libstdcxx-verbose"
-	"$SRC/gcc/configure" "--prefix=$PREFIX" --enable-languages=c,c++ --disable-libssp "$@" MAKEINFO=missing
+	[[ ! -f Makefile ]] && "${SRC}/gcc/configure" "--prefix=${PREFIX}" \
+		--enable-languages=c,c++ --disable-libssp "$@" MAKEINFO=missing
 	# There seems to be a build failure in parallel builds; ignore any errors and try again without -j8.
-	make "-j$BUILD_JOBS" || make
+	make "-j${BUILD_JOBS}" || make
 	make install
 	unset target_configargs
-	[[ $VERBOSE ]] && set +x
-	popd >/dev/null
-
-	[[ $CLEAN_AFTER_BUILD ]] && rm -rf "$directory"
-
+	end_build "${directory}"
 	echo "Built gcc"
 }
 
@@ -270,57 +295,59 @@ function enable_elf2mac()
 {
 	local target="$1"
 
+	echo "Enabling Elf2Mac..."
 	# Move the real linker aside and install symlinks to Elf2Mac
 	# (Elf2Mac is built by cmake below)
-	[[ $VERBOSE ]] && set -x
-	mv "$PREFIX/bin/$target-ld" "$PREFIX/bin/$target-ld.real"
-	mv "$PREFIX/$target/bin/ld" "$PREFIX/$target/bin/ld.real"
-	ln -s Elf2Mac "$PREFIX/bin/$target-ld"
-	ln -s ../../bin/Elf2Mac "$PREFIX/$target/bin/ld"
-	[[ $VERBOSE ]] && set +x
-
+	[[ -n ${VERBOSE} ]] && set -x
+	mv "${PREFIX}/bin/${target}-ld"{,.real}
+	mv "${PREFIX}/${target}/bin/ld"{,.real}
+	ln -s Elf2Mac "${PREFIX}/bin/${target}-ld"
+	ln -s ../../bin/Elf2Mac "${PREFIX}/${target}/bin/ld"
+	[[ -n ${VERBOSE} ]] && set +x
 	echo "Enabled Elf2Mac"
 }
 
-if [[ $BUILD_THIRDPARTY ]]; then
-	[[ "$PREFIX" = "$DEFAULT_PREFIX" ]] && rm -rf "$PREFIX"
-	mkdir -p "$PREFIX"
-	PREFIX="$(cd "$PREFIX" && pwd -P)"
+if [[ -n ${BUILD_THIRDPARTY} ]]; then
+	[[ -z ${OVERWRITE} && "${PREFIX}" = "${DEFAULT_PREFIX}" ]] && rm -rf "${PREFIX}"
+	[[ ! -d "${PREFIX}" ]] && mkdir -p "${PREFIX}"
+	# Make path absolute for configure scripts even if realpath had been
+	# unavailable
+	PREFIX="$(cd "${PREFIX}" && pwd -P)"
 
-	if [[ "$(uname)" = "Darwin" ]]; then
+	if [[ "$(uname || true)" = "Darwin" ]]; then
 		# present-day Mac users are likely to install dependencies
 		# via the homebrew package manager
 		if [[ -d "/opt/homebrew" ]]; then
-			export CPPFLAGS="$CPPFLAGS -I/opt/homebrew/include"
-			export LDFLAGS="$LDFLAGS -L/opt/homebrew/lib"
+			export CPPFLAGS="${CPPFLAGS} -I/opt/homebrew/include"
+			export LDFLAGS="${LDFLAGS} -L/opt/homebrew/lib"
 		fi
 		# or they could be using MacPorts. Default install
 		# location is /opt/local
 		if [[ -d "/opt/local/include" ]]; then
-			export CPPFLAGS="$CPPFLAGS -I/opt/local/include"
-			export LDFLAGS="$LDFLAGS -L/opt/local/lib"
+			export CPPFLAGS="${CPPFLAGS} -I/opt/local/include"
+			export LDFLAGS="${LDFLAGS} -L/opt/local/lib"
 		fi
 
-		export CPPFLAGS="$CPPFLAGS -I/usr/local/include"
-		export LDFLAGS="$CPPFLAGS -L/usr/local/lib"
+		export CPPFLAGS="${CPPFLAGS} -I/usr/local/include"
+		export LDFLAGS="${LDFLAGS} -L/usr/local/lib"
 	fi
 
-	export CC="$HOST_C_COMPILER"
-	export CXX="$HOST_CXX_COMPILER"
+	export CC="${HOST_C_COMPILER}"
+	export CXX="${HOST_CXX_COMPILER}"
 
-	if [[ $BUILD_68K ]]; then
+	if [[ -n ${BUILD_68K} ]]; then
 		build_binutils binutils-build --target=m68k-apple-macos
 		build_gcc gcc-build --target=m68k-apple-macos --with-arch=m68k --with-cpu=m68000
 		enable_elf2mac m68k-apple-macos
 	fi
 
-	if [[ $BUILD_PALM ]]; then
+	if [[ -n ${BUILD_PALM} ]]; then
 		build_binutils binutils-build-palm --target=m68k-none-palmos
 		build_gcc gcc-build-palm --target=m68k-none-palmos --with-arch=m68k --with-cpu=m68000
 		enable_elf2mac m68k-none-palmos
 	fi
 
-	if [[ $BUILD_PPC ]]; then
+	if [[ -n ${BUILD_PPC} ]]; then
 		build_binutils binutils-build-ppc --disable-plugins --target=powerpc-apple-macos
 		build_gcc gcc-build-ppc --target=powerpc-apple-macos --disable-lto
 	fi
@@ -330,23 +357,18 @@ if [[ $BUILD_THIRDPARTY ]]; then
 	unset CPPFLAGS
 	unset LDFLAGS
 
-	if [[ $BUILD_MAC ]]; then
-		mkdir -p "$PREFIX/lib"
-		mkdir -p "$PREFIX/share/man/man1"
-		mkdir hfsutils
-		pushd hfsutils >/dev/null
-		[[ $VERBOSE ]] && set -x
-		"$SRC/hfsutils/configure" "--prefix=$PREFIX" "--mandir=$PREFIX/share/man" --enable-devlibs
+	if [[ -n ${BUILD_MAC} ]]; then
+		[[ ! -d "${PREFIX}/lib" ]] && mkdir -p "${PREFIX}/lib"
+		[[ ! -d "${PREFIX}/share/man/man1" ]] && mkdir -p "${PREFIX}/share/man/man1"
+		start_build hfsutils
+		[[ ! -f Makefile ]] && "${SRC}/hfsutils/configure" "--prefix=${PREFIX}" \
+			"--mandir=${PREFIX}/share/man" --enable-devlibs
 		make
 		make install
-		[[ $VERBOSE ]] && set +x
-		popd >/dev/null
-
-		[[ $CLEAN_AFTER_BUILD ]] && rm -rf hfsutils
-
+		end_build hfsutils
 		echo "Built hfsutils"
 	fi
-elif [[ $BUILD_MAC ]]; then # SKIP_THIRDPARTY
+elif [[ -n ${BUILD_MAC} ]]; then # SKIP_THIRDPARTY
 	removeInterfacesAndLibraries
 fi # SKIP_THIRDPARTY
 
@@ -354,74 +376,73 @@ fi # SKIP_THIRDPARTY
 
 echo "Building host-based tools..."
 
-mkdir build-host
-pushd build-host >/dev/null
-[[ $VERBOSE ]] && set -x
-cmake "$SRC" "-DCMAKE_INSTALL_PREFIX=$PREFIX" -DCMAKE_BUILD_TYPE=Debug "${HOST_CMAKE_FLAGS[@]}" "$CMAKE_GENERATOR"
-cmake --build . --target install
-[[ $VERBOSE ]] && set +x
-popd >/dev/null
+[[ -n ${VERBOSE} ]] && set -x
+cmake -S "${SRC}" -B build-host --fresh \
+	"-DCMAKE_INSTALL_PREFIX=${PREFIX}" \
+	-DCMAKE_BUILD_TYPE=Debug \
+	"${HOST_CMAKE_FLAGS[@]}" \
+	${USE_NINJA:+"-GNinja"}
+cmake --build build-host --target install "-j${BUILD_JOBS}"
+[[ -n ${VERBOSE} ]] && set +x
+[[ -n ${CLEAN_AFTER_BUILD} ]] && rm -rf build-host
 echo 'subdirs("build-host")' > CTestTestfile.cmake
 echo "Built host-based tools"
 
 # make tools (such as MakeImport and the compilers) available for later commands
-export PATH="$PREFIX/bin:$PATH"
+export PATH="${PREFIX}/bin:${PATH}"
 
 ##################### Set up Interfaces & Libraries
 
-if [[ $BUILD_MAC ]]; then
-	if [[ "$INTERFACES_KIND" = "multiversal" ]]; then
-		([[ $VERBOSE ]] && set -x ; cd "$SRC/multiversal" && ruby make-multiverse.rb -G CIncludes -o "$PREFIX/multiversal")
-		mkdir -p "$PREFIX/multiversal/libppc"
-		cp "$SRC/ImportLibraries"/*.a "$PREFIX/multiversal/libppc/"
+if [[ -n ${BUILD_MAC} ]]; then
+	if [[ "${INTERFACES_KIND}" = "multiversal" ]]; then
+		([[ -n ${VERBOSE} ]] && set -x ; cd "${SRC}/multiversal" && ruby make-multiverse.rb -G CIncludes -o "${PREFIX}/multiversal")
+		mkdir -p "${PREFIX}/multiversal/libppc"
+		cp "${SRC}/ImportLibraries"/*.a "${PREFIX}/multiversal/libppc/"
 	fi
 
 	setUpInterfacesAndLibraries
-	linkInterfacesAndLibraries "$INTERFACES_KIND"
+	linkInterfacesAndLibraries "${INTERFACES_KIND}"
 fi
 
 ##################### Build target libraries and samples
 
-function build_cmake()
+function build_library()
 {
 	local kind="$1"
 	local directory="$2"
 	local toolchain="${3:-}"
 
-	if [[ -z "$directory" ]]; then
-		echo "Missing directory for $kind target library build"
+	if [[ -z "${directory}" ]]; then
+		echo "Missing directory for ${kind} target library build"
 		exit 1
 	fi
 
-	echo "Building target libraries and samples for $kind..."
-	# Build target-based components for 68K
-	mkdir -p "$directory"
-	pushd "$directory" >/dev/null
-
-	[[ $VERBOSE ]] && set -x
-	cmake "$SRC" "-DCMAKE_TOOLCHAIN_FILE=../build-host/cmake/intree$toolchain.toolchain.cmake" \
-				 -DCMAKE_BUILD_TYPE=Release \
-				 -DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY \
-				 "$CMAKE_GENERATOR"
-	cmake --build . --target install
-	[[ $VERBOSE ]] && set -x
-	popd >/dev/null
-	echo "subdirs(\"$directory\")" >> CTestTestfile.cmake
-	echo "Built target $kind libraries and samples"
+	echo "Building target libraries and samples for ${kind}..."
+	[[ -n ${VERBOSE} ]] && set -x
+	cmake -S "${SRC}" -B "${directory}" --fresh \
+		"-DCMAKE_TOOLCHAIN_FILE=../build-host/cmake/intree${toolchain}.toolchain.cmake" \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY \
+		${USE_NINJA:+"-GNinja"}
+	cmake --build "${directory}" --target install
+	[[ -n ${VERBOSE} ]] && set +x
+	echo "subdirs(\"${directory}\")" >> CTestTestfile.cmake
+	[[ -n ${CLEAN_AFTER_BUILD} ]] && rm -rf "${directory}"
+	echo "Built target ${kind} libraries and samples"
 }
 
-[[ $BUILD_68K ]] && build_cmake 68K build-target
-[[ $BUILD_PALM ]] && build_cmake PalmOS build-target-palm
-[[ $BUILD_PPC ]] && build_cmake PowerPC build-target-ppc ppc
-[[ $BUILD_CARBON ]] && build_cmake Carbon build-target-carbon carbon
+[[ -n ${BUILD_68K} ]] && build_library 68K build-target
+[[ -n ${BUILD_PALM} ]] && build_library PalmOS build-target-palm
+[[ -n ${BUILD_PPC} ]] && build_library PowerPC build-target-ppc ppc
+[[ -n ${BUILD_CARBON} ]] && build_library Carbon build-target-carbon carbon
 
 echo
 echo "==============================================================================="
 echo "Done building Retro68."
-if [ "$(which Rez)" != "$PREFIX/bin/Rez" ]; then
-	echo "You might want to add $PREFIX/bin to your PATH."
+if [[ "$(command -v Rez >/dev/null || true)" != "${PREFIX}/bin/Rez" ]]; then
+	echo "You might want to add ${PREFIX}/bin to your PATH."
 fi
 
-[[ $BUILD_68K ]] && echo "You will find 68K sample applications in build-target/Samples/."
-[[ $BUILD_PPC ]] && echo "You will find PowerPC sample applications in build-target-ppc/Samples/."
-[[ $BUILD_CARBON ]] && echo "You will find Carbon sample applications in build-target-carbon/Samples/."
+[[ -n ${BUILD_68K} ]] && echo "You will find 68K sample applications in build-target/Samples/."
+[[ -n ${BUILD_PPC} ]] && echo "You will find PowerPC sample applications in build-target-ppc/Samples/."
+[[ -n ${BUILD_CARBON} ]] && echo "You will find Carbon sample applications in build-target-carbon/Samples/."
