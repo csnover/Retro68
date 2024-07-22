@@ -70,21 +70,23 @@ static unsigned short CalculateCRC(unsigned short CRC, const char* dataBlock, in
 
 static uint32_t MacTime()
 {
-    auto timestamp = std::invoke([&] -> std::chrono::system_clock::time_point {
+    using namespace std::chrono;
+    system_clock::time_point timestamp;
+    {
         const char *sourceDateEpochEnvVar = getenv("SOURCE_DATE_EPOCH");
         if (sourceDateEpochEnvVar && *sourceDateEpochEnvVar)
-            return std::chrono::system_clock::from_time_t((time_t)std::atoll(sourceDateEpochEnvVar));
+            timestamp = system_clock::from_time_t((time_t)std::atoll(sourceDateEpochEnvVar));
         else
-            return std::chrono::system_clock::now();
-    });
+            timestamp = system_clock::now();
+    }
 
     // Calculate Mac-style timestamp (seconds since 1 January 1904 00:00:00)
     std::tm mac_epoch_tm = {
         0, 0, 0, // 00:00:00
         1, 0, 4  // 1 January 1904
     };
-    auto mac_epoch = std::chrono::system_clock::from_time_t(std::mktime(&mac_epoch_tm));
-    return std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now() - mac_epoch).count();
+    auto mac_epoch = system_clock::from_time_t(std::mktime(&mac_epoch_tm));
+    return duration_cast<seconds>(timestamp - mac_epoch).count();
 }
 
 static void writeMacBinary(std::ostream& out, std::string filename,
