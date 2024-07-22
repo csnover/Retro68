@@ -43,15 +43,15 @@ const char * textSection = R"ld(/* ld script for Elf2Mac */
         . = ALIGN (2);
 
         /* The entry point. */
-        _entry_trampoline = .;
-        SHORT(DEFINED(__break_on_entry) ? 0xA9FF : 0x4e71);
-        LONG(0x61000002); /* bsr *+2 */
-        SHORT(0x0697); /* addi.l #_, (a7) */
-        LONG(@entryPoint@ - _entry_trampoline - 6);
-
-        PROVIDE(_start = .); /* fallback entry point to a safe spot - needed for libretro bootstrap */
+        _entry_trampoline = .; /* record current address for displacement */
+        // TODO: This could also use the preinit section on Mac
+        SHORT(DEFINED(__break_on_entry) ? 0xA9FF /* Debugger() */ : 0x4e71 /* nop */);
+        LONG(0x61000002); /* bsr *+2                ; push pc to stack */
+        SHORT(0x0697);    /* addi.l #ENTRY, (a7)    ; displace pc to entry point */
+        LONG(@entryPoint@ - _entry_trampoline - 6 /* sizeof(addi.l) */); /* #ENTRY */
+        PROVIDE(_start = .); /* fallback entry point to a safe spot - needed for libretro bootstrap when there is a custom entry point */
         Retro68InitMultisegApp = .; /* override this for the single-segment case */
-        SHORT(0x4e75); /* rts */
+        SHORT(0x4e75); /* rts                       ; jump to entry point */
 
         *(.relocvars)
         */libretrocrt.a:start.c.obj(.text*)
