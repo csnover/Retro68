@@ -1,0 +1,5 @@
+; Options for the PalmOS compiler.
+
+mbreak-on-start
+Target
+Break into the debugger before the application starts.

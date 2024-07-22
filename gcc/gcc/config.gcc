@@ -2367,6 +2367,7 @@ m68k-*-macos* | m68k-*-palmos*)
 		# PalmOS devices mostly use MC68328 SoC, which has a 68EC000 CPU
 		default_m68k_cpu=68000
 		tm_file="${tm_file} m68k/m68k-palmos.h"
+		extra_options="${extra_options} m68k/m68k-palmos.opt"
 		;;
 	*)
 		default_m68k_cpu=68020

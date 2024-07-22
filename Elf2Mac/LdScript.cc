@@ -66,6 +66,9 @@ const char * textSection = R"ld(/* ld script for Elf2Mac */
         *(.glue_7)
         *(.jcr)
         . = ALIGN (4) ;
+        __preinit_section = . ;
+        KEEP (*(.preinit))
+        __preinit_section_end = . ;
         __init_section = . ;
         KEEP (*(.init))
         __init_section_end = . ;
