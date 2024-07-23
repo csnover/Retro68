@@ -28,7 +28,7 @@ Note: There is now experimental support for the [Nix Package Manager](www.nixos.
 
 - Linux, Mac OS X or Windows (via Cygwin)
 - boost
-- CMake 3.9 or later
+- CMake 3.15 or later
 - GCC dependencies: GMP 4.2+, MPFR 2.3.1+ and MPC 0.8.0+
 - bison version 3.0.2 or later
 - ruby version 2.1 or later
@@ -322,9 +322,10 @@ Retro68-Specific Components:
 
 ### binutils
 
-Two new target platforms:
+Three new target platforms:
 - `m68k-apple-macos`, based on the `m68k-unknown-elf` target
 - `powerpc-apple-macos`, based on the `powerpc-ibm-aix` target
+- `m68k-none-palmos`, based on the `m68k-unknown-elf` target
 
 The powerpc target has a few hacks to make weak symbols work as expected.
 The elf target has a hack to protect MacsBug symbols from -gc-sections.
@@ -332,7 +333,7 @@ The elf target has a hack to protect MacsBug symbols from -gc-sections.
 ### gcc
 
 Various patches and hacks:
-- New target platforms `m68k-apple-macos` and `powerpc-apple-macos`.
+- New target platforms `m68k-apple-macos`, `powerpc-apple-macos`, and `m68k-none-palmos`.
 - support `"\pPascal String Literals"`
 
 68K specific:
