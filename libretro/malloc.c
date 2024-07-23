@@ -27,9 +27,21 @@
 #include <errno.h>
 #include <reent.h>
 #include <string.h>
+#ifdef __palmos__
+#include <Core/System/MemoryMgr.h>
+#else
 #include <MacMemory.h>
+#endif
 
 void referenceMyMalloc(void) {}
+
+#ifdef __palmos__
+typedef MemPtr Ptr;
+#define NewPtr MemPtrNew
+#define DisposePtr MemPtrFree
+#define GetPtrSize MemPtrSize
+#define memcpy MemMove
+#endif
 
 void *_malloc_r(struct _reent *reent_ptr, size_t sz)
 {
@@ -42,7 +54,13 @@ void *_malloc_r(struct _reent *reent_ptr, size_t sz)
 }
 void *_calloc_r(struct _reent *reent_ptr, size_t sz, size_t sz2)
 {
+#ifdef __palmos__
+    MemPtr p = MemPtrNew(sz*sz2);
+    if (p)
+        MemSet(p, sz, 0);
+#else
     Ptr p = NewPtrClear(sz*sz2);
+#endif
 
     if(!p)
         reent_ptr->_errno = ENOMEM;
@@ -69,9 +87,13 @@ void *_realloc_r(struct _reent *reent_ptr, void *ptr, size_t sz)
     }
     else
     {
+#ifdef __palmos__
+        if(MemPtrResize(ptr, sz))
+#else
         MemError();
         SetPtrSize(ptr, sz);
         if(MemError())
+#endif
         {
             size_t oldSz = GetPtrSize(ptr);
             if(sz > oldSz)
@@ -133,4 +155,3 @@ void *memalign(size_t alignment, size_t sz)
 
     return p;
 }
-

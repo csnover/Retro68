@@ -30,22 +30,26 @@ target_sources(retrocrt PRIVATE
     consolehooks.c
 )
 target_compile_options(retrocrt PRIVATE -ffunction-sections)
-install(TARGETS retrocrt DESTINATION lib)
+install(TARGETS retrocrt)
 
 if(RETRO_68K OR RETRO_PALMOS)
     target_sources(retrocrt PRIVATE
-        MultiSegApp.c
-        PoorMansDebugging.h
         Retro68Runtime.h
         relocate.c
-        start.c
     )
     install(FILES Retro68Runtime.h DESTINATION include)
 
-    if(RETRO_68K)
+    if(RETRO_PALMOS)
         target_sources(retrocrt PRIVATE
+            palmstart.c
+        )
+    else()
+        target_sources(retrocrt PRIVATE
+            MultiSegApp.c
             LoadSeg.s
+            PoorMansDebugging.h
             qdglobals.c
+            start.c
             Retro68.r
             Retro68APPL.r
         )

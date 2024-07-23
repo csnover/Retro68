@@ -33,51 +33,55 @@
  * earliest stages of program startup.
  */
 
+#ifdef __palmos__
+#include <Core/System/DebugMgr.h>
+#define DebugStr DbgMessage
+#endif
 
 #if !ENABLE_ASSERT
 #define assert(x) do { } while(0)
 #else
-#define assert(x) do { \
-        if(!(x)) {\
-            unsigned char str[6];    \
-            int i;    \
-            int l = __LINE__; \
-            for(i = 1; i < 6; i++)    \
-                str[i] = ' ';    \
-            str[0] = 5;    \
-            str[5] = '0';    \
-            for(i = 5; l && i > 0; i--)    \
-            {    \
+#define assert(x) do {                      \
+        if(!(x)) {                          \
+            unsigned char str[6];           \
+            int i;                          \
+            int l = __LINE__;               \
+            for(i = 1; i < 6; i++)          \
+                str[i] = ' ';               \
+            str[0] = 5;                     \
+            str[5] = '0';                   \
+            for(i = 5; l && i > 0; i--)     \
+            {                               \
                 str[i] = '0' + (l % 10);    \
-                l /= 10;    \
-            }    \
-            DebugStr(str);    \
-        }    \
+                l /= 10;                    \
+            }                               \
+            DebugStr(str);                  \
+        }                                   \
     } while(0)
 #endif
 
 #if !ENABLE_LOG
 #define log(x) do { } while(0)
 #else
-#define log(x) do { \
-        {\
-            unsigned char str[10];    \
-            int ___i;    \
-            unsigned l = (x); \
-            for(___i = 2; ___i < 10; ___i++)    \
-                str[___i] = ' ';    \
-            str[0] = 9;    \
-            str[1] = 'L';    \
-            str[9] = '0';    \
+#define log(x) do {                                 \
+        {                                           \
+            unsigned char str[10];                  \
+            int ___i;                               \
+            unsigned l = (x);                       \
+            for(___i = 2; ___i < 10; ___i++)        \
+                str[___i] = ' ';                    \
+            str[0] = 9;                             \
+            str[1] = 'L';                           \
+            str[9] = '0';                           \
             for(___i = 8; l && ___i > 1; ___i--)    \
-            {    \
-                str[___i] = '0' + (l & 0xF);    \
-                if((l & 0xF) >= 0xA) \
+            {                                       \
+                str[___i] = '0' + (l & 0xF);        \
+                if((l & 0xF) >= 0xA)                \
                     str[___i] = 'A' - 10 + (l&0xF); \
-                l >>= 4;    \
-            }    \
-            DebugStr(str);    \
-        }    \
+                l >>= 4;                            \
+            }                                       \
+            DebugStr(str);                          \
+        }                                           \
     } while(0)
 
 #endif

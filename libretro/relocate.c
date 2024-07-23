@@ -26,7 +26,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#ifdef PALMOS
+#ifdef __palmos__
 #include <SystemMgr.h>
 #define StripAddress
 #else
@@ -72,7 +72,7 @@ Retro68RelocState relocState __attribute__ ((section(".relocvars"))) = {
 };
 
 
-#ifdef PALMOS
+#ifdef __palmos__
 #define GET_VIRTUAL_ADDRESS(NAME, SYM) \
     do {    \
         __asm__( "\tlea " #SYM ", %0\n"    \
@@ -164,7 +164,6 @@ void Retro68ApplyRelocations(uint8_t *base, uint32_t size, void *relocations, ui
 
 void Retro68Relocate()
 {
-#ifndef PALMOS
     // memory address to retrieve the ROM type (64K or a later ROM)
     // see for details http://www.mac.linux-m68k.org/devel/macalmanac.php
     short* ROM85      = (short*) 0x028E;
@@ -185,7 +184,6 @@ void Retro68Relocate()
         hasStripAddr = (trapStripAddr != trapUnimpl);
         hasFlushCodeCache = (trapFlushCodeCache != trapUnimpl);
     }
-#endif
                     
     // Figure out the displacement
     // what is the difference between the addresses in our program code
@@ -342,7 +340,7 @@ void Retro68Relocate()
     // ... but that's the job of _start(). 
 }
 
-#ifdef PALMOS
+#ifdef __palmos__
 void Retro68CallPreinit(uint16_t flags)
 {
     typedef void (*preinitFunction)(uint16_t);

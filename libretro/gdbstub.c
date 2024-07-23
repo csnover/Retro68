@@ -13,8 +13,7 @@
 #include <FeatureMgr.h>
 #include <SystemMgr.h>
 
-static void
-StartDebug (UInt16, void *, UInt16 flags)
+static void StartDebug(UInt16 flags)
 {
     if ((flags & (sysAppLaunchFlagNewGlobals | sysAppLaunchFlagSubCall)) == 0)
         return;

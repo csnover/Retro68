@@ -25,7 +25,7 @@
 
 #include <stdint.h>
 
-#ifdef PALMOS
+#ifdef __palmos__
 #include <PalmTypes.h>
 typedef MemPtr Ptr;
 typedef MemHandle Handle;
@@ -54,7 +54,7 @@ typedef MemHandle Handle;
 // StripAddress24 must not be used on 32-bit systems, or the resulting crashes
 // will be even more mysterious.
 
-#ifdef PALMOS
+#ifdef __palmos__
 #define StripAddress24
 #else
 #define StripAddress24(x) ((char*) ((unsigned long)(x) & 0x00FFFFFF))
@@ -74,7 +74,7 @@ typedef MemHandle Handle;
     } while(0)
 
 void Retro68Relocate(void);
-#ifdef PALMOS
+#ifdef __palmos__
 void Retro68CallPreinit(uint16_t flags);
 #endif
 void Retro68CallConstructors(void);

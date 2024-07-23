@@ -33,34 +33,71 @@
 #include <string.h>
 #include <stdlib.h>
 
+#ifdef __palmos__
+#include <Core/System/Chars.h>
+#include <Core/System/DebugMgr.h>
+#include <Core/System/ErrorBase.h>
+#include <Core/System/FileStream.h>
+#include <Core/System/MemoryMgr.h>
+#include <Core/System/TimeMgr.h>
+#include <Core/UI/Event.h>
+#else
 #include <MacMemory.h>
 #include <Processes.h>
 #include <Files.h>
 #include <TextUtils.h>
 #include <Errors.h>
+#endif
 
 void *_sbrk_r(struct _reent *reent, ptrdiff_t increment)
 {
+#ifdef __palmos__
+    DbgSrcBreak();
+    MemPtr p = MemPtrNew(increment);
+    if(p)
+        MemSet(p, increment, 0);
+#else
     Debugger();
-    return NewPtrClear(increment);
+    Ptr p = NewPtrClear(increment);
+#endif
+    return p;
 }
 
 void _exit(int status)
 {
+#ifdef __palmos__
+    // prc-tools just raised an error when someone tried to call exit. This
+    // implementation tries to do the right thing, taken from the Palm OS
+    // Programmer’s Companion, Volume I, p163: “Opening the Launcher
+    // Programmatically”
+    EventType e;
+    MemSet(&e, sizeof(e), 0);
+    e.eType = keyDownEvent;
+    e.data.keyDown.chr = launchChr;
+    e.data.keyDown.modifiers = commandKeyMask;
+    EvtAddEventToQueue(&e);
+    for(;;) EvtGetEvent(&e, evtWaitForever);
+#else
     //if(status != 0)
     //    Debugger();
     ExitToShell();
     for(;;)
         ;
+#endif
 }
 
+#ifndef __palmos__
 ssize_t _consolewrite(int fd, const void *buf, size_t count);
 ssize_t _consoleread(int fd, void *buf, size_t count);
 
 const int kMacRefNumOffset = 10;
+#endif
 
 ssize_t _write_r(struct _reent *reent, int fd, const void *buf, size_t count)
 {
+#ifdef __palmos__
+    return FileWrite((FileHand)fd, buf, 1, count, NULL);
+#else
     long cnt = count;
     if(fd >= kMacRefNumOffset)
     {
@@ -69,10 +106,14 @@ ssize_t _write_r(struct _reent *reent, int fd, const void *buf, size_t count)
     }
     else
         return _consolewrite(fd,buf,count);
+#endif
 }
 
 ssize_t _read_r(struct _reent *reent, int fd, void *buf, size_t count)
 {
+#ifdef __palmos__
+    return FileRead((FileHand)fd, buf, 1, count, NULL);
+#else
     long cnt = count;
     if(fd >= kMacRefNumOffset)
     {
@@ -81,10 +122,42 @@ ssize_t _read_r(struct _reent *reent, int fd, void *buf, size_t count)
     }
     else
         return _consoleread(fd,buf,count);
+#endif
 }
 
 int _open_r(struct _reent *reent, const char* name, int flags, int mode)
 {
+#ifdef __palmos__
+    UInt32 openMode;
+    switch(flags & O_ACCMODE)
+    {
+        case O_RDONLY:
+            openMode = fileModeReadOnly;
+            break;
+        case O_RDWR:
+        case O_WRONLY:
+            // TODO: Emulate O_CREAT
+            if(flags & O_APPEND)
+                openMode = fileModeAppend;
+            else if(flags & O_TRUNC)
+                openMode = fileModeReadWrite;
+            else
+                openMode = fileModeUpdate;
+            break;
+    }
+    if(flags & O_EXCL)
+        openMode |= fileModeExclusive;
+    Err err;
+    FileHand fp = FileOpen(0, name, 0, 0, mode, &err);
+    switch(err)
+    {
+        case errNone: return (int)fp;
+        case fileErrNotFound: reent->_errno = EACCES; break;
+        case fileErrMemError: reent->_errno = ENOMEM; break;
+        default: reent->_errno = EINVAL; break;
+    }
+    return -1;
+#else
     Str255 pname;
 #if TARGET_API_MAC_CARBON
     // Carbon has the new, sane version.
@@ -131,10 +204,20 @@ int _open_r(struct _reent *reent, const char* name, int flags, int mode)
     }
 
     return ref + kMacRefNumOffset;
+#endif
 }
 
 int _close_r(struct _reent *reent, int fd)
 {
+#ifdef __palmos__
+    switch(FileClose((FileHand)fd))
+    {
+        case errNone: return 0;
+        case fileErrInvalidDescriptor: reent->_errno = EBADF; break;
+        default: reent->_errno = EIO; break;
+    }
+    return -1;
+#else
     if(fd >= kMacRefNumOffset) {
         short refNum = fd - kMacRefNumOffset;
         short vRefNum;
@@ -143,6 +226,7 @@ int _close_r(struct _reent *reent, int fd)
         if (err == noErr)
             FlushVol(NULL, vRefNum);
     }
+#endif
     return 0;
 }
 
@@ -158,6 +242,24 @@ extern int _stat_r(struct _reent * reent, const char *fn, struct stat *buf)
 
 off_t _lseek_r(struct _reent *reent, int fd, off_t offset, int whence)
 {
+#ifdef __palmos__
+    FileOriginEnum origin = fileOriginBeginning;
+    switch(whence)
+    {
+        case SEEK_CUR: origin = fileOriginCurrent; break;
+        case SEEK_END: origin = fileOriginEnd; break;
+    }
+    Err err;
+    off_t offs;
+    if((err = FileSeek((FileHand)fd, offset, origin)) == errNone)
+        offs = FileTell((FileHand)fd, NULL, &err);
+    else
+        offs = (off_t) -1;
+
+    if(err != errNone)
+        reent->_errno = EINVAL;
+    return offs;
+#else
     if(fd >= kMacRefNumOffset)
     {
         short posMode;
@@ -181,6 +283,7 @@ off_t _lseek_r(struct _reent *reent, int fd, off_t offset, int whence)
         return finalPos;
     }
     return (off_t) -1;
+#endif
 }
 
 int _kill_r(struct _reent *reent, pid_t pid, int sig)
@@ -213,7 +316,12 @@ int _fcntl_r(struct _reent *reent, int fd, int cmd, int arg)
 
 int _isatty_r(struct _reent *reent, int fd)
 {
+#ifdef __palmos__
+    reent->_errno = ENOTTY;
+    return 0;
+#else
     return fd < kMacRefNumOffset;
+#endif
 }
 
 int _link_r(struct _reent *reent, const char *from, const char *to)
@@ -234,6 +342,14 @@ int _rename_r(struct _reent *reent, const char *from, const char *to)
 
 int _unlink_r(struct _reent *reent, const char *fn)
 {
+#ifdef __palmos__
+    switch (FileDelete(0, fn))
+    {
+        case errNone: return 0;
+        case fileErrNotFound: reent->_errno = ENOENT; break;
+        default: reent->_errno = EIO; break;
+    }
+#endif
     return -1;
 }
 
@@ -249,16 +365,19 @@ int _wait_r(struct _reent *reent, int *wstatus)
     return -1;                    /* Always fails */
 }
 
-
-
 int _gettimeofday_r(struct _reent *reent, struct timeval *tp, void *__tz)
 {
     /* Classic MacOS's GetDateTime function returns an integer.
      * TickCount() has a slightly higher resolution, but is independent of the real-time clock.
      */
-    unsigned long secs;
+    unsigned long secs, ticks;
+#ifdef __palmos__
+    secs = TimGetSeconds();
+    ticks = TimGetTicks();
+#else
     GetDateTime(&secs);
-    unsigned long ticks = TickCount();
+    ticks = TickCount();
+#endif
 
     static unsigned long savedTicks = 0, savedSecs = 0;
     
