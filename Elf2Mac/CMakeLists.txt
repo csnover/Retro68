@@ -24,9 +24,8 @@ add_executable(Elf2Mac
     Symtab.h Symtab.cc
     Section.h Section.cc
     Object.h Object.cc)
-target_link_libraries(Elf2Mac ResourceFiles ELF)
 
+target_link_libraries(Elf2Mac PRIVATE ResourceFiles ELF Boost::headers)
 target_include_directories(Elf2Mac PRIVATE ${CMAKE_INSTALL_PREFIX}/include)
-target_include_directories(Elf2Mac PRIVATE ${Boost_INCLUDE_DIR})
 
-install(TARGETS Elf2Mac RUNTIME DESTINATION bin)
+install(TARGETS Elf2Mac)

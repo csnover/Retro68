@@ -1,27 +1,7 @@
 find_package(Boost COMPONENTS filesystem program_options)
-find_path(HFS_INCLUDE_DIR NAMES hfs.h)
-find_library(HFS_LIBRARY NAMES hfs)
 
-set(LAUNCHMETHODS
-    Executor.h Executor.cc
-    MiniVMac.h MiniVMac.cc
-    SSH.h SSH.cc
-    StreamBasedLauncher.h StreamBasedLauncher.cc
-    Serial.h Serial.cc
-    TCP.h TCP.cc
-    SharedFile.h SharedFile.cc
-)
-
-if(APPLE)
-    LIST(APPEND LAUNCHMETHODS
-        Classic.h Classic.cc
-        )
-    LIST(APPEND LAUNCHMETHODS
-        Carbon.h Carbon.cc)
-endif()
-add_definitions(-DRETRO68_PREFIX="${CMAKE_INSTALL_PREFIX}")
-
-add_executable(LaunchAPPL
+add_executable(LaunchAPPL)
+target_sources(LaunchAPPL PRIVATE
     LaunchAPPL.cc
     MakeExecutable.cc
 
@@ -30,14 +10,38 @@ add_executable(LaunchAPPL
 
     Utilities.h Utilities.cc
 
-    ${LAUNCHMETHODS})
-
-target_include_directories(LaunchAPPL PRIVATE ${CMAKE_INSTALL_PREFIX}/include ${Boost_INCLUDE_DIR} ${HFS_INCLUDE_DIR})
-target_link_libraries(LaunchAPPL ResourceFiles LaunchAPPLCommon ${Boost_LIBRARIES} ${HFS_LIBRARY})
+    Executor.h Executor.cc
+    SSH.h SSH.cc
+    StreamBasedLauncher.h StreamBasedLauncher.cc
+    Serial.h Serial.cc
+    TCP.h TCP.cc
+    SharedFile.h SharedFile.cc)
 
 if(APPLE)
+    target_sources(LaunchAPPL PRIVATE
+        Classic.h Classic.cc
+        Carbon.h Carbon.cc)
     find_library(APPLICATIONSERVICES_FW ApplicationServices)
-    target_link_libraries(LaunchAPPL ${APPLICATIONSERVICES_FW})    
+    target_link_libraries(LaunchAPPL PRIVATE ${APPLICATIONSERVICES_FW})
 endif()
 
-install(TARGETS LaunchAPPL RUNTIME DESTINATION bin)
+target_compile_definitions(LaunchAPPL PRIVATE RETRO68_PREFIX="${CMAKE_INSTALL_PREFIX}")
+target_link_libraries(LaunchAPPL PRIVATE
+    ResourceFiles
+    LaunchAPPLCommon
+    Boost::headers
+    Boost::filesystem
+    Boost::program_options)
+
+find_path(HFS_INCLUDE_DIR NAMES hfs.h)
+find_library(HFS_LIBRARY NAMES hfs)
+if(HFS_LIBRARY_FOUND)
+    target_compile_definitions(LaunchAPPL PRIVATE RETRO_HAVE_HFSUTILS)
+    target_sources(LaunchAPPL PRIVATE MiniVMac.h MiniVMac.cc)
+    target_link_libraries(LaunchAPPL PRIVATE ${HFS_LIBRARY})
+    target_include_directories(LaunchAPPL PRIVATE ${HFS_INCLUDE_DIR})
+else()
+    message(STATUS "hfsutils not found. Building LaunchAPPL without MiniVMac support")
+endif()
+
+install(TARGETS LaunchAPPL)

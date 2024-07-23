@@ -6,7 +6,7 @@ add_application(MPWTool
     CREATOR "MPS "
     main.c
 )
-if(CMAKE_SYSTEM_NAME MATCHES Retro68)
+if(RETRO_68K)
     # On 68K, the application must be single-segment.
     
     # The trap patches required for Retro68's multi-segment

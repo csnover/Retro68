@@ -1,9 +1,9 @@
-find_program(LAUNCH_APPL LaunchAPPL PATH "${CMAKE_INSTALL_PREFIX}/../bin/")
+find_program(LAUNCH_APPL LaunchAPPL REQUIRED)
 execute_process(COMMAND ${LAUNCH_APPL} --list-emulators
     OUTPUT_VARIABLE EMULATOR_LIST)
 string(REPLACE "\n" ";" EMULATOR_LIST "${EMULATOR_LIST}")
 
-if(CMAKE_SYSTEM_NAME MATCHES "RetroCarbon")
+if(RETRO_CARBON)
     if("carbon" IN_LIST EMULATOR_LIST)
         set(RETRO68_LAUNCH_METHOD carbon CACHE STRING "How to launch Mac applications (for automated testing)")
     else()
@@ -17,11 +17,11 @@ else()
     endif()
 endif()
 
-if(CMAKE_SYSTEM_NAME MATCHES "RetroCarbon")
+if(RETRO_CARBON)
     set(TESTCASE_PREFIX "Carbon.")
-elseif(CMAKE_SYSTEM_NAME MATCHES "Retro68")
+elseif(RETRO_68K)
     set(TESTCASE_PREFIX "M68K.")
-elseif(CMAKE_SYSTEM_NAME MATCHES "RetroPPC")
+elseif(RETRO_PPC)
     set(TESTCASE_PREFIX "PPC.")
 else()
     set(TESTCASE_PREFIX)
@@ -30,14 +30,11 @@ endif()
 set(RETRO68_TEST_CONFIG "--timeout=10" CACHE STRING "Options to pass to LaunchAPPL when running tests")
 
 set(LAUNCH_METHOD_FLAG)
-if(RETRO68_LAUNCH_METHOD MATCHES "NONE")
-else()
-set(LAUNCH_METHOD_FLAG "-e${RETRO68_LAUNCH_METHOD}")
-endif()    # RETRO68_LAUNCH_METHOD
+if(NOT RETRO68_LAUNCH_METHOD MATCHES "NONE")
+    set(LAUNCH_METHOD_FLAG "-e${RETRO68_LAUNCH_METHOD}")
+endif()
 
 enable_testing()
-
-
 
 function(test FILE)
     get_filename_component(NAME ${FILE} NAME_WE)
@@ -50,7 +47,7 @@ function(test FILE)
     endif()
 endfunction()
 
-if(CMAKE_SYSTEM_NAME MATCHES "Retro68")
+if(RETRO_68K)
     test(ReallyEmpty.c)
     set_target_properties(ReallyEmpty PROPERTIES LINK_FLAGS "-Wl,-gc-sections -Wl,--mac-single")
 endif()
@@ -69,7 +66,7 @@ test(Init.cc PROPERTIES PASS_REGULAR_EXPRESSION "constructor\nmain\ndestructor")
 
 test(StdIO.c PROPERTIES PASS_REGULAR_EXPRESSION "OK")
 
-if(CMAKE_SYSTEM_NAME MATCHES Retro68)
+if(RETRO_68K)
     add_application(Segments Segment1.c Segment2.c Segments.segmap Test.h Test.c)
     set_target_properties(Segments PROPERTIES
         LINK_FLAGS "-Wl,-gc-sections -Wl,--mac-segments -Wl,${CMAKE_CURRENT_SOURCE_DIR}/Segments.segmap")
@@ -78,7 +75,7 @@ if(CMAKE_SYSTEM_NAME MATCHES Retro68)
 
 
     test(PCRel32.c PROPERTIES PASS_REGULAR_EXPRESSION "OK")
-    target_compile_options(PCRel32 PRIVATE -march=68020)
+    target_compile_options(PCRel32 PRIVATE -march=68000)
 endif()
 
 test(Exceptions.cc PROPERTIES PASS_REGULAR_EXPRESSION "OK")

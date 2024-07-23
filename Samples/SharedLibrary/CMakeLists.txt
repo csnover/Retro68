@@ -28,7 +28,7 @@ if(TARGET retrocrt)
     #       make sure the run-time library is already compiled
     # (not needed for standalone projects)
     add_dependencies(Library retrocrt)
-endif(TARGET retrocrt)
+endif()
 
 # Step 2: Tell the linker to export symbols.
 
@@ -36,9 +36,7 @@ endif(TARGET retrocrt)
 # target_link_options(Library PUBLIC -Wl,-bexpfull)
 
 # Or tell it to use an export list from a separate file:
-# (CMake 3.13 or later)
-# target_link_options(Library PUBLIC -Wl,-bE:${CMAKE_CURRENT_SOURCE_DIR}/library.exp)
-set_target_properties(Library PROPERTIES LINK_FLAGS -Wl,-bE:${CMAKE_CURRENT_SOURCE_DIR}/library.exp)
+target_link_options(Library PUBLIC -Wl,-bE:${CMAKE_CURRENT_SOURCE_DIR}/library.exp)
 
 # Note: Step 1 & 2 are equivalent to the command:
 #  powerpc-apple-macos-gcc -shared -Wl,-bE:library.exp library.c -o libLibrary.so
@@ -52,6 +50,7 @@ add_custom_command(
 
 # Step 4: Combine the PEF data fork with a resource fork containing a cfrg resource:
 
+find_program(REZ Rez REQUIRED)
 if (REZ_INCLUDE_PATH)
     set(REZ_INCLUDE_FLAG -I${REZ_INCLUDE_PATH})
 endif()
@@ -66,7 +65,6 @@ add_custom_command(
             --cc "%Library.ad"
             -t "shlb" -c "????"
             --data Library.pef
-            
     DEPENDS Library.pef ${rsrc_files})
 
 # Step 5: Create a CMake custom target so CMake knows that Steps 3 and 4 need to be done

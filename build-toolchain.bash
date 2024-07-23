@@ -381,7 +381,11 @@ cmake -S "${SRC}" -B build-host --fresh \
 	"-DCMAKE_INSTALL_PREFIX=${PREFIX}" \
 	-DCMAKE_BUILD_TYPE=Debug \
 	"${HOST_CMAKE_FLAGS[@]}" \
-	${USE_NINJA:+"-GNinja"}
+	${USE_NINJA:+"-GNinja"} \
+	${BUILD_PALM:+"-DRETRO_PALMOS=ON"} \
+	${BUILD_PPC:+"-DRETRO_PPC=ON"} \
+	${BUILD_68K:+"-DRETRO_68K=ON"} \
+	${BUILD_CARBON:+"-DRETRO_CARBON=ON"}
 cmake --build build-host --target install "-j${BUILD_JOBS}"
 [[ -n ${VERBOSE} ]] && set +x
 [[ -n ${CLEAN_AFTER_BUILD} ]] && rm -rf build-host
@@ -408,33 +412,30 @@ fi
 
 function build_library()
 {
-	local kind="$1"
-	local directory="$2"
-	local toolchain="${3:-}"
+	local directory="$1"
+	local abi="$2"
+	shift 2
 
-	if [[ -z "${directory}" ]]; then
-		echo "Missing directory for ${kind} target library build"
-		exit 1
-	fi
-
-	echo "Building target libraries and samples for ${kind}..."
+	echo "Building target libraries and samples for ${abi}..."
 	[[ -n ${VERBOSE} ]] && set -x
 	cmake -S "${SRC}" -B "${directory}" --fresh \
-		"-DCMAKE_TOOLCHAIN_FILE=../build-host/cmake/intree${toolchain}.toolchain.cmake" \
+		"-DCMAKE_TOOLCHAIN_FILE=${PREFIX}/share/cmake/Retro.toolchain.cmake" \
 		-DCMAKE_BUILD_TYPE=Release \
 		-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY \
-		${USE_NINJA:+"-GNinja"}
+		${USE_NINJA:+"-GNinja"} \
+		"-DRETRO_ABI=${abi}" \
+		"$@"
 	cmake --build "${directory}" --target install
 	[[ -n ${VERBOSE} ]] && set +x
 	echo "subdirs(\"${directory}\")" >> CTestTestfile.cmake
 	[[ -n ${CLEAN_AFTER_BUILD} ]] && rm -rf "${directory}"
-	echo "Built target ${kind} libraries and samples"
+	echo "Built target ${abi} libraries and samples"
 }
 
-[[ -n ${BUILD_68K} ]] && build_library 68K build-target
-[[ -n ${BUILD_PALM} ]] && build_library PalmOS build-target-palm
-[[ -n ${BUILD_PPC} ]] && build_library PowerPC build-target-ppc ppc
-[[ -n ${BUILD_CARBON} ]] && build_library Carbon build-target-carbon carbon
+[[ -n ${BUILD_68K} ]] && build_library build-target m68k-apple-macos
+[[ -n ${BUILD_PALM} ]] && build_library build-target-palm m68k-none-palmos
+[[ -n ${BUILD_PPC} ]] && build_library build-target-ppc powerpc-apple-macos
+[[ -n ${BUILD_CARBON} ]] && build_library build-target-carbon powerpc-apple-macos -DRETRO_CARBON=ON
 
 echo
 echo "==============================================================================="

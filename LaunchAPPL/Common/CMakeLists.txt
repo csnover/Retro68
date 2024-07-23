@@ -11,6 +11,6 @@ target_include_directories(LaunchAPPLCommon PUBLIC .)
 add_executable(TestLaunchAPPLCommon Test.cc)
 target_link_libraries(TestLaunchAPPLCommon LaunchAPPLCommon)
 
-if(CMAKE_SYSTEM_NAME MATCHES Retro)
-    target_compile_options(LaunchAPPLCommon PRIVATE -ffunction-sections  -Os)
+if(RETRO)
+    target_compile_options(LaunchAPPLCommon PRIVATE -ffunction-sections -Os)
 endif()

@@ -1,6 +1,6 @@
 %require "3.0.2"
 %defines
-%define parser_class_name {RezParser}
+%define api.parser.class {RezParser}
 %skeleton "lalr1.cc"
 
 %locations;

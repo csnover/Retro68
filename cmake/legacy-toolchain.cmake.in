@@ -1,0 +1,4 @@
+set(RETRO_LEGACY_TOOLCHAIN TRUE)
+set(RETRO_ABI "@RETRO_ABI@")
+set(RETRO_CARBON @RETRO_CARBON@)
+include(${CMAKE_CURRENT_LIST_DIR}/Retro.toolchain.cmake)

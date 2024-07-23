@@ -15,14 +15,16 @@ public:
     {
         autodetect,
 #ifdef __APPLE__
-        real,
+        real = 1,
 #endif
 #ifdef PALMOS
-        prc,
+        prc = 2,
 #endif
-        macbin,
-        diskimage,
-        basilisk,
+        macbin = 3,
+#ifdef RETRO_HAVE_HFSUTILS
+        diskimage = 4,
+#endif
+        basilisk = 5,
         applesingle,
         underscore_appledouble,
         percent_appledouble

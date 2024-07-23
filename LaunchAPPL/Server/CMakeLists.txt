@@ -6,26 +6,26 @@ CHECK_INCLUDE_FILE(MacTCP.h HAVE_MACTCP_H)
 
 set(HAVE_OPENTRANSPORT NO)
 if(HAVE_OPENTRANSPORT_H)
-    if(CMAKE_SYSTEM_NAME MATCHES RetroPPC)
+    if(RETRO_PPC)
         find_library(OPENTRANSPORT_LIBRARY NAMES libOpenTransportLib.a)
         if(OPENTRANSPORT_LIBRARY)
             set(HAVE_OPENTRANSPORT YES)
         endif()
-    elseif(CMAKE_SYSTEM_NAME MATCHES Retro68)
+    elseif(RETRO_68K)
         find_library(OPENTRANSPORT_LIBRARY NAMES libOpenTransport.a)
         if(OPENTRANSPORT_LIBRARY)
             set(HAVE_OPENTRANSPORT YES)
         endif()
-    elseif(CMAKE_SYSTEM_NAME MATCHES RetroCarbon)
+    elseif(RETRO_CARBON)
         set(HAVE_OPENTRANSPORT YES)
     endif()
 endif()
 
 set(HAVE_NAVIGATION NO)
 if(HAVE_NAVIGATION_H)
-    if(CMAKE_SYSTEM_NAME MATCHES RetroPPC)
+    if(RETRO_PPC)
         find_library(NAVIGATION_LIBRARY NAMES libNavigation.a)
-    elseif(CMAKE_SYSTEM_NAME MATCHES Retro68)
+    elseif(RETRO_68K)
         find_library(NAVIGATION_LIBRARY NAMES Navigation.far)
     else()
         set(HAVE_NAVIGATION YES)
@@ -36,7 +36,7 @@ if(HAVE_NAVIGATION_H)
     endif()
 endif()
 
-if(HAVE_MACTCP_H AND NOT CMAKE_SYSTEM_NAME MATCHES RetroCarbon)
+if(HAVE_MACTCP_H AND NOT RETRO_CARBON)
     set(HAVE_MACTCP YES)
 else()
     set(HAVE_MACTCP NO)
@@ -49,16 +49,14 @@ set(CONNECTION_SOURCES
         SharedFileProvider.cc
     )
 
-if(CMAKE_SYSTEM_NAME MATCHES RetroCarbon)
-else()
+if(NOT RETRO_CARBON)
     list(APPEND CONNECTION_SOURCES
-            SerialConnectionProvider.h
-            SerialConnectionProvider.cc
-            MacSerialStream.h
-            MacSerialStream.cc
-        )
-endif()        
-
+        SerialConnectionProvider.h
+        SerialConnectionProvider.cc
+        MacSerialStream.h
+        MacSerialStream.cc
+    )
+endif()
 
 if(HAVE_MACTCP)
     list(APPEND CONNECTION_SOURCES
@@ -78,14 +76,12 @@ if(HAVE_OPENTRANSPORT)
         )
 endif()
 
-
 option(LAUNCHAPPLSERVER_DEBUG_CONSOLE "Add a debug console to LaunchAPPLServer" FALSE)
 
 set(MAYBE_CONSOLE)
 if(LAUNCHAPPLSERVER_DEBUG_CONSOLE)
     set(MAYBE_CONSOLE "CONSOLE")
 endif()
-
 
 add_application(LaunchAPPLServer 
     TYPE "APPL"
@@ -128,7 +124,7 @@ set_target_properties(LaunchAPPLServer PROPERTIES
         CXX_STANDARD 17
     )
 target_compile_options(LaunchAPPLServer PRIVATE -ffunction-sections -Os)
-if(CMAKE_SYSTEM_NAME MATCHES Retro68)
+if(RETRO_68K)
     set_target_properties(LaunchAPPLServer PROPERTIES
             LINK_FLAGS "-Wl,-gc-sections -Wl,--mac-segments -Wl,${CMAKE_CURRENT_SOURCE_DIR}/LaunchAPPLServer.segmap"
         )
@@ -139,10 +135,10 @@ else()
 endif()
 
 if(HAVE_OPENTRANSPORT)
-    if(CMAKE_SYSTEM_NAME MATCHES RetroPPC)
+    if(RETRO_PPC)
         target_link_libraries(LaunchAPPLServer -lOpenTransportAppPPC -lOpenTransportLib -lOpenTptInternetLib)
     endif()
-    if(CMAKE_SYSTEM_NAME MATCHES Retro68)
+    if(RETRO_68K)
         target_link_libraries(LaunchAPPLServer -lOpenTransport -lOpenTransportApp -lOpenTptInet)
     endif()
 endif()

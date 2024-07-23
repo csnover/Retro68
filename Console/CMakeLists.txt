@@ -33,12 +33,12 @@ set_target_properties(RetroConsole
 
 # different library name for Carbon
 # (Carbon shares the powerpc-apple-macos/ directory with Classic PPC)
-if(CMAKE_SYSTEM_NAME MATCHES RetroCarbon)
+if(RETRO_CARBON)
     set_target_properties(RetroConsole PROPERTIES OUTPUT_NAME RetroConsoleCarbon)
 endif()
 target_include_directories(RetroConsole PUBLIC .)
 
-install(TARGETS RetroConsole  DESTINATION lib)
+install(TARGETS RetroConsole)
 
 add_application(ConsoleTest
     ConsoleTest.cc

@@ -17,11 +17,15 @@
 
 add_application(EmptyTest EmptyTest.c)
 
-add_application(ExceptionTest CONSOLE ExceptionTest.cc)
-add_application(InitTest CONSOLE InitTest.cc)
+# TODO: Implement enough for tests on Palm OS. This should be easier since
+# POSE already comes with a communication channel for testing.
+if(RETRO_MAC)
+    add_application(ExceptionTest CONSOLE ExceptionTest.cc)
+    add_application(InitTest CONSOLE InitTest.cc)
 
-if(CMAKE_SYSTEM_NAME MATCHES Retro68)
-enable_language(ASM)
-add_application(AsmTest AsmTest.s)
-set_target_properties(AsmTest PROPERTIES LINKER_LANGUAGE C)
+    if(RETRO_68K)
+        enable_language(ASM)
+        add_application(AsmTest AsmTest.s)
+        set_target_properties(AsmTest PROPERTIES LINKER_LANGUAGE C)
+    endif()
 endif()

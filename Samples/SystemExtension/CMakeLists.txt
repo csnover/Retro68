@@ -37,20 +37,18 @@ if(TARGET retrocrt)
     add_dependencies(SystemExtension retrocrt)
 endif(TARGET retrocrt)
 
-
-
 set_target_properties(SystemExtension PROPERTIES
     OUTPUT_NAME SystemExtension.flt
-    
-        # set a linker flag that says we want a flat piece
-        # of code in a data file
+    # set a linker flag that says we want a flat piece
+    # of code in a data file
     LINK_FLAGS -Wl,--mac-flat)
 
+find_program(REZ Rez REQUIRED)
 if (REZ_INCLUDE_PATH)
     set(REZ_INCLUDE_FLAG -I${REZ_INCLUDE_PATH})
 endif()
 
-    # Use Rez to put it together
+# Use Rez to put it together
 add_custom_command(
     OUTPUT SystemExtension.bin SystemExtension.dsk
     COMMAND ${REZ} ${REZ_INCLUDE_FLAG}
@@ -61,6 +59,5 @@ add_custom_command(
                     --cc SystemExtension
                     -t INIT
     DEPENDS SystemExtension SystemExtension.r Icons.rsrc.bin)
-
 
 add_custom_target(SystemExtension_INIT ALL DEPENDS SystemExtension.dsk)

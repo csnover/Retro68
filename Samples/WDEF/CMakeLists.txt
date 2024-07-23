@@ -16,10 +16,10 @@
 #    along with Retro68.  If not, see <http://www.gnu.org/licenses/>.
 
 # To use this example as a standalone project using CMake:
-# mkdir build
-# cd build
-# cmake .. -DCMAKE_TOOLCHAIN_FILE=path/to/Retro68-build/toolchain/cmake/retro68.toolchain.cmake
-# make
+# cmake -S <this directory> -B build \
+#    -DCMAKE_TOOLCHAIN_FILE=path/to/Retro68/share/cmake/Retro.toolchain.cmake \
+#    -DRETRO_ABI=m68k-apple-macos
+# cmake --build build
 
 # This sample program contains a custom window definition procedure (WDEF) defined in wdef.c.
 # It is used in two different ways:
@@ -29,7 +29,6 @@
 # First, let's build a separate code resource:
 add_executable(WDEF wdef.c)
 
-
 if(TARGET retrocrt)
     # Hack: if we are building as part of the Retro68 source tree,
     #       make sure the run-time library is already compiled
@@ -37,8 +36,7 @@ if(TARGET retrocrt)
     add_dependencies(WDEF retrocrt)
 endif(TARGET retrocrt)
 
-
-if(CMAKE_SYSTEM_NAME MATCHES Retro68)
+if(RETRO_68K)
     set_target_properties(WDEF PROPERTIES
             # tell wdef.c that it is being compiled as a code resource
         COMPILE_DEFINITIONS "COMPILING_AS_CODE_RESOURCE"
@@ -51,7 +49,7 @@ if(CMAKE_SYSTEM_NAME MATCHES Retro68)
         LINK_FLAGS "-Wl,--mac-flat -Wl,-eMYWINDOWDEFPROC -Wl,-gc-sections")
     set(WDEF_R wdef.r)
     set(WDEF_RESOURCE WDEF)
-elseif(CMAKE_SYSTEM_NAME MATCHES RetroPPC)
+elseif(NOT RETRO_CARBON)
     set_target_properties(WDEF PROPERTIES
         COMPILE_OPTIONS -ffunction-sections # make things smaller
         # tell wdef.c that it is being compiled as a code resource
@@ -60,6 +58,7 @@ elseif(CMAKE_SYSTEM_NAME MATCHES RetroPPC)
         )
     set(WDEF_R wdefppc.r)
 
+    find_program(MAKE_PEF MakePEF REQUIRED)
     add_custom_command(
         OUTPUT WDEF.pef
         COMMAND ${MAKE_PEF} WDEF -o "WDEF.pef"
@@ -71,7 +70,8 @@ if (REZ_INCLUDE_PATH)
     set(REZ_INCLUDE_FLAG -I${REZ_INCLUDE_PATH})
 endif()
 
-    # wrap the compiled WDEF into a resource
+# wrap the compiled WDEF into a resource
+find_program(REZ Rez REQUIRED)
 add_custom_command(
     OUTPUT WDEF.rsrc.bin
     COMMAND ${REZ} ${REZ_INCLUDE_FLAG}
@@ -87,7 +87,7 @@ add_application(WDEFShell
 
     wdef.c  # the WDEF as a plain source file in the application
 
-        # the separately compiled WDEF resource
+    # the separately compiled WDEF resource
     ${CMAKE_CURRENT_BINARY_DIR}/WDEF.rsrc.bin   
     )
 

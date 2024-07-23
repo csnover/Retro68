@@ -8,7 +8,6 @@ PREFIX=$(RETRO68)/m68k-unknown-elf
 CC=$(RETRO68)/bin/m68k-unknown-elf-gcc
 CXX=$(RETRO68)/bin/m68k-unknown-elf-g++
 REZ=$(RETRO68)/bin/Rez
-MAKEAPPL=$(RETRO68)/bin/MakeAPPL
 
 CXXFLAGS=-std=c++11
 LDFLAGS=-Wl,-gc-sections -lm

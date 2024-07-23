@@ -17,7 +17,10 @@ map<string,ResourceFile::Format> formats {
     {"basilisk", ResourceFile::Format::basilisk},
     {"applesingle", ResourceFile::Format::applesingle},
     {"underscore_appledouble", ResourceFile::Format::underscore_appledouble},
-    {"percent_appledouble", ResourceFile::Format::percent_appledouble}
+    {"percent_appledouble", ResourceFile::Format::percent_appledouble},
+#ifdef PALMOS
+    {"prc", ResourceFile::Format::prc},
+#endif
 };
 map<ResourceFile::Format,string> reverseFormats;
 

@@ -15,71 +15,56 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Retro68.  If not, see <http://www.gnu.org/licenses/>.
 
-find_package(Boost COMPONENTS wave filesystem system thread regex program_options)
+find_package(Boost COMPONENTS wave filesystem system thread regex program_options REQUIRED)
 
-# Look for bison.
-    # We need Version 3, and Mac OS X still comes with an outdated version (2.3).
-    # So we just add the path where the homebrew package manager installs its
-    # "keg-only" version. Shouldn't hurt on Linux.
-set(CMAKE_PROGRAM_PATH ${CMAKE_PROGRAM_PATH} "/opt/homebrew/opt/bison/bin" "/usr/local/opt/bison/bin")
-find_package(BISON 3.0.2)
+find_package(BISON 3.0.2 REQUIRED)
 
-if(NOT Boost_FOUND)
-    message(FATAL_ERROR "The boost libraries have not been found.")
-endif()
-
-if(NOT BISON_FOUND)
-    message(FATAL_ERROR "GNU Bison version 3.0.2 or later is required.")
-endif()
-
-include_directories(. ${CMAKE_CURRENT_BINARY_DIR})
-
-set(BISON_OUTPUTS ${CMAKE_CURRENT_BINARY_DIR}/RezParser.generated.cc ${CMAKE_CURRENT_BINARY_DIR}/RezParser.generated.hh
-    ${CMAKE_CURRENT_BINARY_DIR}/location.hh ${CMAKE_CURRENT_BINARY_DIR}/position.hh
-    ${CMAKE_CURRENT_BINARY_DIR}/stack.hh)
-
-add_custom_command(OUTPUT ${BISON_OUTPUTS}
-        COMMAND ${BISON_EXECUTABLE}
-        ARGS -o ${CMAKE_CURRENT_BINARY_DIR}/RezParser.generated.cc RezParser.yy
-        DEPENDS RezParser.yy
-        COMMENT "[BISON][RezParser] Building parser with bison ${BISON_VERSION}"
-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
-
+BISON_TARGET(RezLib_bison RezParser.yy RezParser.generated.cc DEFINES_FILE RezParser.generated.hh)
 
 add_library(RezLib
-        RezParser.yy
-        ${BISON_OUTPUTS}
+    RezParser.yy
+    ${BISON_RezLib_bison_OUTPUTS}
 
-        RezLexer.h
-        RezLexer.cc
-        RezLexerWaveToken.h
-        RezLexerNextToken.cc
+    RezLexer.h
+    RezLexer.cc
+    RezLexerWaveToken.h
+    RezLexerNextToken.cc
 
-        RezWorld.cc
-        RezWorld.h
+    RezWorld.cc
+    RezWorld.h
 
-        ResourceDefinitions.cc
-        ResourceDefinitions.h
+    ResourceDefinitions.cc
+    ResourceDefinitions.h
 
-        Expression.cc
-        Expression.h
+    Expression.cc
+    Expression.h
 
-        ResourceCompiler.cc
-        ResourceCompiler.h
+    ResourceCompiler.cc
+    ResourceCompiler.h
 
-        ResSpec.h
+    ResSpec.h
 
-        Diagnostic.h Diagnostic.cc
-    )
-target_link_libraries(RezLib ResourceFiles ${Boost_LIBRARIES})
-target_include_directories(RezLib PRIVATE ${Boost_INCLUDE_DIR})
+    Diagnostic.h Diagnostic.cc)
 
-add_executable(Rez
-        Rez.cc
-    )
-target_link_libraries(Rez RezLib ResourceFiles ${Boost_LIBRARIES})
-target_include_directories(Rez PRIVATE ${Boost_INCLUDE_DIR})
+target_include_directories(RezLib PUBLIC
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR})
 
-install(TARGETS Rez RUNTIME DESTINATION bin)
+target_link_libraries(RezLib
+    PUBLIC
+        ResourceFiles
+    PRIVATE
+        Boost::headers
+        Boost::wave
+        Boost::filesystem
+        Boost::system
+        Boost::thread
+        Boost::regex
+        Boost::program_options)
+
+add_executable(Rez Rez.cc)
+target_link_libraries(Rez PRIVATE RezLib ResourceFiles)
+
+install(TARGETS Rez)
 
 add_subdirectory(Test)

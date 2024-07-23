@@ -15,7 +15,9 @@
 #    include "Carbon.h"
 #endif
 #include "Executor.h"
+#ifdef RETRO_HAVE_HFSUTILS
 #include "MiniVMac.h"
+#endif
 #include "SSH.h"
 #include "Serial.h"
 #include "TCP.h"
@@ -41,7 +43,10 @@ static void RegisterLaunchMethods()
 #    endif
         new Carbon(),
 #endif
-        new Executor(), new MiniVMac(),
+        new Executor(),
+#ifdef RETRO_HAVE_HFSUTILS
+        new MiniVMac(),
+#endif
         new SSH(),
         new Serial(),
         new TCP(),

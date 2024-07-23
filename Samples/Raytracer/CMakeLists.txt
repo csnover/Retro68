@@ -16,10 +16,10 @@
 #    along with Retro68.  If not, see <http://www.gnu.org/licenses/>.
 
 # To use this example as a standalone project using CMake:
-# mkdir build
-# cd build
-# cmake .. -DCMAKE_TOOLCHAIN_FILE=path/to/Retro68-build/toolchain/m68k-apple-macos/cmake/retro68.toolchain.cmake
-# make
+# cmake -S <this directory> -B build \
+#    -DCMAKE_TOOLCHAIN_FILE=path/to/Retro68/share/cmake/Retro.toolchain.cmake \
+#    -DRETRO_ABI=m68k-apple-macos
+# cmake --build build
 
 if(APPLE)
     add_executable(Raytracer MACOSX_BUNDLE
@@ -52,4 +52,3 @@ else()
     set_target_properties(Raytracer PROPERTIES LINK_FLAGS "-Wl,-gc-sections")
     set_target_properties(Raytracer2 PROPERTIES LINK_FLAGS "-Wl,-gc-sections")    
 endif()
-
