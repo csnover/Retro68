@@ -67,10 +67,16 @@ else()
     option(RETRO_68K "Enable Mac 68K" OFF)
     option(RETRO_CARBON "Enable Mac Carbon" OFF)
 
+    # TODO: It would be trivial to only build utilities that apply to the
+    # platforms being built; the only reason this is not done currently is
+    # to make sure no Apple stuff is broken by work to add Palm OS support
+    # (Palm and Mac utilities are so close to the same thing that it seems bad
+    # to have two different systems)
     add_subdirectory(ConvertDiskImage)
     add_subdirectory(ConvertObj)
     add_subdirectory(Elf2Mac)
     add_subdirectory(LaunchAPPL)
+    add_subdirectory(PalmUtils)
     add_subdirectory(PEFTools)
     add_subdirectory(ResourceFiles)
     add_subdirectory(Rez)

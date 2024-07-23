@@ -422,6 +422,11 @@ Contains a library that implements basic text console functionality.
 
 An automated test suite that can be run using `ctest` and `LaunchAPPL`.
 
+### PalmUtils/prc-tools
+
+A copy of small parts of prc-tools 2.3 required to generate specs files for
+compiling against the Palm OS SDK, made to build with CMake.
+
 ### Sample Program: Hello World
 
 The binary is in Retro68-build/build-target/Samples/HelloWorld/.
