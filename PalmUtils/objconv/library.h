@@ -14,10 +14,12 @@
 #ifndef LIBRARY_H
 #define LIBRARY_H
 
-
 // Make big-endian numbers for library
+uint16_t EndianChange(uint16_t);           // Convert little-endian to big-endian number, or vice versa
 uint32_t EndianChange(uint32_t);           // Convert little-endian to big-endian number, or vice versa
+uint64_t EndianChange(uint64_t);           // Convert little-endian to big-endian number, or vice versa
 
+void EndianChangeStruct(void *obj, const int *size);
 
 // Define UNIX library member header
 struct SUNIXLibraryHeader {

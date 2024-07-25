@@ -212,7 +212,7 @@ void CCOF2ASM::MakeSymbolList() {
          Type = 0x80000082;
       }
 
-      const char * Name = (char*)GetSymbolName(Sym.p->s.Name);
+      const char * Name = GetSymbolName(Sym.p);
 
       // Get scope. Note that these values are different from the constants defined in maindef.h
       uint32_t Scope = 0;

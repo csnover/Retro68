@@ -262,7 +262,8 @@ void CErrorReporter::submit(int ErrorNumber, char const * extra1, char const * e
    // Print error message with two extra text info fields
    // ErrorTexts[ErrorNumber] must contain %s where extra texts are to be inserted
    char text[MAX_ERROR_TEXT_LENGTH];
-   if (extra1 == 0) extra1 = "???"; if (extra2 == 0) extra2 = "???";
+   if (extra1 == 0) extra1 = "???";
+   if (extra2 == 0) extra2 = "???";
    SErrorText * err = FindError(ErrorNumber);
    sprintf(text, err->Text, extra1, extra2);
    HandleError(err, text);

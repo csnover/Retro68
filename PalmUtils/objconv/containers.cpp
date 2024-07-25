@@ -19,7 +19,8 @@
 
 // Names of file formats
 SIntTxt FileFormatNames[] = {
-    {FILETYPE_COFF,         "COFF"},
+    {FILETYPE_COFF,         "PE/COFF"},
+    {FILETYPE_COFF_UNIX,    "COFF"},
     {FILETYPE_OMF,          "OMF"},
     {FILETYPE_ELF,          "ELF"},
     {FILETYPE_MACHO_LE,     "Mach-O Little Endian"},
@@ -174,12 +175,14 @@ CFileBuffer::CFileBuffer() : CMemoryBuffer() {
     FileName = 0;
     OutputFileName = 0;
     FileType = WordSize = Executable = 0;
+    BigEndian = false;
 }
 
 CFileBuffer::CFileBuffer(char const * filename) : CMemoryBuffer() {  
     // Constructor
     FileName = filename;
     FileType = WordSize = 0;
+    BigEndian = false;
 }
 
 void CFileBuffer::Read(int IgnoreError) {                   
@@ -349,16 +352,23 @@ int CFileBuffer::GetFileType() {
         }
     }
     else if (Get<uint16_t>(0) == PE_MACHINE_I386) {
-        // COFF/PE 32
+        // PE/COFF 32
         FileType = FILETYPE_COFF;
         WordSize = 32;
         Executable = (Get<SCOFF_FileHeader>(0).Flags & PE_F_EXEC) != 0;
     }
     else if (Get<uint16_t>(0) == PE_MACHINE_X8664) {
-        // COFF64/PE32+
+        // PE32+/COFF64
         FileType = FILETYPE_COFF;
         WordSize = 64;
         Executable = (Get<SCOFF_FileHeader>(0).Flags & PE_F_EXEC) != 0;
+    }
+    else if (EndianChange(Get<uint16_t>(0)) == PE_MACHINE_M68K) {
+        // COFF
+        FileType = FILETYPE_COFF_UNIX;
+        WordSize = 32;
+        Executable = (EndianChange(Get<SCOFF_FileHeader>(0).Flags) & PE_F_EXEC) != 0;
+        BigEndian = true;
     }
     else if (Get<uint8_t>(0) == OMF_THEADR) {
         // OMF 16 or 32
@@ -459,7 +469,7 @@ char * CFileBuffer::SetFileNameExtension(const char * f) {
             strcpy(name+i, ".obj"); // Windows object file
         }
     }
-    else { // output type is ELF or MACHO
+    else { // output type is COFF/*nix, ELF, or MACHO
         if ((FileType & (FILETYPE_LIBRARY | FILETYPE_OMFLIBRARY)) || (cmd.LibraryOptions & CMDL_LIBRARY_ADDMEMBER)) {
             strcpy(name+i, ".a");   // Linux/BSD/Mac function library
         }
@@ -496,6 +506,7 @@ void operator >> (CFileBuffer & a, CFileBuffer & b) {
     b.BufferSize = a.GetBufferSize();        // Size of allocated buffer
     b.NumEntries = a.GetNumEntries();        // Number of objects pushed
     b.Executable = a.Executable;             // File is executable
+    b.BigEndian  = a.BigEndian;              // File is big-endian
     if (a.WordSize) b.WordSize = a.WordSize; // Segment word size (16, 32, 64)
     if (a.FileName) b.FileName = a.FileName; // Name of input file
     if (a.OutputFileName) b.OutputFileName = a.OutputFileName;// Name of output file

@@ -88,7 +88,7 @@ void CLibrary::Go() {
             cmd.LibrarySubtype = LIBTYPE_OMF;  break;
         case FILETYPE_COFF: case FILETYPE_DOS: 
             cmd.LibrarySubtype = LIBTYPE_WINDOWS;  break;
-        case FILETYPE_ELF:
+        case FILETYPE_COFF_UNIX: case FILETYPE_ELF:
             cmd.LibrarySubtype = LIBTYPE_LINUX;  break;
         case FILETYPE_MACHO_LE: case FILETYPE_MACHO_BE:
             cmd.LibrarySubtype = LIBTYPE_BSD_MAC;  break;
@@ -96,7 +96,7 @@ void CLibrary::Go() {
             switch (cmd.InputType) {
             case FILETYPE_COFF: case FILETYPE_DOS: 
                 cmd.LibrarySubtype = LIBTYPE_WINDOWS;  break;
-            case FILETYPE_ELF:
+            case FILETYPE_COFF_UNIX: case FILETYPE_ELF:
                 cmd.LibrarySubtype = LIBTYPE_LINUX;  break;
             case FILETYPE_MACHO_LE: case FILETYPE_MACHO_BE:
                 cmd.LibrarySubtype = LIBTYPE_BSD_MAC;  break;
@@ -213,7 +213,7 @@ void CLibrary::Go() {
                         // Conversion or name change requested
 
                         // Check type before conversion
-                        int FileType0 = MemberBuffer.GetFileType();
+                        (void)MemberBuffer.GetFileType();
                         MemberBuffer.Go();
                         if (err.Number()) return; // Stop if error
                         // Check type after conversion
@@ -765,6 +765,9 @@ void CLibrary::DumpUNIX() {
         else {
             printf(". Type not specified. Possibly alias record");
         }
+        if (MemberBuffer.BigEndian) {
+            printf("-BE");
+        }
 
         // Get symbol table for specific file type
         switch (MemberFileType) {
@@ -784,6 +787,7 @@ void CLibrary::DumpUNIX() {
                 break;
             }
 
+        case FILETYPE_COFF_UNIX:
         case FILETYPE_COFF: {
             CCOFF coff;
             MemberBuffer >> coff;       // Transfer MemberBuffer to coff object
@@ -1163,7 +1167,7 @@ void CLibrary::InsertMemberUNIX(CFileBuffer * member) {
         else {
             // store in LongNamesBuffer
             if (cmd.OutputType == FILETYPE_COFF) {
-                // COFF: Name is zero-terminated
+                // PE/COFF: Name is zero-terminated
                 i = LongNamesBuffer.PushString(name);
             }
             else {
@@ -1232,6 +1236,7 @@ void CLibrary::InsertMemberUNIX(CFileBuffer * member) {
 
     // Get public string table
     switch(member->GetFileType()) {
+    case FILETYPE_COFF_UNIX:
     case FILETYPE_COFF: {
         CCOFF coff;
         *member >> coff;     // Translate member to type COFF
@@ -1404,7 +1409,7 @@ char * CLibrary::StripMemberName(char * name) {
     if (FileType == FILETYPE_COFF || FileType == FILETYPE_OMF) {
         extension = ".obj";  elen = 4;
     }
-    else if (FileType == FILETYPE_ELF || FileType == FILETYPE_MACHO_LE || FileType == FILETYPE_MACHO_BE) {
+    else if (FileType == FILETYPE_COFF_UNIX || FileType == FILETYPE_ELF || FileType == FILETYPE_MACHO_LE || FileType == FILETYPE_MACHO_BE) {
         extension = ".o";  elen = 2;
     }
 
@@ -1626,9 +1631,36 @@ void CLibrary::SortStringTable() {
 }
 
 
+uint16_t EndianChange(uint16_t n) {
+    // Convert little-endian to big-endian number, or vice versa
+    return (n << 8) | (n >> 8);
+}
+
+
 uint32_t EndianChange(uint32_t n) {
     // Convert little-endian to big-endian number, or vice versa
     return (n << 24) | ((n & 0x0000FF00) << 8) | ((n & 0x00FF0000) >> 8) | (n >> 24);
+}
+
+uint64_t EndianChange(uint64_t n) {
+    // Convert little-endian to big-endian number, or vice versa
+    n = (n & 0x00000000FFFFFFFF) << 32 | (n & 0xFFFFFFFF00000000) >> 32;
+    n = (n & 0x0000FFFF0000FFFF) << 16 | (n & 0xFFFF0000FFFF0000) >> 16;
+    n = (n & 0x00FF00FF00FF00FF) << 8  | (n & 0xFF00FF00FF00FF00) >> 8;
+    return n;
+}
+
+
+void EndianChangeStruct(void *obj, const int *size) {
+    char *pObj = (char *)obj;
+    for (; *size != 0; ++size) {
+        switch (*size) {
+        case 2: *((uint16_t *)pObj) = EndianChange(*(uint16_t *)pObj); break;
+        case 4: *((uint32_t *)pObj) = EndianChange(*(uint32_t *)pObj); break;
+        case 8: *((uint64_t *)pObj) = EndianChange(*(uint64_t *)pObj); break;
+        }
+        pObj += *size;
+    }
 }
 
 
@@ -1694,13 +1726,14 @@ void CLibrary::MakeSymbolTableUnix() {
     // Official MS COFF reference says that the "//" longnames member must be present,
     // even if it is unused, but MS LIB does not make it unless it is needed.
     // Here, we will include the longnames member only if it is needed
-    if ((SymbolTableType == FILETYPE_COFF || SymbolTableType == FILETYPE_ELF) && LongNamesBuffer.GetDataSize()) {
+    if ((SymbolTableType == FILETYPE_COFF_UNIX || SymbolTableType == FILETYPE_COFF || SymbolTableType == FILETYPE_ELF) && LongNamesBuffer.GetDataSize()) {
         LongnamesMemberSize = sizeof(SUNIXLibraryHeader) + LongNamesBuffer.GetDataSize();
     }
 
     // Offset to first member
     uint32_t FirstMemberOffset = 0;
     switch (SymbolTableType) {
+    case FILETYPE_COFF_UNIX:
     case FILETYPE_COFF:
         FirstMemberOffset = 8 + 2*sizeof(SUNIXLibraryHeader) + RoundEven(Index1Size) 
             + RoundEven(Index2Size) + RoundEven(LongnamesMemberSize);
@@ -1721,7 +1754,7 @@ void CLibrary::MakeSymbolTableUnix() {
     }
 
     // Make unsorted symbol table for COFF or ELF output
-    if (SymbolTableType == FILETYPE_COFF || SymbolTableType == FILETYPE_ELF) {
+    if (SymbolTableType == FILETYPE_COFF_UNIX || SymbolTableType == FILETYPE_COFF || SymbolTableType == FILETYPE_ELF) {
 
         // Put file size into symbol table header
         sprintf(SymTab.FileSize, "%u ", Index1Size);
@@ -1762,7 +1795,7 @@ void CLibrary::MakeSymbolTableUnix() {
     if (!RepressWarnings && SymbolTableType != FILETYPE_MACHO_LE) SortStringTable();
 
     // Make sorted symbol table, COFF style
-    if (SymbolTableType == FILETYPE_COFF) {
+    if (SymbolTableType == FILETYPE_COFF_UNIX || SymbolTableType == FILETYPE_COFF) {
         if (NumMembers > 0xFFFF) err.submit(2502);  // Too many members
 
         // Reuse symbol table header, change size entry
@@ -1999,8 +2032,8 @@ void CLibrary::MakeBinaryFileUNIX() {
     // Reserve file buffer for output file
     OutFile.SetSize(GetBufferSize());
 
-    if (cmd.OutputType == FILETYPE_COFF || cmd.OutputType == FILETYPE_ELF || cmd.OutputType == FILETYPE_MACHO_LE) {
-        // COFF, ELF and MAach-O libraries all use Unix-style archive with 
+    if (cmd.OutputType == FILETYPE_COFF_UNIX || cmd.OutputType == FILETYPE_COFF || cmd.OutputType == FILETYPE_ELF || cmd.OutputType == FILETYPE_MACHO_LE) {
+        // COFF, ELF and Mach-O libraries all use Unix-style archive with
         // differences in symbol table format
 
         // Make symbol table

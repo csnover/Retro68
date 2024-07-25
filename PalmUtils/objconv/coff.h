@@ -27,17 +27,20 @@
 /********************** FILE HEADER **********************/
 
 struct SCOFF_FileHeader {
- uint16_t Machine;              // Machine ID (magic number)
- uint16_t NumberOfSections;     // number of sections
- uint32_t TimeDateStamp;        // time & date stamp 
- uint32_t PSymbolTable;         // file pointer to symbol table
- uint32_t NumberOfSymbols;      // number of symbol table entries 
- uint16_t SizeOfOptionalHeader; // size of optional header
- uint16_t Flags;                // Flags indicating attributes
+   uint16_t Machine;              // Machine ID (magic number)
+   uint16_t NumberOfSections;     // number of sections
+   uint32_t TimeDateStamp;        // time & date stamp
+   uint32_t PSymbolTable;         // file pointer to symbol table
+   uint32_t NumberOfSymbols;      // number of symbol table entries
+   uint16_t SizeOfOptionalHeader; // size of optional header
+   uint16_t Flags;                // Flags indicating attributes
+
+   void ByteSwap();
 };
 
 // Values of Machine:
 #define PE_MACHINE_I386       0x14c
+#define PE_MACHINE_M68K       0x150
 #define PE_MACHINE_X8664     0x8664
 
 // Bits for Flags:
@@ -51,6 +54,8 @@ struct SCOFF_FileHeader {
 struct SCOFF_IMAGE_DATA_DIRECTORY {
    uint32_t VirtualAddress;              // Image relative address of table
    uint32_t Size;                        // Size of table
+
+   void ByteSwap();
 };
 
 // Extended structure used internally with virtual address translated to section:offset
@@ -60,6 +65,8 @@ struct SCOFF_ImageDirAddress : public SCOFF_IMAGE_DATA_DIRECTORY {
    uint32_t FileOffset;                  // Offset relative to file
    uint32_t MaxOffset;                   // Section size - SectionOffset
    const char * Name;                  // Name of table
+
+   void ByteSwap();
 };
 
 // Optional header
@@ -165,6 +172,8 @@ union SCOFF_OptionalHeader {
       SCOFF_IMAGE_DATA_DIRECTORY CLRRuntimeHeader;
       SCOFF_IMAGE_DATA_DIRECTORY Reserved;       // 0
    } h64;
+
+   void ByteSwap();
 };
 
 // Value of Magic for optional header
@@ -225,19 +234,22 @@ struct SCOFF_BaseRelocation {
 /********************** SECTION HEADER **********************/
 
 struct SCOFF_SectionHeader {
- char    Name[8];        // section name
- uint32_t  VirtualSize;    // size of section when loaded. (Should be 0 for object files, but it seems to be accumulated size of all sections)
- uint32_t  VirtualAddress; // subtracted from offsets during relocation. preferably 0
- uint32_t  SizeOfRawData;  // section size in file
- uint32_t  PRawData;       // file  to raw data for section
- uint32_t  PRelocations;   // file  to relocation entries
- uint32_t  PLineNumbers;   // file  to line number entries
- uint16_t  NRelocations;   // number of relocation entries
- uint16_t  NLineNumbers;   // number of line number entries
- uint32_t  Flags;          // flags   
+   char    Name[8];        // section name
+   uint32_t  VirtualSize;    // size of section when loaded. (Should be 0 for object  files, but it seems to be accumulated size of all sections)
+   uint32_t  VirtualAddress; // subtracted from offsets during relocation. preferably 0
+   uint32_t  SizeOfRawData;  // section size in file
+   uint32_t  PRawData;       // file  to raw data for section
+   uint32_t  PRelocations;   // file  to relocation entries
+   uint32_t  PLineNumbers;   // file  to line number entries
+   uint16_t  NRelocations;   // number of relocation entries
+   uint16_t  NLineNumbers;   // number of line number entries
+   uint32_t  Flags;          // flags
+
+   void ByteSwap();
 };
 
 // Section flags values
+#define PE_SCN_NOLOAD           0x00000002  // noload section
 #define PE_SCN_CNT_CODE         0x00000020  // section contains executable code
 #define PE_SCN_CNT_INIT_DATA    0x00000040  // section contains initialized data
 #define PE_SCN_CNT_UNINIT_DATA  0x00000080  // section contains unintialized data
@@ -284,11 +296,13 @@ struct SCOFF_SectionHeader {
  */
 //#pragma pack(push, 1)
 struct SCOFF_LineNumbers {
- union {
-  uint32_t Fname;    // function name symbol table index, if Line == 0
-  uint32_t Addr;     // section-relative address of code that corresponds to line
- };
- uint16_t Line;      // line number
+   union {
+    uint32_t Fname;    // function name symbol table index, if Line == 0
+    uint32_t Addr;     // section-relative address of code that corresponds to line
+   };
+   uint16_t Line;      // line number
+
+   void ByteSwap(uint16_t nLineNumbers);
 };
 
 // Warning: Size does not fit standard alignment!
@@ -362,6 +376,8 @@ union SCOFF_SymTableEntry {
       uint8_t  Selection;            // COMDAT selection number
       uint8_t  Unused1[3];           // Unused
    } section;
+
+   void ByteSwap(uint32_t numberOfSymbols);
 };
 
 // Warning: Size does not fit standard alignment!
@@ -429,7 +445,7 @@ union SCOFF_SymTableEntry {
  */
 /********************** Storage classes for symbol table entries **********************/
 
-#define COFF_CLASS_NULL                    0
+#define COFF_CLASS_NULL                    0 // no storage class
 #define COFF_CLASS_AUTOMATIC               1 // automatic variable
 #define COFF_CLASS_EXTERNAL                2 // external symbol 
 #define COFF_CLASS_STATIC                  3 // static
@@ -470,9 +486,11 @@ union SCOFF_SymTableEntry {
 //#pragma pack(push, 1)  //__attribute__((packed));
 
 struct SCOFF_Relocation {
-  uint32_t VirtualAddress;   // Section-relative address of relocation source
-  uint32_t SymbolTableIndex; // Zero-based index into symbol table
-  uint16_t Type;             // Relocation type
+   uint32_t VirtualAddress;   // Section-relative address of relocation source
+   uint32_t SymbolTableIndex; // Zero-based index into symbol table
+   uint16_t Type;             // Relocation type
+
+   void ByteSwap(int8_t *buf, uint32_t pRawData, uint32_t dataSize, uint16_t nRelocations);
 };
 #define SIZE_SCOFF_Relocation  10  // Size of SCOFF_Relocation packed
 //#pragma pack(pop)
@@ -490,7 +508,14 @@ struct SCOFF_Relocation {
 #define COFF32_RELOC_SECREL      0x0B   // 32-bit section-relative
 #define COFF32_RELOC_SECREL7     0x0D   // 7-bit section-relative
 #define COFF32_RELOC_TOKEN       0x0C   // CLR token
-#define COFF32_RELOC_REL32       0x14   // 32-bit EIP-relative
+#define COFF32_RELOC_8           0x0F   // 8-bit direct reference
+#define COFF32_RELOC_16          0x10   // 16-bit direct reference
+#define COFF32_RELOC_32          0x11   // 32-bit direct reference
+#define COFF32_RELOC_PCREL8      0x12   // 8-bit EIP-relative (DISP8)
+#define COFF32_RELOC_PCREL16     0x13   // 16-bit EIP-relative (DISP16)
+#define COFF32_RELOC_REL32       0x14   // 32-bit EIP-relative (DISP32)
+#define COFF32_RELOC_NEG16       0x15   // 16-bit from end of section
+#define COFF32_RELOC_NEG32       0x45   // 32-bit from end of section
 
 /********************** Relocation types for 64-bit COFF **********************/
 // Note: These values are obtained by my own testing.

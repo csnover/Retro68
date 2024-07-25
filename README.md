@@ -422,6 +422,12 @@ Contains a library that implements basic text console functionality.
 
 An automated test suite that can be run using `ctest` and `LaunchAPPL`.
 
+### PalmUtils/objconv
+
+Agner Fog’s objconv, version 2023-Mar-29, with hacks to support big-endian M68K
+COFF to ELF conversion, and to build using CMake. Used to import the glue
+libraries from the Palm OS SDK.
+
 ### PalmUtils/pilrc
 
 A copy of the PilRC resource compiler, originally version 3.2.90. Updated to

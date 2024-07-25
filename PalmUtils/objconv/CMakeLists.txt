@@ -1,5 +1,7 @@
 project(objconv HOMEPAGE_URL "https://www.agner.org/optimize/#objconv")
 
+set(CMAKE_CXX_FLAGS "-Wall -Wno-class-memaccess")
+
 add_executable(objconv
 	cmdline.cpp
 	cmdline.h

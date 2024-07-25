@@ -458,13 +458,14 @@ void CConverter::Go() {
       // File dump requested
       if (cmd.Verbose > 0) {
          // Tell what we are doing:
-         printf("\nDump of file: %s, type: %s%i", FileName, GetFileFormatName(FileType), WordSize);
+         printf("\nDump of file: %s, type: %s-%i%s", FileName, GetFileFormatName(FileType), WordSize, BigEndian ? "-BE" : "");
       }
 
       switch(FileType) {
       case FILETYPE_ELF:
          DumpELF();  break;
 
+      case FILETYPE_COFF_UNIX:
       case FILETYPE_COFF:
          DumpCOF();   break;
 
@@ -555,7 +556,7 @@ void CConverter::Go() {
                // Change leading '.' to '_' in nonstandard section names
                cmd.SegmentDot = CMDL_SECTIONDOT_DOT2U;
             }
-            else if (cmd.OutputType == FILETYPE_ELF) {
+            else if (cmd.OutputType == FILETYPE_COFF_UNIX || cmd.OutputType == FILETYPE_ELF) {
                // Change leading '_' to '.' in nonstandard section names
                cmd.SegmentDot = CMDL_SECTIONDOT_U2DOT;
             }
@@ -630,6 +631,7 @@ void CConverter::Go() {
 
 
       // Conversion from COFF
+      case FILETYPE_COFF_UNIX:
       case FILETYPE_COFF:
          switch (cmd.OutputType) {
          case FILETYPE_COFF:

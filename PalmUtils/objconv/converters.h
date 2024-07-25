@@ -86,7 +86,7 @@ public:
    void PrintSymbolTable(int symnum);            // Dump symbol table entries
    void PrintImportExport();                     // Print imported and exported symbols
    static void PrintSegmentCharacteristics(uint32_t flags); // Print segment characteristics
-   char const * GetSymbolName(char* Symbol);     // Get symbol name from 8 byte entry
+   char const * GetSymbolName(SCOFF_SymTableEntry *);     // Get symbol name from 8 byte entry
    char const * GetSectionName(const char* Symbol);    // Get section name from 8 byte entry
    const char * GetFileName(SCOFF_SymTableEntry *);    // Get file name from records in symbol table
    const char * GetShortFileName(SCOFF_SymTableEntry*);// Same as above. Strips path before filename
@@ -94,6 +94,8 @@ public:
    void PublicNames(CMemoryBuffer * Strings, CSList<SStringEntry> * Index, int m); // Make list of public names
    int  GetImageDir(uint32_t n, SCOFF_ImageDirAddress * dir); // Find address of image directory for executable files
 protected:
+   enum class Flavor { PE = 0, UNIX };
+
    CArrayBuf<SCOFF_SectionHeader> SectionHeaders;// Copy of section headers
    int NSections;                                // Number of sections
    SCOFF_FileHeader * FileHeader;                // File header
@@ -106,6 +108,7 @@ protected:
    SCOFF_IMAGE_DATA_DIRECTORY * pImageDirs;      // Pointer to image directories (for executable files)
    uint32_t NumImageDirs;                          // Number of image directories (for executable files)
    uint32_t EntryPoint;                            // Entry point (for executable files)
+   Flavor Flavor;                                  // Type of COFF format
 };
 
 

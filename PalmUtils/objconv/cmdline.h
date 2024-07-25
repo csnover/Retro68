@@ -19,7 +19,7 @@
 // Constants for output file type
 #define CMDL_OUTPUT_DUMP          0x80       // No output file, just dump contents
 #define CMDL_OUTPUT_ELF    FILETYPE_ELF      // ELF file
-#define CMDL_OUTPUT_PE     FILETYPE_COFF     // MS-COFF/PE file
+#define CMDL_OUTPUT_PE     FILETYPE_COFF     // MS-PE/COFF file
 #define CMDL_OUTPUT_OMF    FILETYPE_OMF      // OMF file
 #define CMDL_OUTPUT_MACHO  FILETYPE_MACHO_LE // Mach-O file, little endian
 #define CMDL_OUTPUT_MASM   FILETYPE_ASM      // Disassembly

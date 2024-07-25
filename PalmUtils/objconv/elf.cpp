@@ -222,6 +222,55 @@ SIntTxt ELFPTypeNames[] = {
    {PT_PHDR,        "Entry for header table itself"}
 };
 
+void Elf32_Ehdr::ByteSwap() {
+   static constexpr int sizes[] = { 2, 2, 4, 4, 4, 4, 4, 2, 2, 2, 2, 2, 2, 0 };
+   EndianChangeStruct(&e_type, sizes);
+}
+
+void Elf64_Ehdr::ByteSwap() {
+   static constexpr int sizes[] = { 2, 2, 4, 8, 8, 8, 4, 2, 2, 2, 2, 2, 2, 0 };
+   EndianChangeStruct(&e_type, sizes);
+}
+
+void Elf32_Shdr::ByteSwap() {
+   static constexpr int sizes[] = { 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 0 };
+   EndianChangeStruct(this, sizes);
+}
+
+void Elf64_Shdr::ByteSwap() {
+   static constexpr int sizes[] = { 4, 4, 8, 8, 8, 8, 4, 4, 8, 8, 0 };
+   EndianChangeStruct(this, sizes);
+}
+
+void Elf32_Sym::ByteSwap() {
+   static constexpr int sizes[] = { 4, 4, 4, 1, 1, 2, 0 };
+   EndianChangeStruct(this, sizes);
+}
+
+void Elf64_Sym::ByteSwap() {
+   static constexpr int sizes[] = { 4, 1, 1, 2, 8, 8, 0 };
+   EndianChangeStruct(this, sizes);
+}
+
+void Elf32_Rel::ByteSwap() {
+   static constexpr int sizes[] = { 4, 4, 0 };
+   EndianChangeStruct(this, sizes);
+}
+
+void Elf64_Rel::ByteSwap() {
+   static constexpr int sizes[] = { 8, 4, 4, 0 };
+   EndianChangeStruct(this, sizes);
+}
+
+void Elf32_Rela::ByteSwap() {
+   static constexpr int sizes[] = { 4, 4, 4, 0 };
+   EndianChangeStruct(this, sizes);
+}
+
+void Elf64_Rela::ByteSwap() {
+   static constexpr int sizes[] = { 8, 4, 4, 8, 0 };
+   EndianChangeStruct(this, sizes);
+}
 
 // Class CELF members:
 // Constructor
@@ -236,6 +285,8 @@ void CELF<ELFSTRUCTURES>::ParseFile(){
    // Load and parse file buffer
    uint32_t i;
    FileHeader = *(TELF_Header*)Buf();   // Copy file header
+   BigEndian = (FileHeader.e_ident[EI_DATA] == ELFDATA2MSB);
+   if (BigEndian) FileHeader.ByteSwap();
    NSections = FileHeader.e_shnum;
    SectionHeaders.SetNum(NSections);    // Allocate space for section headers
    SectionHeaders.SetZero();
@@ -251,17 +302,32 @@ void CELF<ELFSTRUCTURES>::ParseFile(){
    uint32_t SectionOffset = uint32_t(FileHeader.e_shoff);
 
    for (i = 0; i < NSections; i++) {
-      SectionHeaders[i] = Get<TELF_SectionHeader>(SectionOffset);
+      if (BigEndian) Get<TELF_SectionHeader>(SectionOffset).ByteSwap();
+      TELF_SectionHeader &sheader = Get<TELF_SectionHeader>(SectionOffset);
+      SectionHeaders[i] = sheader;
       // check section header integrity
-      if (SectionHeaders[i].sh_type != SHT_NOBITS && (SectionHeaders[i].sh_offset > GetDataSize() 
-          || SectionHeaders[i].sh_offset + SectionHeaders[i].sh_size > GetDataSize() 
-          || SectionHeaders[i].sh_offset + SectionHeaders[i].sh_entsize > GetDataSize())) {
+      if (sheader.sh_type != SHT_NOBITS && (sheader.sh_offset > GetDataSize()
+          || sheader.sh_offset + sheader.sh_size > GetDataSize()
+          || sheader.sh_offset + sheader.sh_entsize > GetDataSize())) {
               err.submit(2035);
       }
       SectionOffset += SectionHeaderSize;
-      if (SectionHeaders[i].sh_type == SHT_SYMTAB) {
+      if (sheader.sh_type == SHT_SYMTAB) {
          // Symbol table found
          Symtabi = i;
+      }
+
+      // This junk was copied from `PublicNames`
+      if (BigEndian && (sheader.sh_type==SHT_SYMTAB || sheader.sh_type==SHT_DYNSYM)) {
+         uint32_t entrysize = (uint32_t)(sheader.sh_entsize);
+         uint32_t symtabsize = uint32_t(sheader.sh_size);
+         int8_t * symtab = Buf() + uint32_t(sheader.sh_offset);
+         int8_t * symtabend = symtab + symtabsize;
+         if (entrysize < sizeof(TELF_Symbol)) {err.submit(2033); entrysize = sizeof(TELF_Symbol);}
+         // Loop through symbol table
+         for (; symtab < symtabend; symtab += entrysize) {
+            ((TELF_Symbol*)symtab)->ByteSwap();
+         }
       }
    }
 
@@ -344,7 +410,7 @@ void CELF<ELFSTRUCTURES>::Dump(int options) {
            printf("\noffset = 0x%X, vaddr = 0x%X, paddr = 0x%X, filesize = 0x%X, memsize = 0x%X, align = 0x%X", 
                (uint32_t)pHeader.p_offset, (uint32_t)pHeader.p_vaddr, (uint32_t)pHeader.p_paddr, (uint32_t)pHeader.p_filesz, (uint32_t)pHeader.p_memsz, (uint32_t)pHeader.p_align);
            programHeaderOffset += programHeaderSize;
-           if (pHeader.p_filesz < 0x100 && (int32_t)pHeader.p_offset < GetDataSize() && memchr(Buf()+pHeader.p_offset, 0, (uint32_t)pHeader.p_filesz)) {
+           if (pHeader.p_filesz < 0x100 && (uint32_t)pHeader.p_offset < GetDataSize() && memchr(Buf()+pHeader.p_offset, 0, (uint32_t)pHeader.p_filesz)) {
                printf("\nContents: %s", Buf()+(int32_t)pHeader.p_offset);
            }
        }

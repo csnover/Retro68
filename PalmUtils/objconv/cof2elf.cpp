@@ -310,7 +310,7 @@ void CCOF2ELF<ELFSTRUCTURES>::MakeSymbolTable() {
          //SCOFF_SymTableEntryAux * sa = (SCOFF_SymTableEntryAux *)(OldSymtab.b + SIZE_SCOFF_SymTableEntry);
 
          // Symbol name
-         name1 = this->GetSymbolName(OldSymtab.p->s.Name);
+         name1 = this->GetSymbolName(OldSymtab.p);
 
          // Symbol value
          sym.st_value = OldSymtab.p->s.Value;
@@ -383,6 +383,7 @@ void CCOF2ELF<ELFSTRUCTURES>::MakeSymbolTable() {
          }
 
          // Put record into new symbol table
+         if (BigEndian) sym.ByteSwap();
          NewSections[symtab].Push(&sym, sizeof(sym));
 
          // Insert into symbol translation table
@@ -416,7 +417,7 @@ void CCOF2ELF<ELFSTRUCTURES>::MakeSymbolTable() {
          SCOFF_SymTableEntry * sa = (SCOFF_SymTableEntry*)(OldSymtab.b + SIZE_SCOFF_SymTableEntry);
 
          // Symbol name
-         name1 = GetSymbolName(OldSymtab.p->s.Name);
+         name1 = GetSymbolName(OldSymtab.p);
 
          // Symbol value
          sym.st_value = OldSymtab.p->s.Value;
@@ -474,6 +475,7 @@ void CCOF2ELF<ELFSTRUCTURES>::MakeSymbolTable() {
          }
 
          // Put record into new symbol table
+         if (BigEndian) sym.ByteSwap();
          NewSections[symtab].Push(&sym, sizeof(sym));
 
          // Insert into symbol translation table
@@ -559,15 +561,23 @@ void CCOF2ELF<ELFSTRUCTURES>::MakeRelocationTables() {
                // Interpret 32-bit COFF relocation types
                switch (OldReloc.p->Type) {
                case COFF32_RELOC_ABS:     // Ignored
-                  NewRelocEntry.r_type = R_386_NONE;  break;
+                  NewRelocEntry.r_type = BigEndian ? R_68K_NONE : R_386_NONE;  break;
 
                case COFF32_RELOC_TOKEN:   // .NET common language runtime token
                   err.submit(2014);       // Error message
                   // Continue in next case and insert absolute address as token:
                case COFF32_RELOC_DIR32:   // 32-bit absolute virtual address
-                  NewRelocEntry.r_type = R_386_32;  break;
+                  if (BigEndian)
+                     err.submit(2030, OldReloc.p->Type);
+                  else
+                     NewRelocEntry.r_type = R_386_32;
+                  break;
 
                case COFF32_RELOC_IMGREL:  // 32-bit image relative address
+                  if (BigEndian) {
+                     err.submit(2030, OldReloc.p->Type);
+                     break;
+                  }
                   // Image-relative relocation not supported in ELF
                   if (cmd.OutputType == FILETYPE_MACHO_LE) {
                      // Intermediate during conversion to MachO
@@ -587,10 +597,29 @@ void CCOF2ELF<ELFSTRUCTURES>::MakeRelocationTables() {
                   err.submit(1301, TempText);  err.ClearError(1301);
                   break;
 
-               case COFF32_RELOC_REL32:   // 32-bit self-relative
-                  NewRelocEntry.r_type = R_386_PC32;
-                  // Difference between EIP-relative and self-relative relocation = size of address field
-                  NewRelocEntry.r_addend = -4;  break; 
+               case COFF32_RELOC_PCREL8: // 8-bit PC-relative
+                  if (BigEndian)
+                     NewRelocEntry.r_type = R_68K_PC8;
+                  else
+                     err.submit(2030, OldReloc.p->Type);
+                  break;
+
+               case COFF32_RELOC_PCREL16: // 16-bit PC-relative
+                  if (BigEndian)
+                     NewRelocEntry.r_type = R_68K_PC16;
+                  else
+                     err.submit(2030, OldReloc.p->Type);
+                  break;
+
+               case COFF32_RELOC_REL32:   // 32-bit self-relative (PE) / 32-bit PC-relative (M68K)
+                  if (BigEndian)
+                     NewRelocEntry.r_type = R_68K_PC32;
+                  else {
+                     NewRelocEntry.r_type = R_386_PC32;
+                     // Difference between EIP-relative and self-relative relocation = size of address field
+                     NewRelocEntry.r_addend = -4;
+                  }
+                  break;
                   /* !! error  if self-relative relocation with offset
                    !! test data that fails = testpic32.obj */
 
@@ -713,6 +742,7 @@ void CCOF2ELF<ELFSTRUCTURES>::MakeRelocationTables() {
 
                // Save 32-bit relocation record Elf32_Rel, not Elf32_Rela
                if (NewRelocEntry.r_addend) err.submit(9000);
+               if (BigEndian) NewRelocEntry.ByteSwap();
                NewSections[newsecr].Push(&NewRelocEntry, sizeof(Elf32_Rel));
             }
             else {
@@ -726,6 +756,7 @@ void CCOF2ELF<ELFSTRUCTURES>::MakeRelocationTables() {
                }*/
 
                // Save 64-bit relocation record. Must be Elf64_Rela
+               if (BigEndian) NewRelocEntry.ByteSwap();
                NewSections[newsecr].Push(&NewRelocEntry, sizeof(Elf64_Rela));
             }
          }
@@ -773,6 +804,7 @@ void CCOF2ELF<ELFSTRUCTURES>::MakeBinaryFile() {
    for (newsec = 0; newsec < NumSectionsNew; newsec++) {
 
       // Put section header into ToFile
+      if (BigEndian) NewSectionHeaders[newsec].ByteSwap();
       ToFile.Push(&NewSectionHeaders[newsec], sizeof(TELF_SectionHeader));
    }
 
@@ -785,7 +817,7 @@ void CCOF2ELF<ELFSTRUCTURES>::MakeBinaryFile() {
    // File class
    FileHeader.e_ident[EI_CLASS] = (WordSize == 32) ? ELFCLASS32 : ELFCLASS64;
    // Data Endian-ness
-   FileHeader.e_ident[EI_DATA] = ELFDATA2LSB;
+   FileHeader.e_ident[EI_DATA] = BigEndian ? ELFDATA2MSB : ELFDATA2LSB;
    // ELF version
    FileHeader.e_ident[EI_VERSION] = EV_CURRENT;
    // ABI
@@ -795,7 +827,7 @@ void CCOF2ELF<ELFSTRUCTURES>::MakeBinaryFile() {
    // File type
    FileHeader.e_type = ET_REL;
    // Machine architecture
-   FileHeader.e_machine = (WordSize == 32) ? EM_386 : EM_X86_64;
+   FileHeader.e_machine = BigEndian ? EM_68K : ((WordSize == 32) ? EM_386 : EM_X86_64);
    // Version
    FileHeader.e_version = EV_CURRENT;
    // Flags
@@ -815,6 +847,9 @@ void CCOF2ELF<ELFSTRUCTURES>::MakeBinaryFile() {
 
    // Section header string table index
    FileHeader.e_shstrndx = (uint16_t)shstrtab;
+
+   if (BigEndian)
+      FileHeader.ByteSwap();
 
    // Put file header into beginning of ToFile where we made space for it
    memcpy(ToFile.Buf(), &FileHeader, sizeof(FileHeader));

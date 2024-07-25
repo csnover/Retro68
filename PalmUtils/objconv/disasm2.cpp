@@ -1095,7 +1095,7 @@ void CDisassembler::WriteImmediateOperand(uint32_t Type) {
     }
 
     // Operand size
-    if ((s.Operands[0] & 0xFFF) <= 0xA && s.Operands[0] != 0 || (s.Operands[0] & 0xF0) == 0xA0) {
+    if (((s.Operands[0] & 0xFFF) <= 0xA && s.Operands[0] != 0) || (s.Operands[0] & 0xF0) == 0xA0) {
         // Destination is general purpose register
         OSize = s.OperandSize;
     }

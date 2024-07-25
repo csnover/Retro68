@@ -83,7 +83,7 @@ void CMAC2MAC<MACSTRUCTURES>::MakeSymbolTable() {
 
       case SYMA_MAKE_WEAK:
          // Make symbol weak
-         if (cmd.OutputType == FILETYPE_COFF) {
+         if (cmd.OutputType == FILETYPE_COFF_UNIX || cmd.OutputType == FILETYPE_COFF) {
             // PE/COFF format does not support weak publics
             err.submit(2200);
          }

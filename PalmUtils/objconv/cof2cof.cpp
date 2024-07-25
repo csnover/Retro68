@@ -62,7 +62,7 @@ void CCOF2COF::MakeSymbolTable() {
          // This is a section definition record
          // aux record contains length and number of relocations. Ignore aux record
          symboltype = SYMT_SECTION;
-         name1 = GetSymbolName(OldSymtab.p->s.Name);
+         name1 = GetSymbolName(OldSymtab.p);
       }
       else if (OldSymtab.p->s.StorageClass == COFF_CLASS_FILE) {
          // This is a filename record
@@ -78,7 +78,7 @@ void CCOF2COF::MakeSymbolTable() {
       else {
          // This is a symbol record
          // Symbol name
-         name1 = GetSymbolName(OldSymtab.p->s.Name);
+         name1 = GetSymbolName(OldSymtab.p);
          if (OldSymtab.p->s.StorageClass == COFF_CLASS_EXTERNAL) {
             // This is a public or external symbol
             if (OldSymtab.p->s.SectionNumber <= 0) {
@@ -106,7 +106,7 @@ void CCOF2COF::MakeSymbolTable() {
 
       case SYMA_MAKE_WEAK:
          // Make symbol weak
-         if (cmd.OutputType == FILETYPE_COFF) {
+         if (cmd.OutputType == FILETYPE_COFF || cmd.OutputType == FILETYPE_COFF_UNIX) {
             // PE/COFF format does not support weak publics. Use this only when converting to ELF
             err.submit(2200);
          }
@@ -226,12 +226,40 @@ void CCOF2COF::MakeBinaryFile() {
    // New file header = copy of old file header
    SCOFF_FileHeader NewFileHeader = *FileHeader;
 
-   ToFile.SetFileType(FILETYPE_COFF); // Set type of output file
+   ToFile.SetFileType(Flavor == Flavor::PE ? FILETYPE_COFF : FILETYPE_COFF_UNIX); // Set type of output file
    ToFile.WordSize = WordSize;
    ToFile.FileName = FileName;
+   ToFile.BigEndian = BigEndian;
+
+   if (BigEndian) {
+      uint32_t SectionOffset = sizeof(SCOFF_FileHeader) + NewFileHeader.SizeOfOptionalHeader;
+      for (i = 0; i < NSections; ++i, SectionOffset += sizeof(SCOFF_SectionHeader)) {
+         SCOFF_SectionHeader &SectionHeader = Get<SCOFF_SectionHeader>(SectionOffset);
+         if (SectionHeader.NRelocations) {
+            union { SCOFF_Relocation * p; int8_t * b; } Reloc;
+            Reloc.b = Buf() + SectionHeader.PRelocations;
+            Reloc.p->ByteSwap(Buf(), SectionHeader.PRawData, GetDataSize(), SectionHeader.NRelocations);
+         }
+         if (SectionHeader.NLineNumbers) {
+            union { SCOFF_LineNumbers * p; int8_t * b; } Linnum;
+            Linnum.b = Buf() + SectionHeader.PLineNumbers;
+            Linnum.p->ByteSwap(SectionHeader.NLineNumbers);
+         }
+
+         SectionHeader.ByteSwap();
+      }
+
+      if (OptionalHeader) OptionalHeader->ByteSwap();
+
+      // NewFileHeader is not swapped here since it will be overwritten at the
+      // end of the function
+   }
 
    // Copy file header, section headers and sections to new file
    ToFile.Push(Buf(), NewFileHeader.PSymbolTable);
+
+   if (BigEndian)
+      Get<SCOFF_SymTableEntry>(FileHeader->PSymbolTable).ByteSwap(NumberOfSymbols);
 
    // Copy symbol table
    ToFile.Push(SymbolTable, NumberOfSymbols * SIZE_SCOFF_SymTableEntry);
@@ -239,6 +267,8 @@ void CCOF2COF::MakeBinaryFile() {
    // Additions to symbol table
    int NumAddedSymbols = NewSymbolTable.GetNumEntries();
    if (NumAddedSymbols) {
+      if (BigEndian)
+         NewSymbolTable.Get<SCOFF_SymTableEntry>(0).ByteSwap(NumAddedSymbols);
       // Append to symbols table
       ToFile.Push(NewSymbolTable.Buf(), NumAddedSymbols * SIZE_SCOFF_SymTableEntry);
       // Update NumberOfSymbols in file header
@@ -247,8 +277,12 @@ void CCOF2COF::MakeBinaryFile() {
 
    // Insert new string table
    uint32_t NewStringTableSize = NewStringTable.GetDataSize();
+   if (BigEndian)
+      NewStringTableSize = EndianChange(NewStringTableSize);
    // First 4 bytes = size
    ToFile.Push(&NewStringTableSize, sizeof(uint32_t));
+   if (BigEndian)
+      NewStringTableSize = EndianChange(NewStringTableSize);
    // Then the string table itself, except the first 4 bytes
    if (NewStringTableSize > 4) 
       ToFile.Push(NewStringTable.Buf() + 4, NewStringTableSize - 4);
@@ -284,6 +318,7 @@ void CCOF2COF::MakeBinaryFile() {
             SCOFF_SectionHeader * pSectHeader;
             pSectHeader = &Get<SCOFF_SectionHeader>(SectionOffset);
             SectionOffset += sizeof(SCOFF_SectionHeader);
+            if (BigEndian) pSectHeader->ByteSwap();
             if (pSectHeader->PRawData >= EndOfOldStringTable && pSectHeader->PRawData <= GetDataSize()) {
                pSectHeader->PRawData += EndOfNewStringTable - EndOfOldStringTable;
             }
@@ -292,9 +327,14 @@ void CCOF2COF::MakeBinaryFile() {
             }            if (pSectHeader->PLineNumbers >= EndOfOldStringTable && pSectHeader->PRawData <= GetDataSize()) {
                pSectHeader->PLineNumbers += EndOfNewStringTable - EndOfOldStringTable;
             }
+            if (BigEndian) pSectHeader->ByteSwap();
          }
       }
    }
+
+   if (BigEndian)
+      NewFileHeader.ByteSwap();
+
    // Update file header
    memcpy(ToFile.Buf(), &NewFileHeader, sizeof(NewFileHeader));
 

@@ -36,13 +36,14 @@ static inline uint32_t HighDWord (uint64_t x) {
 #define MAXFILENAMELENGTH        256
 
 // File types 
-#define FILETYPE_COFF              1         // Windows COFF/PE file
+#define FILETYPE_COFF              1         // Windows PE/COFF file
 #define FILETYPE_OMF               2         // Windows OMF file
 #define FILETYPE_ELF               3         // Linux or BSD ELF file
 #define FILETYPE_MACHO_LE          4         // Mach-O file, little endian
 #define FILETYPE_MACHO_BE          5         // Mach-O file, big endian
 #define FILETYPE_DOS               6         // DOS file
 #define FILETYPE_WIN3X             7         // Windows 3.x file
+#define FILETYPE_COFF_UNIX         8         // *nix COFF file
 #define IMPORT_LIBRARY_MEMBER   0x10         // Member of import library, Windows
 #define FILETYPE_MAC_UNIVBIN    0x11         // Macintosh universal binary
 #define FILETYPE_MS_WPO         0x20         // Object file for whole program optimization, MS

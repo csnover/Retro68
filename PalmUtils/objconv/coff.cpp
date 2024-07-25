@@ -23,7 +23,14 @@ SIntTxt COFF32RelNames[] = {
    {COFF32_RELOC_SECREL,  "Section relative"}, // 32-bit section-relative
    {COFF32_RELOC_SECREL7, "7 bit section relative"}, // 7-bit section-relative
    {COFF32_RELOC_TOKEN,   "CLR token"},        // CLR token
-   {COFF32_RELOC_REL32,   "EIP relative"}      // 32-bit relative to end of address field
+   {COFF32_RELOC_8,       "8-bit direct"},     // 8-bit direct reference
+   {COFF32_RELOC_16,      "16-bit direct"},    // 16-bit direct reference
+   {COFF32_RELOC_32,      "32-bit direct"},    // 32-bit direct reference
+   {COFF32_RELOC_PCREL8,  "8-bit EIP relative"}, // 8-bit EIP-relative (DISP8)
+   {COFF32_RELOC_PCREL16, "16-bit EIP relative"}, // 16-bit EIP-relative (DISP16)
+   {COFF32_RELOC_REL32,   "EIP relative"},     // 32-bit relative to end of address field
+   {COFF32_RELOC_NEG16,   "16-bit negative section relative"}, // 16-bit from end of section
+   {COFF32_RELOC_NEG32,   "32-bit negative section relative"}, // 32-bit from end of section
 };
 
 SIntTxt COFF64RelNames[] = {
@@ -59,6 +66,7 @@ SIntTxt COFFMachineNames[] = {
    {0x1C0, "Arm"},             // Arm
    {0x284, "Alpha 64 bit"},    // Alpha AXP 64 bit
    {0x14C, "I386"},            // x86, 32 bit
+   {0x150, "Motorola68000"},   // Motorola 68000 series (GCC)
    {0x200, "IA64"},            // Intel Itanium
    {0x268, "Motorola68000"},   // Motorola 68000 series
    {0x266, "MIPS16"},  
@@ -77,6 +85,7 @@ SIntTxt COFFMachineNames[] = {
 
 // Storage class names
 SIntTxt COFFStorageClassNames[] = {
+   {COFF_CLASS_NULL, "None"},
    {COFF_CLASS_END_OF_FUNCTION, "EndOfFunc"},
    {COFF_CLASS_AUTOMATIC, "AutoVariable"},
    {COFF_CLASS_EXTERNAL, "External/Public"},
@@ -111,6 +120,7 @@ SIntTxt COFFStorageClassNames[] = {
 
 // Names of section characteristics
 SIntTxt COFFSectionFlagNames[] = {
+   {PE_SCN_NOLOAD,          "No load"},
    {PE_SCN_CNT_CODE,        "Text"},
    {PE_SCN_CNT_INIT_DATA,   "Data"},
    {PE_SCN_CNT_UNINIT_DATA, "BSS"},
@@ -161,6 +171,170 @@ SIntTxt COFFImageDirNames[] = {
    {15,  "Reserved_table"}
 };
 
+void SCOFF_FileHeader::ByteSwap() {
+   static constexpr int sizes[] = { 2, 2, 4, 4, 4, 2, 2, 0 };
+   EndianChangeStruct((void *)this, sizes);
+}
+
+void SCOFF_IMAGE_DATA_DIRECTORY::ByteSwap() {
+   static constexpr int sizes[] = { 2, 2, 0 };
+   EndianChangeStruct((void *)this, sizes);
+}
+
+void SCOFF_ImageDirAddress::ByteSwap() {
+   static constexpr int sizes[] = { 4, 4, 4, 4, 0 };
+   EndianChangeStruct((void *)this, sizes);
+}
+
+void SCOFF_OptionalHeader::ByteSwap() {
+   if (h64.Magic == COFF_Magic_PE64) {
+      static constexpr int sizes[] = {
+         4, 4, 4, 4, 4,
+         8, 4, 4, 2, 2, 2, 2, 2, 2,
+         4, 4, 4, 4, 2, 2, 8, 8, 8, 8,
+         4, 4, 0
+      };
+      EndianChangeStruct(&h64.SizeOfCode, sizes);
+      h64.ExportTable.ByteSwap();
+      h64.ImportTable.ByteSwap();
+      h64.ResourceTable.ByteSwap();
+      h64.ExceptionTable.ByteSwap();
+      h64.CertificateTable.ByteSwap();
+      h64.BaseRelocationTable.ByteSwap();
+      h64.Debug.ByteSwap();
+      h64.Architecture.ByteSwap();
+      h64.GlobalPtr.ByteSwap();
+      h64.TLSTable.ByteSwap();
+      h64.LoadConfigTable.ByteSwap();
+      h64.BoundImportTable.ByteSwap();
+      h64.ImportAddressTable.ByteSwap();
+      h64.DelayImportDescriptor.ByteSwap();
+      h64.CLRRuntimeHeader.ByteSwap();
+      h64.Reserved.ByteSwap();
+   } else {
+      static constexpr int sizes[] = {
+         4, 4, 4, 4, 4, 4,
+         4, 4, 4, 2, 2, 2, 2, 2, 2,
+         4, 4, 4, 4, 2, 2,
+         4, 4, 4, 4, 4, 4
+      };
+      EndianChangeStruct(this, sizes);
+      h32.ExportTable.ByteSwap();
+      h32.ImportTable.ByteSwap();
+      h32.ResourceTable.ByteSwap();
+      h32.ExceptionTable.ByteSwap();
+      h32.CertificateTable.ByteSwap();
+      h32.BaseRelocationTable.ByteSwap();
+      h32.Debug.ByteSwap();
+      h32.Architecture.ByteSwap();
+      h32.GlobalPtr.ByteSwap();
+      h32.TLSTable.ByteSwap();
+      h32.LoadConfigTable.ByteSwap();
+      h32.BoundImportTable.ByteSwap();
+      h32.ImportAddressTable.ByteSwap();
+      h32.DelayImportDescriptor.ByteSwap();
+      h32.CLRRuntimeHeader.ByteSwap();
+      h32.Reserved.ByteSwap();
+   }
+}
+
+void SCOFF_SectionHeader::ByteSwap() {
+   static constexpr int sizes[] = { 4, 4, 4, 4, 4, 4, 2, 2, 4, 0 };
+   EndianChangeStruct(&VirtualSize, sizes);
+}
+
+void SCOFF_SymTableEntry::ByteSwap(uint32_t numberOfSymbols) {
+   uint32_t isym = 0;  // current symbol table entry
+   uint32_t jsym;      // auxiliary entry number
+   union {        // Pointer to symbol table
+      SCOFF_SymTableEntry * p;  // Normal pointer
+      int8_t * b;               // Used for address calculation
+   } Symtab;
+
+   Symtab.p = this;
+   while (isym < numberOfSymbols) {
+      SCOFF_SymTableEntry *s0;
+
+      // Increment point
+      s0 = Symtab.p;
+      {
+         static constexpr int sizes[] = { 4, 2, 2, 0 };
+         EndianChangeStruct(&s0->s.Value, sizes);
+         if (s0->stringindex.zeroes == 0)
+            s0->stringindex.offset = EndianChange(s0->stringindex.offset);
+      }
+
+      Symtab.b += SIZE_SCOFF_SymTableEntry;
+      isym++;
+      jsym = 0;
+      while (jsym < s0->s.NumAuxSymbols && isym + jsym < numberOfSymbols) {
+         SCOFF_SymTableEntry * sa = Symtab.p;
+         if (s0->s.StorageClass == COFF_CLASS_EXTERNAL
+            && s0->s.Type == COFF_TYPE_FUNCTION
+            && s0->s.SectionNumber > 0) {
+               static constexpr int sizes[] = { 4, 4, 4, 4, 2, 0 };
+               EndianChangeStruct(&sa->func, sizes);
+         }
+         else if (strcmp(s0->s.Name,".bf")==0 || strcmp(s0->s.Name,".ef")==0) {
+            static constexpr int sizes[] = { 4, 2, 2, 4, 4, 2, 0 };
+            EndianChangeStruct(&sa->bfef, sizes);
+         }
+         else if (s0->s.StorageClass == COFF_CLASS_EXTERNAL &&
+            s0->s.SectionNumber == COFF_SECTION_UNDEF &&
+            s0->s.Value == 0) {
+            static constexpr int sizes[] = { 4, 4, 4, 4, 2, 0 };
+            EndianChangeStruct(&sa->weak, sizes);
+         }
+         else if (s0->s.StorageClass == COFF_CLASS_STATIC) {
+            static constexpr int sizes[] = { 4, 2, 2, 4, 2, 0 };
+            EndianChangeStruct(&sa->section, sizes);
+         }
+         else if (s0->s.StorageClass == COFF_CLASS_ALIAS) {
+            static constexpr int sizes[] = { 4, 4, 4, 4, 2, 0 };
+            EndianChangeStruct(&sa->weak, sizes);
+         }
+         else {
+            // Aux raw data, like ASCII text
+         }
+         Symtab.b += SIZE_SCOFF_SymTableEntry;
+         jsym++;
+      }
+      isym += jsym;
+   }
+}
+
+void SCOFF_Relocation::ByteSwap(int8_t *buf, uint32_t pRawData, uint32_t dataSize, uint16_t nRelocations) {
+   union {
+      SCOFF_Relocation * p;
+      int8_t * b;
+   } Reloc;
+
+   Reloc.p = this;
+   for (int i = 0; i < nRelocations; ++i) {
+      static constexpr int sizes[] = { 4, 4, 2, 0 };
+      EndianChangeStruct(Reloc.p, sizes);
+      if (Reloc.p->Type < COFF32_RELOC_SEG12
+         && pRawData + Reloc.p->VirtualAddress < dataSize) {
+            uint32_t *addend = (uint32_t*)(buf + pRawData + Reloc.p->VirtualAddress);
+            *addend = EndianChange(*addend);
+      }
+      Reloc.b += SIZE_SCOFF_Relocation;
+   }
+}
+
+void SCOFF_LineNumbers::ByteSwap(uint16_t nLineNumbers) {
+   union {
+      SCOFF_LineNumbers * p;
+      int8_t * b;
+   } Linnum;
+   Linnum.p = this;
+   for (int i = 0; i < nLineNumbers; ++i) {
+      static constexpr int sizes[] = { 4, 2, 0 };
+      EndianChangeStruct(Linnum.p, sizes);
+      Linnum.b += SIZE_SCOFF_LineNumbers;
+   }
+}
+
 // Class CCOFF members:
 // Constructor
 CCOFF::CCOFF() {
@@ -183,9 +357,13 @@ void CCOFF::ParseFile(){
          err.submit(9000);
          return;
       }
+   } else if (EndianChange(Get<uint16_t>(0)) == PE_MACHINE_M68K) {
+      BigEndian = true;
+      Flavor = Flavor::UNIX;
    }
    // Find file header
    FileHeader = &Get<SCOFF_FileHeader>(FileHeaderOffset);
+   if (BigEndian) FileHeader->ByteSwap();
    NSections = FileHeader->NumberOfSections;
 
    // check header integrity
@@ -196,6 +374,7 @@ void CCOFF::ParseFile(){
       OptionalHeader = &Get<SCOFF_OptionalHeader>(FileHeaderOffset + sizeof(SCOFF_FileHeader));
       // Find image data directories
       if (OptionalHeader) {
+         if (BigEndian) OptionalHeader->ByteSwap();
          if (OptionalHeader->h64.Magic == COFF_Magic_PE64) {
             // 64 bit version
             pImageDirs = &(OptionalHeader->h64.ExportTable);
@@ -220,12 +399,30 @@ void CCOFF::ParseFile(){
    // Find section headers
    uint32_t SectionOffset = FileHeaderOffset + sizeof(SCOFF_FileHeader) + FileHeader->SizeOfOptionalHeader;
    for (int i = 0; i < NSections; i++) {
+      if (BigEndian) Get<SCOFF_SectionHeader>(SectionOffset).ByteSwap();
       SectionHeaders[i] = Get<SCOFF_SectionHeader>(SectionOffset);
+      SCOFF_SectionHeader &SectionHeader = SectionHeaders[i];
       SectionOffset += sizeof(SCOFF_SectionHeader);
       // Check for _ILDATA section
-      if (strcmp(SectionHeaders[i].Name, "_ILDATA") == 0) {
+      if (strcmp(SectionHeader.Name, "_ILDATA") == 0) {
          // This is an intermediate file for Intel compiler
          err.submit(2114);
+      }
+      if (SectionHeader.NRelocations) {
+         union {
+            SCOFF_Relocation * p;  // pointer to record
+            int8_t * b;              // used for address calculation and incrementing
+         } Reloc;
+         Reloc.b = Buf() + SectionHeader.PRelocations;
+         Reloc.p->ByteSwap(Buf(), SectionHeader.PRawData, GetDataSize(), SectionHeader.NRelocations);
+      }
+      if (SectionHeader.NLineNumbers) {
+         union {
+            SCOFF_LineNumbers * p;  // pointer to record
+            int8_t * b;              // used for address calculation and incrementing
+         } Linnum;
+         Linnum.b = Buf() + SectionHeader.PLineNumbers;
+         Linnum.p->ByteSwap(SectionHeader.NLineNumbers);
       }
    }
    if (SectionOffset > GetDataSize()) {
@@ -234,10 +431,14 @@ void CCOFF::ParseFile(){
    // Find symbol table
    SymbolTable = &Get<SCOFF_SymTableEntry>(FileHeader->PSymbolTable);
    NumberOfSymbols = FileHeader->NumberOfSymbols;
+   if (BigEndian) SymbolTable->ByteSwap(NumberOfSymbols);
 
    // Find string table
    StringTable = ((char*)Buf() + FileHeader->PSymbolTable + NumberOfSymbols * SIZE_SCOFF_SymTableEntry);
    StringTableSize = *(int*)StringTable; // First 4 bytes of string table contains its size
+
+   if (BigEndian)
+      StringTableSize = EndianChange(StringTableSize);
 }
 
 // Debug dump
@@ -246,7 +447,7 @@ void CCOFF::Dump(int options) {
 
    if (options & DUMP_FILEHDR) {
       // File header
-      printf("\nDump of PE/COFF file %s", FileName);
+      printf("\nDump of %sCOFF file %s", (Flavor == Flavor::PE ? "PE/" : ""), FileName);
       printf("\n-----------------------------------------------");
       printf("\nFile size: %i", GetDataSize());
       printf("\nFile header:");
@@ -415,18 +616,18 @@ void CCOFF::Dump(int options) {
 }
 
 
-char const * CCOFF::GetSymbolName(char* Symbol) {
+char const * CCOFF::GetSymbolName(SCOFF_SymTableEntry *symbol) {
    // Get symbol name from 8 byte entry
    static char text[16];
-   if (*(uint32_t*)Symbol != 0) {
+   if (symbol->stringindex.zeroes != 0) {
       // Symbol name not more than 8 bytes
-      memcpy(text, Symbol, 8);   // Copy to local buffer
+      memcpy(text, symbol->s.Name, 8);   // Copy to local buffer
       text[8] = 0;                    // Append terminating zero
       return text;                    // Return text
    }
    else {
       // Longer than 8 bytes. Get offset into string table
-      uint32_t offset = *(uint32_t*)(Symbol + 4);
+      uint32_t offset = symbol->stringindex.offset;
       if (offset >= StringTableSize || offset >= GetDataSize()) {err.submit(2035); return "";}
       char * s = StringTable + offset;
       if (*s) return s;               // Return string table entry
@@ -545,7 +746,7 @@ void CCOFF::PrintSymbolTable(int symnum) {
       printf("\n");
       if (symnum >= 0) printf("  ");
       printf("Symbol %i - Name: %s\n  Value=%i, ", 
-         isym, GetSymbolName(Symtab.p->s.Name), Symtab.p->s.Value);
+         isym, GetSymbolName(Symtab.p), Symtab.p->s.Value);
       if (Symtab.p->s.SectionNumber > 0) {
          printf("Section=%i", Symtab.p->s.SectionNumber);
       }
@@ -673,7 +874,7 @@ void CCOFF::PublicNames(CMemoryBuffer * Strings, CSList<SStringEntry> * Index, i
          se.Member = m;
 
          // Store name
-         se.String = Strings->PushString(GetSymbolName(Symtab.p->s.Name));
+         se.String = Strings->PushString(GetSymbolName(Symtab.p));
          // Store name index
          Index->Push(se);
       }

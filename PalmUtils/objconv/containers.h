@@ -133,6 +133,7 @@ public:
    int WordSize;                                 // Segment word size (16, 32, 64)
    int FileType;                                 // Object file type
    int Executable;                               // File is executable
+   bool BigEndian;                               // File is big-endian
    char * SetFileNameExtension(const char * f);  // Set file name extension according to FileType
 protected:
    void GetOMFWordSize();                        // Determine word size for OMF file

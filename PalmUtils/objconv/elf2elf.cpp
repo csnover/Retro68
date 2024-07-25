@@ -161,7 +161,7 @@ void CELF2ELF<ELFSTRUCTURES>::MakeSymbolTable() {
 
             case SYMA_MAKE_WEAK:
                // Make symbol weak
-               if (cmd.OutputType == FILETYPE_COFF) {
+               if (cmd.OutputType == FILETYPE_COFF || cmd.OutputType == FILETYPE_COFF_UNIX) {
                   // PE/COFF format does not support weak publics. Use this only when converting to ELF
                   err.submit(2200);
                }

@@ -212,7 +212,7 @@ void CCOF2OMF::MakeSymbolList() {
             SymbolBuffer[isym].Scope = S_PUBLIC;               // Scope = public
             SymbolBuffer[isym].NewIndex = ++NumPublicSymbols;  // Public symbol number
             // Get name
-            SymbolBuffer[isym].Name = NameBuffer.PushString(GetSymbolName(Symtab.p->s.Name));
+            SymbolBuffer[isym].Name = NameBuffer.PushString(GetSymbolName(Symtab.p));
 
             // Find section in SectionBuffer
             uint32_t OldSection = Symtab.p->s.SectionNumber;
@@ -226,7 +226,7 @@ void CCOF2OMF::MakeSymbolList() {
             // Symbol is external
             SymbolBuffer[isym].Scope = S_EXTERNAL;        // Scope = external
             SymbolBuffer[isym].NewIndex = ++NumExternalSymbols;  // External symbol number
-            SymbolBuffer[isym].Name = NameBuffer.PushString(GetSymbolName(Symtab.p->s.Name));
+            SymbolBuffer[isym].Name = NameBuffer.PushString(GetSymbolName(Symtab.p));
          }
          else if (Symtab.p->s.SectionNumber == COFF_SECTION_ABSOLUTE) {
 
@@ -234,7 +234,7 @@ void CCOF2OMF::MakeSymbolList() {
             SymbolBuffer[isym].Scope = S_PUBLIC;        // Scope = public
             SymbolBuffer[isym].NewIndex = ++NumPublicSymbols;  // Public symbol number
             // Get name
-            SymbolBuffer[isym].Name = NameBuffer.PushString(GetSymbolName(Symtab.p->s.Name));
+            SymbolBuffer[isym].Name = NameBuffer.PushString(GetSymbolName(Symtab.p));
 
             SymbolBuffer[isym].Segment = 0;          // 0 indicates absolute
 
