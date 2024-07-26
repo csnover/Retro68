@@ -29,6 +29,11 @@
  *                 GNU GPL documentation additions
  */
 
+#ifndef __PLEX_H__
+#define __PLEX_H__
+
+#include "std.h"
+
 typedef struct _plex
 {
   int m_iMac;
@@ -53,3 +58,5 @@ BOOL PlexAddElement(PLEX * pplex,
 BOOL PlexIsValid(PLEX * pplex);
 
 #define DEFPL(NAME) typedef PLEX NAME;
+
+#endif

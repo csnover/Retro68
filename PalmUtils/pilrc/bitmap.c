@@ -318,7 +318,7 @@ SetUserPalette4bpp(int p[][3],
  * Set the 4bpp user palette to the system palette
  */
 void
-SetUserPalette4bppToDefault4bpp()
+SetUserPalette4bppToDefault4bpp(void)
 {
 #ifdef BITMAP_CALL_LOG
   if (!vfQuiet)
@@ -373,7 +373,7 @@ SetUserPalette8bpp(int p[][3],
  * Set the 8bpp user palette to the system palette
  */
 void
-SetUserPalette8bppToDefault8bpp()
+SetUserPalette8bppToDefault8bpp(void)
 {
 #ifdef BITMAP_CALL_LOG
   if (!vfQuiet)
@@ -1032,7 +1032,6 @@ BMP_ConvertWindowsBitmap(RCBITMAP * rcbmp,
   if (numClrs > 256)
     numClrs = 0;                                 // direct color FIX
   pbSrc = ((PILRC_BYTE *) pbmi) + cbHeader + (sizeof(RGBQUAD) * numClrs);
-  cbitsPel = -1;
   colorDat = 0;
 
   if ((bmi.biCompression == BI_RLE4) || (bmi.biCompression == BI_RLE8))
@@ -1777,7 +1776,7 @@ WriteIndexedColorTbmp(RCBITMAP * rcbmp,
   } table[N];
 
   unsigned char *outp = rcbmp->pbBits;
-  int x, y, h, nentries, ninputcolors, noutputcolors;
+  int x, y, h, nentries, ninputcolors;
 
   nentries = 0;
   for (h = 0; h < N; h++)
@@ -1863,8 +1862,6 @@ WriteIndexedColorTbmp(RCBITMAP * rcbmp,
     if (rcbmp->cbRow > rcbmp->cx)
       *outp++ = 0;
   }
-
-  noutputcolors = (colortable) ? ninputcolors : 0;
 
   if (ninputcolors > 256)
   {
@@ -2644,20 +2641,19 @@ BMP_CompressDumpBitmap(RCBITMAP * rcbmp,
     {
       if ((test = fread(pData, 1, dataSize, outputFile)) != dataSize)
       {
-        fprintf(stderr, "ERROR: Read %lu bytes, expected %lu\n",
+        Error("Read %lu bytes, expected %lu\n",
           (unsigned long)test, (unsigned long)dataSize);
-        abort();
       }
       crc = Crc16CalcBlock(pData, (unsigned short)dataSize, 0);
 
-      error = fseek(outputFile, currentPosInFile, SEEK_SET);    /* jump before the header */
+      fseek(outputFile, currentPosInFile, SEEK_SET);    /* jump before the header */
       EmitL(dataSize);                           /* write header size of data */
       if (vfLE32)                                /* write header crc of data */
         EmitL((unsigned int)crc);
       else
         EmitW(crc);
 
-      error = fseek(outputFile, newPosInFile, SEEK_SET);        /* jump afer header + bmp */
+      fseek(outputFile, newPosInFile, SEEK_SET);        /* jump afer header + bmp */
     }
     free(pData);
   }

@@ -128,7 +128,7 @@ static const char usage[] =
 "  -MD            Generate dependency list\n";
 
 static void
-ArgError()
+ArgError(void)
 {
   fprintf(stderr, "%s", usage);
   exit(1);

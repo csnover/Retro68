@@ -41,12 +41,6 @@
 #ifndef _pilrc_h
 #define _pilrc_h                                 // RMA : multiples include protection
 
-#if (SIZEOF_INT == SIZEOF_CHAR_P)
-typedef int p_int;
-#elif (SIZEOF_LONG == SIZEOF_CHAR_P)
-typedef long p_int;
-#endif
-
 #ifndef strdup
 char *strdup(const char *s);
 #endif

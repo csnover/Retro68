@@ -31,6 +31,8 @@
 #ifndef __lex__
 #define __lex__
 
+#include "std.h"
+
 typedef int LT;
 
 #define ltNil     -1

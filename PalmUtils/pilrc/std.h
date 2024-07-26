@@ -41,6 +41,8 @@ typedef int BOOL;
 typedef unsigned char BYTE;
 
 #include <assert.h>
+#include <stdint.h>
 #define Assert(f) assert(f)
+typedef intptr_t p_int;
 
 #endif

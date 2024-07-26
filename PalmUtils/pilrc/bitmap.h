@@ -32,6 +32,8 @@
 #ifndef __BITMAP_H__
 #define __BITMAP_H__
 
+#include "std.h"
+
 /**
  * Dump a single Bitmap (Tbmp or tAIB) resource.
  * 
@@ -60,10 +62,10 @@ extern void DumpBitmap(const char *fileName,
 
 extern void SetUserPalette4bpp(int p[][3],
                                int nColors);
-extern void SetUserPalette4bppToDefault4bpp();
+extern void SetUserPalette4bppToDefault4bpp(void);
 extern void SetUserPalette8bpp(int p[][3],
                                int nColors);
-extern void SetUserPalette8bppToDefault8bpp();
+extern void SetUserPalette8bppToDefault8bpp(void);
 
 #define kSingleDensity          72
 #define kOneAndOneHalfDensity   108

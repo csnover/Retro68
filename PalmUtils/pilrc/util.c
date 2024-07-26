@@ -145,9 +145,6 @@ Diagnostic(BOOL fError, const FILELINE *pos,
 
   vfprintf(stderr, szFormat, *args);
   fprintf(stderr, "\n");
-
-  if (fError)
-    exit(1);
 }
 #endif
 
@@ -163,6 +160,7 @@ Error(const char *szFormat, ...)
   va_start(args, szFormat);
   Diagnostic(fTrue, NULL, szFormat, &args);
   va_end(args);
+  exit(1);
 }
 
 VOID
@@ -172,6 +170,7 @@ ErrorLine(const char *szFormat, ...)
   va_start(args, szFormat);
   Diagnostic(fTrue, &vIn.file, szFormat, &args);
   va_end(args);
+  exit(1);
 }
 
 VOID

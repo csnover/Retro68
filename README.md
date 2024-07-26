@@ -422,6 +422,12 @@ Contains a library that implements basic text console functionality.
 
 An automated test suite that can be run using `ctest` and `LaunchAPPL`.
 
+### PalmUtils/pilrc
+
+A copy of the PilRC resource compiler, originally version 3.2.90. Updated to
+work correctly in 64-bit host environments, to fix bugs, and to build with
+CMake.
+
 ### PalmUtils/prc-tools
 
 A copy of small parts of prc-tools 2.3 required to generate specs files for

@@ -227,10 +227,11 @@ DiagnosticX(BOOL error, const char *szFormat, ...)
  * Report an error with line number and filename 
  */
 
-static void
+NORETURN static void
 ErrorX(const char *s)
 {
   DiagnosticX(fTrue, "%s", s);
+  exit(1);
 }
 
 /*
@@ -326,7 +327,7 @@ ParseLine(char *s,
  */
 
 static void
-CloseGlyph(int *header,
+CloseGlyph(p_int *header,
            int width,
            int *row,
            int *col,
@@ -385,7 +386,8 @@ DumpFont(const char *pchFileName,
   char s[kArraySize], *s1, *bitmap[kArraySize];
   unsigned short int coltable[kArraySize];
   size_t x;
-  int token, value, header[14];
+  int token, value;
+  p_int header[14];
   int curChar = -1;
   int autoWidth = 1;
   int autoRectWidth = 1;
@@ -618,7 +620,8 @@ DumpFontFamily( int fntNo, int version, unsigned int densityCount, FNTFAMDEF * f
   char s[kArraySize], *s1, *bitmap[kArraySize];
   unsigned short int coltable[kArraySize];
   size_t x;
-  int token, value, header[15];
+  int token, value;
+  p_int header[15];
   unsigned short bit[8] = { 128, 64, 32, 16, 8, 4, 2, 1 };
   unsigned int counter = 0;
   FNTFAMDEF * tmpFontFamilyEntries = fontFamilyEntries;
@@ -1413,11 +1416,11 @@ FreeFontMem()
 |		Get extent of pilot string, placing each char width in rgdx
 -------------------------------------------------------------WESC------------*/
 int
-DxCalcRgdx(unsigned char *sz,
+DxCalcRgdx(char *sz,
            int ifnt,
            int *rgdx)
 {
-  unsigned char *pch;
+  char *pch;
   int dx;
 
   if (sz == NULL)
@@ -1427,8 +1430,8 @@ DxCalcRgdx(unsigned char *sz,
   for (pch = sz; *pch != 0; pch++)
   {
     if (rgdx != NULL)
-      rgdx[pch - sz] = DxChar(*pch, ifnt);
-    dx += DxChar(*pch, ifnt);
+      rgdx[pch - sz] = DxChar((unsigned char)*pch, ifnt);
+    dx += DxChar((unsigned char)*pch, ifnt);
   }
   return dx;
 }

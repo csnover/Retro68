@@ -35,6 +35,7 @@
  *                 VERSION -> PILRCUI_VERSION to avoid automake's VERSION
  */
 
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -59,7 +60,7 @@ void pilrcui_reload(GtkWidget *,
                     gpointer);
 void pilrcui_exit(GtkWidget *,
                   gpointer);
-void create_file_selection();
+void create_file_selection(void);
 void file_selection_ok(GtkWidget * w,
                        GtkFileSelection * fs);
 void destroy_window(GtkWidget * widget,
@@ -88,20 +89,20 @@ static GtkWidget *FormMenu = NULL;
  * Second entry is for an accelerator, don't have them yet 
  */
 static GtkItemFactoryEntry menu_items[] = {
-  {"/_File", NULL, NULL, 0, "<Branch>"},
-  {"/File/_Open", "<control>O", pilrcui_open, 0, NULL},
-  {"/File/_Reload", "<control>R", pilrcui_reload, 0, NULL},
-  {"/File/sep1", NULL, NULL, 0, "<Separator>"},
-  {"/File/E_xit", NULL, pilrcui_exit, 0, NULL},
-  {"/_Options", NULL, NULL, 0, "<Branch>"},
-  {"/Options/_Resize", NULL, NULL, 0, NULL},
-  {"/Options/No _AutoID", NULL, pilrcui_toggle_autoid, 0, "<CheckItem>"},
-  {"/Options/_Verbose", NULL, pilrcui_toggle_quiet, 0, "<CheckItem>"},
-  {"/_Help", NULL, NULL, 0, "<LastBranch>"},
-  {"/Help/_About", NULL, pilrcui_about_create, 0, NULL}
+  {"/_File", NULL, NULL, 0, "<Branch>", NULL},
+  {"/File/_Open", "<control>O", pilrcui_open, 0, NULL, NULL},
+  {"/File/_Reload", "<control>R", pilrcui_reload, 0, NULL, NULL},
+  {"/File/sep1", NULL, NULL, 0, "<Separator>", NULL},
+  {"/File/E_xit", NULL, pilrcui_exit, 0, NULL, NULL},
+  {"/_Options", NULL, NULL, 0, "<Branch>", NULL},
+  {"/Options/_Resize", NULL, NULL, 0, NULL, NULL},
+  {"/Options/No _AutoID", NULL, pilrcui_toggle_autoid, 0, "<CheckItem>", NULL},
+  {"/Options/_Verbose", NULL, pilrcui_toggle_quiet, 0, "<CheckItem>", NULL},
+  {"/_Help", NULL, NULL, 0, "<LastBranch>", NULL},
+  {"/Help/_About", NULL, pilrcui_about_create, 0, NULL, NULL}
 };
 
-static int CurrentForm = -1;
+static p_int CurrentForm = -1;
 
 void
 pilrcui_open(GtkWidget * w,
@@ -193,7 +194,6 @@ pilrcui_pilot_text(GtkDrawingArea * w,
   int y;
   int sy;
   int sx;
-  int cch;
   int rgdx[256];
   GdkFont *font;
   GdkGC *gc;
@@ -225,10 +225,6 @@ pilrcui_pilot_text(GtkDrawingArea * w,
       return;
       break;
   }
-
-  cch = strlen(s);
-
-  sx = gdk_string_width(font, s);
 
   sy = font->ascent;
 
@@ -277,7 +273,6 @@ pilrcui_pilot_text(GtkDrawingArea * w,
 void
 pilrcui_drawform(GtkDrawingArea * w)
 {
-  GtkStateType state;
   PLEXFORMOBJLIST *pplt;
   RCFormBA16Type *pform;
   FRM *pfrm;
@@ -286,8 +281,6 @@ pilrcui_drawform(GtkDrawingArea * w)
   GdkGCValues gcval;
   int pen;
   RCPOINT org;
-
-  state = GTK_STATE_NORMAL;
 
   /*
    * clear the pixmap: 
@@ -478,9 +471,7 @@ pilrcui_drawform(GtkDrawingArea * w)
                * savepen = pen; 
                */
               pen = PEN_4;
-              /*
-               * fall thru 
-               */
+              /* fall through */
             case repeatingButtonCtl:
             case pushButtonCtl:
               if (ctl.attr.frame == boldButtonFrame)
@@ -645,9 +636,6 @@ pilrcui_drawform(GtkDrawingArea * w)
         break;
       case frmTitleObj:
         {
-          RCFORMTITLE title;
-
-          title = *pobj->title;
           pchText = pobj->title->text;
           /*
            * rc = pform->window.windowBounds; 
@@ -686,14 +674,6 @@ pilrcui_drawform(GtkDrawingArea * w)
         }
         break;
       case frmPopupObj:
-        {
-          RCFORMPOPUP popup;
-
-          /*
-           * no ui, ez 
-           */
-          popup = *pobj->popup;
-        }
         break;
       case frmGraffitiStateObj:
         {
@@ -865,7 +845,7 @@ pilrcui_menus_init(GtkWidget * window)
 }
 
 int
-create_main_window()
+create_main_window(void)
 {
   GtkWidget *menubar;
   GtkWidget *vbox;
@@ -954,11 +934,10 @@ pilrcui_about_create(GtkWidget * w,
   GtkWidget *frame;
   GtkWidget *label;
   GtkWidget *alignment;
-  gint max_width;
 
   if (!about_dialog)
   {
-    about_dialog = gtk_window_new(GTK_WINDOW_DIALOG);
+    about_dialog = gtk_window_new(GTK_WINDOW_TOPLEVEL);
     gtk_window_set_title(GTK_WINDOW(about_dialog), "About PilrcUI/X");
     gtk_window_set_policy(GTK_WINDOW(about_dialog), FALSE, FALSE, FALSE);
     gtk_window_position(GTK_WINDOW(about_dialog), GTK_WIN_POS_CENTER);
@@ -1004,16 +983,14 @@ pilrcui_about_create(GtkWidget * w,
      */
 
     style = gtk_style_new();
-    gdk_font_unref(style->font);
-    style->font =
-      gdk_font_load("-Adobe-Helvetica-Medium-R-Normal--*-140-*-*-*-*-*-*");
-    gtk_widget_push_style(style);
+    gdk_font_unref(gtk_style_get_font(style));
+    gtk_style_set_font(style, gdk_font_load("-Adobe-Helvetica-Medium-R-Normal--*-140-*-*-*-*-*-*"));
 
     label = gtk_label_new(PILRCUI_VERSION);
+    gtk_widget_set_style(label, style);
     gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, TRUE, 0);
     gtk_widget_show(label);
-
-    gtk_widget_pop_style();
+    gtk_widget_set_style(label, NULL);
 
     label = gtk_label_new("by");
     gtk_box_pack_start(GTK_BOX(vbox), label, FALSE, TRUE, 0);
@@ -1043,9 +1020,6 @@ pilrcui_about_create(GtkWidget * w,
      * gtk_container_add (GTK_CONTAINER (alignment), frame);
      * gtk_widget_show (frame);
      */
-
-    max_width = 0;
-
   }
 
   if (!GTK_WIDGET_VISIBLE(about_dialog))

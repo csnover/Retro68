@@ -398,7 +398,7 @@ CheckNumericSymbol(const SYM* psym)
 }
 
 static int
-IdGetAutoId()
+IdGetAutoId(void)
 {
   idAutoMac += idAutoDirection;
   return idAutoMac;
@@ -421,7 +421,7 @@ PsymAddSymAutoId(const char *sz)
 |	Free up all memory allocated for the symbol table
 -------------------------------------------------------------WESC------------*/
 static VOID
-FreeSymTable()
+FreeSymTable(void)
 {
     SYM* psym;
     SYM* psymNext;
@@ -506,7 +506,7 @@ PteFromSz(const char *sz)
 |		Free up the translation table
 -------------------------------------------------------------WESC------------*/
 static VOID
-FreeTranslations()
+FreeTranslations(void)
 {
   TE *pte;
   TE *pteNext;
@@ -1967,6 +1967,7 @@ CbEmitStruct(void *pv,
   byte = 0;
   word = 0;                                      /* RMa add */
   Assert(sizeof(char *) == sizeof(p_int));
+  Assert(pv != NULL);
   pi = (p_int *) pv;
   for (pch = szPic; *pch != 0;)
   {
@@ -2168,7 +2169,6 @@ CbFromLt(RCFORMOBJLIST * plt,
   RCFORMOBJECT *pobj;
   char *pchText;
 
-  cb = 0;
   pobj = (vfLE32 ? &PBAFIELD32(plt, u.object) : &PBAFIELD16(plt, u.object));
 
   pchText = NULL;
@@ -2261,7 +2261,6 @@ DumpForm(FRM * pfrm)
    */
   for (ilt = 0; ilt < clt; ilt++)
   {
-    int cbLt;
     char *pchText;
     RCFORMOBJECT *pobj;
     RCFORMOBJLIST *plt;
@@ -2274,7 +2273,6 @@ DumpForm(FRM * pfrm)
 
     //              pobj = &plt->u.object;
     pobj = (vfLE32 ? &PBAFIELD32(plt, u.object) : &PBAFIELD16(plt, u.object));
-    cbLt = CbFromLt(plt, 0);
     pchText = NULL;
     CbEmitStruct(pobj->ptr, mpotszEmit[PBAFIELD(plt, objectType)],
                  &pchText, fTrue);
@@ -2795,7 +2793,7 @@ FParseObjects(RCPFILE * prcpfile)
         SETPBAFIELD(obj.table, numColumns, itm.numColumns);
         SETPBAFIELD(obj.table, numRows, itm.numRows);
         SETPBAFIELD(obj.table, rgdxcol,
-                    calloc(PBAFIELD(obj.table, numColumns), sizeof(int)));
+                    calloc(PBAFIELD(obj.table, numColumns), sizeof(p_int)));
         for (icol = 0; icol < PBAFIELD(obj.table, numColumns); icol++)
           SETPBAFIELD(obj.table, rgdxcol[icol], itm.rgdxcol[icol]);
         fok = frmTableObj;
@@ -2911,7 +2909,7 @@ static BOOL
 FParseForm(RCPFILE * prcpf)
 {
   ITM itm;
-  BOOL f;
+  // BOOL f;
   FRM frm;
 
   memset(&frm, 0, sizeof(FRM));
@@ -2959,7 +2957,8 @@ FParseForm(RCPFILE * prcpf)
   SETPBAFIELD(vpfrm, form.defaultButton, itm.defaultBtnId);
   SETPBAFIELD(vpfrm, form.menuRscId, itm.menuId);
 
-  f = FParseObjects(prcpf);
+  FParseObjects(prcpf);
+  // f = FParseObjects(prcpf);
   //      if (ifrmMac > ifrmMax)
   //              Error("Too many forms!");
   if (vfCheckDupes)
@@ -2989,7 +2988,7 @@ FParseForm(RCPFILE * prcpf)
    * clone pointers?  yuck 
    */
   //      ifrmMac++;
-  return f;
+  // return f;
 }
 
 /*-----------------------------------------------------------------------------
@@ -2999,7 +2998,7 @@ FParseForm(RCPFILE * prcpf)
 | emitted bytes the same as the USR tools.
 -------------------------------------------------------------WESC------------*/
 static VOID
-DumpMenu()
+DumpMenu(void)
 {
   int cmpd;
   int impd;
@@ -3093,7 +3092,7 @@ DumpMenu()
 |		Compute the menu screen rect
 -------------------------------------------------------------WESC------------*/
 static VOID
-AssignMenuRects()
+AssignMenuRects(void)
 {
   int cmpd;
   int impd;
@@ -3351,7 +3350,7 @@ FParseMenu(RCPFILE * prcpfile)
 |	FreeMenu
 -------------------------------------------------------------WESC------------*/
 static void
-FreeMenu()
+FreeMenu(void)
 {
   int impd;
   int imi;
@@ -3485,7 +3484,7 @@ WriteAlert:
 |	ParseDumpVersion
 -------------------------------------------------------------WESC------------*/
 static void
-ParseDumpVersion()
+ParseDumpVersion(void)
 {
   // default version ID is 1 (it dont work otherwise) :P
   int id = (FIsString(PeekTok()))? 1 : WGetId("Version ResourceId");
@@ -3512,7 +3511,7 @@ ParseDumpVersion()
 |
 -------------------------------------------------------------KAS-------------*/
 static void
-ParseDumpStringTable()
+ParseDumpStringTable(void)
 {
   int id;
   int tot = 0;
@@ -3585,7 +3584,7 @@ ParseDumpStringTable()
 |	ParseDumpString
 -------------------------------------------------------------WESC------------*/
 static void
-ParseDumpString()
+ParseDumpString(void)
 {
   int id;
   char *pchString;
@@ -3696,7 +3695,7 @@ ParseDumpString()
 |       ParseDumpCategories
 -------------------------------------------------------------JOHNL-----------*/
 static void
-ParseDumpCategories()
+ParseDumpCategories(void)
 {
   int id, len, count;
   char *string;
@@ -4351,7 +4350,7 @@ ParseDumpLauncherCategory(void)
   if (id == 0)
     id = 1000;
 
-  if (DesirableLocale(pLocale))
+  if (DesirableLocale(pLocale) && pString != NULL)
   {
     OpenOutput(kPalmResType[kDefaultCategoryRscType], id);      /* RMa "taic" */
     DumpBytes(pString, strlen(pString) + 1);
@@ -4368,7 +4367,7 @@ ParseDumpLauncherCategory(void)
 |	ParseDumpApplicationIconName
 -------------------------------------------------------------WESC------------*/
 static void
-ParseDumpApplicationIconName()
+ParseDumpApplicationIconName(void)
 {
   char *pchString;
   ITM itm;
@@ -4395,7 +4394,7 @@ ParseDumpApplicationIconName()
 |	ParseDumpApplication
 -------------------------------------------------------------WESC------------*/
 static void
-ParseDumpApplication()
+ParseDumpApplication(void)
 {
   char *pchString;
   ITM itm;
@@ -4419,7 +4418,7 @@ ParseDumpApplication()
 |	ParseDumpTrap
 -------------------------------------------------------------WESC------------*/
 static void
-ParseDumpTrap()
+ParseDumpTrap(void)
 {
   int id;
   int wTrap;
@@ -4453,7 +4452,7 @@ ParseDumpTrap()
 |     ParseDumpFont
 -------------------------------------------------------------DPT-------------*/
 static void
-ParseDumpFont()
+ParseDumpFont(void)
 {
   int id;
   int fontid;
@@ -4482,7 +4481,7 @@ ParseDumpFont()
 |     ParseDumpFontFamily
 -------------------------------------------------------------RMa-------------*/
 static void
-ParseDumpFontFamily()
+ParseDumpFontFamily(void)
 {
   ITM itm;
   int id;
@@ -4539,7 +4538,7 @@ ParseDumpFontFamily()
 |     ParseDumpHex
 --------------------------------------------------------------AA-------------*/
 static void
-ParseDumpHex()
+ParseDumpHex(void)
 {
   char *pchResType = PchGetString("Resource Type");
   ITM itm;
@@ -4614,7 +4613,7 @@ ParseDumpHex()
 |     ParseDumpData
 --------------------------------------------------------------AA-------------*/
 static void
-ParseDumpData()
+ParseDumpData(void)
 {
   char *pchResType, *pchFileName;
   ITM itm;
@@ -4665,7 +4664,7 @@ ParseDumpData()
 |	ParseDumpInteger
 -------------------------------------------------------------BLC-------------*/
 static void
-ParseDumpInteger()
+ParseDumpInteger(void)
 {
   ITM itm;
 
@@ -4894,7 +4893,7 @@ ParseDumpPaletteTable(void)
 |      ParseDumpPalette
 -------------------------------------------------------------RMa-------------*/
 static void
-ParseDumpPalette()
+ParseDumpPalette(void)
 {
   char *pchFileName;
   int id;
@@ -5044,7 +5043,7 @@ ParseApplicationPreferences(void)
 |	ParseTranslation
 -------------------------------------------------------------WESC------------*/
 static void
-ParseTranslation()
+ParseTranslation(void)
 {
   BOOL fAddTranslation;
   char *pch;
@@ -5100,7 +5099,7 @@ ParseTranslation()
 -------------------------------------------------------------BLC-------------*/
 
 static void
-ParseResetAutoID()
+ParseResetAutoID(void)
 {
     int newAutoID = WGetConstEx("reset value for AutoID");
     idAutoMac = newAutoID;
@@ -5113,7 +5112,7 @@ ParseResetAutoID()
 -------------------------------------------------------------BLC-------------*/
 
 static void
-ParseGenerateHeader()
+ParseGenerateHeader(void)
 {
     free(szOutputHeaderFile);
     szOutputHeaderFile = PchGetString("Output header name");

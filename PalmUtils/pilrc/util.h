@@ -44,8 +44,10 @@
 
 #ifdef __GNUC__
 #define PRINTF_FORMATTING  __attribute__ ((format(printf, 1, 2)))
+#define NORETURN __attribute__ ((noreturn))
 #else
 #define PRINTF_FORMATTING
+#define NORETURN
 #endif
 
 /* Error() and ErrorLine() write a message to stderr and halt translation;
@@ -53,8 +55,8 @@
    add an indication of the current source file and line number to the message
    given via the printf format etc arguments.  */
 
-VOID Error(const char *szFormat, ...)  PRINTF_FORMATTING;
-VOID ErrorLine(const char *szFormat, ...)    PRINTF_FORMATTING;
+VOID Error(const char *szFormat, ...)  PRINTF_FORMATTING NORETURN;
+VOID ErrorLine(const char *szFormat, ...)    PRINTF_FORMATTING NORETURN;
 VOID WarningLine(const char *szFormat, ...)  PRINTF_FORMATTING;
 
 /* The functions above are actually wrappers around this general purpose

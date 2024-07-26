@@ -63,7 +63,7 @@ extern void DumpFontFamily(int fntNo,
 extern void InitFontMem(int);
 extern void FreeFontMem(void);
 
-extern int DxCalcRgdx(unsigned char *,
+extern int DxCalcRgdx(char *,
                       int,
                       int *);
 extern int DxCalcExtent(unsigned char *,
