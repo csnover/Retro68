@@ -244,8 +244,6 @@ EmWindowFltk::EmWindowFltk (void) :
 
 	this->end ();
 
-	this->redraw (); // Redraw help message
-
 	// Set the X-Windows window class.  Normally, this is done when
 	// Fl_Window::show (argc, argv) is called (in main()).  However, the
 	// EmWindow class gets in the way and automatically shows the host
@@ -600,10 +598,6 @@ void EmWindowFltk::HostWindowReset (void)
 
 	this->size (w, h);
 	this->size_range (w, h, w, h);
-
-	// Invalidate the window contents now (necessary?).
-
-	this->redraw ();
 }
 
 
