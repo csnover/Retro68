@@ -634,6 +634,9 @@ ENGLISH=Autorun
 ID=kStr_AutorunAndQuit
 ENGLISH=AutorunAndQuit
 
+ID=kStr_MainWindowInstructions
+ENGLISH=Right click on this window to show a menu of commands.
+
 ID=kStr_ReadFrom
 ENGLISH=read from
 

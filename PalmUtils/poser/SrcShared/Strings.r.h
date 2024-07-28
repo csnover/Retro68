@@ -240,6 +240,7 @@
 #define kStr_Autoload				2004
 #define kStr_Autorun				2005
 #define kStr_AutorunAndQuit			2006
+#define kStr_MainWindowInstructions 2007
 
 #define kStr_ReadFrom				2010
 #define kStr_WroteTo				2011

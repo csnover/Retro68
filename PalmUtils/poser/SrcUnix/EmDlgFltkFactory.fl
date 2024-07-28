@@ -1,14 +1,11 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.00 
-header_name {.h} 
-code_name {.cpp} 
-gridx 5 
-gridy 5 
-snap 3
+version 1.0308
+header_name {.h}
+code_name {.cpp}
 Function {PrvMakeROMTransferQueryDialog()} {} {
   Fl_Window {} {
     label {ROM Transfer}
-    xywh {752 584 520 400} labelsize 12 hide
+    xywh {752 584 520 400} type Double labelsize 12 hide
     code0 {\#include "EmCommon.h"}
     code1 {\#include "EmDlgFltk.h"}
     code2 {\#include "Platform.h"} modal
@@ -39,16 +36,16 @@ Function {PrvMakeROMTransferQueryDialog()} {} {
     }
     Fl_Choice {} {
       label {Baud:}
-      xywh {60 360 130 20} labelsize 12 textsize 12
+      xywh {60 360 130 20} down_box BORDER_BOX labelsize 12 textsize 12
       code0 {::PrvSetWidgetID (o, kDlgItemDlqBaudList);}
     } {}
   }
-} 
+}
 
 Function {PrvMakeROMTransferProgressDialog()} {} {
   Fl_Window {} {
     label Progress
-    xywh {190 593 300 115} labelsize 12 hide
+    xywh {190 593 300 115} type Double labelsize 12 hide
   } {
     Fl_Return_Button {} {
       label Cancel
@@ -65,12 +62,12 @@ Function {PrvMakeROMTransferProgressDialog()} {} {
       code0 {::PrvSetWidgetID (o, kDlgItemDlpProgress);}
     }
   }
-} 
+}
 
 Function {PrvMakeNewHordeDialog()} {} {
   Fl_Window {} {
     label {New Gremlin Horde}
-    xywh {86 192 410 460} labelsize 12 hide modal
+    xywh {86 192 410 460} type Double labelsize 12 hide modal
   } {
     Fl_Return_Button {} {
       label OK
@@ -143,7 +140,7 @@ Function {PrvMakeNewHordeDialog()} {} {
       }
       Fl_Choice {} {
         label {Choose which to launch first:} open
-        xywh {210 175 165 25} labelsize 12 align 5 textsize 12
+        xywh {210 175 165 25} down_box BORDER_BOX labelsize 12 align 5 textsize 12
         code0 {::PrvSetWidgetID (o, kDlgItemHrdFirstLaunchedApp);}
       } {}
       Fl_Button {} {
@@ -158,12 +155,12 @@ Function {PrvMakeNewHordeDialog()} {} {
       }
     }
   }
-} 
+}
 
 Function {PrvMakeEditSkinsDialog()} {} {
   Fl_Window {} {
     label Skins
-    xywh {897 266 300 280} labelsize 12 hide modal
+    xywh {897 266 300 280} type Double labelsize 12 hide modal
   } {
     Fl_Return_Button {} {
       label OK
@@ -201,12 +198,12 @@ Function {PrvMakeEditSkinsDialog()} {} {
       }
     }
   }
-} 
+}
 
 Function {PrvMakeEditLoggingOptionsDialog()} {} {
   Fl_Window {} {
     label {Logging Options}
-    xywh {53 135 405 275} labelsize 12 hide modal
+    xywh {53 135 405 275} type Double labelsize 12 hide modal
   } {
     Fl_Return_Button {} {
       label OK
@@ -337,12 +334,12 @@ Function {PrvMakeEditLoggingOptionsDialog()} {} {
       code0 {::PrvSetWidgetID (o, kDlgItemLogLogLLDebuggerData);}
     }
   }
-} 
+}
 
 Function {PrvMakeSessionNewDialog()} {} {
   Fl_Window {} {
     label {New Session}
-    xywh {942 412 280 170} labelsize 12 hide modal
+    xywh {942 412 280 170} type Double labelsize 12 hide modal
   } {
     Fl_Return_Button {} {
       label OK
@@ -356,31 +353,31 @@ Function {PrvMakeSessionNewDialog()} {} {
     }
     Fl_Choice {} {
       label {ROM file:}
-      xywh {80 15 180 20} labelsize 12 textsize 12
+      xywh {80 15 180 20} down_box BORDER_BOX labelsize 12 textsize 12
       code0 {::PrvSetWidgetID (o, kDlgItemNewROM);}
     } {}
     Fl_Choice {} {
       label {Device:}
-      xywh {80 40 180 20} labelsize 12 textsize 12
+      xywh {80 40 180 20} down_box BORDER_BOX labelsize 12 textsize 12
       code0 {::PrvSetWidgetID (o, kDlgItemNewDevice);}
     } {}
     Fl_Choice {} {
       label {Skin:}
-      xywh {80 65 180 20} labelsize 12 textsize 12
+      xywh {80 65 180 20} down_box BORDER_BOX labelsize 12 textsize 12
       code0 {::PrvSetWidgetID (o, kDlgItemNewSkin);}
     } {}
     Fl_Choice {} {
       label {RAM size:}
-      xywh {80 90 180 20} labelsize 12 textsize 12
+      xywh {80 90 180 20} down_box BORDER_BOX labelsize 12 textsize 12
       code0 {::PrvSetWidgetID (o, kDlgItemNewMemorySize);}
     } {}
   }
-} 
+}
 
 Function {PrvMakeHostFSOptionsDialog()} {} {
   Fl_Window {} {
     label {HostFS Options}
-    xywh {850 280 330 220} labelsize 12 hide modal
+    xywh {850 280 330 220} type Double labelsize 12 hide modal
   } {
     Fl_Return_Button {} {
       label OK
@@ -413,12 +410,12 @@ Function {PrvMakeHostFSOptionsDialog()} {} {
       code0 {::PrvSetWidgetID (o, kDlgItemHfsBrowse);}
     }
   }
-} 
+}
 
 Function {PrvMakeDatabaseImportDialog()} {} {
   Fl_Window {} {
     label Install
-    xywh {674 242 290 90} labelsize 12 hide modal
+    xywh {674 242 290 90} type Double labelsize 12 hide modal
   } {
     Fl_Box {} {
       label {Items remaining to be installed:}
@@ -439,12 +436,12 @@ Function {PrvMakeDatabaseImportDialog()} {} {
       code0 {::PrvSetWidgetID (o, kDlgItemCancel);}
     }
   }
-} 
+}
 
 Function {PrvMakeCommonDialog()} {} {
   Fl_Window {} {
     label {Palm OS Emulator}
-    xywh {211 257 380 150} hide modal
+    xywh {211 257 380 150} type Double hide modal
   } {
     Fl_Button {} {
       label Continue
@@ -470,12 +467,12 @@ Function {PrvMakeCommonDialog()} {} {
       code1 {Fl_Group::current ()->resizable (o);}
     }
   }
-} 
+}
 
 Function {PrvMakeEditDebuggingOptionsDialog()} {} {
   Fl_Window {} {
     label {Debug Options}
-    xywh {76 97 415 357} labelsize 12 hide modal
+    xywh {76 97 415 357} type Double labelsize 12 hide modal
   } {
     Fl_Return_Button {} {
       label OK
@@ -591,12 +588,12 @@ Function {PrvMakeEditDebuggingOptionsDialog()} {} {
       code0 {::PrvSetWidgetID (o, kDlgItemDbgDialogBeep);}
     }
   }
-} 
+}
 
 Function {PrvMakeEditBreakpointsDialog()} {} {
   Fl_Window {} {
     label Breakpoints
-    xywh {899 137 290 330} labelsize 12 hide modal
+    xywh {899 137 290 330} type Double labelsize 12 hide modal
   } {
     Fl_Return_Button {} {
       label OK
@@ -648,12 +645,12 @@ Function {PrvMakeEditBreakpointsDialog()} {} {
       }
     }
   }
-} 
+}
 
 Function {PrvMakeEditCodeBreakpointDialog()} {} {
   Fl_Window {} {
     label {Code Breakpoint}
-    xywh {680 176 260 120} labelsize 12 hide modal
+    xywh {680 176 260 120} type Double labelsize 12 hide modal
   } {
     Fl_Return_Button {} {
       label OK
@@ -676,12 +673,12 @@ Function {PrvMakeEditCodeBreakpointDialog()} {} {
       code0 {::PrvSetWidgetID (o, kDlgItemBrkCondition);}
     }
   }
-} 
+}
 
 Function {PrvMakeDatabaseExportDialog()} {} {
   Fl_Window {} {
     label {Export Database}
-    xywh {643 135 260 385} labelsize 12 hide modal
+    xywh {643 135 260 385} type Double labelsize 12 hide modal
   } {
     Fl_Return_Button {} {
       label OK
@@ -699,12 +696,12 @@ Function {PrvMakeDatabaseExportDialog()} {} {
       code0 {::PrvSetWidgetID (o, kDlgItemExpDbList);}
     }
   }
-} 
+}
 
 Function {PrvMakeEditPreferencesDialog()} {} {
   Fl_Window {} {
     label Preferences
-    xywh {251 186 270 417} labelsize 12 hide modal
+    xywh {251 186 270 417} type Double labelsize 12 hide modal
   } {
     Fl_Return_Button {} {
       label OK
@@ -781,19 +778,19 @@ Function {PrvMakeEditPreferencesDialog()} {} {
       code0 {::PrvSetWidgetID (o, kDlgItemPrfUserName);}
     }
   }
-} 
+}
 
 Function {PrvMakeEditTracingOptionsDialog()} {} {
   Fl_Window {} {
     label {Tracing Options}
-    xywh {656 88 203 100} labelsize 12 hide modal
+    xywh {656 88 203 100} type Double labelsize 12 hide modal
   } {}
-} 
+}
 
 Function {PrvMakeResetDialog()} {} {
   Fl_Window {} {
     label Reset
-    xywh {446 151 480 305} labelsize 12 hide
+    xywh {446 151 480 305} type Double labelsize 12 hide
   } {
     Fl_Return_Button {} {
       label Reset
@@ -849,12 +846,12 @@ Function {PrvMakeResetDialog()} {} {
       xywh {130 175 330 65} labelsize 12 align 149
     }
   }
-} 
+}
 
 Function {PrvMakeSessionInfoDialog()} {} {
   Fl_Window {} {
     label {Session Info}
-    xywh {638 44 414 212} labelsize 12 hide
+    xywh {638 44 414 212} type Double labelsize 12 hide
   } {
     Fl_Return_Button {} {
       label OK
@@ -898,12 +895,12 @@ Function {PrvMakeSessionInfoDialog()} {} {
       code0 {::PrvSetWidgetID (o, kDlgItemInfSessionFld);}
     }
   }
-} 
+}
 
 Function {PrvMakeGremlinControlDialog()} {} {
   Fl_Window {} {
     label {Gremlin Control}
-    xywh {654 76 326 109} labelsize 12 hide
+    xywh {654 76 326 109} type Double labelsize 12 hide
   } {
     Fl_Box {} {
       label {Event: 0,000,000 of 0,000,000}
@@ -936,12 +933,12 @@ Function {PrvMakeGremlinControlDialog()} {} {
       code0 {::PrvSetWidgetID (o, kDlgItemGrmStep);}
     }
   }
-} 
+}
 
 Function {PrvMakeEditErrorHandlingDialog()} {} {
   Fl_Window {} {
     label {Error Handling}
-    xywh {110 117 394 318} labelsize 12 hide modal
+    xywh {110 117 394 318} type Double labelsize 12 hide modal
   } {
     Fl_Return_Button {} {
       label OK
@@ -959,12 +956,12 @@ Function {PrvMakeEditErrorHandlingDialog()} {} {
     }
     Fl_Choice {} {
       label {On warnings:}
-      xywh {115 45 225 20} labelsize 12 textsize 12
+      xywh {115 45 225 20} down_box BORDER_BOX labelsize 12 textsize 12
       code0 {::PrvSetWidgetID (o, kDlgItemErrWarningOff);}
     } {}
     Fl_Choice {} {
       label {On errors:}
-      xywh {115 80 225 20} labelsize 12 textsize 12
+      xywh {115 80 225 20} down_box BORDER_BOX labelsize 12 textsize 12
       code0 {::PrvSetWidgetID (o, kDlgItemErrErrorOff);}
     } {}
     Fl_Box {} {
@@ -973,23 +970,24 @@ Function {PrvMakeEditErrorHandlingDialog()} {} {
     }
     Fl_Choice {} {
       label {On warnings:}
-      xywh {115 175 225 20} labelsize 12 textsize 12
+      xywh {115 175 225 20} down_box BORDER_BOX labelsize 12 textsize 12
       code0 {::PrvSetWidgetID (o, kDlgItemErrWarningOn);}
     } {}
     Fl_Choice {} {
       label {On errors:}
-      xywh {115 210 225 20} labelsize 12 textsize 12
+      xywh {115 210 225 20} down_box BORDER_BOX labelsize 12 textsize 12
       code0 {::PrvSetWidgetID (o, kDlgItemErrErrorOn);}
     } {}
   }
-} 
+}
 
-Function {PrvMakeAboutDialog()} {} {
+Function {PrvMakeAboutDialog()} {open
+} {
   Fl_Window {} {
-    label {About Palm OS(R) Emulator}
-    xywh {124 348 362 231} hide
+    label {About Palm OS(R) Emulator} open
+    xywh {2105 437 360 230} type Double
     code0 {\#include <FL/Fl_Pixmap.H>}
-    code1 {\#include "poser.xpm"} modal
+    code1 {\#include "poser.xpm"} modal visible
   } {
     Fl_Return_Button {} {
       label OK
@@ -1002,12 +1000,12 @@ Function {PrvMakeAboutDialog()} {} {
       code0 {Fl_Pixmap* p = new Fl_Pixmap (poser_xpm);}
       code1 {p->label (o);}
     }
-    Fl_Tabs {} {
+    Fl_Tabs {} {open
       xywh {70 10 285 180}
     } {
       Fl_Group {} {
-        label Palm
-        xywh {95 35 260 155} labelsize 12 hide
+        label Palm open selected
+        xywh {95 35 260 155} labelsize 12
         code0 {o->show ();}
       } {
         Fl_Box {} {
@@ -1018,31 +1016,25 @@ Function {PrvMakeAboutDialog()} {} {
           code2 {o->label (versionStr.c_str ());}
         }
         Fl_Box {} {
-          label {Copyright (c) 1998-2001 Palm, Inc.}
+          label {Copyright © 1998-2001 Palm, Inc.}
           xywh {100 70 240 15} labelsize 10 align 21
-        }
-        Fl_Button {} {
-          label {<http://www.palmos.com>}
-          callback openURL
-          xywh {100 105 125 15} box FLAT_BOX selection_color 2 labelsize 10 labelcolor 4 align 21
-        }
-        Fl_Button {} {
-          label {<mailto:bug.reports@corp.palm.com>}
-          callback openURL
-          xywh {100 120 175 15} box FLAT_BOX selection_color 2 labelsize 10 labelcolor 4 align 21
         }
         Fl_Box {} {
           label {Download the latest version from:}
           xywh {100 140 165 15} labelsize 10 align 21
         }
         Fl_Button {} {
-          label {<http://www.palmos.com/dev/tech/tools/emulator>}
+          label {<https://github.com/autc04/Retro68>}
           callback openURL
           xywh {100 155 235 15} box FLAT_BOX selection_color 2 labelsize 10 labelcolor 4 align 21
         }
+        Fl_Box {} {
+          label {Copyright © 2024 Retro68 contributors}
+          xywh {100 85 239 15} labelsize 10 align 21
+        }
       }
       Fl_Group {} {
-        label Windows
+        label Windows open
         xywh {95 35 260 155} labelsize 12 hide
       } {
         Fl_Box {} {
@@ -1050,7 +1042,7 @@ Function {PrvMakeAboutDialog()} {} {
           xywh {100 55 240 15} labelsize 10 align 21
         }
         Fl_Box {} {
-          label {Portions copyright (c) 1996-1997}
+          label {Portions copyright © 1996-1997}
           xywh {100 70 240 15} labelsize 10 align 21
         }
         Fl_Button {} {
@@ -1059,13 +1051,13 @@ Function {PrvMakeAboutDialog()} {} {
           xywh {100 100 125 15} box FLAT_BOX selection_color 2 labelsize 10 labelcolor 4 align 21
         }
         Fl_Button {} {
-          label {<mailto:greg@hewgill.com>}
+          label {<mailto:greg@@hewgill.com>}
           callback openURL
-          xywh {100 115 130 15} box FLAT_BOX selection_color 2 labelsize 10 labelcolor 4 align 21
+          xywh {100 115 250 15} box FLAT_BOX selection_color 2 labelsize 10 labelcolor 4 align 21
         }
       }
       Fl_Group {} {
-        label Macintosh
+        label Macintosh open
         xywh {95 35 260 155} labelsize 12 hide
       } {
         Fl_Box {} {
@@ -1073,7 +1065,7 @@ Function {PrvMakeAboutDialog()} {} {
           xywh {100 55 240 15} labelsize 10 align 21
         }
         Fl_Box {} {
-          label {Portions copyright (c) 1995-1997}
+          label {Portions copyright © 1995-1997}
           xywh {100 70 240 15} labelsize 10 align 21
         }
         Fl_Button {} {
@@ -1082,21 +1074,21 @@ Function {PrvMakeAboutDialog()} {} {
           xywh {100 100 220 15} box FLAT_BOX selection_color 2 labelsize 10 labelcolor 4 align 21
         }
         Fl_Button {} {
-          label {<mailto:ILLUMESoft@aol.com>}
+          label {<mailto:ILLUMESoft@@aol.com>}
           callback openURL
           xywh {100 115 150 15} box FLAT_BOX selection_color 2 labelsize 10 labelcolor 4 align 21
         }
       }
       Fl_Group {} {
-        label UAE
-        xywh {95 35 260 155} labelsize 12
+        label UAE open
+        xywh {95 35 260 155} labelsize 12 hide
       } {
         Fl_Box {} {
           label {UAE Amiga Emulator by Bernd Schmidt}
           xywh {100 55 240 15} labelsize 10 align 21
         }
         Fl_Box {} {
-          label {Portions copyright (c) 1995-1997}
+          label {Portions copyright © 1995-1997}
           xywh {100 70 240 15} labelsize 10 align 21
         }
         Fl_Button {} {
@@ -1105,19 +1097,19 @@ Function {PrvMakeAboutDialog()} {} {
           xywh {100 100 170 15} box FLAT_BOX selection_color 2 labelsize 10 labelcolor 4 align 21
         }
         Fl_Button {} {
-          label {<mailto:crux@pool.informatik.rwth-aachen.de>}
-          callback openURL selected
+          label {<mailto:crux@@pool.informatik.rwth-aachen.de>}
+          callback openURL
           xywh {100 115 225 15} box FLAT_BOX selection_color 2 labelsize 10 labelcolor 4 align 21
         }
       }
     }
   }
-} 
+}
 
 Function {PrvMakeMinimizeDialog()} {} {
   Fl_Window {} {
     label {Minimizing...}
-    xywh {644 124 375 125} labelsize 12 hide
+    xywh {644 124 375 125} type Double labelsize 12 hide
   } {
     Fl_Box {} {
       label {Pass \#000}
@@ -1154,4 +1146,4 @@ Function {PrvMakeMinimizeDialog()} {} {
       code0 {::PrvSetWidgetID (o, kDlgItemCancel);}
     }
   }
-} 
+}
