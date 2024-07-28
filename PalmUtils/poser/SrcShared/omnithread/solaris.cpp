@@ -93,7 +93,7 @@ omni_condition::wait(void)
 }
 
 int
-omni_condition::timedwait(unsigned long secs, unsigned long nanosecs)
+omni_condition::timedwait(uint32 secs, uint32 nanosecs)
 {
     timespec rqts = { secs, nanosecs };
 
@@ -316,7 +316,7 @@ omni_thread::~omni_thread(void)
 void
 omni_thread::start(void)
 {
-    long flags = 0;
+    int32 flags = 0;
 
     if (detached)
 	flags |= THR_DETACHED;
@@ -492,7 +492,7 @@ omni_thread::yield(void)
 
 
 void
-omni_thread::sleep(unsigned long secs, unsigned long nanosecs)
+omni_thread::sleep(uint32 secs, uint32 nanosecs)
 {
     timespec rqts = { secs, nanosecs };
     if (nanosleep(&rqts, (timespec*)NULL) != 0)
@@ -501,8 +501,8 @@ omni_thread::sleep(unsigned long secs, unsigned long nanosecs)
 
 
 void
-omni_thread::get_time(unsigned long* abs_sec, unsigned long* abs_nsec,
-		      unsigned long rel_sec, unsigned long rel_nsec)
+omni_thread::get_time(uint32* abs_sec, uint32* abs_nsec,
+		      uint32 rel_sec, uint32 rel_nsec)
 {
     timespec abs;
     clock_gettime(CLOCK_REALTIME, &abs);

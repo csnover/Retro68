@@ -14,6 +14,8 @@
 #include "EmCommon.h"
 #include "EmTRGSD.h"
 
+#include <cstring>
+
 /************************************************************************
  * This class handles the SPI SD controller interface used in the 
  * HandEra 330.

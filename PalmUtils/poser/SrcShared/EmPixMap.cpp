@@ -16,6 +16,8 @@
 
 #include "Platform.h"			// Platform::AllocateMemory
 
+#include <cstring>
+
 /*
 	EmPixMap is a simple class for managing pixmaps (multi-bpp bitmap)
 	in a cross-platform fashion.
@@ -70,7 +72,7 @@ struct ScanlineParms
 typedef void (*ScanlineConverter) (const ScanlineParms&);
 
 
-static void				PrvMakeMask		(void* dstPtr, void* srcPtr, long rowBytes, long width, long height);
+static void				PrvMakeMask		(void* dstPtr, void* srcPtr, int32 rowBytes, int32 width, int32 height);
 static void				PrvAddToRegion	(EmRegion& region, int top, int left, int right);
 static EmPixMapDepth	PrvGetDepth		(EmPixMapFormat);
 
@@ -189,13 +191,15 @@ FOR_EACH_FORMAT_PAIR (DECLARE_CONVERTER)
 #define PUT_24RGB(destPtr, r, g, b, a)	\
 	*destPtr++ = r;						\
 	*destPtr++ = g;						\
-	*destPtr++ = b;
+	*destPtr++ = b;						\
+	(void)a;
 
 
 #define PUT_24BGR(destPtr, r, g, b, a)	\
 	*destPtr++ = b;						\
 	*destPtr++ = g;						\
-	*destPtr++ = r;
+	*destPtr++ = r;						\
+	(void)a;
 
 
 #define PUT_32ARGB(destPtr, r, g, b, a)	\
@@ -267,7 +271,7 @@ FOR_EACH_FORMAT_PAIR (DECLARE_CONVERTER)
 
 
 #define STD_NO_CONVERT(BPP)									\
-	long	numBytes = ((parms.fRight * BPP) + 7) / 8;		\
+	int32	numBytes = ((parms.fRight * BPP) + 7) / 8;		\
 	memcpy (parms.fDestScanline, parms.fSrcScanline, numBytes);
 
 
@@ -316,6 +320,7 @@ FOR_EACH_FORMAT_PAIR (DECLARE_CONVERTER)
 		Bool	isDark1 = r < 0xC0;							\
 		Bool	isDark2 = g < 0xC0;							\
 		Bool	isDark3 = b < 0xC0;							\
+		(void)a;											\
 															\
 		if (isDark1 || isDark2 || isDark3)					\
 		{													\
@@ -770,15 +775,15 @@ EmPixMap::CreateRegion	(void) const
 	for (EmCoord yy = 0; yy < height; ++yy)
 	{
 		Bool	wasInRegion = false;
-		long	xStart = 0;
-		long	xEnd = 0;
+		int32	xStart = 0;
+		int32	xEnd = 0;
 
 		uint8*	cBits = bits + yy * rowBytes;
 
 		uint8	aByte = 0;
 		uint8	bitMask = 0;
 
-		for (long xx = 0; xx < width; ++xx, bitMask >>= 1)
+		for (int32 xx = 0; xx < width; ++xx, bitMask >>= 1)
 		{
 			if (bitMask == 0)
 			{
@@ -1118,8 +1123,8 @@ EmPixMap::ConvertToColor (int type, EmCoord firstLine, EmCoord lastLine)
 void
 EmPixMap::FlipScanlines	(void)
 {
-	long	height		= fSize.fY;
-	long	rowBytes	= fRowBytes;
+	int32	height		= fSize.fY;
+	int32	rowBytes	= fRowBytes;
 	uint8*	topLine		= (uint8*) this->GetBits ();
 	uint8*	bottomLine	= topLine + (height - 1) * rowBytes;
 
@@ -1240,7 +1245,7 @@ EmPixMap::CopyRect	(EmPixMap& dest, const EmPixMap& src,
 	// Determine what scanline converter to use.
 
 	ScanlineConverter	conv = NULL;
-	long	srcDestFormat = (((uint32) src.GetFormat ()) << 16) | (uint32) dest.GetFormat ();
+	int32	srcDestFormat = (((uint32) src.GetFormat ()) << 16) | (uint32) dest.GetFormat ();
 
 	switch (srcDestFormat)
 	{
@@ -1281,7 +1286,7 @@ EmPixMap::CopyRect	(EmPixMap& dest, const EmPixMap& src,
 
 		EmPixMapDepth	destDepth			= dest.GetDepth ();
 		uint8*			destBasePtr			= (uint8*) dest.GetBits ();
-		long			halfDestRowBytes	= destRowBytes / 2;
+		int32			halfDestRowBytes	= destRowBytes / 2;
 		uint8*			srcLinePtr			= destBasePtr + bottom * destRowBytes + halfDestRowBytes;
 		uint8*			destLinePtr			= destBasePtr + bottom * destRowBytes * 2 + destRowBytes;
 
@@ -1367,7 +1372,7 @@ EmPixMap::DetermineRowBytes	(void) const
 {
 	// RowBytes rounded up to 32-bit boundaries.
 
-	long			width = fSize.fX;
+	int32			width = fSize.fX;
 	EmPixMapDepth	depth = this->GetDepth ();
 
 	return ((width * depth + 31) & ~31) / 8;
@@ -1418,7 +1423,7 @@ EmPixMap::UpdateBuffer (void) const
 {
 	if (!fPixels)
 	{
-		long	neededSize = fSize.fY * fRowBytes;
+		int32	neededSize = fSize.fY * fRowBytes;
 		const_cast <EmPixMap*> (this)->fPixels =
 			(uint8*) Platform::AllocateMemory (neededSize);
 	}
@@ -1634,18 +1639,18 @@ uint16* Get4To8Table (void)
  *
  ***********************************************************************/
 
-static void PrvMakeMask (void* dstPtr, void* srcPtr, long rowBytes,
-							long /*width*/, long height)
+static void PrvMakeMask (void* dstPtr, void* srcPtr, int32 rowBytes,
+							int32 /*width*/, int32 height)
 {
 	uint8*	src			= (uint8*) srcPtr;
 	uint8*	dest		= (uint8*) dstPtr;
 	uint8*	prev;
 	uint8*	prev0;
 	uint8	srcVal, destVal, prevDestVal, newDestVal;
-	long 	absRowBytes	= rowBytes;
-	long 	xx, yy;
-	long 	valChanged, anyChange;
-	long	pass		= 0;
+	int32 	absRowBytes	= rowBytes;
+	int32 	xx, yy;
+	int32 	valChanged, anyChange;
+	int32	pass		= 0;
 	uint8	edge		= 0;	// Sentry for the left and right edges.
 
 	// Set the destination bitmap to black (1's)

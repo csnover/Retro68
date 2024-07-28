@@ -41,7 +41,7 @@ void Exception (int nr, emuptr /*oldpc*/)
 }
 
 
-unsigned long op_illg (uint32 iOpcode)
+uae_u32 op_illg (uae_u32 iOpcode)
 {
 	EmAssert (gCPU68K);
 

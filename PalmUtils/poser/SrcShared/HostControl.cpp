@@ -42,6 +42,7 @@
 #include "ROMStubs.h"			// EvtWakeup
 #include "Strings.r.h"			// kStr_ProfileResults
 
+#include <cstdlib>
 #include <ctype.h>				// isdigit
 
 #if HAS_TRACER
@@ -157,15 +158,15 @@ static FILE*		PrvToFILE				(emuptr);
 static void			PrvTmFromHostTm			(struct tm& dest, const HostTmType& src);
 static void			PrvHostTmFromTm			(EmProxyHostTmType& dest, const struct tm& src);
 
-static void			PrvMapAndReturn			(const void* p, long size, EmSubroutine& sub);
+static void			PrvMapAndReturn			(const void* p, int32 size, EmSubroutine& sub);
 static void			PrvMapAndReturn			(const string& s, EmSubroutine& sub);
 static void			PrvReturnString			(const char* p, EmSubroutine& sub);
 static void			PrvReturnString			(const string& s, EmSubroutine& sub);
 
 static void			PrvReleaseAllResources	(void);
 
-static emuptr		PrvMalloc				(long size);
-static emuptr		PrvRealloc				(emuptr p, long size);
+static emuptr		PrvMalloc				(int32 size);
+static emuptr		PrvRealloc				(emuptr p, int32 size);
 static void			PrvFree					(emuptr p);
 
 
@@ -268,7 +269,7 @@ inline size_t x_fread (void* buffer, size_t size, size_t count, FILE* f)
 	return fread (buffer, size, count, f);
 }
 
-inline int x_fseek (FILE* f, long offset, int origin)
+inline int x_fseek (FILE* f, int32 offset, int origin)
 {
 	if (f == hostLogFILE)
 	{
@@ -278,7 +279,7 @@ inline int x_fseek (FILE* f, long offset, int origin)
 	return fseek (f, offset, origin);
 }
 
-inline long x_ftell (FILE* f)
+inline int32 x_ftell (FILE* f)
 {
 	if (f == hostLogFILE)
 	{
@@ -371,7 +372,7 @@ CallROMType HandleHostControlCall (void)
 
 static void _HostGetHostVersion (void)
 {
-	// long HostGetHostVersion (void)
+	// Int32 HostGetHostVersion (void)
 
 	CALLED_SETUP_HC ("Int32", "void");
 
@@ -501,11 +502,11 @@ static void _HostGetHostPlatform (void)
 
 static void _HostIsSelectorImplemented (void)
 {
-	// HostBoolType HostIsSelectorImplemented (long selector)
+	// HostBoolType HostIsSelectorImplemented (Int32 selector)
 
-	CALLED_SETUP_HC ("HostBoolType", "long selector");
+	CALLED_SETUP_HC ("HostBoolType", "Int32 selector");
 
-	CALLED_GET_PARAM_VAL (long, selector);
+	CALLED_GET_PARAM_VAL (Int32, selector);
 
 	HostHandler fn = PrvHostGetHandler ((HostControlSelectorType) selector);
 
@@ -521,9 +522,9 @@ static void _HostIsSelectorImplemented (void)
 
 static void _HostGestalt (void)
 {
-	// HostErrType HostGestalt (long gestSel, long* response)
+	// HostErrType HostGestalt (Int32 gestSel, Int32* response)
 
-	CALLED_SETUP_HC ("HostErrType", "long gestSel, long* response");
+	CALLED_SETUP_HC ("HostErrType", "Int32 gestSel, Int32* response");
 
 	// Return the result.
 
@@ -556,9 +557,9 @@ static void _HostIsCallingTrap (void)
 
 static void _HostProfileInit (void)
 {
-	// HostErrType HostProfileInit (long maxCalls, long maxDepth)
+	// HostErrType HostProfileInit (Int32 maxCalls, Int32 maxDepth)
 
-	CALLED_SETUP_HC ("HostErrType", "long maxCalls, long maxDepth");
+	CALLED_SETUP_HC ("HostErrType", "Int32 maxCalls, Int32 maxDepth");
 
 	if (!::ProfileCanInit ())
 	{
@@ -568,8 +569,8 @@ static void _HostProfileInit (void)
 
 	// Get the caller's parameters.
 
-	CALLED_GET_PARAM_VAL (long, maxCalls);
-	CALLED_GET_PARAM_VAL (long, maxDepth);
+	CALLED_GET_PARAM_VAL (Int32, maxCalls);
+	CALLED_GET_PARAM_VAL (Int32, maxDepth);
 
 	// Call the function.
 
@@ -741,15 +742,15 @@ static void _HostProfileDetailFn (void)
 
 static void _HostProfileGetCycles (void)
 {
-	// long	HostProfileGetCycles(void)
+	// Int32	HostProfileGetCycles(void)
 
-	CALLED_SETUP_HC ("long", "void");
+	CALLED_SETUP_HC ("Int32", "void");
 
 	// Get the caller's parameters.
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, gClockCycles);
+	PUT_RESULT_VAL (Int32, gClockCycles);
 }
 
 #endif
@@ -763,15 +764,15 @@ static void _HostProfileGetCycles (void)
 
 static void _HostErrNo (void)
 {
-	// long HostErrNo (void)
+	// Int32 HostErrNo (void)
 
-	CALLED_SETUP_HC ("long", "void");
+	CALLED_SETUP_HC ("Int32", "void");
 
 	// Get the caller's parameters.
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, translate_err_no (errno));
+	PUT_RESULT_VAL (Int32, translate_err_no (errno));
 }
 
 
@@ -783,9 +784,9 @@ static void _HostErrNo (void)
 
 static void _HostFClose (void)
 {
-	// long HostFClose (HostFILEType* fileP)
+	// Int32 HostFClose (HostFILEType* fileP)
 
-	CALLED_SETUP_HC ("long", "HostFILEType* fileP");
+	CALLED_SETUP_HC ("Int32", "HostFILEType* fileP");
 
 	// Get the caller's parameters.
 
@@ -795,14 +796,14 @@ static void _HostFClose (void)
 
 	if (!fh)
 	{
-		PUT_RESULT_VAL (long, EOF);
+		PUT_RESULT_VAL (int32, EOF);
 		errno = hostErrInvalidParameter;
 		return;
 	}
 
 	// Call the function.
 
-	int 	result = x_fclose (fh);
+	int	result = x_fclose (fh);
 
 	vector<FILE*>::iterator	iter = gOpenFiles.begin ();
 	while (iter != gOpenFiles.end ())
@@ -818,7 +819,7 @@ static void _HostFClose (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -828,9 +829,9 @@ static void _HostFClose (void)
 
 static void _HostFEOF (void)
 {
-	// long HostFEOF (HostFILEType* fileP)
+	// Int32 HostFEOF (HostFILEType* fileP)
 
-	CALLED_SETUP_HC ("long", "HostFILEType* fileP");
+	CALLED_SETUP_HC ("Int32", "HostFILEType* fileP");
 
 	// Get the caller's parameters.
 
@@ -840,7 +841,7 @@ static void _HostFEOF (void)
 
 	if (!fh)
 	{
-		PUT_RESULT_VAL (long, 1);	// At end of file (right choice?)
+		PUT_RESULT_VAL (int32, 1);	// At end of file (right choice?)
 		return;
 	}
 
@@ -850,7 +851,7 @@ static void _HostFEOF (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -860,9 +861,9 @@ static void _HostFEOF (void)
 
 static void _HostFError (void)
 {
-	// long HostFError (HostFILEType* fileP)
+	// Int32 HostFError (HostFILEType* fileP)
 
-	CALLED_SETUP_HC ("long", "HostFILEType* fileP");
+	CALLED_SETUP_HC ("Int32", "HostFILEType* fileP");
 
 	// Get the caller's parameters.
 
@@ -872,7 +873,7 @@ static void _HostFError (void)
 
 	if (!fh)
 	{
-		PUT_RESULT_VAL (long, hostErrInvalidParameter);
+		PUT_RESULT_VAL (int32, hostErrInvalidParameter);
 		return;
 	}
 
@@ -882,7 +883,7 @@ static void _HostFError (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, translate_err_no (result));
+	PUT_RESULT_VAL (int32, translate_err_no (result));
 }
 
 
@@ -892,9 +893,9 @@ static void _HostFError (void)
 
 static void _HostFFlush (void)
 {
-	// long HostFFlush (HostFILEType* fileP)
+	// Int32 HostFFlush (HostFILEType* fileP)
 
-	CALLED_SETUP_HC ("long", "HostFILEType* fileP");
+	CALLED_SETUP_HC ("Int32", "HostFILEType* fileP");
 
 	// Get the caller's parameters.
 
@@ -904,7 +905,7 @@ static void _HostFFlush (void)
 
 	if (!fh)
 	{
-		PUT_RESULT_VAL (long, EOF);
+		PUT_RESULT_VAL (Int32, EOF);
 		errno = hostErrInvalidParameter;
 		return;
 	}
@@ -915,7 +916,7 @@ static void _HostFFlush (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -925,9 +926,9 @@ static void _HostFFlush (void)
 
 static void _HostFGetC (void)
 {
-	// long HostFGetC (HostFILEType* fileP)
+	// Int32 HostFGetC (HostFILEType* fileP)
 
-	CALLED_SETUP_HC ("long", "HostFILEType* fileP");
+	CALLED_SETUP_HC ("Int32", "HostFILEType* fileP");
 
 	// Get the caller's parameters.
 
@@ -937,7 +938,7 @@ static void _HostFGetC (void)
 
 	if (!fh)
 	{
-		PUT_RESULT_VAL (long, EOF);	// No file, no data...
+		PUT_RESULT_VAL (Int32, EOF);	// No file, no data...
 		errno = hostErrInvalidParameter;
 		return;
 	}
@@ -948,7 +949,7 @@ static void _HostFGetC (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -958,27 +959,27 @@ static void _HostFGetC (void)
 
 static void _HostFGetPos (void)
 {
-	// long HostFGetPos (HostFILEType* fileP, long* posP)
+	// Int32 HostFGetPos (HostFILEType* fileP, Int32* posP)
 
-	CALLED_SETUP_HC ("long", "HostFILEType* fileP, long* posP");
+	CALLED_SETUP_HC ("Int32", "HostFILEType* fileP, Int32* posP");
 
 	// Get the caller's parameters.
 
 	CALLED_GET_PARAM_FILE (fileP);
-	CALLED_GET_PARAM_REF (long, posP, Marshal::kInput);
+	CALLED_GET_PARAM_REF (Int32, posP, Marshal::kInput);
 
 	// Check the parameters.
 
 	if (!fh || posP == EmMemNULL)
 	{
-		PUT_RESULT_VAL (long, 1);
+		PUT_RESULT_VAL (Int32, 1);
 		errno = hostErrInvalidParameter;
 		return;
 	}
 
 	// Call the function.
 
-	long	pos = x_ftell (fh);
+	Int32	pos = x_ftell (fh);
 
 	// If the function succeeded, return the position in
 	// the memory location pointed to by "posP".
@@ -991,7 +992,7 @@ static void _HostFGetPos (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, (pos == -1 ? 1 : 0));
+	PUT_RESULT_VAL (Int32, (pos == -1 ? 1 : 0));
 }
 
 
@@ -1001,9 +1002,9 @@ static void _HostFGetPos (void)
 
 static void _HostFGetS (void)
 {
-	// char* HostFGetS (char* s, long n, HostFILEType* fileP)
+	// char* HostFGetS (char* s, Int32 n, HostFILEType* fileP)
 
-	CALLED_SETUP_HC ("char*", "char* s, long n, HostFILEType* fileP");
+	CALLED_SETUP_HC ("char*", "char* s, Int32 n, HostFILEType* fileP");
 
 	// Get the caller's parameters.
 
@@ -1082,7 +1083,7 @@ static void _HostFOpen (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (emuptr, result);
+	PUT_RESULT_PTR (result);
 }
 
 
@@ -1092,9 +1093,9 @@ static void _HostFOpen (void)
 
 static void _HostFPrintF (void)
 {
-	// long HostFPrintF (HostFILEType* fileP, const char* fmt, ...)
+	// Int32 HostFPrintF (HostFILEType* fileP, const char* fmt, ...)
 
-	CALLED_SETUP_STDARG_HC ("long", "HostFILEType* fileP, const char* fmt");
+	CALLED_SETUP_STDARG_HC ("Int32", "HostFILEType* fileP, const char* fmt");
 
 	// Get the caller's parameters.
 
@@ -1105,7 +1106,7 @@ static void _HostFPrintF (void)
 
 	if (!fh || fmt == EmMemNULL)
 	{
-		PUT_RESULT_VAL (long, EOF);
+		PUT_RESULT_VAL (Int32, EOF);
 		errno = hostErrInvalidParameter;
 		return;
 	}
@@ -1121,18 +1122,20 @@ static void _HostFPrintF (void)
 
 	if (!::PrvCollectParameters (sub, string (fmt), stackData, stringData))
 	{
-		PUT_RESULT_VAL (long, EOF);
+		PUT_RESULT_VAL (Int32, EOF);
 		errno = hostErrInvalidParameter;
 		return;
 	}
 
 	// Write everything out to the file using vfprintf.
 
-	int 	result = x_vfprintf (fh, fmt, (va_list) &stackData[0]);
+	union { char *stack; va_list args; } cursed;
+	cursed.stack = reinterpret_cast<char *>(stackData.data());
+	int 	result = x_vfprintf (fh, fmt, cursed.args);
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -1142,20 +1145,20 @@ static void _HostFPrintF (void)
 
 static void _HostFPutC (void)
 {
-	// long HostFPutC (long c, HostFILEType* fileP)
+	// Int32 HostFPutC (Int32 c, HostFILEType* fileP)
 
-	CALLED_SETUP_HC ("long", "long c, HostFILEType* fileP");
+	CALLED_SETUP_HC ("Int32", "Int32 c, HostFILEType* fileP");
 
 	// Get the caller's parameters.
 
-	CALLED_GET_PARAM_VAL (long, c);
+	CALLED_GET_PARAM_VAL (Int32, c);
 	CALLED_GET_PARAM_FILE (fileP);
 
 	// Check the parameters.
 
 	if (!fh)
 	{
-		PUT_RESULT_VAL (long, EOF);
+		PUT_RESULT_VAL (Int32, EOF);
 		errno = hostErrInvalidParameter;
 		return;
 	}
@@ -1166,7 +1169,7 @@ static void _HostFPutC (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -1176,9 +1179,9 @@ static void _HostFPutC (void)
 
 static void _HostFPutS (void)
 {
-	// long HostFPutS (const char* s, HostFILEType* fileP)
+	// Int32 HostFPutS (const char* s, HostFILEType* fileP)
 
-	CALLED_SETUP_HC ("long", "const char* s, HostFILEType* fileP");
+	CALLED_SETUP_HC ("Int32", "const char* s, HostFILEType* fileP");
 
 	// Get the caller's parameters.
 
@@ -1189,7 +1192,7 @@ static void _HostFPutS (void)
 
 	if (!fh || s == EmMemNULL)
 	{
-		PUT_RESULT_VAL (long, EOF);
+		PUT_RESULT_VAL (Int32, EOF);
 		errno = hostErrInvalidParameter;
 		return;
 	}
@@ -1200,7 +1203,7 @@ static void _HostFPutS (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -1210,14 +1213,14 @@ static void _HostFPutS (void)
 
 static void _HostFRead (void)
 {
-	// long HostFRead (void* buffer, long size, long count, HostFILEType* fileP)
+	// Int32 HostFRead (void* buffer, Int32 size, Int32 count, HostFILEType* fileP)
 
-	CALLED_SETUP_HC ("long", "void* buffer, long size, long count, HostFILEType* fileP");
+	CALLED_SETUP_HC ("Int32", "void* buffer, Int32 size, Int32 count, HostFILEType* fileP");
 
 	// Get the caller's parameters.
 
-	CALLED_GET_PARAM_VAL (long, size);
-	CALLED_GET_PARAM_VAL (long, count);
+	CALLED_GET_PARAM_VAL (Int32, size);
+	CALLED_GET_PARAM_VAL (Int32, count);
 	CALLED_GET_PARAM_PTR (void, buffer, size * count, Marshal::kOutput);
 	CALLED_GET_PARAM_FILE (fileP);
 
@@ -1225,7 +1228,7 @@ static void _HostFRead (void)
 
 	if (!fh || buffer == EmMemNULL)
 	{
-		PUT_RESULT_VAL (long, 0);
+		PUT_RESULT_VAL (Int32, 0);
 		errno = hostErrInvalidParameter;
 		return;
 	}
@@ -1243,7 +1246,7 @@ static void _HostFRead (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -1275,21 +1278,21 @@ static void _HostFScanF (void)
 
 static void _HostFSeek (void)
 {
-	// long HostFSeek (HostFILEType* fileP, long offset, long origin)
+	// Int32 HostFSeek (HostFILEType* fileP, Int32 offset, Int32 origin)
 
-	CALLED_SETUP_HC ("long", "HostFILEType* fileP, long offset, long origin");
+	CALLED_SETUP_HC ("Int32", "HostFILEType* fileP, Int32 offset, Int32 origin");
 
 	// Get the caller's parameters.
 
 	CALLED_GET_PARAM_FILE (fileP);
-	CALLED_GET_PARAM_VAL (long, offset);
-	CALLED_GET_PARAM_VAL (long, origin);
+	CALLED_GET_PARAM_VAL (Int32, offset);
+	CALLED_GET_PARAM_VAL (Int32, origin);
 
 	// Check the parameters.
 
 	if (!fh)
 	{
-		PUT_RESULT_VAL (long, -1);
+		PUT_RESULT_VAL (Int32, -1);
 		errno = hostErrInvalidParameter;
 		return;
 	}
@@ -1300,7 +1303,7 @@ static void _HostFSeek (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -1310,20 +1313,20 @@ static void _HostFSeek (void)
 
 static void _HostFSetPos (void)
 {
-	// long HostFSetPos (HostFILEType* fileP, long* posP)
+	// Int32 HostFSetPos (HostFILEType* fileP, Int32* posP)
 
-	CALLED_SETUP_HC ("long", "HostFILEType* fileP, long* posP");
+	CALLED_SETUP_HC ("Int32", "HostFILEType* fileP, Int32* posP");
 
 	// Get the caller's parameters.
 
 	CALLED_GET_PARAM_FILE (fileP);
-	CALLED_GET_PARAM_REF (long, posP, Marshal::kInput);
+	CALLED_GET_PARAM_REF (Int32, posP, Marshal::kInput);
 
 	// Check the parameters.
 
 	if (!fh)
 	{
-		PUT_RESULT_VAL (long, 1);
+		PUT_RESULT_VAL (Int32, 1);
 		errno = hostErrInvalidParameter;
 		return;
 	}
@@ -1334,7 +1337,7 @@ static void _HostFSetPos (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -1344,9 +1347,9 @@ static void _HostFSetPos (void)
 
 static void _HostFTell (void)
 {
-	// long HostFTell (HostFILEType* fileP)
+	// Int32 HostFTell (HostFILEType* fileP)
 
-	CALLED_SETUP_HC ("long", "HostFILEType* fileP");
+	CALLED_SETUP_HC ("Int32", "HostFILEType* fileP");
 
 	// Get the caller's parameters.
 
@@ -1356,18 +1359,18 @@ static void _HostFTell (void)
 
 	if (!fh)
 	{
-		PUT_RESULT_VAL (long, -1);
+		PUT_RESULT_VAL (Int32, -1);
 		errno = hostErrInvalidParameter;
 		return;
 	}
 
 	// Call the function.
 
-	long	result = x_ftell (fh);
+	Int32	result = x_ftell (fh);
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -1377,14 +1380,14 @@ static void _HostFTell (void)
 
 static void _HostFWrite (void)
 {
-	// long HostFWrite (const void* buffer, long size, long count, HostFILEType* fileP)
+	// Int32 HostFWrite (const void* buffer, Int32 size, Int32 count, HostFILEType* fileP)
 
-	CALLED_SETUP_HC ("long", "const void* buffer, long size, long count, HostFILEType* fileP");
+	CALLED_SETUP_HC ("Int32", "const void* buffer, Int32 size, Int32 count, HostFILEType* fileP");
 
 	// Get the caller's parameters.
 
-	CALLED_GET_PARAM_VAL (long, size);
-	CALLED_GET_PARAM_VAL (long, count);
+	CALLED_GET_PARAM_VAL (Int32, size);
+	CALLED_GET_PARAM_VAL (Int32, count);
 	CALLED_GET_PARAM_PTR (void, buffer, size * count, Marshal::kInput);
 	CALLED_GET_PARAM_FILE (fileP);
 
@@ -1392,7 +1395,7 @@ static void _HostFWrite (void)
 
 	if (!fh || buffer == EmMemNULL)
 	{
-		PUT_RESULT_VAL (long, 0);
+		PUT_RESULT_VAL (Int32, 0);
 		errno = hostErrInvalidParameter;
 		return;
 	}
@@ -1403,7 +1406,7 @@ static void _HostFWrite (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -1413,9 +1416,9 @@ static void _HostFWrite (void)
 
 static void _HostRemove (void)
 {
-	// long HostRemove(const char* nameP)
+	// Int32 HostRemove(const char* nameP)
 
-	CALLED_SETUP_HC ("long", "const char* nameP");
+	CALLED_SETUP_HC ("Int32", "const char* nameP");
 
 	// Get the caller's parameters.
 
@@ -1427,7 +1430,7 @@ static void _HostRemove (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -1437,9 +1440,9 @@ static void _HostRemove (void)
 
 static void _HostRename (void)
 {
-	// long HostRename(const char* oldNameP, const char* newNameP)
+	// Int32 HostRename(const char* oldNameP, const char* newNameP)
 
-	CALLED_SETUP_HC ("long", "const char* oldNameP, const char* newNameP");
+	CALLED_SETUP_HC ("Int32", "const char* oldNameP, const char* newNameP");
 
 	// Get the caller's parameters.
 
@@ -1452,7 +1455,7 @@ static void _HostRename (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -1474,7 +1477,7 @@ static void _HostTmpFile (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (emuptr, result);
+	PUT_RESULT_PTR (result);
 }
 
 
@@ -1606,13 +1609,13 @@ static void _HostGetEnv (void)
 
 static void _HostMalloc (void)
 {
-	// void* HostMalloc(long size)
+	// void* HostMalloc(Int32 size)
 
-	CALLED_SETUP_HC ("void*", "long size");
+	CALLED_SETUP_HC ("void*", "Int32 size");
 
 	// Get the caller's parameters.
 
-	CALLED_GET_PARAM_VAL (long, size);
+	CALLED_GET_PARAM_VAL (Int32, size);
 
 	// Call the function.
 
@@ -1630,14 +1633,14 @@ static void _HostMalloc (void)
 
 static void _HostRealloc (void)
 {
-	// void* HostRealloc(void* p, long size)
+	// void* HostRealloc(void* p, Int32 size)
 
-	CALLED_SETUP_HC ("void*", "void* p, long size");
+	CALLED_SETUP_HC ("void*", "void* p, Int32 size");
 
 	// Get the caller's parameters.
 
 	CALLED_GET_PARAM_VAL (emuptr, p);
-	CALLED_GET_PARAM_VAL (long, size);
+	CALLED_GET_PARAM_VAL (Int32, size);
 
 	// Call the function.
 
@@ -1931,9 +1934,9 @@ static void _HostTime (void)
 
 static void _HostMkDir (void)
 {
-	// long HostMkDir (const char* nameP)
+	// Int32 HostMkDir (const char* nameP)
 
-	CALLED_SETUP_HC ("long", "char* nameP");
+	CALLED_SETUP_HC ("Int32", "char* nameP");
 
 	// Get the caller's parameters.
 
@@ -1945,7 +1948,7 @@ static void _HostMkDir (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -1955,9 +1958,9 @@ static void _HostMkDir (void)
 
 static void _HostRmDir (void)
 {
-	// long HostRmDir (const char* nameP)
+	// Int32 HostRmDir (const char* nameP)
 
-	CALLED_SETUP_HC ("long", "char* nameP");
+	CALLED_SETUP_HC ("Int32", "char* nameP");
 
 	// Get the caller's parameters.
 
@@ -1969,7 +1972,7 @@ static void _HostRmDir (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -2017,7 +2020,7 @@ static void _HostOpenDir (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (emuptr, dir);
+	PUT_RESULT_PTR (dir);
 }
 
 
@@ -2035,7 +2038,7 @@ static void _HostReadDir(void)
 
 	CALLED_GET_PARAM_VAL (emuptr, dirP);
 
-	MyDIR*	dir = (MyDIR*) (emuptr) dirP;
+	MyDIR*	dir = EmMemFakeT<MyDIR *>(dirP);
 
 	// Make sure dir is valid.
 
@@ -2129,15 +2132,15 @@ FoundIt:
 
 static void _HostCloseDir (void)
 {
-	// long HostCloseDir(HostDIRType*)
+	// Int32 HostCloseDir(HostDIRType*)
 
-	CALLED_SETUP_HC ("long", "HostDIRType* dirP");
+	CALLED_SETUP_HC ("Int32", "HostDIRType* dirP");
 
 	// Get the caller's parameters.
 
 	CALLED_GET_PARAM_VAL (emuptr, dirP);
 
-	MyDIR*	dir = (MyDIR*) (emuptr) dirP;
+	MyDIR*	dir = EmMemFakeT<MyDIR *>(dirP);
 
 	// Make sure dir is valid.
 
@@ -2166,7 +2169,7 @@ static void _HostCloseDir (void)
 
 	// Return no error (should we return an error if DIR was not found?)
 
-	PUT_RESULT_VAL (long, 0);
+	PUT_RESULT_VAL (Int32, 0);
 }
 
 
@@ -2176,9 +2179,9 @@ static void _HostCloseDir (void)
 
 static void _HostStat(void)
 {
-	// long	HostStat(const char*, HostStatType*)
+	// Int32	HostStat(const char*, HostStatType*)
 
-	CALLED_SETUP_HC ("long", "const char* nameP, HostStatType* statP");
+	CALLED_SETUP_HC ("Int32", "const char* nameP, HostStatType* statP");
 
 	// Get the caller's parameters.
 
@@ -2189,7 +2192,7 @@ static void _HostStat(void)
 
 	if (nameP == EmMemNULL || statP == EmMemNULL)
 	{
-		PUT_RESULT_VAL (long, hostErrInvalidParameter);
+		PUT_RESULT_VAL (Int32, hostErrInvalidParameter);
 		return;
 	}
 
@@ -2228,7 +2231,7 @@ static void _HostStat(void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -2238,20 +2241,20 @@ static void _HostStat(void)
 
 static void _HostTruncate (void)
 {
-	// long HostTruncate(const char*, long)
+	// Int32 HostTruncate(const char*, Int32)
 
-	CALLED_SETUP_HC ("long", "char* nameP, long size");
+	CALLED_SETUP_HC ("Int32", "char* nameP, Int32 size");
 
 	// Get the caller's parameters.
 
 	CALLED_GET_PARAM_STR (char, nameP);
-	CALLED_GET_PARAM_VAL (long, size);
+	CALLED_GET_PARAM_VAL (Int32, size);
 
 	// Check the parameters.
 
 	if (nameP == EmMemNULL || size < 0)
 	{
-		PUT_RESULT_VAL (long, hostErrInvalidParameter);
+		PUT_RESULT_VAL (Int32, hostErrInvalidParameter);
 		return;
 	}
 
@@ -2272,7 +2275,7 @@ static void _HostTruncate (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -2282,9 +2285,9 @@ static void _HostTruncate (void)
 
 static void _HostUTime (void)
 {
-	// long HostUTime (const char*, HostUTimeType*)
+	// Int32 HostUTime (const char*, HostUTimeType*)
 
-	CALLED_SETUP_HC ("long", "char* nameP, HostUTimeType* timeP");
+	CALLED_SETUP_HC ("Int32", "char* nameP, HostUTimeType* timeP");
 
 	// Get the caller's parameters.
 
@@ -2293,7 +2296,7 @@ static void _HostUTime (void)
 
 	if (nameP == EmMemNULL || timeP == EmMemNULL)
 	{
-		PUT_RESULT_VAL (long, -1);
+		PUT_RESULT_VAL (Int32, -1);
 		errno = hostErrInvalidParameter;
 		return;
 	}
@@ -2316,7 +2319,7 @@ static void _HostUTime (void)
 
 	// Return the result.
 
-	PUT_RESULT_VAL (long, result);
+	PUT_RESULT_VAL (Int32, result);
 }
 
 
@@ -2326,20 +2329,20 @@ static void _HostUTime (void)
 
 static void _HostGetFileAttr(void)
 {
-	// long	HostGetFileAttr(const char*, unsigned long * attr)
+	// Int32	HostGetFileAttr(const char*, Int32 * attr)
 
-	CALLED_SETUP_HC ("long", "char* nameP, unsigned long * attrP");
+	CALLED_SETUP_HC ("Int32", "char* nameP, UInt32 * attrP");
 
 	// Get the caller's parameters.
 
 	CALLED_GET_PARAM_STR (char, nameP);
-	CALLED_GET_PARAM_REF (unsigned long, attrP, Marshal::kOutput);
+	CALLED_GET_PARAM_REF (UInt32, attrP, Marshal::kOutput);
 
 	// Check the parameters.
 
 	if (nameP == EmMemNULL || attrP == EmMemNULL)
 	{
-		PUT_RESULT_VAL (long, hostErrInvalidParameter);
+		PUT_RESULT_VAL (Int32, hostErrInvalidParameter);
 		return;
 	}
 
@@ -2354,14 +2357,14 @@ static void _HostGetFileAttr(void)
 
 	if (errno != 0)
 	{
-		PUT_RESULT_VAL (long, -1);
+		PUT_RESULT_VAL (Int32, -1);
 		return;
 	}
 
 	*attrP = attr;
 	CALLED_PUT_PARAM_REF (attrP);
 
-	PUT_RESULT_VAL (long, hostErrNone);
+	PUT_RESULT_VAL (Int32, hostErrNone);
 }
 
 
@@ -2371,20 +2374,20 @@ static void _HostGetFileAttr(void)
 
 static void _HostSetFileAttr(void)
 {
-	// long	HostSetFileAttr(const char*, unsigned long attr)
+	// Int32	HostSetFileAttr(const char*, Int32 attr)
 
-	CALLED_SETUP_HC ("long", "char* nameP, unsigned long attr");
+	CALLED_SETUP_HC ("Int32", "char* nameP, UInt32 attr");
 
 	// Get the caller's parameters.
 
 	CALLED_GET_PARAM_STR (char, nameP);
-	CALLED_GET_PARAM_VAL (unsigned long, attr);
+	CALLED_GET_PARAM_VAL (UInt32, attr);
 
 	// Check the parameters.
 
 	if (nameP == EmMemNULL)
 	{
-		PUT_RESULT_VAL (long, hostErrInvalidParameter);
+		PUT_RESULT_VAL (Int32, hostErrInvalidParameter);
 		return;
 	}
 	
@@ -2398,11 +2401,11 @@ static void _HostSetFileAttr(void)
 
 	if (errno != 0)
 	{
-		PUT_RESULT_VAL (long, -1);
+		PUT_RESULT_VAL (Int32, -1);
 		return;
 	}
 
-	PUT_RESULT_VAL (long, hostErrNone);
+	PUT_RESULT_VAL (Int32, hostErrNone);
 }
 
 
@@ -2428,11 +2431,11 @@ static void _HostGremlinIsRunning (void)
 
 static void _HostGremlinNumber (void)
 {
-	// long HostGremlinNumber (void)
+	// Int32 HostGremlinNumber (void)
 
-	CALLED_SETUP_HC ("long", "void");
+	CALLED_SETUP_HC ("Int32", "void");
 
-	PUT_RESULT_VAL (long, Hordes::GremlinNumber ());
+	PUT_RESULT_VAL (Int32, Hordes::GremlinNumber ());
 }
 
 
@@ -2442,11 +2445,11 @@ static void _HostGremlinNumber (void)
 
 static void _HostGremlinCounter (void)
 {
-	// long HostGremlinCounter (void)
+	// Int32 HostGremlinCounter (void)
 
-	CALLED_SETUP_HC ("long", "void");
+	CALLED_SETUP_HC ("Int32", "void");
 
-	PUT_RESULT_VAL (long, Hordes::EventCounter ());
+	PUT_RESULT_VAL (Int32, Hordes::EventCounter ());
 }
 
 
@@ -2456,11 +2459,11 @@ static void _HostGremlinCounter (void)
 
 static void _HostGremlinLimit (void)
 {
-	// long HostGremlinLimit (void)
+	// Int32 HostGremlinLimit (void)
 
-	CALLED_SETUP_HC ("long", "void");
+	CALLED_SETUP_HC ("Int32", "void");
 
-	PUT_RESULT_VAL (long, Hordes::EventLimit ());
+	PUT_RESULT_VAL (Int32, Hordes::EventLimit ());
 }
 
 
@@ -2560,18 +2563,18 @@ static void _HostGremlinNew (void)
 
 static void _HostImportFile (void)
 {
-	// HostErrType HostImportFile (const char* fileName, long cardNum)
+	// HostErrType HostImportFile (const char* fileName, Int32 cardNum)
 
-	CALLED_SETUP_HC ("HostErrType", "const char* fileName, long cardNum");
+	CALLED_SETUP_HC ("HostErrType", "const char* fileName, Int32 cardNum");
 
 	// Get the caller's parameters.
 
 	CALLED_GET_PARAM_STR (char, fileName);
-//	CALLED_GET_PARAM_VAL (long, cardNum);
+//	CALLED_GET_PARAM_VAL (Int32, cardNum);
 
 	// Check the parameters.
 
-	if (fileName == NULL)
+	if (fileName == EmMemNULL)
 	{
 		PUT_RESULT_VAL (HostErrType, hostErrInvalidParameter);
 		return;
@@ -2606,19 +2609,19 @@ static void _HostImportFile (void)
 
 static void _HostImportFileWithID (void)
 {
-	// HostErrType HostImportFileWithID (const char* fileName, long cardNum, LocalID *newIDP)
+	// HostErrType HostImportFileWithID (const char* fileName, Int32 cardNum, LocalID *newIDP)
 
-	CALLED_SETUP_HC ("HostErrType", "const char* fileName, long cardNum, LocalID *newIDP");
+	CALLED_SETUP_HC ("HostErrType", "const char* fileName, Int32 cardNum, LocalID *newIDP");
 
 	// Get the caller's parameters.
 
 	CALLED_GET_PARAM_STR (char, fileName);
-//	CALLED_GET_PARAM_VAL (long, cardNum);
+//	CALLED_GET_PARAM_VAL (Int32, cardNum);
 	CALLED_GET_PARAM_REF (LocalID, newIDP, Marshal::kOutput);
 
 	// Check the parameters.
 
-	if (fileName == NULL)
+	if (fileName == EmMemNULL)
 	{
 		PUT_RESULT_VAL (HostErrType, hostErrInvalidParameter);
 		return;
@@ -2660,19 +2663,19 @@ static void _HostImportFileWithID (void)
 
 static void _HostExportFile (void)
 {
-	// HostErrType HostExportFile (const char* dbNameP, long cardNum, const char* fileNameP)
+	// HostErrType HostExportFile (const char* dbNameP, Int32 cardNum, const char* fileNameP)
 
-	CALLED_SETUP_HC ("HostErrType", "const char* fileName, long cardNum, const char* dbName");
+	CALLED_SETUP_HC ("HostErrType", "const char* fileName, Int32 cardNum, const char* dbName");
 
 	// Get the caller's parameters.
 
 	CALLED_GET_PARAM_STR (char, fileName);
-	CALLED_GET_PARAM_VAL (long, cardNum);
+	CALLED_GET_PARAM_VAL (Int32, cardNum);
 	CALLED_GET_PARAM_STR (char, dbName);
 
 	// Check the parameters.
 
-	if (fileName == NULL || dbName == NULL)
+	if (fileName == EmMemNULL || dbName == EmMemNULL)
 	{
 		PUT_RESULT_VAL (HostErrType, hostErrInvalidParameter);
 		return;
@@ -2715,7 +2718,7 @@ static void _HostSaveScreen (void)
 
 	// Check the parameters.
 
-	if (fileNameP == NULL)
+	if (fileNameP == EmMemNULL)
 	{
 		PUT_RESULT_VAL (HostErrType, hostErrInvalidParameter);
 		return;
@@ -3312,7 +3315,7 @@ static void _HostLogFile (void)
 
 	CALLED_SETUP_HC ("HostFILEType", "void");
 
-	PUT_RESULT_VAL (emuptr, hostLogFile);
+	PUT_RESULT_PTR (hostLogFile);
 }
 
 
@@ -3322,14 +3325,14 @@ static void _HostLogFile (void)
 
 static void _HostSetLogFileSize (void)
 {
-	// void HostSetLogFileSize (long newSize)
+	// void HostSetLogFileSize (Int32 newSize)
 
-	CALLED_SETUP_HC ("void", "long newSize");
+	CALLED_SETUP_HC ("void", "Int32 newSize");
 
-	CALLED_GET_PARAM_VAL (long, newSize);
+	CALLED_GET_PARAM_VAL (Int32, newSize);
 
-	Preference<long>	logFileSize (kPrefKeyLogFileSize);
-	logFileSize = (long) newSize;
+	Preference<Int32>	logFileSize (kPrefKeyLogFileSize);
+	logFileSize = (Int32) newSize;
 }
 
 
@@ -3342,12 +3345,12 @@ static void _HostSetLogFileSize (void)
 #if 0
 static void _HostSessionCreate (void)
 {
-	// HostErrType HostSessionCreate(const char* device, long ramSize, const char* romPath)
+	// HostErrType HostSessionCreate(const char* device, Int32 ramSize, const char* romPath)
 
 	struct StackFrame
 	{
 		const char*	device;
-		long		ramSize;
+		Int32		ramSize;
 		const char*	romPath;
 	};
 
@@ -3615,11 +3618,11 @@ static void _HostSignalSend (void)
 
 static void _HostSignalWait (void)
 {
-	// HostErrType HostSignalWait (long timeout)
+	// HostErrType HostSignalWait (Int32 timeout)
 
-	CALLED_SETUP_HC ("HostErrType", "long timeout");
+	CALLED_SETUP_HC ("HostErrType", "Int32 timeout");
 
-	CALLED_GET_PARAM_VAL (long, timeout);
+	CALLED_GET_PARAM_VAL (Int32, timeout);
 
 	// Unblock the CPU thread if it's suspended from a previous
 	// HostSignalSend call.
@@ -3989,9 +3992,9 @@ static void _HostDbgClearDataBreak (void)
 
 static void _HostSlotMax (void)
 {
-	// long HostSlotMax(void)
+	// Int32 HostSlotMax(void)
 
-	CALLED_SETUP_HC ("long", "void");
+	CALLED_SETUP_HC ("Int32", "void");
 
 	int	maxSlotNo = 0;
 
@@ -4008,7 +4011,7 @@ static void _HostSlotMax (void)
 		++iter;
 	}
 
-	PUT_RESULT_VAL (long, maxSlotNo);
+	PUT_RESULT_VAL (Int32, maxSlotNo);
 }
 
 
@@ -4018,11 +4021,11 @@ static void _HostSlotMax (void)
 
 static void _HostSlotRoot (void)
 {
-	// const char* HostSlotRoot(long slotNo)
+	// const char* HostSlotRoot(Int32 slotNo)
 
-	CALLED_SETUP_HC ("char*", "long slotNo");
+	CALLED_SETUP_HC ("char*", "Int32 slotNo");
 
-	CALLED_GET_PARAM_VAL (long, slotNo);
+	CALLED_GET_PARAM_VAL (Int32, slotNo);
 
 	PUT_RESULT_VAL (emuptr, EmMemNULL);
 
@@ -4052,11 +4055,11 @@ static void _HostSlotRoot (void)
 
 static void _HostSlotHasCard (void)
 {
-	// HostBoolType HostSlotHasCard(long slotNo)
+	// HostBoolType HostSlotHasCard(Int32 slotNo)
 
-	CALLED_SETUP_HC ("HostBoolType", "long slotNo");
+	CALLED_SETUP_HC ("HostBoolType", "Int32 slotNo");
 
-	CALLED_GET_PARAM_VAL (long, slotNo);
+	CALLED_GET_PARAM_VAL (Int32, slotNo);
 
 	PUT_RESULT_VAL (HostBoolType, false);
 
@@ -4368,11 +4371,11 @@ void PrvPushShort (EmSubroutine& sub, ByteList& stackData)
 	// Read a 2-byte int from the caller's stack, and push it
 	// onto our stack as a 4-byte int.
 
-	char	paramName[20];
-	sprintf (paramName, "param%d", (int) stackData.size ());
+	char	paramName[16];
+	snprintf (paramName, countof(paramName), "param%d", (int) stackData.size ());
 
-	char	decl[20];
-	sprintf (decl, "UInt16 %s", paramName);
+	char	decl[23];
+	snprintf (decl, countof(decl), "UInt16 %s", paramName);
 
 	sub.AddParam (decl);
 
@@ -4395,11 +4398,11 @@ void PrvPushLong (EmSubroutine& sub, ByteList& stackData)
 	// Read a 4-byte long int from the caller's stack, and push it
 	// onto our stack as a 4-byte long int.
 
-	char	paramName[20];
-	sprintf (paramName, "param%d", (int) stackData.size ());
+	char	paramName[16];
+	snprintf (paramName, countof(paramName), "param%d", (int) stackData.size ());
 
-	char	decl[20];
-	sprintf (decl, "UInt32 %s", paramName);
+	char	decl[23];
+	snprintf (decl, countof(decl), "UInt32 %s", paramName);
 
 	sub.AddParam (decl);
 
@@ -4407,9 +4410,9 @@ void PrvPushLong (EmSubroutine& sub, ByteList& stackData)
 	sub.GetParamVal (paramName, value);
 
 	ByteList::size_type	oldSize = stackData.size ();
-	stackData.insert (stackData.end (), sizeof (long), 0);	// Make space for a "long int"
+	stackData.insert (stackData.end (), sizeof (Int32), 0);	// Make space for a "long int"
 
-	*(long*) &stackData[oldSize] = value;
+	*(Int32*) &stackData[oldSize] = value;
 }
 
 
@@ -4443,11 +4446,11 @@ void PrvPushString (EmSubroutine& sub, ByteList& stackData, StringList& stringDa
 {
 	// Get the string pointer and clone the string into a new string object.
 
-	char	paramName[20];
-	sprintf (paramName, "param%d", (int) stackData.size ());
+	char	paramName[16];
+	snprintf (paramName, countof(paramName), "param%d", (int) stackData.size ());
 
-	char	decl[20];
-	sprintf (decl, "char* %s", paramName);
+	char	decl[22];
+	snprintf (decl, countof(decl), "char* %s", paramName);
 
 	sub.AddParam (decl);
 
@@ -4481,12 +4484,12 @@ void PrvPushString (EmSubroutine& sub, ByteList& stackData, StringList& stringDa
 
 FILE* PrvToFILE (emuptr f)
 {
-	if ((HostFILEType*) f == hostLogFile)
+	if (EmMemFakeT<HostFILEType *>(f) == hostLogFile)
 	{
 		return hostLogFILE;
 	}
 
-	return (FILE*) f;
+	return EmMemFakeT<FILE *>(f);
 }
 
 
@@ -4530,7 +4533,7 @@ void PrvHostTmFromTm (EmProxyHostTmType& dest, const struct tm& src)
 //		¥ PrvMapAndReturn
 // ---------------------------------------------------------------------------
 
-void PrvMapAndReturn (const void* p, long size, EmSubroutine& sub)
+void PrvMapAndReturn (const void* p, Int32 size, EmSubroutine& sub)
 {
 	emuptr	result = EmBankMapped::GetEmulatedAddress (p);
 
@@ -4837,7 +4840,7 @@ void PrvReleaseAllResources (void)
 //		¥ PrvMalloc
 // ---------------------------------------------------------------------------
 
-emuptr PrvMalloc (long size)
+emuptr PrvMalloc (Int32 size)
 {
 	// Prepare the return value.
 
@@ -4875,7 +4878,7 @@ emuptr PrvMalloc (long size)
 //		¥ PrvRealloc
 // ---------------------------------------------------------------------------
 
-emuptr PrvRealloc (emuptr p, long size)
+emuptr PrvRealloc (emuptr p, Int32 size)
 {
 	// Prepare the return value.
 

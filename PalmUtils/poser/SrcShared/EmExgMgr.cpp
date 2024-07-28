@@ -140,13 +140,14 @@ EmExgMgr::~EmExgMgr (void)
 
 EmExgMgr* EmExgMgr::GetExgMgr (UInt16 libRefNum)
 {
-	emuptr	entryP = (emuptr) ::SysLibTblEntry (libRefNum);
+	emuptr	entryP = EmMemPtr(::SysLibTblEntry (libRefNum));
 	if (!entryP)
 		return NULL;
 
 	EmAliasSysLibTblEntryType<PAS>	entry (entryP);
 	emuptr	globalsP = entry.globalsP;
-	return (EmExgMgr*) globalsP;
+	EmASSERT(false && "packing 64-bit pointer like this will never work");
+	return EmMemFakeT<EmExgMgr *>(globalsP);
 }
 
 
@@ -322,8 +323,8 @@ UInt32 EmExgMgrStream::ExgLibReceive (UInt16 /*libRefNum*/, emuptr /*exgSocketP*
 {
 	// Determine how many bytes to transfer.
 
-	long	amountToCopy = bufLen;
-	long	amountLeftInBuffer = fStream.GetLength () - fStream.GetMarker ();
+	int32	amountToCopy = bufLen;
+	int32	amountLeftInBuffer = fStream.GetLength () - fStream.GetMarker ();
 	if (amountToCopy > amountLeftInBuffer)
 		amountToCopy = amountLeftInBuffer;
 

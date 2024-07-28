@@ -31,7 +31,7 @@ class EmROMTransfer
 		Bool					Continue			(EmDlgRef);
 		void					Abort				(EmDlgRef);
 
-		long					Size				(void);
+		int32					Size				(void);
 		void*					Data				(void);
 
 	private:
@@ -44,7 +44,7 @@ class EmROMTransfer
 		Bool					HaveEntireROM		(void);
 		Bool					ValidXModemBlock	(const uint8* block);
 		void	 				SendByte			(uint8 byte);
-		void					UpdateProgress		(EmDlgRef, long, long, long);
+		void					UpdateProgress		(EmDlgRef, int32, int32, int32);
 		static void				ResetSerialPort		(EmTransport* oldPort,
 													 EmTransport* serPort);
 
@@ -52,17 +52,17 @@ class EmROMTransfer
 		int						fState;
 		EmTransport*			fTransport;
 
-		long					fROMSize;
-		long					fROMRead;
+		int32					fROMSize;
+		int32					fROMRead;
 		StMemory				fROMBuffer;
 
 		Bool					fHaveFirstBlock;
 		Bool					fHaveLastBlock;
 		uint8					fLastValidBlock;
 
-		long					fProgressCaption;
-		long					fProgressValue;
-		long					fProgressMax;
+		int32					fProgressCaption;
+		int32					fProgressValue;
+		int32					fProgressMax;
 		uint32					fProgressLastUpdate;
 		enum { kProgressTimeout = 300 };	// Milliseconds
 
@@ -72,7 +72,7 @@ class EmROMTransfer
 		enum { kXModemBlockSize = 1024L };
 		enum { kBufferSize = 2 * kXModemBlockSize };
 		uint8					fTempBuffer[kBufferSize];
-		long					fTempBufferOffset;
+		int32					fTempBufferOffset;
 };
 
 

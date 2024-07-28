@@ -10,6 +10,7 @@
 
 #include "Byteswapping.h"		// Canonical
 
+#include <cstring>
 
 #pragma mark --- Construction & Destruction ---
 

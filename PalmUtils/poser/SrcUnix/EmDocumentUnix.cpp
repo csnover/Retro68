@@ -17,8 +17,10 @@
 #include "EmScreen.h"			// EmScreen
 
 // !!! Need to get rid of this dependancy on FLTK
-#include <FL/filename.h>		// filename_setext
+#include <FL/filename.H>		// filename_setext
 
+#include <cstdlib>
+#include <cstring>
 #include <stdio.h>				// fopen, fprintf, fwrite, fclose, FILE
 
 
@@ -95,7 +97,7 @@ void EmDocumentUnix::HostSaveScreen (const EmFileRef& destRef)
 	string	fullPath = destRef.GetFullPath ();
 	char*	fNameExt = (char*) malloc (fullPath.size () + 4);
 	strcpy (fNameExt, fullPath.c_str ());
-	filename_setext (fNameExt, ".ppm");
+	fl_filename_setext (fNameExt, ".ppm");
 
 	FILE* f = fopen (fNameExt, "wb");
 	if (f)
@@ -124,12 +126,12 @@ void EmDocumentUnix::HostSaveScreen (const EmFileRef& destRef)
 
 		EmPoint size = info.fImage.GetSize ();
 
-		fprintf (f, "P6 %ld %ld 255\x0D", size.fX, size.fY);
+		fprintf (f, "P6 %d %d 255\x0D", size.fX, size.fY);
 
 		uint8* bits = (uint8*) info.fImage.GetBits ();
-		for (long yy = 0; yy < size.fY; ++yy)
+		for (int32 yy = 0; yy < size.fY; ++yy)
 		{
-			long rowBytes = info.fImage.GetRowBytes ();
+			int32 rowBytes = info.fImage.GetRowBytes ();
 			uint8* basePtr = bits + yy * rowBytes;
 
 			fwrite (basePtr, 1, rowBytes, f);

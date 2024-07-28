@@ -21,6 +21,8 @@
 #include "Platform.h"			// AllocateMemory
 #include "ROMStubs.h"			// NetLibConfigMakeActive
 
+#include <cstddef>
+#include <cstring>
 
 #if PLATFORM_MAC
 #include <errno.h>				// ENOENT, errno
@@ -98,7 +100,7 @@ SOCKET	gSockets[netMaxNumSockets] = { INVALID_SOCKET, INVALID_SOCKET, INVALID_SO
 extern WORD	gWinSockVersion;
 #endif
 
-static long	gOpenCount;
+static int32	gOpenCount;
 static UInt16	gCurConfigIndex;
 
 static Bool	NetLibToSocketsRef			(const NetSocketRef				inSocket,
@@ -627,9 +629,9 @@ Int16 Platform_NetLib::SocketOptionSet(UInt16 libRefNum,
 		}
 
 #if PLATFORM_WINDOWS
-		unsigned long	param;
+		uint32	param;
 #else
-		long			param;
+		int32			param;
 #endif
 
 		if (optValueLen == 1)
@@ -637,7 +639,7 @@ Int16 Platform_NetLib::SocketOptionSet(UInt16 libRefNum,
 		else if (optValueLen == 2)
 			param = *(short*) optValueP;
 		else if (optValueLen == 4)
-			param = *(long*) optValueP;
+			param = *(int32*) optValueP;
 		else
 			param = 1;
 
@@ -1126,7 +1128,7 @@ Int16 Platform_NetLib::SendPB(UInt16 libRefNum,
 	// Collapse the scatter-write array into a single big buffer.
 
 	UInt16	ii;
-	long	bigBufferSize = 0;
+	int32	bigBufferSize = 0;
 	for (ii = 0; ii < pbP->iovLen; ++ii)
 	{
 		bigBufferSize += pbP->iov[ii].bufLen;
@@ -1134,7 +1136,7 @@ Int16 Platform_NetLib::SendPB(UInt16 libRefNum,
 
 	StMemory	bigBuffer (bigBufferSize);
 
-	long	offset = 0;
+	int32	offset = 0;
 	for (ii = 0; ii < pbP->iovLen; ++ii)
 	{
 		memcpy (bigBuffer.Get() + offset, pbP->iov[ii].bufP, pbP->iov[ii].bufLen);
@@ -1298,7 +1300,7 @@ Int16 Platform_NetLib::ReceivePB(UInt16 libRefNum,
 	// First, get the size for the big buffer.
 
 	UInt16	ii;
-	long	bigBufferSize = 0;
+	int32	bigBufferSize = 0;
 	for (ii = 0; ii < pbP->iovLen; ++ii)
 	{
 		bigBufferSize += pbP->iov[ii].bufLen;
@@ -1310,7 +1312,7 @@ Int16 Platform_NetLib::ReceivePB(UInt16 libRefNum,
 
 	// Third, copy the input buffer's contents to the big buffer.
 
-	long	offset = 0;
+	int32	offset = 0;
 	for (ii = 0; ii < pbP->iovLen; ++ii)
 	{
 		memcpy (bigBuffer.Get () + offset, pbP->iov[ii].bufP, pbP->iov[ii].bufLen);
@@ -2438,14 +2440,14 @@ Bool SocketsToNetLibHostEnt (	const hostent&			inHostEnt,
 	//						NetHostInfoBufType.hostInfo.nameAliasesP
 	char*	curSrcAlias;
 	char*	curDestAlias = outHostEnt.aliases[0];
-	long	index = 0;
+	int32	index = 0;
 	while ((index < netDNSMaxAliases) &&
 		((curSrcAlias = inHostEnt.h_aliases[index]) != NULL))
 	{
 		outHostEnt.aliasList[index] = curDestAlias;
 		strcpy (curDestAlias, curSrcAlias);
 		curDestAlias += strlen (curDestAlias) + 1;
-		if ((((long) curDestAlias) & 1) != 0)
+		if ((((size_t) curDestAlias) & 1) != 0)
 			++curDestAlias;
 		++index;
 	}
@@ -2533,13 +2535,13 @@ Bool SocketsToNetLibServEnt (	const servent&			inServEnt,
 	//						NetServInfoBufType.servInfo.nameAliasesP
 	char*	curSrcAlias;
 	char*	curDestAlias = outServEnt.aliases[0];
-	long	index = 0;
+	int32	index = 0;
 	while ((curSrcAlias = inServEnt.s_aliases[index]) != NULL)
 	{
 		outServEnt.aliasList[index] = curDestAlias;
 		strcpy (curDestAlias, curSrcAlias);
 		curDestAlias += strlen (curDestAlias) + 1;
-		if ((((long) curDestAlias) & 1) != 0)
+		if ((((size_t) curDestAlias) & 1) != 0)
 			++curDestAlias;
 		++index;
 

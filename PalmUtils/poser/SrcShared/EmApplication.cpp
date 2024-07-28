@@ -645,8 +645,6 @@ EmDocument* EmApplication::HandleOpenBound (void)
 
 void EmApplication::HandleFileList (const EmFileRefList& fileList)
 {
-	int	operation = kStr_GenericOperation;
-
 	try
 	{
 		// Grovel over the file list, counting up how many of each kind of
@@ -698,7 +696,6 @@ void EmApplication::HandleFileList (const EmFileRefList& fileList)
 
 		else if (prcCount > 0)
 		{
-			operation = prcCount == 1 ? kStr_CmdInstall : kStr_CmdInstallMany;
 			EmDlg::DoDatabaseImport (fileList, kMethodBest);
 		}
 
@@ -707,8 +704,6 @@ void EmApplication::HandleFileList (const EmFileRefList& fileList)
 
 		else if (psfCount > 0)
 		{
-			operation = kStr_CmdOpen;
-
 			if (!this->IsBoundFully ())
 			{
 				if (psfCount > 1)
@@ -727,8 +722,6 @@ void EmApplication::HandleFileList (const EmFileRefList& fileList)
 
 		else if (romCount > 0)
 		{
-			operation = kStr_CmdNew;
-
 			if (!this->IsBound ())
 			{
 				if (romCount > 1)

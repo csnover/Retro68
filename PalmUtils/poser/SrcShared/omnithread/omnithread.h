@@ -291,7 +291,7 @@ public:
 	// If wait() is called by multiple threads, a signal may wake up more
 	// than one thread.  See POSIX threads documentation for details.
 
-    int timedwait(unsigned long secs, unsigned long nanosecs = 0);
+    int timedwait(unsigned int secs, unsigned int nanosecs = 0);
 	// timedwait() is given an absolute time to wait until.  To wait for a
 	// relative time from now, use omni_thread::get_time. See POSIX threads
 	// documentation for why absolute times are better than relative.
@@ -462,11 +462,11 @@ public:
     static void yield(void);
 	// allows another thread to run.
 
-    static void sleep(unsigned long secs, unsigned long nanosecs = 0);
+    static void sleep(unsigned int secs, unsigned int nanosecs = 0);
 	// sleeps for the given time.
 
-    static void get_time(unsigned long* abs_sec, unsigned long* abs_nsec,
-			 unsigned long rel_sec = 0, unsigned long rel_nsec=0);
+    static void get_time(unsigned int* abs_sec, unsigned int* abs_nsec,
+			 unsigned int rel_sec = 0, unsigned int rel_nsec=0);
 	// calculates an absolute time in seconds and nanoseconds, suitable for
 	// use in timed_waits on condition variables, which is the current time
 	// plus the given relative offset.

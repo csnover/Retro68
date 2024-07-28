@@ -73,12 +73,12 @@ void write_log (const char *s, ...)
 static int *opcode_map;
 static int *opcode_next_clev;
 static int *opcode_last_postfix;
-static unsigned long *counts;
+static uae_u32 *counts;
 
 static void read_counts (void)
 {
     FILE *file;
-    unsigned long opcode, count, total;
+    uae_u32 opcode, count, total;
     char name[20];
     int nr = 0;
     memset (counts, 0, 65536 * sizeof *counts);
@@ -1162,7 +1162,7 @@ static int source_is_imm1_8 (struct instr *i)
     return i->stype == 3;
 }
 
-static void gen_opcode (unsigned long int opcode)
+static void gen_opcode (uae_u32 opcode)
 {
     struct instr *curi = table68k + opcode;
 #if PALM_PERF
@@ -3134,7 +3134,7 @@ static void generate_one_opcode (int rp)
 {
     int i;
     uae_u16 smsk, dmsk;
-    long int opcode = opcode_map[rp];
+    uae_s32 opcode = opcode_map[rp];
 
     if (table68k[opcode].mnemo == i_ILLG
 	|| table68k[opcode].clev > cpu_level)
@@ -3163,7 +3163,7 @@ static void generate_one_opcode (int rp)
     fprintf (stblfile, "{ op_%lx_%d, 0, %ld }, /* %s */\n", opcode, postfix, opcode, lookuptab[i].name);
 #endif	// PALM_PERF
     fprintf (headerfile, "extern cpuop_func op_%lx_%d;\n", opcode, postfix);
-    printf ("unsigned long REGPARAM2 op_%lx_%d(uae_u32 opcode) /* %s */\n{\n", opcode, postfix, lookuptab[i].name);
+    printf ("uae_u32 REGPARAM2 op_%lx_%d(uae_u32 opcode) /* %s */\n{\n", opcode, postfix, lookuptab[i].name);
 
     switch (table68k[opcode].stype) {
      case 0: smsk = 7; break;
@@ -3325,7 +3325,7 @@ int main (int argc, char **argv)
 	opcode_last_write = (int *) xmalloc (sizeof (int) * nr_cpuop_funcs);
 #endif	// PALM_PERF
     opcode_next_clev = (int *) xmalloc (sizeof (int) * nr_cpuop_funcs);
-    counts = (unsigned long *) xmalloc (65536 * sizeof (unsigned long));
+    counts = (uae_u32 *) xmalloc (65536 * sizeof (uae_u32));
     read_counts ();
 
     /* It would be a lot nicer to put all in one file (we'd also get rid of

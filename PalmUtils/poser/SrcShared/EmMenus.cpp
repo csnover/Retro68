@@ -50,7 +50,7 @@ static EmMenu	gMenuPopupMenu;
 static EmMenu	gMenuPartiallyBoundPopupMenu;
 static EmMenu	gMenuFullyBoundPopupMenu;
 
-static unsigned long	gChangeCount;
+static uint32	gChangeCount;
 
 // ---------------------------------------------------------------------------
 // This array is accessed by index using the values in EmMenuItemID.  Thus,

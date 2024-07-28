@@ -22,6 +22,8 @@
 #include "Platform.h"				// Platform::GetMilliseconds
 #include "Strings.r.h"				// kStr_Waiting
 
+#include <cstdlib>
+#include <cstring>
 
 /*
 	Notes on the XModem/YModem implementation used in this file:
@@ -247,7 +249,7 @@ void EmROMTransfer::Abort (EmDlgRef)
  *
  ***********************************************************************/
 
-long EmROMTransfer::Size (void)
+int32 EmROMTransfer::Size (void)
 {
 	return fROMSize;
 }
@@ -505,11 +507,11 @@ void EmROMTransfer::BufferPendingData (void)
 	// Get some data.  Read as much as we can, but don't overflow
 	// our local buffer.
 
-	long	bytesInPort = fTransport->BytesInBuffer (kXModemBufferSize);
+	int32	bytesInPort = fTransport->BytesInBuffer (kXModemBufferSize);
 
 	if (bytesInPort > 0)
 	{
-		long	bytesToRead = min (bytesInPort, kBufferSize - fTempBufferOffset);
+		int32	bytesToRead = min (bytesInPort, kBufferSize - fTempBufferOffset);
 		ErrCode	err = fTransport->Read (bytesToRead, &fTempBuffer[fTempBufferOffset]);
 		Errors::ThrowIfError (err);
 		fTempBufferOffset += bytesToRead;
@@ -666,7 +668,7 @@ void EmROMTransfer::SendByte (uint8 byte)
 	}
 #endif
 
-	long	len = 1;
+	int32	len = 1;
 	/*ErrCode	err =*/ fTransport->Write (len, &byte);
 
 	// Any errors will just cause the retry/timeout mechanisms to kick in.
@@ -695,7 +697,7 @@ void EmROMTransfer::SendByte (uint8 byte)
  *
  ***********************************************************************/
 
-void EmROMTransfer::UpdateProgress (EmDlgRef dlg, long caption, long value, long maxValue)
+void EmROMTransfer::UpdateProgress (EmDlgRef dlg, int32 caption, int32 value, int32 maxValue)
 {
 	if (fProgressCaption != caption)
 	{
@@ -717,7 +719,7 @@ void EmROMTransfer::UpdateProgress (EmDlgRef dlg, long caption, long value, long
 		if (fProgressMax != maxValue)
 		{
 			fProgressMax = maxValue;
-			EmDlg::SetItemMax (dlg, kDlgItemDlpProgress, max (1L, maxValue / 1024));
+			EmDlg::SetItemMax (dlg, kDlgItemDlpProgress, max (1, maxValue / 1024));
 		}
 
 		if (fProgressValue != value)

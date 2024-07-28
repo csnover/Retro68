@@ -77,7 +77,7 @@
  *		The solution is to declare variables that you want to use
  *		in both the Try and Catch blocks as "volatile". For example:
  *
- *		volatile long	x = 1;		// Declare volatile local variable
+ *		volatile int32	x = 1;		// Declare volatile local variable
  *		ErrTry {
  *			x = 100;						// Set local variable in Try
  *			ErrThrow(-1);
@@ -187,7 +187,7 @@
 #if EMULATION_LEVEL != EMULATION_NONE
 	#define	ErrJumpBuf	jmp_buf
 #else
-	typedef long* ErrJumpBuf[12];			// D3-D7,PC,A2-A7
+	typedef int32* ErrJumpBuf[12];			// D3-D7,PC,A2-A7
 #endif
 	
 // Structure used to store Try state.

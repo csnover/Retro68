@@ -108,8 +108,8 @@ omni_condition::wait(void)
 }
 
 typedef struct alarmclock_args {
-  unsigned long secs;
-  unsigned long nsecs;
+  uint32 secs;
+  uint32 nsecs;
   bool wakeup;
   condition_t condition;
   mutex_t mutex;
@@ -132,7 +132,7 @@ any_t alarmclock(any_t arg)
   return (any_t)TRUE;
 }
 
-int omni_condition::timedwait(unsigned long abs_secs, unsigned long abs_nsecs)
+int omni_condition::timedwait(uint32 abs_secs, uint32 abs_nsecs)
 {
   alarmclock_args alarm;
 
@@ -580,7 +580,7 @@ void omni_thread::yield(void)
 #define MAX_SLEEP_SECONDS (unsigned)4294966	// (2**32-2)/1000
 
 void
-omni_thread::sleep(unsigned long secs, unsigned long nanosecs)
+omni_thread::sleep(uint32 secs, uint32 nanosecs)
 {
   if (secs <= MAX_SLEEP_SECONDS) {
     thread_switch(THREAD_NULL, SWITCH_OPTION_WAIT, secs * 1000 + nanosecs / 1000000);
@@ -599,12 +599,12 @@ omni_thread::sleep(unsigned long secs, unsigned long nanosecs)
 }
 
 void
-omni_thread::get_time(unsigned long* abs_sec, unsigned long* abs_nsec,
-		      unsigned long rel_sec, unsigned long rel_nsec)
+omni_thread::get_time(uint32* abs_sec, uint32* abs_nsec,
+		      uint32 rel_sec, uint32 rel_nsec)
 {
   int rc;
-  unsigned long tv_sec;
-  unsigned long tv_nsec;
+  uint32 tv_sec;
+  uint32 tv_nsec;
   struct timeval tv;
 	
   rc = gettimeofday(&tv, NULL); 

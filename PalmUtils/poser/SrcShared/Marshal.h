@@ -20,6 +20,8 @@
 #include "EmSubroutine.h"		// EmSubroutine
 #include "Platform.h"			// Platform::AllocateMemory
 
+#include <stddef.h>
+
 
 /* ===========================================================================
 
@@ -179,8 +181,8 @@ typedef UInt8*					UInt8Ptr;
 	Marshal::PutReturnVal (sub, (type) val);
 
 
-#define PUT_RESULT_PTR(type, val)							\
-	Marshal::PutReturnVal (sub, (type) val);
+#define PUT_RESULT_PTR(val)									\
+	Marshal::PutReturnVal (sub, (const void *) val);
 
 
 #define RETURN_RESULT_VAL(type)								\
@@ -190,7 +192,7 @@ typedef UInt8*					UInt8Ptr;
 
 #define RETURN_RESULT_PTR(type)								\
 	GET_RESULT_PTR ();										\
-	return (type) result
+	return EmMemFakeT<type>(result)
 
 
 
@@ -252,9 +254,9 @@ class Marshal
 		#define INPUT(io)	(((io) & Marshal::kInput) != 0)
 		#define OUTPUT(io)	(((io) & Marshal::kOutput) != 0)
 
-		static void*			GetBuffer (emuptr p, long len);
+		static void*			GetBuffer (emuptr p, int32 len);
 #if (__GNUC__ == 2)
-		static void				PutBuffer (emuptr p, unsigned char* const buf, long len)
+		static void				PutBuffer (emuptr p, unsigned char* const buf, int32 len)
 								{
 									if (p)
 									{
@@ -265,7 +267,7 @@ class Marshal
 								}
 #else
 		template <class T>
-		static void				PutBuffer (emuptr p, T* const buf, long len)
+		static void				PutBuffer (emuptr p, T* const buf, int32 len)
 								{
 									if (p)
 									{
@@ -285,15 +287,19 @@ class Marshal
 		type we ever fetch.  Those overloaded functions appear below.
 	=========================================================================== */
 
-#define DECLARE_POINTER_MARSHALLER(type)									\
+#define DECLARE_POINTER_MARSHALLER(type)														\
 		inline static void GetParamVal (EmSubroutine& sub, EmParamNameArg name, type*& v)		\
-			{ sub.GetParamVal (name, (emuptr&) v); }						\
-																			\
+		{																						\
+			emuptr p;																			\
+			sub.GetParamVal (name, p);															\
+			v = EmMemFakeT<type *>(p);																\
+		}																						\
+																								\
 		inline static void PutParamVal (EmSubroutine& sub, EmParamNameArg name, const type* v)	\
-			{ sub.SetParamVal (name, (emuptr) v); }							\
-																			\
-		inline static void PutReturnVal (EmSubroutine& sub, const type* v)	\
-			{ sub.SetReturnVal ((emuptr) v); }
+			{ sub.SetParamVal (name, EmMemPtr(v)); }											\
+																								\
+		inline static void PutReturnVal (EmSubroutine& sub, const type* v)						\
+			{ sub.SetReturnVal (EmMemPtr(v)); }
 
 
 		DECLARE_POINTER_MARSHALLER (void)
@@ -329,7 +335,7 @@ class Marshal
 		inline static void PutReturnVal (EmSubroutine& sub, type v)		\
 			{ sub.SetReturnVal ((asType&) v); }							\
 																		\
-		inline static long GetBufSize (const type&)						\
+		inline static int32 GetBufSize (const type&)						\
 			{ return sizeof(asType); }
 
 
@@ -348,15 +354,44 @@ class Marshal
 		DECLARE_SCALAR_MARSHALLER (NetSocketTypeEnum, uint8, 8)
 		DECLARE_SCALAR_MARSHALLER (SystemPreferencesChoice, uint8, 8)
 
-		DECLARE_SCALAR_MARSHALLER (SysAppInfoPtr, uint32, 32)
-		DECLARE_SCALAR_MARSHALLER (UInt8Ptr, uint32, 32)
+#define DECLARE_EMUPTR_SCALAR_MARSHALLER(type)							\
+		inline static void GetParamVal (EmSubroutine& sub, EmParamNameArg name, type& v)	\
+		{																\
+			emuptr temp;												\
+			sub.GetParamVal (name, temp);								\
+			v = EmMemFakeT<type>(temp);									\
+		}																\
+																		\
+		inline static void PutParamVal (EmSubroutine& sub, EmParamNameArg name, type v)		\
+			{ sub.SetParamVal (name, EmMemPtr(v)); }					\
+																		\
+		inline static void GetParamRef (emuptr p, type& v)				\
+			{ v = EmMemFakeT<type>(EmMemGet32 (p)); }					\
+																		\
+		inline static void PutParamRef (emuptr p, const type& v)		\
+			{ EmMemPut32 (p, EmMemPtr(v)); }							\
+																		\
+		inline static void GetReturnVal (EmSubroutine& sub, type& v)	\
+		{																\
+			emuptr temp;												\
+			sub.GetReturnVal (temp);									\
+			v = EmMemFakeT<type>(temp);									\
+		}																\
+																		\
+		inline static void PutReturnVal (EmSubroutine& sub, type v)		\
+			{ sub.SetReturnVal (EmMemPtr(v)); }							\
+																		\
+		inline static int32 GetBufSize (const type&)					\
+			{ return sizeof(emuptr); }
 
+		DECLARE_EMUPTR_SCALAR_MARSHALLER (SysAppInfoPtr)
+		DECLARE_EMUPTR_SCALAR_MARSHALLER (UInt8Ptr)
 
 #define DECLARE_STRUCT_MARSHALLER(type)								\
 		static void			Get##type (emuptr p, type&);			\
 		static void			Put##type (emuptr p, const type&);		\
 																	\
-		static long			GetBufSize (const type&)				\
+		static size_t		GetBufSize (const type&)				\
 			{ return EmProxy##type::GetSize (); }					\
 																	\
 		inline static void	GetParamRef (emuptr p, type& v)			\
@@ -424,7 +459,7 @@ class ParamVal
 	copy is copied back to emulated memory when the Put method is called.
 =========================================================================== */
 
-template <typename T, long inOut>
+template <typename T, int32 inOut>
 class ParamRef
 {
 	public:
@@ -484,11 +519,11 @@ class ParamRef
 	release the lock block of memory.
 =========================================================================== */
 
-template <typename T, long inOut>
+template <typename T, int32 inOut>
 class ParamPtr
 {
 	public:
-						ParamPtr (EmSubroutine& sub, EmParamNameArg name, long len) :
+						ParamPtr (EmSubroutine& sub, EmParamNameArg name, int32 len) :
 							fSub (&sub),
 							fName (name),
 							fPtr (EmMemNULL),
@@ -530,7 +565,7 @@ class ParamPtr
 		EmSubroutine*	fSub;
 		EmParamName		fName;
 		emuptr			fPtr;
-		long			fLen;
+		int32			fLen;
 		T*				fVal;
 };
 
@@ -598,7 +633,7 @@ class PushParamVal
 						}
 };
 
-template <typename T, long inOut>
+template <typename T, int32 inOut>
 class PushParamRef
 {
 	public:
@@ -613,7 +648,7 @@ class PushParamRef
 							{
 								// Allocate a buffer big enough for the mapped/translated data.
 
-								long	size = Marshal::GetBufSize (*fHostPtr);
+								int32	size = Marshal::GetBufSize (*fHostPtr);
 								fMappedData = Platform::AllocateMemory (size);
 
 								// Map the buffer
@@ -667,11 +702,11 @@ class PushParamRef
 		emuptr			fMappedPtr;
 };
 
-template <typename T, long inOut>
+template <typename T, int32 inOut>
 class PushParamPtr
 {
 	public:
-						PushParamPtr (EmSubroutine& sub, EmParamNameArg name, const T* ptr, long size) :
+						PushParamPtr (EmSubroutine& sub, EmParamNameArg name, const T* ptr, int32 size) :
 							fSub (&sub),
 							fName (name),
 							fHostPtr (ptr),
@@ -723,7 +758,7 @@ class PushParamStr
 							{
 								// Map the buffer
 
-								long	size = strlen (ptr) + 1;
+								int32	size = strlen (ptr) + 1;
 								EmBankMapped::MapPhysicalMemory (fHostPtr, size);
 								fMappedPtr = EmBankMapped::GetEmulatedAddress (fHostPtr);
 							}

@@ -533,9 +533,9 @@ typedef CardInfoType*	CardInfoPtr;
 
 #if MEMORY_FORCE_LOCK == MEMORY_FORCE_LOCK_ON
 	#define	memHandleProtect(h)											\
-				((MemHandle)((UInt32)h | 0x80000000))
+				((MemHandle)(((size_t)h & 0xFFFFFFFF) | 0x80000000))
 	#define	memHandleUnProtect(h)										\
-				((void **)((UInt32)h & 0x7FFFFFFF))
+				((void **)((size_t)h & 0x7FFFFFFF))
 #else
 	#define	memHandleProtect(h)		(h)
 	#define	memHandleUnProtect(h)	(h)

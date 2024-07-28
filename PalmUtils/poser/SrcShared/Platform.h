@@ -107,8 +107,8 @@ class Platform
 	
 		static Bool				PinToScreen				(EmRect&);
 
-		static void 			ToHostEOL				(StMemory& dest, long& destLen,
-														 const char* src, long srcLen);
+		static void 			ToHostEOL				(StMemory& dest, int32& destLen,
+														 const char* src, int32 srcLen);
 
 
 		static Bool 			ReadROMFileReference	(ChunkFile& docFile,

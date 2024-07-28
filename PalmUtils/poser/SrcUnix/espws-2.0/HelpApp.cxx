@@ -258,9 +258,7 @@ void HelpApp::cb_OK(Fl_Return_Button* o, void* v) {
 }
 
 HelpApp::HelpApp() {
-  Fl_Window* w;
   { Fl_Window* o = window_ = new Fl_Window(530, 385, "Help Application");
-    w = o;
     o->user_data((void*)(this));
     { HelpView* o = view_ = new HelpView(0, 95, 530, 270);
       o->box(FL_DOWN_BOX);
@@ -357,7 +355,6 @@ HelpApp::HelpApp() {
     o->end();
   }
   { Fl_Window* o = bmWindow_ = new Fl_Window(239, 386, "Bookmarks");
-    w = o;
     o->user_data((void*)(this));
     { Fl_Browser* o = bmList_ = new Fl_Browser(0, 25, 240, 360);
       o->type(3);
@@ -370,7 +367,6 @@ HelpApp::HelpApp() {
     o->end();
   }
   { Fl_Window* o = propWindow_ = new Fl_Window(385, 111, "Bookmark Properties");
-    w = o;
     o->user_data((void*)(this));
     { Fl_Input* o = propTitle_ = new Fl_Input(50, 10, 325, 25, "Title: ");
       o->labelfont(1);

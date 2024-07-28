@@ -83,7 +83,7 @@ FileChooser::directory(const char *d)	// I - Directory to change to
 #else
     if (d[0] != '/' && d[0] != '\\')
 #endif /* WIN32 || __EMX__ */
-      filename_absolute(directory_, d);
+      fl_filename_absolute(directory_, d);
     else
     {
       strncpy(directory_, d, sizeof(directory_) - 1);
@@ -151,7 +151,7 @@ FileChooser::count()
   int		i;		// Looping var
   int		count;		// Number of selected files
   const char	*filename;	// Filename in input field or list
-  char		pathname[1024];	// Full path to file
+  char		pathname[1026];	// Full path to file
 
 
   if (type_ != MULTI)
@@ -163,14 +163,14 @@ FileChooser::count()
 
     // Is the file name a directory?
     if (directory_[0] != '\0')
-      sprintf(pathname, "%s/%s", directory_, filename);
+      snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
     else
     {
       strncpy(pathname, filename, sizeof(pathname) - 1);
       pathname[sizeof(pathname) - 1] = '\0';
     }
 
-    if (filename_isdir(pathname) && !directory_chooser_)
+    if (fl_filename_isdir(pathname) && !directory_chooser_)
       return (0);
     else
       return (1);
@@ -182,14 +182,14 @@ FileChooser::count()
       // See if this file is a directory...
       filename = (char *)fileList->text(i);
       if (directory_[0] != '\0')
-	sprintf(pathname, "%s/%s", directory_, filename);
+        snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
       else
       {
 	strncpy(pathname, filename, sizeof(pathname) - 1);
 	pathname[sizeof(pathname) - 1] = '\0';
       }
 
-      if (!filename_isdir(pathname) || directory_chooser_)
+      if (!fl_filename_isdir(pathname) || directory_chooser_)
 	count ++;
     }
 
@@ -207,7 +207,7 @@ FileChooser::value(int f)	// I - File number
   int		i;		// Looping var
   int		count;		// Number of selected files
   const char	*name;		// Current filename
-  static char	pathname[1024];	// Filename + directory
+  static char	pathname[1026];	// Filename + directory
 
 // There seems to be a little bit of a bug...sometimes
 // the returned path can start with '//'.  I think the
@@ -226,7 +226,7 @@ FileChooser::value(int f)	// I - File number
     if (name[0] == '\0')
       return (NULL);
 
-    sprintf(pathname, "%s/%s", directory_, name);
+    snprintf(pathname, sizeof(pathname), "%s/%s", directory_, name);
     return ((const char *)pathname);
   }
 
@@ -235,9 +235,9 @@ FileChooser::value(int f)	// I - File number
     {
       // See if this file is a directory...
       name = fileList->text(i);
-      sprintf(pathname, "%s/%s", directory_, name);
+      snprintf(pathname, sizeof(pathname), "%s/%s", directory_, name);
 
-      if (!filename_isdir(pathname) || directory_chooser_)
+      if (!fl_filename_isdir(pathname) || directory_chooser_)
       {
         // Nope, see if this this is "the one"...
 	count ++;
@@ -264,7 +264,7 @@ FileChooser::value(const char *filename)	// I - Filename + directory
 
 
   // See if the filename is actually a directory...
-  if (filename == NULL || filename_isdir(filename))
+  if (filename == NULL || fl_filename_isdir(filename))
   {
     // Yes, just change the current directory...
     directory(filename);
@@ -344,7 +344,7 @@ void
 FileChooser::newdir()
 {
   const char	*dir;		// New directory name
-  char		pathname[1024];	// Full path of directory
+  char		pathname[1026];	// Full path of directory
 
 
   // Get a directory name from the user
@@ -357,7 +357,7 @@ FileChooser::newdir()
 #else
   if (dir[0] != '/' && dir[0] != '\\')
 #endif /* WIN32 || __EMX__ */
-    sprintf(pathname, "%s/%s", directory_, dir);
+    snprintf(pathname, sizeof(pathname), "%s/%s", directory_, dir);
   else
   {
     strncpy(pathname, dir, sizeof(pathname) - 1);
@@ -406,12 +406,12 @@ void
 FileChooser::fileListCB()
 {
   char	*filename,		// New filename
-	pathname[1024];		// Full pathname to file
+	pathname[1026];		// Full pathname to file
 
 
   filename = (char *)fileList->text(fileList->value());
   if (directory_[0] != '\0')
-    sprintf(pathname, "%s/%s", directory_, filename);
+    snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
   else
   {
     strncpy(pathname, filename, sizeof(pathname) - 1);
@@ -422,9 +422,9 @@ FileChooser::fileListCB()
   {
 #if defined(WIN32) || defined(__EMX__)
     if ((strlen(pathname) == 2 && pathname[1] == ':') ||
-        filename_isdir(pathname))
+        fl_filename_isdir(pathname))
 #else
-    if (filename_isdir(pathname))
+    if (fl_filename_isdir(pathname))
 #endif /* WIN32 || __EMX__ */
     {
       directory(pathname);
@@ -437,7 +437,7 @@ FileChooser::fileListCB()
   {
     fileName->value(filename);
 
-    if (!filename_isdir(pathname) || directory_chooser_)
+    if (!fl_filename_isdir(pathname) || directory_chooser_)
       okButton->activate();
   }
 }
@@ -452,7 +452,7 @@ FileChooser::fileNameCB()
 {
   char		*filename,	// New filename
 		*slash,		// Pointer to trailing slash
-		pathname[1024];	// Full pathname to file
+		pathname[1026];	// Full pathname to file
   int		i,		// Looping var
 		min_match,	// Minimum number of matching chars
 		max_match,	// Maximum number of matching chars
@@ -475,7 +475,7 @@ FileChooser::fileNameCB()
       filename[0] != '/' &&
       filename[0] != '\\' &&
       !(isalpha(filename[0]) && filename[1] == ':'))
-    sprintf(pathname, "%s/%s", directory_, filename);
+    snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
   else
   {
     strncpy(pathname, filename, sizeof(pathname) - 1);
@@ -484,7 +484,7 @@ FileChooser::fileNameCB()
 #else
   if (directory_[0] != '\0' &&
       filename[0] != '/')
-    sprintf(pathname, "%s/%s", directory_, filename);
+    snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
   else
   {
     strncpy(pathname, filename, sizeof(pathname) - 1);
@@ -500,7 +500,7 @@ FileChooser::fileNameCB()
     if (((strlen(pathname) == 2 && pathname[1] == ':') ||
         filename_isdir(pathname)) && !directory_chooser_)
 #else
-    if (filename_isdir(pathname) && !directory_chooser_)
+    if (fl_filename_isdir(pathname) && !directory_chooser_)
 #endif /* WIN32 || __EMX__ */
       directory(pathname);
     else if (type_ == CREATE || access(pathname, 0) == 0)
@@ -629,10 +629,10 @@ FileChooser::fileNameCB()
     }
 
     // See if we need to enable the OK button...
-    sprintf(pathname, "%s/%s", directory_, fileName->value());
+    snprintf(pathname, sizeof(pathname), "%s/%s", directory_, fileName->value());
 
     if ((type_ == CREATE || access(pathname, 0) == 0) &&
-        (!filename_isdir(pathname) || directory_chooser_))
+        (!fl_filename_isdir(pathname) || directory_chooser_))
       okButton->activate();
     else
       okButton->deactivate();

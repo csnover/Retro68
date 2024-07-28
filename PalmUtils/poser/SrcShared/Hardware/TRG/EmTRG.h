@@ -18,6 +18,6 @@
 #define hwrOEMDeviceIDTRGpro		1
 #define hwrTRGproID					0
 
-void OEMCreateTRGRegObjs(long hardwareSubID);
+void OEMCreateTRGRegObjs(int32 hardwareSubID);
 
 #endif	// EmTRG_h

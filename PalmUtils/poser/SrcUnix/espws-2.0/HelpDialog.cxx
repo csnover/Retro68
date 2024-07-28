@@ -106,9 +106,7 @@ void HelpDialog::cb_larger_(Fl_Button* o, void* v) {
 }
 
 HelpDialog::HelpDialog() {
-  Fl_Window* w;
   { Fl_Window* o = window_ = new Fl_Window(530, 385, "Help Dialog");
-    w = o;
     o->user_data((void*)(this));
     { HelpView* o = view_ = new HelpView(10, 10, 510, 330);
       o->box(FL_DOWN_BOX);

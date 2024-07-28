@@ -317,7 +317,7 @@ MemAccessFlags	kZeroMemAccessFlags;
 	kREGByteWrite,		//    22,592
 */
 
-long	gMemoryAccess[kLastEnum];
+int32	gMemoryAccess[kLastEnum];
 #endif
 
 
@@ -617,7 +617,7 @@ void Memory::CheckNewPC (emuptr newPC)
 //		¥ CEnableFullAccess
 // ===========================================================================
 
-long	CEnableFullAccess::fgAccessCount = 0;
+int32	CEnableFullAccess::fgAccessCount = 0;
 
 
 // ---------------------------------------------------------------------------
@@ -748,12 +748,12 @@ inline const void*	_get_real_address(emuptr p)
 }
 
 template <class T>
-inline void		_add_delta (T*& v, long delta)
+inline void		_add_delta (T*& v, int32 delta)
 {
 	v = (T*) (((char*) v) + delta);
 }
 
-inline void		_add_delta (emuptr& v, long delta)
+inline void		_add_delta (emuptr& v, int32 delta)
 {
 	v += delta;
 }
@@ -803,11 +803,11 @@ emuptr 	EmMem_memset(emuptr dst, int val, size_t len)
 		len -= sizeof (char);
 	}
 
-	while (len >= sizeof (long))	// while there are middle longs
+	while (len >= sizeof (int32))	// while there are middle longs
 	{
 		longPutter(q, longVal);
-		q += sizeof (long);
-		len -= sizeof (long);
+		q += sizeof (int32);
+		len -= sizeof (int32);
 	}
 
 	while (len > 0) 				// while there are trailing bytes

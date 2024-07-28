@@ -12,6 +12,7 @@
 \* ===================================================================== */
 
 #include "EmCommon.h"
+#include "EmMemory.h"
 
 #include <stdio.h>		// needed for sprintf.
 #include <stdlib.h>		// needed for rand and srand
@@ -169,14 +170,14 @@ static UInt8 _TxtByteAttr (UInt8 inByte)
 #define rand	Gremlin_rand
 #define srand	Gremlin_srand
 
-unsigned long int gGremlinNext = 1;
+unsigned int gGremlinNext = 1;
 
 static int rand(void)
 {
 //	gGremlinNext = gGremlinNext * 1103515245 + 12345;	// MSL numbers
 
-	gGremlinNext = gGremlinNext * 214013L + 2531011L;	// VC++ numbers
-	PRINTF ("--- gGremlinNext == 0x%08X", (long) gGremlinNext);
+	gGremlinNext = gGremlinNext * 214013 + 2531011;	// VC++ numbers
+	PRINTF ("--- gGremlinNext == 0x%08X", gGremlinNext);
 
 	return ((gGremlinNext >> 16) & 0x7FFF);
 }
@@ -191,15 +192,15 @@ static void srand(unsigned int seed)
 
 
 //#define randN(N) ((N) ? rand() / (RAND_MAX / (N)) : (0))
-#define randN(N) ((int) (((long) rand() * (N)) / ((long) RAND_MAX + 1)))
+#define randN(N) ((int) (((int) rand() * (N)) / ((int) RAND_MAX + 1)))
 #define randPercent (randN(100))
 
 #ifndef forSimulator
 #undef randN
-inline int randN (long N)
+inline int randN (int N)
 {
-	int	result = ((int) (((long) rand() * (N)) / ((long) RAND_MAX + 1)));
-	PRINTF ("--- randN(%ld) == 0x%08X", N, (long) result);
+	int	result = ((int) (((int) rand() * (N)) / ((int) RAND_MAX + 1)));
+	PRINTF ("--- randN(%ld) == 0x%08X", N, (int) result);
 	return result;
 }
 #endif
@@ -250,7 +251,7 @@ inline int randN (long N)
 
 //Global variables
 Gremlins*	TheGremlinsP;					// Pointer to the Gremlins class.
-long		IdleTimeCheck;					// Tick count for the next idle query
+int32		IdleTimeCheck;					// Tick count for the next idle query
 
 // Array of probabilities of a key being pressed for gremlin mode.
 #define NUM_OF_KEYS		0x110
@@ -955,7 +956,7 @@ static void FakeEventXY(Int16* x, Int16* y)
 		const PenBtnInfoType* buttonListP = EvtGetPenBtnList(&numButtons);
 
 		const size_t	size = EmAliasPenBtnInfoType<PAS>::GetSize ();
-		emuptr			addr = ((emuptr) buttonListP) + randN(numButtons) * size;
+		emuptr			addr = EmMemPtr(buttonListP) + randN(numButtons) * size;
 
 		EmAliasPenBtnInfoType<PAS>	button (addr);
 		RectangleType randButtonRect;
@@ -1077,7 +1078,7 @@ static void FakeEventXY(Int16* x, Int16* y)
 
 void GremlinsSendEvent (void)
 {
-//	long					tick;
+//	int					tick;
 //	Boolean					idle;
 //	LowMemType*				lowMemP = (LowMemType*)PilotGlobalsP;
 //	SysEvtMgrGlobalsPtr		sysEvtMgrGlobalsP;
@@ -1516,16 +1517,16 @@ Gremlins::New (const GremlinInfo& info)
 			Errors::ThrowIfPalmError (err);
 
 			// Create the param block
-			emuptr	cmdPBP = (emuptr) ::MemPtrNew (sizeof (SysAppLaunchCmdOpenDBType));
-			Errors::ThrowIfNULL ((void*) cmdPBP);
+			emuptr	cmdPBP = EmMemPtr(::MemPtrNew (sizeof (SysAppLaunchCmdOpenDBType)));
+			Errors::ThrowIfNULL (cmdPBP);
 
 			// Fill it in
-			::MemPtrSetOwner ((MemPtr) cmdPBP, 0);
+			::MemPtrSetOwner (EmMemFakeT<MemPtr>(cmdPBP), 0);
 			EmMemPut16 (cmdPBP + offsetof (SysAppLaunchCmdOpenDBType, cardNo), dbInfo.cardNo);
 			EmMemPut32 (cmdPBP + offsetof (SysAppLaunchCmdOpenDBType, dbID), dbInfo.dbID);
 
 			// Switch now
-			err = ::SysUIAppSwitch (cardNo, dbID, sysAppLaunchCmdOpenDB, (MemPtr) cmdPBP);
+			err = ::SysUIAppSwitch (cardNo, dbID, sysAppLaunchCmdOpenDB, EmMemFakeT<MemPtr>(cmdPBP));
 			Errors::ThrowIfPalmError (err);
 		}
 	}
@@ -1568,7 +1569,7 @@ Gremlins::Save (SessionFile& f)
 {
 	gremlinStopTime = Platform::GetMilliseconds ();
 
-	const long	kCurrentVersion = 2;
+	const int	kCurrentVersion = 2;
 
 	Chunk			chunk;
 	EmStreamChunk	s (chunk);
@@ -1631,7 +1632,7 @@ Gremlins::Load (SessionFile& f)
 
 	if (f.ReadGremlinInfo (chunk))
 	{
-		long			version;
+		int			version;
 		EmStreamChunk	s (chunk);
 
 		s >> version;
@@ -1870,8 +1871,8 @@ Gremlins::Stop (void)
 		gremlinStopTime = Platform::GetMilliseconds ();
 
 		unsigned short	number;
-		unsigned long	step;
-		unsigned long	until;
+		unsigned int	step;
+		unsigned int	until;
 		this->Status (&number, &step, &until);
 
 		if (LogGremlins ())
@@ -1913,7 +1914,7 @@ Boolean Gremlins::SendCharsToType()
 		UInt16 charSize = TxtGetNextChar(charsToType, 0, &theChar);
 		EmEventPlayback::RecordKeyEvent (theChar, 0, 0);
 		StubAppEnqueueKey(theChar, 0, 0);
-		PRINTF ("--- Gremlin #%ld Gremlins::SendCharsToType: key = %ld", (long) number, (long) theChar);
+		PRINTF ("--- Gremlin #%d Gremlins::SendCharsToType: key = %d", number, theChar);
 		strcpy(&charsToType[0], &charsToType[charSize]);
 		return true;
 	}
@@ -1951,11 +1952,11 @@ Boolean Gremlins::GetFakeEvent()
 	PointType pen;
 	const char *quote;
 
-	PRINTF ("--- Gremlin #%ld Gremlins::GetFakeEvent: Entering", (long) number);
+	PRINTF ("--- Gremlin #%d Gremlins::GetFakeEvent: Entering", number);
 
 	if (! inited)
 	{
-		PRINTF ("--- Gremlin #%ld Gremlins::GetFakeEvent: not initialized; leaving", (long) number);
+		PRINTF ("--- Gremlin #%d Gremlins::GetFakeEvent: not initialized; leaving", number);
 		return false;
 	}
 
@@ -1963,7 +1964,7 @@ Boolean Gremlins::GetFakeEvent()
 	if (counter > until)
 	{
 		StubAppGremlinsOff ();
-		PRINTF ("--- Gremlin #%ld Gremlins::GetFakeEvent: End of Days; leaving", (long) number);
+		PRINTF ("--- Gremlin #%d Gremlins::GetFakeEvent: End of Days; leaving", number);
 		return false;
 	}
 
@@ -1980,7 +1981,7 @@ Boolean Gremlins::GetFakeEvent()
 	{
 		EmEventPlayback::RecordNullEvent ();
 		catchUp = false;
-		PRINTF ("--- Gremlin #%ld Gremlins::GetFakeEvent: playing catchup; leaving", (long) number);
+		PRINTF ("--- Gremlin #%d Gremlins::GetFakeEvent: playing catchup; leaving", number);
 		return false;
 	}
 #ifdef forSimulator
@@ -1998,7 +1999,7 @@ Boolean Gremlins::GetFakeEvent()
 		needPenUp = false;
 		EmEventPlayback::RecordPenEvent (pen);
 		StubAppEnqueuePt(&pen);
-		PRINTF ("--- Gremlin #%ld Gremlins::GetFakeEvent: posted pen up; leaving", (long) number);
+		PRINTF ("--- Gremlin #%d Gremlins::GetFakeEvent: posted pen up; leaving", number);
 		return true;
 	}
 
@@ -2007,7 +2008,7 @@ Boolean Gremlins::GetFakeEvent()
 
 	if (SendCharsToType())
 	{
-		PRINTF ("--- Gremlin #%ld Gremlins::GetFakeEvent: sent chars to type (1); leaving", (long) number);
+		PRINTF ("--- Gremlin #%d Gremlins::GetFakeEvent: sent chars to type (1); leaving", number);
 		return true;
 	}
 
@@ -2068,7 +2069,7 @@ Boolean Gremlins::GetFakeEvent()
 			if (!result)
 				EmEventPlayback::RecordNullEvent ();
 
-			PRINTF ("--- Gremlin #%ld Gremlins::GetFakeEvent: sent chars to type (2); leaving", (long) number);
+			PRINTF ("--- Gremlin #%d Gremlins::GetFakeEvent: sent chars to type (2); leaving", number);
 			return result;
 			}
 		else
@@ -2114,7 +2115,7 @@ Boolean Gremlins::GetFakeEvent()
 				StubAppEnqueueKey(i, 0, 0);
 			}
 
-			PRINTF ("--- Gremlin #%ld Gremlins::GetFakeEvent: posted key = %ld; leaving", (long) number, i);
+			PRINTF ("--- Gremlin #%d Gremlins::GetFakeEvent: posted key = %d; leaving", number, i);
 			return true;
 			}
 	}		
@@ -2130,8 +2131,8 @@ Boolean Gremlins::GetFakeEvent()
 		lastPenDown = true;
 		EmEventPlayback::RecordPenEvent (pen);
 		StubAppEnqueuePt(&pen);
-		PRINTF ("--- Gremlin #%ld Gremlins::GetFakeEvent: posted pen event = (%ld, %ld), leaving",
-				(long) number, (long) pen.x, (long) pen.y);
+		PRINTF ("--- Gremlin #%d Gremlins::GetFakeEvent: posted pen event = (%d, %d), leaving",
+				number, pen.x, pen.y);
 
 		// Draw a test pixel on the overlay				
 		StubViewDrawPixel(pen.x, pen.y);
@@ -2143,7 +2144,7 @@ Boolean Gremlins::GetFakeEvent()
 	{
 		EmEventPlayback::RecordKeyEvent (vchrMenu, vchrMenu, commandKeyMask);
 		StubAppEnqueueKey(vchrMenu, vchrMenu, commandKeyMask);
-		PRINTF ("--- Gremlin #%ld Gremlins::GetFakeEvent: posted key = vchrMenu, leaving", (long) number);
+		PRINTF ("--- Gremlin #%d Gremlins::GetFakeEvent: posted key = vchrMenu, leaving", number);
 		return true;
 	}
 
@@ -2152,7 +2153,7 @@ Boolean Gremlins::GetFakeEvent()
 	{
 		EmEventPlayback::RecordKeyEvent (vchrFind, vchrFind, commandKeyMask);
 		StubAppEnqueueKey(vchrFind, vchrFind, commandKeyMask);
-		PRINTF ("--- Gremlin #%ld Gremlins::GetFakeEvent: posted key = vchrFind, leaving", (long) number);
+		PRINTF ("--- Gremlin #%d Gremlins::GetFakeEvent: posted key = vchrFind, leaving", number);
 		return true;
 	}
 
@@ -2161,7 +2162,7 @@ Boolean Gremlins::GetFakeEvent()
 	{
 		EmEventPlayback::RecordKeyEvent (vchrKeyboard, vchrKeyboard, commandKeyMask);
 		StubAppEnqueueKey(vchrKeyboard, vchrKeyboard, commandKeyMask);
-		PRINTF ("--- Gremlin #%ld Gremlins::GetFakeEvent: posted key = vchrKeyboard, leaving", (long) number);
+		PRINTF ("--- Gremlin #%d Gremlins::GetFakeEvent: posted key = vchrKeyboard, leaving", number);
 		return true;
 	}
 
@@ -2170,7 +2171,7 @@ Boolean Gremlins::GetFakeEvent()
 	{
 		EmEventPlayback::RecordKeyEvent (vchrLowBattery, vchrLowBattery, commandKeyMask);
 		StubAppEnqueueKey(vchrLowBattery, vchrLowBattery, commandKeyMask);
-		PRINTF ("--- Gremlin #%ld Gremlins::GetFakeEvent: posted key = vchrLowBattery, leaving", (long) number);
+		PRINTF ("--- Gremlin #%d Gremlins::GetFakeEvent: posted key = vchrLowBattery, leaving", number);
 		return true;
 	}
 
@@ -2205,8 +2206,8 @@ Boolean Gremlins::GetFakeEvent()
 									sysAppLaunchCmdNormalLaunch, NULL);
 					Errors::ThrowIfPalmError (err);
 
-					PRINTF ("--- Gremlin #%ld Gremlins::GetFakeEvent: switched to app %s, leaving",
-						(long) number, dbInfo.name);
+					PRINTF ("--- Gremlin #%d Gremlins::GetFakeEvent: switched to app %s, leaving",
+						number, dbInfo.name);
 
 					return true;
 				}
@@ -2224,12 +2225,12 @@ Boolean Gremlins::GetFakeEvent()
 	{
 		EmEventPlayback::RecordKeyEvent (vchrAutoOff, vchrAutoOff, commandKeyMask);
 		StubAppEnqueueKey(vchrAutoOff, vchrAutoOff, commandKeyMask);
-		PRINTF ("--- Gremlin #%ld Gremlins::GetFakeEvent: posted key = vchrAutoOff, leaving", (long) number);
+		PRINTF ("--- Gremlin #%d Gremlins::GetFakeEvent: posted key = vchrAutoOff, leaving", number);
 		return true;
 	}
 */
-	PRINTF ("--- Gremlin #%ld Gremlins::GetFakeEvent: exiting with no event.",
-			(long) number);
+	PRINTF ("--- Gremlin #%d Gremlins::GetFakeEvent: exiting with no event.",
+			number);
 
 	// If nothing happened fall out to generate a nilEvent	
 
@@ -2313,8 +2314,8 @@ void Gremlins::GetPenMovement()
 	StubAppEnqueuePt(&pen);
 #endif
 
-	PRINTF ("--- Gremlin #%ld Gremlins::GetPenMovement: pen = (%ld, %ld)",
-			(long) number, (long) pen.x, (long) pen.y);
+	PRINTF ("--- Gremlin #%d Gremlins::GetPenMovement: pen = (%d, %d)",
+			number, pen.x, pen.y);
 }
 
 
@@ -2331,6 +2332,6 @@ void Gremlins::GetPenMovement()
  *************************************************************/
 void Gremlins::BumpCounter()
 {
-	PRINTF ("--- Gremlin #%ld: bumping counter", (long) number);
+	PRINTF ("--- Gremlin #%d: bumping counter", number);
 	++counter;
 }

@@ -60,7 +60,7 @@
  ***********************************************************************/
 
 EmStreamFile::EmStreamFile (const EmFileRef& ref,
-							long openMode,
+							int32 openMode,
 							EmFileCreator creator,
 							EmFileType fileType) :
 	EmStream (),
@@ -201,7 +201,7 @@ EmStreamFile::GetMarker (void) const
 		this->Throw (EBADF);
 	}
 
-	long	pos;
+	int32	pos;
 	OSErr	err = ::GetFPos (fRefNum, &pos);
 	return pos;
 #else
@@ -261,7 +261,7 @@ EmStreamFile::GetLength (void) const
 		this->Throw (EBADF);
 	}
 
-	long	eof;
+	int32	eof;
 	OSErr	err = ::GetEOF (fRefNum, &eof);
 	return eof;
 #else
@@ -270,10 +270,10 @@ EmStreamFile::GetLength (void) const
 		this->Throw (EBADF);
 	}
 
-	long	cur = ftell (fStream);
+	int32	cur = ftell (fStream);
 	fseek (fStream, 0, SEEK_END);
 
-	long	length = ftell (fStream);
+	int32	length = ftell (fStream);
 	fseek (fStream, cur, SEEK_SET);
 
 	return length;
@@ -312,7 +312,7 @@ EmStreamFile::PutBytes (const void*	inBuffer,
 		return EINVAL;
 	}
 
-	long	count = inByteCount;
+	int32	count = inByteCount;
 	OSErr	err = ::FSWrite (fRefNum, &count, inBuffer);
 
 	return err;
@@ -369,7 +369,7 @@ EmStreamFile::GetBytes (void*	outBuffer,
 		return EINVAL;
 	}
 
-	long	count = inByteCount;
+	int32	count = inByteCount;
 	OSErr	err = ::FSRead (fRefNum, &count, outBuffer);
 
 	if (!err && fTextMode)
@@ -438,7 +438,7 @@ EmStreamFile::GetBytes (void*	outBuffer,
  ***********************************************************************/
 
 void			
-EmStreamFile::Open (const EmFileRef& ref, long openMode,
+EmStreamFile::Open (const EmFileRef& ref, int32 openMode,
 					EmFileCreator creator, EmFileType fileType)
 {
 #if USE_MAC_CALLS
@@ -482,7 +482,7 @@ EmStreamFile::Open (const EmFileRef& ref, long openMode,
 	
 	fTextMode = (openMode & kOpenText) != 0;
 #else
-	char*	kModes[] = { "r", "w", "a", "r+", "w+", "a+" };
+	const char*	kModes[] = { "r", "w", "a", "r+", "w+", "a+" };
 	string	mode (kModes[openMode & kOpenTypeMask]);
 
 	if ((openMode & kOpenText) != 0)

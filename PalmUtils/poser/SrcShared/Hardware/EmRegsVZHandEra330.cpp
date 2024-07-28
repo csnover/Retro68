@@ -588,14 +588,14 @@ void EmRegsVZHandEra330::SetSubBankHandlers(void)
 
     // SD support
 	this->SetHandler((ReadFunction)&EmRegsVZHandEra330::spiRxDRead,
-                         (WriteFunction)&EmRegsVZ::StdWrite,
+                         (WriteFunction)&EmRegsVZHandEra330::StdWrite,
 	                 addressof(spiRxD),
 	                 sizeof(UInt16));
-	this->SetHandler((ReadFunction)&EmRegsVZ::StdRead,
+	this->SetHandler((ReadFunction)&EmRegsVZHandEra330::StdRead,
                          (WriteFunction)&EmRegsVZHandEra330::spiTxDWrite,
 	                 addressof(spiTxD),
 	                 sizeof(UInt16));
-	this->SetHandler((ReadFunction)&EmRegsVZ::StdRead,
+	this->SetHandler((ReadFunction)&EmRegsVZHandEra330::StdRead,
                          (WriteFunction)&EmRegsVZHandEra330::spiCont1Write,
 	                 addressof(spiCont1),
 	                 sizeof(UInt16));

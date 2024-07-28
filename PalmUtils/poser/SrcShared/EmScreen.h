@@ -27,9 +27,9 @@ class EmScreenUpdateInfo
 		// returns true.
 
 		EmPixMap	fImage;			// LCD image
-		long		fFirstLine;		// First changed scanline
-		long		fLastLine;		// Last changed scanline + 1
-		long		fLeftMargin;	// If LCD is scrlled by some sub-byte amount,
+		int32		fFirstLine;		// First changed scanline
+		int32		fLastLine;		// Last changed scanline + 1
+		int32		fLeftMargin;	// If LCD is scrlled by some sub-byte amount,
 									// this contains that amount.
 		Bool		fLCDOn;			// True if LCD is on at all
 

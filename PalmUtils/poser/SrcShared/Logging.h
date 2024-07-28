@@ -36,31 +36,31 @@ class LogStreamInner
 								LogStreamInner	(const char* baseName);
 								~LogStreamInner	(void);
 
-		int						DumpHex			(const void*, long dataLen);
+		int						DumpHex			(const void*, int32 dataLen);
 		int						VPrintf			(const char* fmt, va_list args, Bool timestamp = true);
-		int						Write			(const void* buffer, long size, Bool timestamp = true);
+		int						Write			(const void* buffer, int32 size, Bool timestamp = true);
 
 		void					Clear			(void);
 
-		long					GetLogSize		(void);
-		void					SetLogSize		(long);
+		int32					GetLogSize		(void);
+		void					SetLogSize		(int32);
 
 		void					EnsureNewFile	(void);
 		void					DumpToFile		(void);
 
 	private:
-		void					DumpToFile			(EmStreamFile&, const char*, long size);
+		void					DumpToFile			(EmStreamFile&, const char*, int32 size);
 		EmFileRef				CreateFileReference	(void);
 		void					Timestamp			(void);
 		void					NewLine				(void);
-		void					Append				(const char* buffer, long size);
+		void					Append				(const char* buffer, int32 size);
 		void					TrimLeading			(void);
 
 		const char*				fBaseName;
-		long					fFileIndex;
+		int32					fFileIndex;
 
 		ByteDeque				fBuffer;
-		long					fBufferSize;
+		int32					fBufferSize;
 		Bool					fDiscarded;
 
 		int32					fLastGremlinEventCounter;
@@ -79,14 +79,14 @@ class LogStream
 
 		int						Printf			(const char* msg, ...);
 		int						PrintfNoTime	(const char* msg, ...);
-		int						DataPrintf		(const void*, long dataLen, const char* msg, ...);
+		int						DataPrintf		(const void*, int32 dataLen, const char* msg, ...);
 		int						VPrintf			(const char* fmt, va_list args);
-		int						Write			(const void* buffer, long size);
+		int						Write			(const void* buffer, int32 size);
 
 		void					Clear			(void);
 
-		long					GetLogSize		(void);
-		void					SetLogSize		(long);
+		int32					GetLogSize		(void);
+		void					SetLogSize		(int32);
 
 		void					EnsureNewFile	(void);
 		void					DumpToFile		(void);

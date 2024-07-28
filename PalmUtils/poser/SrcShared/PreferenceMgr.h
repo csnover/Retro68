@@ -89,7 +89,7 @@ class BasePreference
 {
 	public:
 								BasePreference		(PrefKeyType name, bool = true);
-								BasePreference		(long index, bool = true);
+								BasePreference		(int32 index, bool = true);
 		virtual 				~BasePreference 	(void);
 
 		bool					Loaded				(void)	{ return fLoaded; }
@@ -116,7 +116,7 @@ class Preference : public BasePreference
 {
 	public:
 								Preference			(PrefKeyType name, bool = true);
-								Preference			(long index, bool = true);
+								Preference			(int32 index, bool = true);
 		virtual 				~Preference 		(void);
 
 	// I would *like* to have these operators.	That way, I could pass in a
@@ -172,7 +172,7 @@ class Preferences
 
 	public:
 		void					PushPrefix			(const string& prefix);
-		void					PushPrefix			(long index);
+		void					PushPrefix			(int32 index);
 		void					PopPrefix			(void);
 
 		string					ExpandKey			(const string& name);

@@ -32,14 +32,14 @@ class EmHostTransportSerial
 		ErrCode					CloseCommPort		(void);
 
 		// Manage data coming in the host serial port.
-		void					PutIncomingData		(const void*, long&);
-		void					GetIncomingData		(void*, long&);
-		long					IncomingDataSize	(void);
+		void					PutIncomingData		(const void*, int32&);
+		void					GetIncomingData		(void*, int32&);
+		int32					IncomingDataSize	(void);
 
 		// Manage data going out the host serial port.
-		void					PutOutgoingData		(const void*, long&);
-		void					GetOutgoingData		(void*, long&);
-		long					OutgoingDataSize	(void);
+		void					PutOutgoingData		(const void*, int32&);
+		void					GetOutgoingData		(void*, int32&);
+		int32					OutgoingDataSize	(void);
 
 		static void*			CommRead			(void*);
 		static void*			CommWrite			(void*);

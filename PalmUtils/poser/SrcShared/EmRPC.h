@@ -36,7 +36,7 @@ class RPC
 		static ErrCode			HandleNewPacket 	(SLP&);
 
 		static Bool				HandlingPacket		(void);
-		static void				DeferCurrentPacket	(long timeout);
+		static void				DeferCurrentPacket	(int32 timeout);
 
 	private:
 		static void 			EventCallback		(CSocket* s, int event);

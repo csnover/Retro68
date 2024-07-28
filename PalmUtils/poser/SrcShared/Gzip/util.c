@@ -43,7 +43,11 @@ int copy(in, out)
     while (insize != 0 && (int)insize != EOF) {
 	write_buf(out, (char*)inbuf, insize);
 	bytes_out += insize;
+#if 0	// POSER
 	insize = read(in, (char*)inbuf, INBUFSIZ);
+#else
+	insize = read_buf((char*)inbuf, INBUFSIZ);
+#endif
     }
     if ((int)insize == EOF && errno != 0) {
 	read_error();

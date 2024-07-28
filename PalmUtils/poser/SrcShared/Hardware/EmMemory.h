@@ -22,8 +22,14 @@
 #include "Switches.h"			// WORDSWAP_MEMORY, UNALIGNED_LONG_ACCESS
 #include "EmTypes.h"			// uint32, etc.
 #include "EmAssert.h"			// EmAssert
+#ifdef __cplusplus
+#include "EmBankMapped.h"
+#endif
 
 #include "sysconfig.h"			// STATIC_INLINE
+
+#include <limits.h>
+#include <stddef.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -87,7 +93,7 @@ typedef struct EmAddressBank
 
 #else // ECM_DYNAMIC_PATCH
 
-	#define EmMemBankIndex(addr)			(((unsigned long)(addr)) >> 16)
+	#define EmMemBankIndex(addr)			(((uint32)(addr)) >> 16)
 
 	#define EmMemGetBank(addr)				(*((gDynEmMemBanksP)[EmMemBankIndex(addr)]))
 	#define EmMemPutBank(addr, b)			((gDynEmMemBanksP)[EmMemBankIndex(addr)] = (b))
@@ -220,7 +226,7 @@ STATIC_INLINE uint16 EmMemDoGet16 (void* a)
 STATIC_INLINE uint8 EmMemDoGet8 (void* a)
 {
 #if WORDSWAP_MEMORY
-	return *(uint8*) ((long) a ^ 1);
+	return *(uint8*) ((size_t) a ^ 1);
 #else
 	return *(uint8*) a;
 #endif
@@ -256,7 +262,7 @@ STATIC_INLINE void EmMemDoPut16 (void* a, uint16 v)
 STATIC_INLINE void EmMemDoPut8 (void* a, uint8 v)
 {
 #if WORDSWAP_MEMORY
-	*(uint8*) ((long) a ^ 1) = v;
+	*(uint8*) ((size_t) a ^ 1) = v;
 #else
 	*(uint8*) a = v;
 #endif
@@ -350,7 +356,7 @@ enum
 	
 	kLastEnum
 };
-extern long				gMemoryAccess[];
+extern int32				gMemoryAccess[];
 #endif
 
 struct EmAddressBank;
@@ -412,9 +418,31 @@ class CEnableFullAccess
 		Bool					fOldProfilingCounted;
 #endif
 
-		static long				fgAccessCount;
+		static int32				fgAccessCount;
 };
 
+// The emulator uses internal Palm OS directly sometimes even though ‘pointers’
+// in the structs are actually emuptr values. These are 64-bit ‘safe’ routines
+// for doing the smuggling that was previously performed using direct casts.
+inline emuptr EmMemPtr(const void *ptr) {
+	size_t addr = size_t(ptr);
+	EmAssert(addr <= UINT32_MAX);
+	return addr;
+}
+
+template <typename Fn>
+inline emuptr EmMemPtrFn(Fn fn) {
+	union { Fn fn; const void *ptr; } cursed;
+	cursed.fn = fn;
+	EmAssert((size_t) cursed.ptr <= UINT32_MAX);
+	return EmMemPtr(cursed.ptr);
+}
+
+template <typename T>
+inline T EmMemFakeT(emuptr addr) {
+	EmAssert(addr <= UINT32_MAX);
+	return reinterpret_cast<T>(addr);
+}
 
 // Std C Library-ish routines for manipulating data
 // in emulated memory.

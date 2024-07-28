@@ -16,12 +16,14 @@
 
 #include "EmCommon.h"
 #include "EmPatchState.h"
+#include <cstddef>
 
 #include "EmApplication.h"		// ScheduleQuit
 #include "EmMemory.h"			// EmMem_strcpy
 #include "Miscellaneous.h"		// SysTrapIndex, SystemCallContext
 #include "PreferenceMgr.h"		// Preference, kPrefKeyReportMemMgrLeaks
 #include "ROMStubs.h"
+#include "EmPalmStructs.h"
 
 
 EmStream& operator >> (EmStream& inStream, EmStackFrame& outInfo);
@@ -97,7 +99,7 @@ Err EmPatchState::Reset (void)
 
 
 
-Err EmPatchState::Save (EmStreamChunk &s, long streamFmtVer, PersistencePhase pass)
+Err EmPatchState::Save (EmStreamChunk &s, int32 streamFmtVer, PersistencePhase pass)
 {
 	UNUSED_PARAM (streamFmtVer);
 	
@@ -115,7 +117,7 @@ Err EmPatchState::Save (EmStreamChunk &s, long streamFmtVer, PersistencePhase pa
 
 		s << fgData.fNextAppCardNo;
 		s << fgData.fNextAppDbID;
-		s << (long) 0;	// was gQuitStage;
+		s << (int32) 0;	// was gQuitStage;
 
 		SaveCurAppInfo (s);
 	}
@@ -146,11 +148,11 @@ Err EmPatchState::Save (EmStreamChunk &s, long streamFmtVer, PersistencePhase pa
 }
 	
 
-Err EmPatchState::Load (EmStreamChunk &s, long streamFmtVer, PersistencePhase pass)
+Err EmPatchState::Load (EmStreamChunk &s, int32 streamFmtVer, PersistencePhase pass)
 {
 	if (pass == PSPersistAll || pass == PSPersistStep1)
 	{
-		long unused;
+		int32 unused;
 
 		s >> fgData.fUIInitialized;
 		s >> fgData.fHeapInitialized;
@@ -220,13 +222,13 @@ Err EmPatchState::Load (EmStreamChunk &s, long streamFmtVer, PersistencePhase pa
 
 Err EmPatchState::SaveCurAppInfo (EmStreamChunk &s)
 {
-	s << (long) fgData.fCurAppInfo.size ();
+	s << (int32) fgData.fCurAppInfo.size ();
 
 	EmuAppInfoList::iterator	iter;
 	for (iter = fgData.fCurAppInfo.begin (); iter != fgData.fCurAppInfo.end (); ++iter)
 	{
 		s << iter->fCmd;
-		s << (long) iter->fDB;
+		s << EmMemPtr(iter->fDB);
 		s << iter->fCardNo;
 		s << iter->fDBID;
 		s << iter->fMemOwnerID;
@@ -244,11 +246,11 @@ Err EmPatchState::LoadCurAppInfo (EmStreamChunk &s)
 {
 	fgData.fCurAppInfo.clear ();
 
-	long	numApps;
+	int32	numApps;
 	
 	s >> numApps;
 
-	long	ii;
+	int32	ii;
 	
 	for (ii = 0; ii < numApps; ++ii)
 	{
@@ -256,10 +258,10 @@ Err EmPatchState::LoadCurAppInfo (EmStreamChunk &s)
 
 		s >> info.fCmd;
 		
-		long		temp;
+		int32		temp;
 
 		s >> temp;	
-		info.fDB = (DmOpenRef) temp;
+		info.fDB = EmMemFakeT<DmOpenRef>(temp);
 		
 		
 		s >> info.fCardNo;
@@ -807,11 +809,13 @@ Err EmPatchState::CollectCurrentAppInfo (emuptr appInfoP, EmuAppInfo &newAppInfo
 {
 	memset (&newAppInfo, 0, sizeof (newAppInfo));
 
+	EmAliasSysAppInfoType<PAS> appInfo(appInfoP);
+
 	// Scarf some information out of the app info block.
 
-	newAppInfo.fDB			= (DmOpenRef) EmMemGet32 (appInfoP + offsetof (SysAppInfoType, dbP));
-	newAppInfo.fStackP		= EmMemGet32 (appInfoP + offsetof (SysAppInfoType, stackP));
-	newAppInfo.fMemOwnerID	= EmMemGet16 (appInfoP + offsetof (SysAppInfoType, memOwnerID));
+	newAppInfo.fDB			= EmMemFakeT<DmOpenRef>(appInfo.dbP);
+	newAppInfo.fStackP		= appInfo.stackP;
+	newAppInfo.fMemOwnerID	= appInfo.memOwnerID;
 
 	// Determine the current stack range.  Under Palm OS 3.0 and later, this information
 	// is in the DatabaseInfo block.  Under earlier OSes, we only get the low-end of the stack
@@ -823,7 +827,7 @@ Err EmPatchState::CollectCurrentAppInfo (emuptr appInfoP, EmuAppInfo &newAppInfo
 	{
 		if (newAppInfo.fStackP)
 		{
-			UInt32	stackSize = ::MemPtrSize ((MemPtr) newAppInfo.fStackP);
+			UInt32	stackSize = ::MemPtrSize (EmMemFakeT<MemPtr>(newAppInfo.fStackP));
 			if (stackSize)
 			{
 				newAppInfo.fStackEndP = newAppInfo.fStackP + stackSize;
@@ -836,7 +840,7 @@ Err EmPatchState::CollectCurrentAppInfo (emuptr appInfoP, EmuAppInfo &newAppInfo
 	}
 	else
 	{
-		newAppInfo.fStackEndP = EmMemGet32 (appInfoP + offsetof (SysAppInfoType, stackEndP));
+		newAppInfo.fStackEndP = appInfo.stackEndP;
 	}
 
 	newAppInfo.fStackSize = newAppInfo.fStackEndP - newAppInfo.fStackP;
@@ -877,7 +881,7 @@ Err EmPatchState::CollectCurrentAppInfo (emuptr appInfoP, EmuAppInfo &newAppInfo
 		strH = ::DmGet1Resource (ainRsc, ainID);
 		if (strH)
 		{
-			emuptr strP = (emuptr) ::MemHandleLock (strH);
+			emuptr strP = EmMemPtr(::MemHandleLock (strH));
 			EmMem_strcpy (appName, strP);
 			::MemHandleUnlock (strH);
 			::DmReleaseResource (strH);
@@ -890,7 +894,7 @@ Err EmPatchState::CollectCurrentAppInfo (emuptr appInfoP, EmuAppInfo &newAppInfo
 			strH = ::DmGet1Resource (verRsc, appVersionAlternateID);
 		if (strH)
 		{
-			emuptr strP = (emuptr) ::MemHandleLock (strH);
+			emuptr strP = EmMemPtr(::MemHandleLock (strH));
 			EmMem_strcpy (appVersion, strP);
 			::MemHandleUnlock (strH);
 			::DmReleaseResource (strH);

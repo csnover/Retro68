@@ -98,14 +98,13 @@
 
 				EmAliasEventType<A>& operator= (const bool);
 				EmAliasEventType<A>& operator= (const char);
-				EmAliasEventType<A>& operator= (const unsigned char);
-				EmAliasEventType<A>& operator= (const unsigned short);
-				EmAliasEventType<A>& operator= (const unsigned int);
-				EmAliasEventType<A>& operator= (const unsigned long);
-				EmAliasEventType<A>& operator= (const signed char);
-				EmAliasEventType<A>& operator= (const signed short);
-				EmAliasEventType<A>& operator= (const signed int);
-				EmAliasEventType<A>& operator= (const signed long);
+				EmAliasEventType<A>& operator= (const uint8);
+				EmAliasEventType<A>& operator= (const uint16);
+				EmAliasEventType<A>& operator= (const uint32);
+				EmAliasEventType<A>& operator= (const uint32);
+				EmAliasEventType<A>& operator= (const int8);
+				EmAliasEventType<A>& operator= (const int16);
+				EmAliasEventType<A>& operator= (const int32);
 				EmAliasEventType<A>& operator= (const void*);
 				
 				ptr_type fPtr;
@@ -170,14 +169,13 @@
 			private:
 				EmProxyEventType& operator= (const bool);
 				EmProxyEventType& operator= (const char);
-				EmProxyEventType& operator= (const unsigned char);
-				EmProxyEventType& operator= (const unsigned short);
-				EmProxyEventType& operator= (const unsigned int);
-				EmProxyEventType& operator= (const unsigned long);
-				EmProxyEventType& operator= (const signed char);
-				EmProxyEventType& operator= (const signed short);
-				EmProxyEventType& operator= (const signed int);
-				EmProxyEventType& operator= (const signed long);
+				EmProxyEventType& operator= (const uint8);
+				EmProxyEventType& operator= (const uint16);
+				EmProxyEventType& operator= (const uint32);
+				EmProxyEventType& operator= (const uint32);
+				EmProxyEventType& operator= (const int8);
+				EmProxyEventType& operator= (const int16);
+				EmProxyEventType& operator= (const int32);
 				EmProxyEventType<& operator= (const void*);
 				
 				char fLocalData[24];
@@ -287,35 +285,35 @@ void	BadSetter (void);
 #else
 
 #define PUT_BE_LONG(p, v)	 do { \
-		((unsigned char*)(p))[0] = (unsigned char)(((unsigned long)(v)) >> 24);	\
-		((unsigned char*)(p))[1] = (unsigned char)(((unsigned long)(v)) >> 16);	\
-		((unsigned char*)(p))[2] = (unsigned char)(((unsigned long)(v)) >>  8);	\
-		((unsigned char*)(p))[3] = (unsigned char)(((unsigned long)(v)) >>  0);	\
+		((uint8*)(p))[0] = (uint8)(((uint32)(v)) >> 24);	\
+		((uint8*)(p))[1] = (uint8)(((uint32)(v)) >> 16);	\
+		((uint8*)(p))[2] = (uint8)(((uint32)(v)) >>  8);	\
+		((uint8*)(p))[3] = (uint8)(((uint32)(v)) >>  0);	\
 		} while(0)
 
 #define PUT_BE_SHORT(p, v)	 do { \
-		((unsigned char*)(p))[0] = (unsigned char)(((unsigned short)(v)) >> 8);	\
-		((unsigned char*)(p))[1] = (unsigned char)(((unsigned short)(v)) >> 0);	\
+		((uint8*)(p))[0] = (uint8)(((uint16)(v)) >> 8);	\
+		((uint8*)(p))[1] = (uint8)(((uint16)(v)) >> 0);	\
 		} while(0)
 
 #define PUT_BE_BYTE(p, v)	 do { \
-		((unsigned char*)(p))[0] = (unsigned char)(v);	\
+		((uint8*)(p))[0] = (uint8)(v);	\
 		} while(0)
 
-#define GET_BE_LONG(p)	(unsigned long)(\
-		(((unsigned long)((unsigned char*)(p))[0]) << 24) |	\
-		(((unsigned long)((unsigned char*)(p))[1]) << 16) |	\
-		(((unsigned long)((unsigned char*)(p))[2]) <<  8) |	\
-		(((unsigned long)((unsigned char*)(p))[3]) <<  0)	\
+#define GET_BE_LONG(p)	(uint32)(\
+		(((uint32)((uint8*)(p))[0]) << 24) |	\
+		(((uint32)((uint8*)(p))[1]) << 16) |	\
+		(((uint32)((uint8*)(p))[2]) <<  8) |	\
+		(((uint32)((uint8*)(p))[3]) <<  0)	\
 		)
 
-#define GET_BE_SHORT(p)	(unsigned short)(\
-		(((unsigned short)((unsigned char*)(p))[0]) <<  8) |	\
-		(((unsigned short)((unsigned char*)(p))[1]) <<  0)	\
+#define GET_BE_SHORT(p)	(uint16)(\
+		(((uint16)((uint8*)(p))[0]) <<  8) |	\
+		(((uint16)((uint8*)(p))[1]) <<  0)	\
 		)
 
-#define GET_BE_BYTE(p)	(unsigned char)(\
-		(((unsigned char)((unsigned char*)(p))[0]) <<  0)	\
+#define GET_BE_BYTE(p)	(uint8)(\
+		(((uint8)((uint8*)(p))[0]) <<  0)	\
 		)
 
 #endif
@@ -345,7 +343,7 @@ class LAS
 };
 
 
-// Provide methods for getting and setting Big Endian data in Palm Addres Space
+// Provide methods for getting and setting Big Endian data in Palm Address Space
 
 class PAS
 {
@@ -373,7 +371,7 @@ class PAS
 // Macro for creating the class that wraps up simple types.
 // ======================================================================
 
-#define DECLARE_SCALAR_ALIAS(type, asType)											\
+#define DECLARE_SCALAR_ALIAS(type, asType, EXTRA_ASSIGNMENT_OPERATORS)				\
 																					\
 	template <class A>																\
 	class EmAlias##type																\
@@ -390,17 +388,15 @@ class PAS
 			EmAlias##type<A>&	operator= (const bool);								\
 			EmAlias##type<A>&	operator= (const char);								\
 																					\
-			EmAlias##type<A>&	operator= (const unsigned char);					\
-			EmAlias##type<A>&	operator= (const unsigned short);					\
-			EmAlias##type<A>&	operator= (const unsigned int);						\
-			EmAlias##type<A>&	operator= (const unsigned long);					\
+			EmAlias##type<A>&	operator= (const uint8);							\
+			EmAlias##type<A>&	operator= (const uint16);							\
+			EmAlias##type<A>&	operator= (const uint32);							\
 																					\
-			EmAlias##type<A>&	operator= (const signed char);						\
-			EmAlias##type<A>&	operator= (const signed short);						\
-			EmAlias##type<A>&	operator= (const signed int);						\
-			EmAlias##type<A>&	operator= (const signed long);						\
+			EmAlias##type<A>&	operator= (const int8);								\
+			EmAlias##type<A>&	operator= (const int16);							\
+			EmAlias##type<A>&	operator= (const int32);							\
 																					\
-			EmAlias##type<A>&	operator= (const void*);							\
+			EXTRA_ASSIGNMENT_OPERATORS												\
 			EmAlias##type<A>&	operator= (const EmAlias##type<A>&);				\
 																					\
 								operator type (void) const;							\
@@ -414,7 +410,7 @@ class PAS
 			ptr_type			fPtr;												\
 	};
 
-#define DECLARE_SCALAR_PROXY(type, asType)											\
+#define DECLARE_SCALAR_PROXY(type, asType, EXTRA_ASSIGNMENT_OPERATORS)				\
 																					\
 	class EmProxy##type																\
 	{																				\
@@ -430,17 +426,15 @@ class PAS
 			EmProxy##type&		operator= (const bool);								\
 			EmProxy##type&		operator= (const char);								\
 																					\
-			EmProxy##type&		operator= (const unsigned char);					\
-			EmProxy##type&		operator= (const unsigned short);					\
-			EmProxy##type&		operator= (const unsigned int);						\
-			EmProxy##type&		operator= (const unsigned long);					\
+			EmProxy##type&		operator= (const uint8);							\
+			EmProxy##type&		operator= (const uint16);							\
+			EmProxy##type&		operator= (const uint32);							\
 																					\
-			EmProxy##type&		operator= (const signed char);						\
-			EmProxy##type&		operator= (const signed short);						\
-			EmProxy##type&		operator= (const signed int);						\
-			EmProxy##type&		operator= (const signed long);						\
+			EmProxy##type&		operator= (const int8);								\
+			EmProxy##type&		operator= (const int16);							\
+			EmProxy##type&		operator= (const int32);							\
 																					\
-			EmProxy##type&		operator= (const void*);							\
+			EXTRA_ASSIGNMENT_OPERATORS												\
 			EmProxy##type&		operator= (const EmProxy##type&);					\
 																					\
 								operator type (void) const;							\
@@ -455,8 +449,12 @@ class PAS
 	};
 
 #define DECLARE_SCALAR_CLASSES(type, asType)										\
-	DECLARE_SCALAR_ALIAS(type, asType)												\
-	DECLARE_SCALAR_PROXY(type, asType)
+	DECLARE_SCALAR_ALIAS(type, asType, /* No extra operator= */)					\
+	DECLARE_SCALAR_PROXY(type, asType, /* No extra operator= */)
+
+#define DECLARE_SCALAR_CLASSES_WITH_VOIDPTR(type, asType)							\
+	DECLARE_SCALAR_ALIAS(type, asType, EmAlias##type<A>& operator= (const void*);)	\
+	DECLARE_SCALAR_PROXY(type, asType, EmProxy##type& operator= (const void*);)
 
 #define DEFINE_SCALAR_ALIAS(type, asType)											\
 																					\
@@ -480,15 +478,12 @@ class PAS
 																					\
 	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, bool)					\
 	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, char)					\
-	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, signed char)			\
-	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, signed short)			\
-	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, signed int)				\
-	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, signed long)			\
-	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, unsigned char)			\
-	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, unsigned short)			\
-	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, unsigned int)			\
-	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, unsigned long)			\
-	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, const void*)			\
+	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, int8)					\
+	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, int16)					\
+	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, int32)					\
+	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, uint8)					\
+	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, uint16)					\
+	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, uint32)					\
 	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, const EmAlias##type<A>&)\
 																					\
 	template <class A>																\
@@ -509,13 +504,13 @@ class PAS
 	template <class A>																\
 	INLINE_ EmAlias##type<A> EmAlias##type<A>::operator [] (int index)				\
 	{																				\
-		return EmAlias##type<A> ((ptr_type) (((char*) this->GetPtr ()) + index * this->GetSize ()));	\
+		return EmAlias##type<A> ((ptr_type) (((size_t) this->GetPtr ()) + index * this->GetSize ()));	\
 	}																				\
 																					\
 	template <class A>																\
 	INLINE_ const EmAlias##type<A> EmAlias##type<A>::operator [] (int index) const	\
 	{																				\
-		return EmAlias##type<A> ((ptr_type) (((char*) this->GetPtr ()) + index * this->GetSize ()));	\
+		return EmAlias##type<A> ((ptr_type) (((size_t) this->GetPtr ()) + index * this->GetSize ()));	\
 	}
 
 #define DEFINE_SCALAR_PROXY(type, asType)											\
@@ -531,15 +526,12 @@ class PAS
 																					\
 	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, bool)					\
 	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, char)					\
-	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, signed char)			\
-	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, signed short)			\
-	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, signed int)				\
-	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, signed long)			\
-	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, unsigned char)			\
-	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, unsigned short)			\
-	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, unsigned int)			\
-	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, unsigned long)			\
-	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, const void*)			\
+	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, int8)					\
+	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, int16)					\
+	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, int32)					\
+	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, uint8)					\
+	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, uint16)					\
+	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, uint32)					\
 	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, const EmProxy##type&)	\
 																					\
 	INLINE_ EmProxy##type::operator type (void) const								\
@@ -570,32 +562,44 @@ class PAS
 	DEFINE_SCALAR_ALIAS(type, asType)												\
 	DEFINE_SCALAR_PROXY(type, asType)
 
+#define DEFINE_SCALAR_CLASSES_WITH_VOIDPTR(type, asType)							\
+	DEFINE_SCALAR_ALIAS(type, asType)												\
+	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR_CONV(type, asType, const void*, EmMemPtr)			\
+	DEFINE_SCALAR_PROXY(type, asType)												\
+	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR_CONV(type, asType, const void*, EmMemPtr)
+
 // Macro that creates the implementation for an assignment operator for simple types.
 
-#define MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, rhs_type)			\
+#define MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR_CONV(type, asType, rhs_type, conv)\
 																					\
 	template <class A>																\
 	INLINE_ EmAlias##type<A>& EmAlias##type<A>::operator= (rhs_type val)			\
 	{																				\
-		if (sizeof (asType) == 1)		A::PutByte (this->GetPtr (), (unsigned char) (asType) val);		\
-		else if (sizeof (asType) == 2)	A::PutWord (this->GetPtr (), (unsigned short) (asType) val);	\
-		else if (sizeof (asType) == 4)	A::PutLong (this->GetPtr (), (unsigned long) (asType) val);		\
+		if (sizeof (asType) == 1)		A::PutByte (this->GetPtr (), (uint8) (asType) conv(val));		\
+		else if (sizeof (asType) == 2)	A::PutWord (this->GetPtr (), (uint16) (asType) conv(val));	\
+		else if (sizeof (asType) == 4)	A::PutLong (this->GetPtr (), (uint32) (asType) conv(val));		\
 		else BadSetter ();															\
 																					\
 		return *this;																\
 	}
 
-#define MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, rhs_type)			\
+#define MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR_CONV(type, asType, rhs_type, conv)\
 																					\
 	INLINE_ EmProxy##type& EmProxy##type::operator= (rhs_type val)					\
 	{																				\
-		if (sizeof (asType) == 1)		LAS::PutByte (this->GetPtr (), (unsigned char) (asType) val);	\
-		else if (sizeof (asType) == 2)	LAS::PutWord (this->GetPtr (), (unsigned short) (asType) val);	\
-		else if (sizeof (asType) == 4)	LAS::PutLong (this->GetPtr (), (unsigned long) (asType) val);	\
+		if (sizeof (asType) == 1)		LAS::PutByte (this->GetPtr (), (uint8) (asType) conv(val));	\
+		else if (sizeof (asType) == 2)	LAS::PutWord (this->GetPtr (), (uint16) (asType) conv(val));	\
+		else if (sizeof (asType) == 4)	LAS::PutLong (this->GetPtr (), (uint32) (asType) conv(val));	\
 		else BadSetter ();															\
 																					\
 		return *this;																\
 	}
+
+#define MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR(type, asType, rhs_type)			\
+	MAKE_ONE_SCALAR_ALIAS_ASSIGNMENT_OPERATOR_CONV(type, asType, rhs_type, /* no conversion function */)
+
+#define MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR(type, asType, rhs_type)			\
+	MAKE_ONE_SCALAR_PROXY_ASSIGNMENT_OPERATOR_CONV(type, asType, rhs_type, /* no conversion function */)
 
 
 // ======================================================================
@@ -700,13 +704,13 @@ class PAS
 	template <class A>																\
 	INLINE_ EmAlias##type<A> EmAlias##type<A>::operator [] (int index)				\
 	{																				\
-		return EmAlias##type<A> ((ptr_type) (((char*) this->GetPtr ()) + index * this->GetSize ()));	\
+		return EmAlias##type<A> ((ptr_type) (((size_t) this->GetPtr ()) + index * this->GetSize ()));	\
 	}																				\
 																					\
 	template <class A>																\
 	INLINE_ const EmAlias##type<A> EmAlias##type<A>::operator [] (int index) const	\
 	{																				\
-		return EmAlias##type<A> ((ptr_type) (((char*) this->GetPtr ()) + index * this->GetSize ()));	\
+		return EmAlias##type<A> ((ptr_type) (((size_t) this->GetPtr ()) + index * this->GetSize ()));	\
 	}
 
 #define DEFINE_STRUCT_PROXY(type, size, FOR_EACH_FIELD)								\
@@ -770,12 +774,12 @@ class PAS
 
 #define MAKE_MEMBER_INITIALIZER_ALIAS(field_offset, field_type, field_name)			\
 																					\
-	, field_name((ptr_type) (((char*) fPtr) + field_offset))
+	, field_name((ptr_type) (((size_t) fPtr) + field_offset))
 
 
 #define MAKE_MEMBER_INITIALIZER_PROXY(field_offset, field_type, field_name)			\
 																					\
-	, field_name((ptr_type) (((char*) this->GetPtr ()) + field_offset))
+	, field_name((ptr_type) (((size_t) this->GetPtr ()) + field_offset))
 
 
 
@@ -799,7 +803,7 @@ typedef uint8	ScrOperation;
 	DO_TO_SCALAR (ControlStyleType, uint8)			\
 	DO_TO_SCALAR (Coord, uint16)					\
 	DO_TO_SCALAR (DmResID, uint16)					\
-	DO_TO_SCALAR (emuptr, emuptr)					\
+	DO_TO_SCALAR##_WITH_VOIDPTR (emuptr, emuptr)	\
 	DO_TO_SCALAR (Err, uint16)						\
 	DO_TO_SCALAR (FontID, uint8)					\
 	DO_TO_SCALAR (FormObjectKind, uint8)			\
@@ -883,6 +887,7 @@ typedef uint8	ScrOperation;
 	FOR_LowMemHdrType_STRUCT (DO_TO_STRUCT)						\
 	FOR_SysAppInfoType_STRUCT (DO_TO_STRUCT)					\
 	FOR_SysLibTblEntryType_STRUCT (DO_TO_STRUCT)				\
+	FOR_SysLibTblEntryTypeV10_STRUCT (DO_TO_STRUCT)				\
 	FOR_PenBtnInfoType_STRUCT (DO_TO_STRUCT)					\
 	FOR_SndCommandType_STRUCT (DO_TO_STRUCT)					\
 																\
@@ -890,6 +895,7 @@ typedef uint8	ScrOperation;
 	FOR_kernel_info_semaphore_STRUCT (DO_TO_STRUCT)				\
 	FOR_kernel_info_timer_STRUCT (DO_TO_STRUCT)					\
 	FOR_SysKernelInfoType_STRUCT (DO_TO_STRUCT)					\
+	FOR_SysEvtMgrGlobalsType_STRUCT (DO_TO_STRUCT)				\
 
 
 #define FOR_EACH_STRUCT_6(DO_TO_STRUCT)							\

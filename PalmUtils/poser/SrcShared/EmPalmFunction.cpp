@@ -996,13 +996,17 @@ emuptr GetLibFunctionAddress (uint16 trapWord, UInt16 refNum, Bool digDeep)
 
 	if (EmPatchState::OSMajorVersion () > 1)
 	{
-		libEntry		= sysLibTableP + refNum * sizeof (SysLibTblEntryType);
-		dispatchTblP	= EmMemGet32 (libEntry + offsetof (SysLibTblEntryType, dispatchTblP));
+		libEntry		= sysLibTableP + refNum *
+			EmAliasSysLibTblEntryType<PAS>::GetSize ();
+		dispatchTblP	= EmMemGet32 (libEntry +
+			EmAliasSysLibTblEntryType<PAS>::offsetof_dispatchTblP ());
 	}
 	else
 	{
-		libEntry		= sysLibTableP + refNum * sizeof (SysLibTblEntryTypeV10);
-		dispatchTblP	= EmMemGet32 (libEntry + offsetof (SysLibTblEntryTypeV10, dispatchTblP));
+		libEntry		= sysLibTableP + refNum *
+			EmAliasSysLibTblEntryTypeV10<PAS>::GetSize ();
+		dispatchTblP	= EmMemGet32 (libEntry +
+			EmAliasSysLibTblEntryTypeV10<PAS>::offsetof_dispatchTblP ());
 	}
 
 	// Validate the dispatch number.  See if the library is one that
@@ -1550,7 +1554,7 @@ void FindTrapName (uint16 trapWord, char* nameP, uint32 extra, Bool digDeep)
 
 void FindFunctionName (emuptr addr, char* nameP, 
 			emuptr* startAddrP, emuptr* endAddrP,
-			long nameCapacity)
+			int32 nameCapacity)
 {
 	// Get the start address only if requested.
 
@@ -1770,7 +1774,7 @@ Bool EndOfFunctionSequence (emuptr addr)
  *
  ***********************************************************************/
 
-void GetMacsbugInfo (emuptr eof, char* name, long nameCapacity, emuptr* sof)
+void GetMacsbugInfo (emuptr eof, char* name, int32 nameCapacity, emuptr* sof)
 {
 	uint8	length;
 	Bool	isFixed;

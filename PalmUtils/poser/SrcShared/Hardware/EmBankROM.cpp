@@ -583,7 +583,7 @@ void EmBankROM::AddOpcodeCycles (void)
 //		¥ EmBankROM::AddressError
 // ---------------------------------------------------------------------------
 
-void EmBankROM::AddressError (emuptr address, long size, Bool forRead)
+void EmBankROM::AddressError (emuptr address, int32 size, Bool forRead)
 {
 	EmAssert (gCPU68K);
 	gCPU68K->AddressError (address, size, forRead);
@@ -594,7 +594,7 @@ void EmBankROM::AddressError (emuptr address, long size, Bool forRead)
 //		¥ EmBankROM::InvalidAccess
 // ---------------------------------------------------------------------------
 
-void EmBankROM::InvalidAccess (emuptr address, long size, Bool forRead)
+void EmBankROM::InvalidAccess (emuptr address, int32 size, Bool forRead)
 {
 	EmAssert (gSession);
 	gSession->ScheduleDeferredError (new EmDeferredErrROM (address, size, forRead));
@@ -618,7 +618,7 @@ void EmBankROM::LoadROM (EmStream& hROM)
 {
 	// Make sure the file is big enough to have a card header.
 
-	if (hROM.GetLength() < (long) EmProxyCardHeaderType::GetSize ())
+	if (hROM.GetLength() < (int32) EmProxyCardHeaderType::GetSize ())
 		Errors::Throw (kError_BadROM);
 
 	// Read the card header.
@@ -1297,14 +1297,14 @@ void EmBankFlash::SetWord (emuptr address, uint32 value)
 				}
 #endif
 
-				const unsigned long kSector1Start	= 0x10C00000;
-				const unsigned long kSector1Size	= 0x00004000;
-				const unsigned long kSector2Start	= 0x10C04000;
-				const unsigned long kSector2Size	= 0x00002000;
-				const unsigned long kSector3Start	= 0x10C06000;
-				const unsigned long kSector3Size	= 0x00002000;
-				const unsigned long kSector4Start	= 0x10C08000;
-				const unsigned long kSector4Size	= 0x00008000;
+				const uint32 kSector1Start	= 0x10C00000;
+				const uint32 kSector1Size	= 0x00004000;
+				const uint32 kSector2Start	= 0x10C04000;
+				const uint32 kSector2Size	= 0x00002000;
+				const uint32 kSector3Start	= 0x10C06000;
+				const uint32 kSector3Size	= 0x00002000;
+				const uint32 kSector4Start	= 0x10C08000;
+				const uint32 kSector4Size	= 0x00008000;
 
 				CEnableFullAccess	munge;
 

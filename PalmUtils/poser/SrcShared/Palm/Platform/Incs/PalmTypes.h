@@ -62,12 +62,12 @@
 // Fixed size data types
 typedef signed char		Int8;
 typedef signed short		Int16;	
-typedef signed long		Int32;
+typedef signed int		Int32;
 
 #if __DEFINE_TYPES_
 typedef unsigned char	UInt8;
 typedef unsigned short  UInt16;
-typedef unsigned long   UInt32;
+typedef unsigned int   UInt32;
 #endif
 
 
@@ -91,7 +91,7 @@ typedef struct _opaque *MemHandle;	// global handle
 
 
 #if __DEFINE_TYPES_						 
-typedef Int32 (*ProcPtr)();
+typedef Int32 (*ProcPtr)(void);
 #endif
 
 

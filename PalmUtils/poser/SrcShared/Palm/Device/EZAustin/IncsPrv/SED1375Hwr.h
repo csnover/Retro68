@@ -75,7 +75,7 @@ typedef volatile SED1375RegsType *SED1375RegsPtr;
 //-----------------------------------------------------------------------
 #define sed1375BaseAddress								0x1F000000
 #define sed1375RegisterOffset 						0x1FFE0
-#define sed1375RegsAddr									((UInt8 *)sed1375BaseAddress + sed1375RegisterOffset)
+#define sed1375RegsAddr									(sed1375BaseAddress + sed1375RegisterOffset)
 
 #define sed1375VideoMemStart							sed1375BaseAddress
 #define sed1375VideoMemSize							81920		// 80K of memory for VRAM and CLUT's

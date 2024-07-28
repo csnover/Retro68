@@ -47,14 +47,14 @@ class EmFileImport
 		ErrCode					Continue				(void);
 		ErrCode					Cancel					(void);
 		Bool					Done					(void);
-		long					GetProgress				(void);
+		int32					GetProgress				(void);
 		LocalID					GetLocalID				(void);
 
 		void					SetResult				(Err);
 		void					SetResult				(ErrCode);
 		void					SetDone					(void);
 
-		static long				CalculateProgressMax	(const EmFileRefList&, EmFileImportMethod method);
+		static int32				CalculateProgressMax	(const EmFileRefList&, EmFileImportMethod method);
 
 	private:
 		void					IncrementalInstall		(void);
@@ -75,7 +75,7 @@ class EmFileImport
 	private:
 		Bool					fUsingExgMgr;
 		Bool					fGotoWhenDone;
-		long					fState;
+		int32					fState;
 		ErrCode					fError;
 		EmStream&				fStream;
 
@@ -86,11 +86,11 @@ class EmFileImport
 
 		// Fields for homebrew installer
 		void*					fFileBuffer;
-		long					fFileBufferSize;
+		int32					fFileBufferSize;
 		LocalID					fDBID;
 		UInt16					fCardNo;
 		DmOpenRef				fOpenID;
-		long					fCurrentEntry;
+		int32					fCurrentEntry;
 };
 
 #endif /* EMFILEIMPORT_H */

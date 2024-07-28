@@ -53,9 +53,9 @@ class ChunkFile
 
 		typedef uint32	Tag;
 
-//		static const long		kChunkNotFound = -1;	// VC++ is a bit medieval here...
+//		static const int32		kChunkNotFound = -1;	// VC++ is a bit medieval here...
 		enum { kChunkNotFound = -1 };
-		long					FindChunk		(Tag tag);	// Returns chunk size
+		int32					FindChunk		(Tag tag);	// Returns chunk size
 
 		Bool					ReadChunk		(int index, Tag& tag, Chunk&);
 		Bool					ReadChunk		(Tag tag, Chunk&);
@@ -91,20 +91,20 @@ class Chunk
 {
 	public:
 								Chunk			(void);
-								Chunk			(long inLength);
+								Chunk			(int32 inLength);
 								Chunk			(const Chunk&);
 								~Chunk			(void);
 
 		Chunk&					operator=		(const Chunk&);
 
 		void*					GetPointer		(void) const;
-		long					GetLength		(void) const;
-		void					SetLength		(long inLength);
+		int32					GetLength		(void) const;
+		void					SetLength		(int32 inLength);
 
 	private:
 		void*					fPtr;
-		long					fUsedSize;
-		long					fAllocatedSize;
+		int32					fUsedSize;
+		int32					fAllocatedSize;
 };
 
 

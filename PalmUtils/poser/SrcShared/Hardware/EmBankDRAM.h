@@ -40,9 +40,9 @@ class EmBankDRAM
 		static void				AddOpcodeCycles		(void);
 
 	private:
-		static void				AddressError		(emuptr address, long size, Bool forRead);
-		static void				InvalidAccess		(emuptr address, long size, Bool forRead);
-		static void				ProbableCause		(emuptr address, long size, Bool forRead);
+		static void				AddressError		(emuptr address, int32 size, Bool forRead);
+		static void				InvalidAccess		(emuptr address, int32 size, Bool forRead);
+		static void				ProbableCause		(emuptr address, int32 size, Bool forRead);
 };
 
 

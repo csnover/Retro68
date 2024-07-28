@@ -196,12 +196,12 @@ ErrCode SLP::HandleDataReceived (void)
 //	do {
 		EmAssert (fSocket);
 
-		long		amtRead;
+		int32		amtRead;
 		ErrCode 	err = fSocket->Read (	this->Header ().GetPtr (),
 											this->Header ().GetSize (),
 											&amtRead);
 
-		if (err == errNone && amtRead == (long) this->Header ().GetSize ())
+		if (err == errNone && amtRead == (int32) this->Header ().GetSize ())
 		{
 			fHavePacket = true;
 
@@ -348,7 +348,7 @@ ErrCode SLP::HandleNewPacket ()
 
 		default:
 			result = slkErrWrongDestSocket;
-			PRINTF ("Unknown destination: %ld.", (long) this->Header ().dest);
+			PRINTF ("Unknown destination: %d.", (int32) this->Header ().dest);
 			break;
 	}
 
@@ -370,7 +370,7 @@ ErrCode SLP::HandleNewPacket ()
  *
  ***********************************************************************/
 
-ErrCode SLP::SendPacket (const void* bodyP, long bodySize)
+ErrCode SLP::SendPacket (const void* bodyP, Int32 bodySize)
 {
 	PRINTF ("Entering SLP::SendPacket.");
 
@@ -383,7 +383,7 @@ ErrCode SLP::SendPacket (const void* bodyP, long bodySize)
 
 	// Fold all the parts into a buffer: header, body, footer.
 
-	long		totalSize = EmAliasSlkPktHeaderType<LAS>::GetSize () +
+	Int32		totalSize = EmAliasSlkPktHeaderType<LAS>::GetSize () +
 							bodySize + 
 							EmAliasSlkPktFooterType<LAS>::GetSize ();
 	StMemory	buffer (totalSize);
@@ -504,7 +504,7 @@ ErrCode SLP::SendPacket (const void* bodyP, long bodySize)
 		totalSize -= EmAliasSlkPktFooterType<LAS>::GetSize ();
 	}
 
-	long	amtWritten;
+	int32	amtWritten;
 	ErrCode result = fSocket->Write (bufferP, totalSize, &amtWritten);
 
 	PRINTF ("Exiting SLP::SendPacket.");
@@ -543,7 +543,7 @@ Bool SLP::HavePacket (void) const
  *
  ***********************************************************************/
 
-long SLP::GetPacketSize (void) const
+Int32 SLP::GetPacketSize (void) const
 {
 	EmAssert (this->HavePacket());
 

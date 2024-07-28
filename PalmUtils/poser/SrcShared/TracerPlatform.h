@@ -36,8 +36,8 @@ public:
 
 	// User feedback
 	virtual void			GetLibraryVersionString	(char* buffer, size_t bufferLen);
-	virtual unsigned long	GetLibraryVersionNumber (void);
-	virtual long			GetConnectionStatus		(void);
+	virtual uint32	GetLibraryVersionNumber (void);
+	virtual int32			GetConnectionStatus		(void);
 	virtual bool			IsLibraryLoaded			(void);
 
 	// Connection control

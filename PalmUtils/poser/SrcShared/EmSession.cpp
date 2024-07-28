@@ -52,7 +52,7 @@ Bool	gIterating = false;
 #endif
 
 Bool	PrvCanBotherCPU	(void);
-void	PrvWakeUpCPU	(long strID);
+void	PrvWakeUpCPU	(int32 strID);
 
 
 /*
@@ -751,7 +751,7 @@ Bool EmSession::SuspendThread (EmStopMethod how)
 
 	Bool	desiredBreakOnSysCall = false;
 
-//	LogAppendMsg ("EmSession::SuspendThread (enter): fState = %ld", (long) fState);
+//	LogAppendMsg ("EmSession::SuspendThread (enter): fState = %d", (int32) fState);
 
 	switch (how)
 	{
@@ -821,7 +821,7 @@ Bool EmSession::SuspendThread (EmStopMethod how)
 			fSharedCondition.broadcast ();
 
 			fSharedCondition.wait ();
-//			LogAppendMsg ("EmSession::SuspendThread (waking): fState = %ld", (long) fState);
+//			LogAppendMsg ("EmSession::SuspendThread (waking): fState = %d", (int32) fState);
 
 #ifndef NDEBUG
 			if (!this->IsNested ())
@@ -930,7 +930,7 @@ Bool EmSession::SuspendThread (EmStopMethod how)
 		EmAssert (fNestLevel == 0 || fState == kBlockedOnUI);	// (If blocked on UI, fNestLevel may be > 0).
 	}
 
-//	LogAppendMsg ("EmSession::SuspendThread (exit): fState = %ld", (long) fState);
+//	LogAppendMsg ("EmSession::SuspendThread (exit): fState = %d", (int32) fState);
 
 	return result;
 }
@@ -948,7 +948,7 @@ void EmSession::ResumeThread (void)
 	omni_mutex_lock	lock (fSharedLock);
 #endif
 
-//	LogAppendMsg ("EmSession::ResumeThread (enter): fState = %ld", (long) fState);
+//	LogAppendMsg ("EmSession::ResumeThread (enter): fState = %d", (int32) fState);
 
 	if (fSuspendState.fCounters.fSuspendByUIThread > 0)
 	{
@@ -974,7 +974,7 @@ void EmSession::ResumeThread (void)
 #endif
 	}
 
-//	LogAppendMsg ("EmSession::ResumeThread (exit): fState = %ld", (long) fState);
+//	LogAppendMsg ("EmSession::ResumeThread (exit): fState = %d", (int32) fState);
 }
 
 
@@ -983,13 +983,13 @@ void EmSession::ResumeThread (void)
 // ---------------------------------------------------------------------------
 
 #if HAS_OMNI_THREAD
-void EmSession::Sleep (unsigned long msecs)
+void EmSession::Sleep (uint32 msecs)
 {
-	const unsigned long	kMillisecondsPerSecond = 1000;
-	const unsigned long	kNanosecondsPerMillisecond = 1000000;
+	const uint32	kMillisecondsPerSecond = 1000;
+	const uint32	kNanosecondsPerMillisecond = 1000000;
 
-	unsigned long	secs = msecs / kMillisecondsPerSecond;
-	unsigned long	nsecs = (msecs % kMillisecondsPerSecond) * kNanosecondsPerMillisecond;
+	uint32	secs = msecs / kMillisecondsPerSecond;
+	uint32	nsecs = (msecs % kMillisecondsPerSecond) * kNanosecondsPerMillisecond;
 
 	fThread->get_time (&secs, &nsecs, secs, nsecs);
 
@@ -1074,7 +1074,7 @@ void EmSession::SetSuspendState (const EmSuspendState& s)
 
 void EmSession::ExecuteIncremental (void)
 {
-//	LogAppendMsg ("EmSession::ExecuteIncremental (enter): fState = %ld", (long) fState);
+//	LogAppendMsg ("EmSession::ExecuteIncremental (enter): fState = %d", (int32) fState);
 
 	fSuspendState.fCounters.fSuspendByTimeout = 0;
 
@@ -1142,7 +1142,7 @@ void EmSession::ExecuteIncremental (void)
 	EmAssert (fSuspendState.fCounters.fSuspendBySubroutineReturn == 0);
 	EmAssert (fNestLevel == 0);
 
-//	LogAppendMsg ("EmSession::ExecuteIncremental (exit): fState = %ld", (long) fState);
+//	LogAppendMsg ("EmSession::ExecuteIncremental (exit): fState = %d", (int32) fState);
 }
 
 
@@ -1158,7 +1158,7 @@ void EmSession::ExecuteSubroutine (void)
 
 	EmAssert (fNestLevel >= 0);
 
-//	LogAppendMsg ("EmSession::ExecuteSubroutine (enter): fState = %ld", (long) fState);
+//	LogAppendMsg ("EmSession::ExecuteSubroutine (enter): fState = %d", (int32) fState);
 
 #if HAS_OMNI_THREAD
 	if (this->InCPUThread ())
@@ -1267,7 +1267,7 @@ void EmSession::ExecuteSubroutine (void)
 	}
 #endif
 
-//	LogAppendMsg ("EmSession::ExecuteSubroutine (exit): fState = %ld", (long) fState);
+//	LogAppendMsg ("EmSession::ExecuteSubroutine (exit): fState = %d", (int32) fState);
 }
 
 
@@ -1523,7 +1523,7 @@ EmDlgItemID EmSession::BlockOnDialog (EmDlgThreadFn fn, const void* parameters)
 
 	gDocument->ScheduleDialog (fn, parameters, result);
 
-//	LogAppendMsg ("EmSession::RunDialog (enter): fState = %ld", (long) fState);
+//	LogAppendMsg ("EmSession::RunDialog (enter): fState = %d", (int32) fState);
 
 	{
 		EmValueChanger<EmSessionState>	oldState (fState, kBlockedOnUI);
@@ -1534,7 +1534,7 @@ EmDlgItemID EmSession::BlockOnDialog (EmDlgThreadFn fn, const void* parameters)
 
 		while (result == kDlgItemNone && !fStop)
 		{
-//			LogAppendMsg ("EmSession::RunDialog (middle): fState = %ld", (long) fState);
+//			LogAppendMsg ("EmSession::RunDialog (middle): fState = %d", (int32) fState);
 			EmAssert (fState == kBlockedOnUI);
 			fSharedCondition.wait ();
 		}
@@ -1544,7 +1544,7 @@ EmDlgItemID EmSession::BlockOnDialog (EmDlgThreadFn fn, const void* parameters)
 
 	fSharedCondition.broadcast ();
 
-//	LogAppendMsg ("EmSession::RunDialog (exit): fState = %ld", (long) fState);
+//	LogAppendMsg ("EmSession::RunDialog (exit): fState = %d", (int32) fState);
 
 	// !!! Throw an exception if fDialogResult == -1.
 
@@ -1552,7 +1552,7 @@ EmDlgItemID EmSession::BlockOnDialog (EmDlgThreadFn fn, const void* parameters)
 
 #else
 
-//	LogAppendMsg ("EmSession::RunDialog (enter): fState = %ld", (long) fState);
+//	LogAppendMsg ("EmSession::RunDialog (enter): fState = %d", (int32) fState);
 
 	// Change the state so that (a) calling EmDlg::RunDialog will call
 	// EmDlg::HostRunDialog instead of calling back into here, and (b)
@@ -1570,7 +1570,7 @@ EmDlgItemID EmSession::BlockOnDialog (EmDlgThreadFn fn, const void* parameters)
 
 	EmDlgItemID	result = fn (parameters);
 
-//	LogAppendMsg ("EmSession::RunDialog (exit): fState = %ld", (long) fState);
+//	LogAppendMsg ("EmSession::RunDialog (exit): fState = %d", (int32) fState);
 
 	return result;
 
@@ -1788,7 +1788,7 @@ Bool PrvCanBotherCPU (void)
 //		¥ PrvWakeUpCPU
 // ---------------------------------------------------------------------------
 
-void PrvWakeUpCPU (long strID)
+void PrvWakeUpCPU (int32 strID)
 {
 	// Make sure the app's awake.  Normally, we post events on a patch to
 	// SysEvGroupWait.	However, if the Palm device is already waiting,
@@ -2281,13 +2281,13 @@ void EmSession::Run ()
 
 	// Loop until we're asked to stop.
 
-//	LogAppendMsg ("EmSession::Run (enter): fState = %ld", (long) fState);
+//	LogAppendMsg ("EmSession::Run (enter): fState = %d", (int32) fState);
 
 	try
 	{
 		while (!fStop)
 		{
-//			LogAppendMsg ("EmSession::Run (top outer loop): fState = %ld", (long) fState);
+//			LogAppendMsg ("EmSession::Run (top outer loop): fState = %d", (int32) fState);
 
 			// Block while we're suspended.  We set fState to kSuspended so
 			// that clients know our state, and unlock fSharedLock so that
@@ -2310,7 +2310,7 @@ void EmSession::Run ()
 			{
 				while (this->IsNested () || (fSuspendState.fAllCounters && !fStop))
 				{
-//					LogAppendMsg ("EmSession::Run (top inner loop): fState = %ld", (long) fState);
+//					LogAppendMsg ("EmSession::Run (top inner loop): fState = %d", (int32) fState);
 
 					// If we were asked to start, our state will have been set to kRunning.
 					// If we were asked to stop before we could actually start running,
@@ -2326,7 +2326,7 @@ void EmSession::Run ()
 					fSharedCondition.wait ();
 				}
 
-//				LogAppendMsg ("EmSession::Run (after inner loop): fState = %ld", (long) fState);
+//				LogAppendMsg ("EmSession::Run (after inner loop): fState = %d", (int32) fState);
 
 				if (fStop)
 				{
@@ -2334,7 +2334,7 @@ void EmSession::Run ()
 				}
 			}
 
-//			LogAppendMsg ("EmSession::Run (after if): fState = %ld", (long) fState);
+//			LogAppendMsg ("EmSession::Run (after if): fState = %d", (int32) fState);
 
 			EmAssert (fSuspendState.fAllCounters == 0);
 			EmAssert (fNestLevel == 0);
@@ -2367,7 +2367,7 @@ void EmSession::Run ()
 
 			fSharedLock.lock ();
 
-//			LogAppendMsg ("EmSession::Run (after CallCPU): fState = %ld", (long) fState);
+//			LogAppendMsg ("EmSession::Run (after CallCPU): fState = %d", (int32) fState);
 
 			EmAssert (fState == kRunning);
 			EmAssert (fNestLevel == 0);

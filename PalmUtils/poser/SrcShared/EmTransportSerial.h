@@ -26,10 +26,10 @@ class EmTransportSerial : public EmTransport
 {
 	public:
 		typedef string	PortName;
-		typedef long	Baud;
-		typedef long	StopBits;
-		typedef long	DataBits;
-		typedef long	HwrHandshake;
+		typedef int32	Baud;
+		typedef int32	StopBits;
+		typedef int32	DataBits;
+		typedef int32	HwrHandshake;
 
 		typedef vector<PortName>	PortNameList;
 		typedef vector<Baud>		BaudList;
@@ -79,12 +79,12 @@ class EmTransportSerial : public EmTransport
 		virtual ErrCode			Open					(void);
 		virtual ErrCode			Close					(void);
 
-		virtual ErrCode			Read					(long&, void*);
-		virtual ErrCode			Write					(long&, const void*);
+		virtual ErrCode			Read					(int32&, void*);
+		virtual ErrCode			Write					(int32&, const void*);
 
 		virtual Bool			CanRead					(void);
 		virtual Bool			CanWrite				(void);
-		virtual long			BytesInBuffer			(long minBytes);
+		virtual int32			BytesInBuffer			(int32 minBytes);
 		virtual string			GetSpecificName			(void);
 
 		ErrCode					SetConfig				(const ConfigSerial&);
@@ -108,9 +108,9 @@ class EmTransportSerial : public EmTransport
 		ErrCode					HostOpen				(void);
 		ErrCode					HostClose				(void);
 
-		ErrCode					HostRead				(long&, void*);
-		ErrCode					HostWrite				(long&, const void*);
-		long					HostBytesInBuffer		(long minBytes);
+		ErrCode					HostRead				(int32&, void*);
+		ErrCode					HostWrite				(int32&, const void*);
+		int32					HostBytesInBuffer		(int32 minBytes);
 
 		ErrCode					HostSetConfig			(const ConfigSerial&);
 

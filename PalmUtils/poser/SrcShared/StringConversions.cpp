@@ -19,6 +19,7 @@
 #include "EmTransport.h"		// EmTransportDescriptor
 #include "Platform.h"			// _stricmp
 
+#include <cstring>
 #include <ctype.h>				// isprint
 #include <stdio.h>				// sscanf, sprintf
 

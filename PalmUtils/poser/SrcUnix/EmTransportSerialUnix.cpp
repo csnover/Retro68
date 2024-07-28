@@ -128,7 +128,7 @@ ErrCode EmTransportSerial::HostClose (void)
  *
  ***********************************************************************/
 
-ErrCode EmTransportSerial::HostRead (long& len, void* data)
+ErrCode EmTransportSerial::HostRead (int32& len, void* data)
 {
 	fHost->GetIncomingData (data, len);
 
@@ -150,7 +150,7 @@ ErrCode EmTransportSerial::HostRead (long& len, void* data)
  *
  ***********************************************************************/
 
-ErrCode EmTransportSerial::HostWrite (long& len, const void* data)
+ErrCode EmTransportSerial::HostWrite (int32& len, const void* data)
 {
 	fHost->PutOutgoingData (data, len);
 
@@ -175,7 +175,7 @@ ErrCode EmTransportSerial::HostWrite (long& len, const void* data)
  *
  ***********************************************************************/
 
-long EmTransportSerial::HostBytesInBuffer (long /*minBytes*/)
+int32 EmTransportSerial::HostBytesInBuffer (int32 /*minBytes*/)
 {
 	return fHost->IncomingDataSize ();
 }
@@ -565,7 +565,7 @@ void EmTransportSerial::HostGetPortNameList (PortNameList& results)
 
 void EmTransportSerial::HostGetSerialBaudList (BaudList& results)
 {
-	long	maxBaud = 115200;	// ::PrvGetMaxBaudRate ()? How to
+	int32	maxBaud = 115200;	// ::PrvGetMaxBaudRate ()? How to
 								// determine that on Unix?.
 
 	switch (maxBaud)
@@ -809,7 +809,7 @@ ErrCode EmHostTransportSerial::CloseCommPort (void)
  *
  ***********************************************************************/
 
-void EmHostTransportSerial::PutIncomingData	(const void* data, long& len)
+void EmHostTransportSerial::PutIncomingData	(const void* data, int32& len)
 {
 	if (len == 0)
 		return;
@@ -838,12 +838,12 @@ void EmHostTransportSerial::PutIncomingData	(const void* data, long& len)
  *
  ***********************************************************************/
 
-void EmHostTransportSerial::GetIncomingData	(void* data, long& len)
+void EmHostTransportSerial::GetIncomingData	(void* data, int32& len)
 {
 	omni_mutex_lock lock (fReadMutex);
 
-	if (len > (long) fReadBuffer.size ())
-		len = (long) fReadBuffer.size ();
+	if (len > (int32) fReadBuffer.size ())
+		len = (int32) fReadBuffer.size ();
 
 	char*	p = (char*) data;
 	deque<char>::iterator	begin = fReadBuffer.begin ();
@@ -867,7 +867,7 @@ void EmHostTransportSerial::GetIncomingData	(void* data, long& len)
  *
  ***********************************************************************/
 
-long EmHostTransportSerial::IncomingDataSize (void)
+int32 EmHostTransportSerial::IncomingDataSize (void)
 {
 	omni_mutex_lock lock (fReadMutex);
 
@@ -889,7 +889,7 @@ long EmHostTransportSerial::IncomingDataSize (void)
  *
  ***********************************************************************/
 
-void EmHostTransportSerial::PutOutgoingData	(const void* data, long& len)
+void EmHostTransportSerial::PutOutgoingData	(const void* data, int32& len)
 {
 	if (len == 0)
 		return;
@@ -924,12 +924,12 @@ void EmHostTransportSerial::PutOutgoingData	(const void* data, long& len)
  *
  ***********************************************************************/
 
-void EmHostTransportSerial::GetOutgoingData	(void* data, long& len)
+void EmHostTransportSerial::GetOutgoingData	(void* data, int32& len)
 {
 	omni_mutex_lock lock (fWriteMutex);
 
-	if (len > (long) fWriteBuffer.size ())
-		len = (long) fWriteBuffer.size ();
+	if (len > (int32) fWriteBuffer.size ())
+		len = (int32) fWriteBuffer.size ();
 
 	char*	p = (char*) data;
 	deque<char>::iterator	begin = fWriteBuffer.begin ();
@@ -953,7 +953,7 @@ void EmHostTransportSerial::GetOutgoingData	(void* data, long& len)
  *
  ***********************************************************************/
 
-long EmHostTransportSerial::OutgoingDataSize (void)
+int32 EmHostTransportSerial::OutgoingDataSize (void)
 {
 	omni_mutex_lock lock (fWriteMutex);
 
@@ -1018,7 +1018,7 @@ void* EmHostTransportSerial::CommRead (void* data)
 					PRINTF ("EmHostTransportSerial::CommRead: Received %ld serial bytes.", len);
 
 				// Add the data to the EmHostTransportSerial object's buffer.
-				long	n = (long) len;
+				int32	n = (int32) len;
 				This->PutIncomingData (buf, n);
 			}
 		}
@@ -1065,7 +1065,7 @@ void* EmHostTransportSerial::CommWrite (void* data)
 
 		// Get the data to write.
 
-		long	len = This->OutgoingDataSize ();
+		int32	len = This->OutgoingDataSize ();
 
 		// If there really wasn't any, go back to sleep.
 
@@ -1169,7 +1169,7 @@ int EmHostTransportSerial::GetBaud (EmTransportSerial::Baud baud)
 #endif
 	}
 
-	PRINTF ("	Unknown Baud value: %ld.", (long) baud);
+	PRINTF ("	Unknown Baud value: %d.", (int32) baud);
 
 	// Not necessarily invalid.  The UART often has invalid baud values while
 	// it's being initialized.   It's also equally valid for a Palm application

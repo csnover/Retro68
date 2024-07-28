@@ -44,8 +44,8 @@ class EmBankROM
 		static emuptr			GetMemoryStart		(void) { return gROMMemoryStart; }
 
 	private:
-		static void				AddressError		(emuptr address, long size, Bool forRead);
-		static void				InvalidAccess		(emuptr address, long size, Bool forRead);
+		static void				AddressError		(emuptr address, int32 size, Bool forRead);
+		static void				InvalidAccess		(emuptr address, int32 size, Bool forRead);
 		static void				LoadROM				(EmStream& hROM);
 
 		static emuptr			gROMMemoryStart;

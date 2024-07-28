@@ -19,6 +19,7 @@
 #include "Logging.h"			// LogAppendMsg
 
 #include <algorithm>			// find()
+#include <cstring>
 
 #if PLATFORM_MAC
 #include <errno.h>				// ENOENT, errno
@@ -600,11 +601,11 @@ ErrCode CTCPSocket::Idle (void)
  *
  ***********************************************************************/
 
-ErrCode CTCPSocket::Write (const void* buffer, long amountToWrite, long* amtWritten)
+ErrCode CTCPSocket::Write (const void* buffer, int32 amountToWrite, int32* amtWritten)
 {
 	PRINTF ("CTCPSocket(0x%08X)::Write...", this);
 
-	long dummy;
+	int32 dummy;
 	if (!amtWritten)
 		amtWritten = &dummy;
 
@@ -663,11 +664,11 @@ ErrCode CTCPSocket::Write (const void* buffer, long amountToWrite, long* amtWrit
  *
  ***********************************************************************/
 
-ErrCode CTCPSocket::Read (void* buffer, long sizeOfBuffer, long* amtRead)
+ErrCode CTCPSocket::Read (void* buffer, int32 sizeOfBuffer, int32* amtRead)
 {
 	PRINTF ("CTCPSocket(0x%08X)::Read...", this);
 
-	long dummy;
+	int32 dummy;
 	if (!amtRead)
 		amtRead = &dummy;
 
@@ -677,7 +678,7 @@ ErrCode CTCPSocket::Read (void* buffer, long sizeOfBuffer, long* amtRead)
 	{
 		while (*amtRead < sizeOfBuffer)
 		{
-			long	r = recv (fConnectedSocket, ((char*) buffer) + *amtRead, sizeOfBuffer - *amtRead, 0);
+			int32	r = recv (fConnectedSocket, ((char*) buffer) + *amtRead, sizeOfBuffer - *amtRead, 0);
 
 			// More from the sockets manual for the select() function:
 			//
@@ -981,7 +982,7 @@ Bool CTCPSocket::CheckConnection (void)
  *
  ***********************************************************************/
 
-Bool CTCPSocket::HasUnreadData (long msecs)
+Bool CTCPSocket::HasUnreadData (int32 msecs)
 {
 	Bool	hasData = false;
 

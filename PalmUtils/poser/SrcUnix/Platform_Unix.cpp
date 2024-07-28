@@ -46,12 +46,12 @@ Bool			gClipboardNeedIncomingData;
 Bool			gClipboardPendingIncomingData;
 Bool			gClipboardHaveIncomingData;
 
-long long PrvGetMicroseconds (void)
+int64 PrvGetMicroseconds (void)
 {
 	struct timeval tv;
 	gettimeofday (&tv, NULL);
 
-	long long usecs = ((long long) tv.tv_sec) * 1000000ULL + tv.tv_usec;
+	int64 usecs = ((int64) tv.tv_sec) * 1000000ULL + tv.tv_usec;
 
 	return usecs;
 }
@@ -138,7 +138,7 @@ string Platform::GetString( StrCode id )
 		return string (str);
 
 	char	buffer[20];
-	sprintf (buffer, "%ld", (long) id);
+	sprintf (buffer, "%d", (int32) id);
 	return string ("<missing string ") + buffer + ">";
 }
 
@@ -512,14 +512,14 @@ Bool Platform::PinToScreen (EmRect& r)
  *
  ***********************************************************************/
 
-void Platform::ToHostEOL (	StMemory& dest, long& destLen,
-				const char* src, long srcLen)
+void Platform::ToHostEOL (	StMemory& dest, int32& destLen,
+				const char* src, int32 srcLen)
 {
 	char*	d = (char*) Platform::AllocateMemory (srcLen);
 	char*	p = d;
 	Bool	previousWas0x0D = false;
 
-	for (long ii = 0; ii < srcLen; ++ii)
+	for (int32 ii = 0; ii < srcLen; ++ii)
 	{
 		char	ch = src[ii];
 
@@ -729,7 +729,7 @@ void Platform::PrintHelp (void)
 
 uint32 Platform::GetMilliseconds( void )
 {
-	long long usecs = ::PrvGetMicroseconds ();
+	int32 long usecs = ::PrvGetMicroseconds ();
 	uint32   millis = (uint32) (usecs / 1000);
 
 	return millis;

@@ -129,7 +129,7 @@ EmRegion::EmRegionImpl::EmRegionImpl (const EmRect& r) :
 //	Constructor for a general region. Works from a buffer created by
 //	RegionOp, so it's not likely that clients will be calling this constructor.
 
-EmRegion::EmRegionImpl::EmRegionImpl (const EmCoord* s, long len) :
+EmRegion::EmRegionImpl::EmRegionImpl (const EmCoord* s, int32 len) :
 	fCapacity (0),
 	fBuf (NULL)
 {
@@ -181,11 +181,11 @@ EmRegion::EmRegionImpl::operator== (const EmRegionImpl& other) const
 //	first to get a rect count. Or, better yet, use EmRegionRectIterator to
 //	get the rectangles one-by-one.
 
-long
+int32
 EmRegion::EmRegionImpl::GetRects (EmRect* rp) const
 {
 	EmCoord*	s = fBuf;
-	long		ii = 0;
+	int32		ii = 0;
 
 	if (s)
 	{
@@ -382,7 +382,7 @@ EmRegion::EmRegion (void) :
 	EmAssert (fImpl.get ());
 }
 
-EmRegion::EmRegion (const EmCoord* s, long len) :
+EmRegion::EmRegion (const EmCoord* s, int32 len) :
 	fImpl (new EmRegionImpl (s, len))
 {
 	EmAssert (fImpl.get ());
@@ -517,7 +517,7 @@ EmRegion::Bounds (void) const
 //		* GetRects
 // ---------------------------------------------------------------------------
 
-long
+int32
 EmRegion::GetRects (EmRect* rp) const
 {
 	EmAssert (fImpl.get ());
@@ -747,7 +747,7 @@ EmRegion::GetBuf (void) const
 //		* Length
 // ---------------------------------------------------------------------------
 
-long
+int32
 EmRegion::Length (void) const
 {
 	EmAssert (fImpl.get ());
@@ -822,12 +822,12 @@ EmRegion::RegionOp (EOpcode code, const EmRegion& r1, const EmRegion& r2)
 	// Get a pointer to our destination buffer.
 	// Use a buffer on the stack for speed if possible.
 	//
-	long buflen = (r1.Length () * r2.Length ());
+	int32 buflen = (r1.Length () * r2.Length ());
 	EmAssert (buflen > 0);
 
 	EmCoord*	buf;
 	EmCoord		stackBuf[100];				// !!! Bigger? Smaller?
-	if (buflen > (long) countof (stackBuf))
+	if (buflen > (int32) countof (stackBuf))
 		buf = new EmCoord[buflen];
 	else
 		buf = stackBuf;
@@ -841,7 +841,7 @@ EmRegion::RegionOp (EOpcode code, const EmRegion& r1, const EmRegion& r2)
 	EmCoord*	x2 = 0;
 	EmCoord*	fixup;
 	EmCoord		y, l1 = 0, l2 = 0, tl1, tl2;
-	long		len, oldlen = -1;
+	int32		len, oldlen = -1;
 	int			test;
 
 	for (;;)

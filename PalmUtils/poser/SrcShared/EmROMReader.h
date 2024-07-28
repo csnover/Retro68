@@ -65,7 +65,7 @@ class EmROMReader
 
 				bool			Free(void)			{ return fFree; }
 				int				Owner(void)			{ return fOwner; }
-				unsigned long	TotalSize(void)		{ return fSize; }
+				uint32	TotalSize(void)		{ return fSize; }
 				size_t			Size(void)			{ return fSize - fHdrSize - fSizeAdj; }
 				ptr_type		GetHdrPtr(void)		{ return fPtr; }
 				ptr_type		GetPtr(void)		{ return A::add(fPtr, (int)(fHdrSize)); }
@@ -79,18 +79,18 @@ class EmROMReader
 
 				friend class EmROMReader;
 
-				unsigned long	fSize;
+				uint32	fSize;
 				bool			fFree;
-				unsigned long	fSizeAdj;
+				uint32	fSizeAdj;
 				int				fLockCount;
 				int				fHOffset;
 				int 			fOwner;
 				ptr_type		fPtr;
-				unsigned long	fAddress;
+				uint32	fAddress;
 				int				fHdrSize;
 
-				unsigned long	recordNumber;
-				unsigned long	dbNumber;
+				uint32	recordNumber;
+				uint32	dbNumber;
 
 				enum
 				{
@@ -119,8 +119,8 @@ class EmROMReader
 				bool			Busy(void)		{ return fBusy; }
 				bool			Secret(void)	{ return fSecret; }
 				int				Category(void)	{ return fCategory; }
-				unsigned long	ID(void)		{ return fID; }
-				unsigned long	Type(void)		{ return fType; }
+				uint32	ID(void)		{ return fID; }
+				uint32	Type(void)		{ return fType; }
 				bool			Record(void)	{ return fRecord; }
 				ChunkType*		Chunk(void) 	{ return fChunk; }
 
@@ -129,8 +129,8 @@ class EmROMReader
 				friend class EmROMReader;
 
 				bool			fRecord;
-				unsigned long	fID;
-				unsigned long	fType;
+				uint32	fID;
+				uint32	fType;
 				int				fCategory;
 				bool			fDeleted;
 				bool			fDirty;
@@ -156,15 +156,15 @@ class EmROMReader
 				const string&		Name(void)	const		{ return fName; }
 				DatabaseItemList&	Items(void)				{ return fItems; }
 
-				unsigned long 		CreationTime(void)		{ return fCreationTime; }
-				unsigned long		ModificationTime(void)	{ return fModificationTime; }
-				unsigned long		BackupTime(void)		{ return fBackupTime; }
+				uint32 		CreationTime(void)		{ return fCreationTime; }
+				uint32		ModificationTime(void)	{ return fModificationTime; }
+				uint32		BackupTime(void)		{ return fBackupTime; }
 				unsigned int		Flags(void)				{ return fFlags; }
 				unsigned int		Version(void)			{ return fVersion; }
-				unsigned long		UniqueIDSeed(void)		{ return fUniqueIDSeed; }
+				uint32		UniqueIDSeed(void)		{ return fUniqueIDSeed; }
 
-				unsigned long		Creator(void)			{ return fCreator; }
-				unsigned long		Type(void)				{ return fType; }
+				uint32		Creator(void)			{ return fCreator; }
+				uint32		Type(void)				{ return fType; }
 
 			private:
 
@@ -172,10 +172,10 @@ class EmROMReader
 
 				DatabaseItemList	fItems;
 				string				fName;
-				unsigned long		fCreator, fType;
-				unsigned long		fCreationTime, fModificationTime, fBackupTime;
+				uint32		fCreator, fType;
+				uint32		fCreationTime, fModificationTime, fBackupTime;
 				unsigned int		fFlags, fVersion;
-				unsigned long		fUniqueIDSeed;
+				uint32		fUniqueIDSeed;
 				ChunkType*			fAppInfoChunk;
 				ChunkType*			fSortInfoChunk;
 		};
@@ -203,7 +203,7 @@ class EmROMReader
 								int& fix,
 								int& stage,
 								int& build) const;
-		unsigned long	Version(void) const;
+		uint32	Version(void) const;
 
 		static int		IsBitmapColor (ChunkType& chunk, bool bootScreen);
 

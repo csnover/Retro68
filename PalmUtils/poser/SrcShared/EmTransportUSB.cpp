@@ -153,8 +153,9 @@ ErrCode EmTransportUSB::Open (void)
 //		fgOpenPorts[fConfig.fPort] = this;
 	}
 
-	if (err)
+	if (err) {
 		PRINTF ("EmTransportUSB::Open: err = %ld", err);
+	}
 
 	return err;
 }
@@ -185,8 +186,9 @@ ErrCode EmTransportUSB::Close (void)
 
 	ErrCode	err = this->HostClose ();
 
-	if (err)
+	if (err) {
 		PRINTF ("EmTransportUSB::Close: err = %ld", err);
+	}
 
 	PRINTF ("EmTransportUSB::Close: now closed...");
 
@@ -209,7 +211,7 @@ ErrCode EmTransportUSB::Close (void)
  *
  ***********************************************************************/
 
-ErrCode EmTransportUSB::Read (long& len, void* data)
+ErrCode EmTransportUSB::Read (int32& len, void* data)
 {
 	PRINTF ("EmTransportUSB::Read...");
 
@@ -248,7 +250,7 @@ ErrCode EmTransportUSB::Read (long& len, void* data)
  *
  ***********************************************************************/
 
-ErrCode EmTransportUSB::Write (long& len, const void* data)
+ErrCode EmTransportUSB::Write (int32& len, const void* data)
 {
 	PRINTF ("EmTransportUSB::Write...");
 
@@ -334,7 +336,7 @@ Bool EmTransportUSB::CanWrite (void)
  *
  ***********************************************************************/
 
-long EmTransportUSB::BytesInBuffer (long minBytes)
+int32 EmTransportUSB::BytesInBuffer (int32 minBytes)
 {
 	if (!fCommEstablished)
 		return 0;
@@ -397,8 +399,9 @@ ErrCode EmTransportUSB::SetConfig (const ConfigUSB& config)
 
 	ErrCode	err = this->HostSetConfig (fConfig);
 
-	if (err)
+	if (err) {
 		PRINTF ("EmTransportUSB::SetConfig: err = %ld", err);
+	}
 
 	return err;
 }

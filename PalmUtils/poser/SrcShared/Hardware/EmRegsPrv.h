@@ -15,6 +15,7 @@
 #define EmRegsPrv_h
 
 #include "EmMemory.h"			// EmMemDoGet8, EmMemDoPut8, etc.
+#include <cstddef>
 
 // Inline functions for reading/writing registers.
 

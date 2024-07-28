@@ -32,7 +32,7 @@
 	For our purposes, we sometimes need to divide up each 64K bank in a
 	similar fashion.  For instance, in order to support accesses to each
 	of the Dragonball registers, we'd like to assign a handler to each
-	byte, word, or long of memory in the bank that contains the
+	byte, word, or int32 of memory in the bank that contains the
 	Dragonball registers.
 
 	This module supports that further subdivision.  EmBankRegs is a bank
@@ -42,7 +42,7 @@
 	subclasses.
 
 	EmRegs subclasses are the moral equivalent of EmBanks, except on a
-	smaller scale.  They are responsible for byte, word, and long memory
+	smaller scale.  They are responsible for byte, word, and int32 memory
 	accesses to a small range of memory completely contained within a
 	64K bank.
 
@@ -595,7 +595,7 @@ void EmBankRegs::DisableSubBank (emuptr address)
 //		¥ EmBankRegs::GetSubBank
 // ---------------------------------------------------------------------------
 
-EmRegs* EmBankRegs::GetSubBank (emuptr address, long size)
+EmRegs* EmBankRegs::GetSubBank (emuptr address, int32 size)
 {
 	// Cast address to a 64-bit value in case address + size == 0x1 0000 0000.
 
@@ -641,7 +641,7 @@ EmRegs* EmBankRegs::GetSubBank (emuptr address, long size)
 //		¥ EmBankRegs::AddressError
 // ---------------------------------------------------------------------------
 
-void EmBankRegs::AddressError (emuptr address, long size, Bool forRead)
+void EmBankRegs::AddressError (emuptr address, int32 size, Bool forRead)
 {
 	EmAssert (gCPU68K);
 	gCPU68K->AddressError (address, size, forRead);
@@ -652,7 +652,7 @@ void EmBankRegs::AddressError (emuptr address, long size, Bool forRead)
 //		¥ EmBankRegs::InvalidAccess
 // ---------------------------------------------------------------------------
 
-void EmBankRegs::InvalidAccess (emuptr address, long size, Bool forRead)
+void EmBankRegs::InvalidAccess (emuptr address, int32 size, Bool forRead)
 {
 	EmAssert (gCPU68K);
 	gCPU68K->BusError (address, size, forRead);
@@ -663,7 +663,7 @@ void EmBankRegs::InvalidAccess (emuptr address, long size, Bool forRead)
 //		¥ EmBankRegs::PreventedAccess
 // ---------------------------------------------------------------------------
 
-void EmBankRegs::PreventedAccess (emuptr address, long size, Bool forRead)
+void EmBankRegs::PreventedAccess (emuptr address, int32 size, Bool forRead)
 {
 	EmAssert (gSession);
 	gSession->ScheduleDeferredError (new EmDeferredErrHardwareRegisters (address, size, forRead));

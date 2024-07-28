@@ -47,8 +47,8 @@ class EmBankMapped
 
 
 	private:
-		static void				AddressError		(emuptr address, long size, Bool forRead);
-		static void				InvalidAccess		(emuptr address, long size, Bool forRead);
+		static void				AddressError		(emuptr address, int32 size, Bool forRead);
+		static void				InvalidAccess		(emuptr address, int32 size, Bool forRead);
 };
 
 

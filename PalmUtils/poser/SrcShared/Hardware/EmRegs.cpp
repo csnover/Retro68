@@ -176,7 +176,7 @@ uint32 EmRegs::GetLong (emuptr address)
 {
 //	EmAssert (this->ValidAddress (address, 4));
 
-	long			offset	= address - this->GetAddressStart ();
+	int32			offset	= address - this->GetAddressStart ();
 	ReadFunction	fn		= fReadFunctions [offset];
 	EmAssert (fn);
 
@@ -192,7 +192,7 @@ uint32 EmRegs::GetWord (emuptr address)
 {
 //	EmAssert (this->ValidAddress (address, 2));
 
-	long			offset	= address - this->GetAddressStart ();
+	int32			offset	= address - this->GetAddressStart ();
 	ReadFunction	fn		= fReadFunctions [offset];
 	EmAssert (fn);
 
@@ -208,7 +208,7 @@ uint32 EmRegs::GetByte (emuptr address)
 {
 //	EmAssert (this->ValidAddress (address, 1));
 
-	long			offset	= address - this->GetAddressStart ();
+	int32			offset	= address - this->GetAddressStart ();
 	ReadFunction	fn		= fReadFunctions [offset];
 	EmAssert (fn);
 
@@ -224,7 +224,7 @@ void EmRegs::SetLong (emuptr address, uint32 value)
 {
 //	EmAssert (this->ValidAddress (address, 4));
 
-	long			offset	= address - this->GetAddressStart ();
+	int32			offset	= address - this->GetAddressStart ();
 	WriteFunction	fn		= fWriteFunctions [offset];
 	EmAssert (fn);
 
@@ -240,7 +240,7 @@ void EmRegs::SetWord (emuptr address, uint32 value)
 {
 //	EmAssert (this->ValidAddress (address, 2));
 
-	long			offset	= address - this->GetAddressStart ();
+	int32			offset	= address - this->GetAddressStart ();
 	WriteFunction	fn		= fWriteFunctions [offset];
 	EmAssert (fn);
 
@@ -256,7 +256,7 @@ void EmRegs::SetByte (emuptr address, uint32 value)
 {
 //	EmAssert (this->ValidAddress (address, 1));
 
-	long			offset	= address - this->GetAddressStart ();
+	int32			offset	= address - this->GetAddressStart ();
 	WriteFunction	fn		= fWriteFunctions [offset];
 	EmAssert (fn);
 
@@ -273,7 +273,7 @@ int EmRegs::ValidAddress (emuptr address, uint32 size)
 	UNUSED_PARAM (size);
 
 	int				result	= false;
-	unsigned long	offset	= address - this->GetAddressStart ();
+	uint32	offset	= address - this->GetAddressStart ();
 
 	if (offset < fReadFunctions.size ())
 	{
@@ -317,7 +317,7 @@ void EmRegs::SetHandler (ReadFunction read, WriteFunction write,
 	int index = start - this->GetAddressStart ();
 
 	EmAssert (index >= 0);
-	EmAssert (index < (long) fReadFunctions.size ());
+	EmAssert (index < (int32) fReadFunctions.size ());
 
 	for (int ii = 0; ii < count; ++ii, ++index)
 	{

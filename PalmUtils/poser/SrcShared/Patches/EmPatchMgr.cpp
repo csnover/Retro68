@@ -164,7 +164,7 @@ void EmPatchMgr::Reset (void)
 
 void EmPatchMgr::Save (SessionFile& f)
 {
-	const long	kCurrentVersion = 5;
+	const int32	kCurrentVersion = 5;
 
 	Chunk			chunk;
 	EmStreamChunk	s (chunk);
@@ -177,7 +177,7 @@ void EmPatchMgr::Save (SessionFile& f)
 //	s << gNetLibPatchModule;
 //	s << gPatchedLibs;
 
-	s << (long) gInstalledTailpatches.size ();
+	s << (int32) gInstalledTailpatches.size ();
 
 	TailPatchIndex::iterator	iter2;
 	for (iter2 = gInstalledTailpatches.begin (); iter2 != gInstalledTailpatches.end (); ++iter2)
@@ -216,7 +216,7 @@ void EmPatchMgr::Load (SessionFile& f)
 	Chunk	chunk;
 	if (f.ReadPatchInfo (chunk))
 	{
-		long			version;
+		int32			version;
 		EmStreamChunk	s (chunk);
 
 		s >> version;
@@ -229,7 +229,7 @@ void EmPatchMgr::Load (SessionFile& f)
 			gInstalledTailpatches.clear ();
 
 
-			long	numTailpatches;
+			int32	numTailpatches;
 			s >> numTailpatches;
 
 			int ii;
@@ -822,7 +822,7 @@ CallROMType EmPatchMgr::CallHeadpatch (HeadpatchProc hp, bool /* noProfiling */)
 		// Stop cycle counting and stop the recording of function entries
 		// and exits.  We want our trap patches to be as transparent as possible.
 
-		StDisableAllProfiling	stopper (/*noProfiling*/);
+		StDisableAllProfiling	stopper; // (/*noProfiling*/);
 
 		handled = hp ();
 	}
@@ -852,7 +852,7 @@ void EmPatchMgr::CallTailpatch (TailpatchProc tp, bool /* noProfiling */)
 		// recording of function entries and exits.  We want our trap patches
 		// to be as transparent as possible.
 
-		StDisableAllProfiling	stopper (/*noProfiling*/);
+		StDisableAllProfiling	stopper; // (/*noProfiling*/);
 
 		tp ();
 	}
@@ -1182,19 +1182,19 @@ Err EmPatchMgr::SwitchToApp (UInt16 cardNo, LocalID dbID)
 
 		// Create the param block
 
-		emuptr cmdPBP = (emuptr) ::MemPtrNew (sizeof (SysAppLaunchCmdOpenDBType));
+		emuptr cmdPBP = EmMemPtr(::MemPtrNew (sizeof (SysAppLaunchCmdOpenDBType)));
 		if (cmdPBP == EmMemNULL)
 			return memErrNotEnoughSpace;
 
 		// Fill it in
 
-		::MemPtrSetOwner ((MemPtr) cmdPBP, 0);
+		::MemPtrSetOwner (EmMemFakeT<MemPtr>(cmdPBP), 0);
 		EmMemPut16 (cmdPBP + offsetof (SysAppLaunchCmdOpenDBType, cardNo), cardNo);
 		EmMemPut32 (cmdPBP + offsetof (SysAppLaunchCmdOpenDBType, dbID), dbID);
 
 		// Switch now
 
-		err = ::SysUIAppSwitch (appCardNo, appDbID, sysAppLaunchCmdOpenDB, (MemPtr) cmdPBP);
+		err = ::SysUIAppSwitch (appCardNo, appDbID, sysAppLaunchCmdOpenDB, EmMemFakeT<MemPtr>(cmdPBP));
 		if (err)
 			return err;
 	}

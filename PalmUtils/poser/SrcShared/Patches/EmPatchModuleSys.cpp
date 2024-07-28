@@ -15,6 +15,7 @@
 #include "EmCommon.h"
 #include "EmPatchModuleSys.h"
 
+#include "Byteswapping.h"
 #include "CGremlinsStubs.h" 	// StubAppEnqueueKey
 #include "DebugMgr.h"			// Debug::ConnectedToTCPDebugger
 #include "EmFileImport.h"		// InstallExgMgrLib
@@ -179,7 +180,7 @@ extern ProtoPatchTableEntry	gProtoMemMgrPatchTable[];
 // ======================================================================
 
 
-static long	gSaveDrawStateStackLevel;
+static int32	gSaveDrawStateStackLevel;
 
 static Bool	gDontPatchClipboardAddItem;
 static Bool	gDontPatchClipboardGetItem;
@@ -189,7 +190,7 @@ static Bool	gDontPatchClipboardGetItem;
 //	Private functions
 // ======================================================================
 
-static long	PrvGetDrawStateStackLevel	(void);
+static int32	PrvGetDrawStateStackLevel	(void);
 static void	PrvCopyPalmClipboardToHost	(void);
 static void	PrvCopyHostClipboardToPalm	(void);
 
@@ -430,7 +431,7 @@ CallROMType SysHeadpatch::DmCloseDatabase (void)
 
 		if (EmPatchState::OSMajorMinorVersion () >= 35)
 		{
-			emuptr						dbAccessP = (emuptr) (DmOpenRef) dbR;
+			emuptr						dbAccessP = EmMemPtr(dbR);
 			EmAliasDmAccessType<PAS>	dbAccess (dbAccessP);
 
 			// If this is a "base" database, look for a corresponding
@@ -456,7 +457,7 @@ CallROMType SysHeadpatch::DmCloseDatabase (void)
 					// If it is, see if the "next" field points to the database
 					// we're closing.
 
-					emuptr						olAccessP = (emuptr) olRef;
+					emuptr						olAccessP = EmMemPtr(olRef);
 					EmAliasDmAccessType<PAS>	olAccess (olAccessP);
 
 					UInt8	openType	= olAccess.openType;
@@ -1410,7 +1411,7 @@ CallROMType SysHeadpatch::SysAppExit (void)
 
 	CALLED_GET_PARAM_REF (SysAppInfoType, appInfoP, Marshal::kInput);
 
-	if (appInfoP == NULL)
+	if (appInfoP == EmMemNULL)
 		return kExecuteROM;
 
 	Int16	cmd			= (*appInfoP).cmd;
@@ -1419,7 +1420,7 @@ CallROMType SysHeadpatch::SysAppExit (void)
 
 	if (false /*LogLaunchCodes ()*/)
 	{
-		emuptr	dbP		= (emuptr) ((*appInfoP).dbP);
+		emuptr	dbP		= EmMemPtr((*appInfoP).dbP);
 		emuptr	openP	= EmMemGet32 (dbP + offsetof (DmAccessType, openP));
 		LocalID	dbID	= EmMemGet32 (openP + offsetof (DmOpenInfoType, hdrID));
 		UInt16	cardNo	= EmMemGet16 (openP + offsetof (DmOpenInfoType, cardNo));
@@ -1435,8 +1436,8 @@ CallROMType SysHeadpatch::SysAppExit (void)
 				&type, &creator);
 
 		LogAppendMsg ("SysAppExit called:");
-		LogAppendMsg ("	cardNo:			%ld",		(long) cardNo);
-		LogAppendMsg ("	dbID:			0x%08lX",	(long) dbID);
+		LogAppendMsg ("	cardNo:			%ld",		(int32) cardNo);
+		LogAppendMsg ("	dbID:			0x%08lX",	(int32) dbID);
 		LogAppendMsg ("		name:		%s",		name);
 		LogAppendMsg ("		type:		%04lX",		type);
 		LogAppendMsg ("		creator:	%04lX",		creator);
@@ -1510,13 +1511,13 @@ CallROMType SysHeadpatch::SysAppLaunch (void)
 				&type, &creator);
 
 		LogAppendMsg ("SysAppLaunch called:");
-		LogAppendMsg ("	cardNo:			%ld",		(long) cardNo);
-		LogAppendMsg ("	dbID:			0x%08lX",	(long) dbID);
+		LogAppendMsg ("	cardNo:			%ld",		(int32) cardNo);
+		LogAppendMsg ("	dbID:			0x%08lX",	(int32) dbID);
 		LogAppendMsg ("		name:		%s",		name);
 		LogAppendMsg ("		type:		%04lX",		type);
 		LogAppendMsg ("		creator:	%04lX",		creator);
-		LogAppendMsg ("	launchFlags:	0x%08lX",	(long) launchFlags);
-		LogAppendMsg ("	cmd:			%ld (%s)",	(long) cmd, launchStr);
+		LogAppendMsg ("	launchFlags:	0x%08lX",	(int32) launchFlags);
+		LogAppendMsg ("	cmd:			%ld (%s)",	(int32) cmd, launchStr);
 
 #if 0
 		switch (cmd)
@@ -1530,21 +1531,21 @@ CallROMType SysHeadpatch::SysAppLaunch (void)
 				FindParamsType	parms;
 
 				LogAppendMsg ("	FindParamsType:");
-				LogAppendMsg ("		dbAccesMode:		%ld",	(long) parms.dbAccesMode);
-				LogAppendMsg ("		recordNum:			%ld",	(long) parms.recordNum);
-				LogAppendMsg ("		more:				%ld",	(long) parms.more);
-				LogAppendMsg ("		strAsTyped:			%ld",	(long) parms.strAsTyped);
-				LogAppendMsg ("		strToFind:			%ld",	(long) parms.strToFind);
-				LogAppendMsg ("		numMatches:			%ld",	(long) parms.numMatches);
-				LogAppendMsg ("		lineNumber:			%ld",	(long) parms.lineNumber);
-				LogAppendMsg ("		continuation:		%ld",	(long) parms.continuation);
-				LogAppendMsg ("		searchedCaller:		%ld",	(long) parms.searchedCaller);
-				LogAppendMsg ("		callerAppDbID:		%ld",	(long) parms.callerAppDbID);
-				LogAppendMsg ("		callerAppCardNo:	%ld",	(long) parms.callerAppCardNo);
-				LogAppendMsg ("		appDbID:			%ld",	(long) parms.appCardNo);
-				LogAppendMsg ("		newSearch:			%ld",	(long) parms.newSearch);
-				LogAppendMsg ("		searchState:		%ld",	(long) parms.searchState);
-				LogAppendMsg ("		match:				%ld",	(long) parms.match);
+				LogAppendMsg ("		dbAccesMode:		%ld",	(int32) parms.dbAccesMode);
+				LogAppendMsg ("		recordNum:			%ld",	(int32) parms.recordNum);
+				LogAppendMsg ("		more:				%ld",	(int32) parms.more);
+				LogAppendMsg ("		strAsTyped:			%ld",	(int32) parms.strAsTyped);
+				LogAppendMsg ("		strToFind:			%ld",	(int32) parms.strToFind);
+				LogAppendMsg ("		numMatches:			%ld",	(int32) parms.numMatches);
+				LogAppendMsg ("		lineNumber:			%ld",	(int32) parms.lineNumber);
+				LogAppendMsg ("		continuation:		%ld",	(int32) parms.continuation);
+				LogAppendMsg ("		searchedCaller:		%ld",	(int32) parms.searchedCaller);
+				LogAppendMsg ("		callerAppDbID:		%ld",	(int32) parms.callerAppDbID);
+				LogAppendMsg ("		callerAppCardNo:	%ld",	(int32) parms.callerAppCardNo);
+				LogAppendMsg ("		appDbID:			%ld",	(int32) parms.appCardNo);
+				LogAppendMsg ("		newSearch:			%ld",	(int32) parms.newSearch);
+				LogAppendMsg ("		searchState:		%ld",	(int32) parms.searchState);
+				LogAppendMsg ("		match:				%ld",	(int32) parms.match);
 
 				break;
 			}
@@ -2058,8 +2059,8 @@ CallROMType SysHeadpatch::SysUIAppSwitch (void)
 				&type, &creator);
 
 		LogAppendMsg ("SysUIAppSwitch called:");
-		LogAppendMsg ("	cardNo:			%ld",		(long) cardNo);
-		LogAppendMsg ("	dbID:			0x%08lX",	(long) dbID);
+		LogAppendMsg ("	cardNo:			%ld",		(int32) cardNo);
+		LogAppendMsg ("	dbID:			0x%08lX",	(int32) dbID);
 		LogAppendMsg ("		name:		%s",		name);
 		LogAppendMsg ("		type:		%04lX",		type);
 		LogAppendMsg ("		creator:	%04lX",		creator);
@@ -2076,7 +2077,7 @@ CallROMType SysHeadpatch::SysUIAppSwitch (void)
 		emuptr nextUIAppCmdPBP = EmLowMem_GetGlobal (nextUIAppCmdPBP);
 		if (nextUIAppCmdPBP)
 		{
-			MemPtrFree((MemPtr) nextUIAppCmdPBP);
+			MemPtrFree(EmMemFakeT<MemPtr>(nextUIAppCmdPBP));
 			EmLowMem_SetGlobal (nextUIAppCmdPBP, 0);
 		}
 	}
@@ -2222,7 +2223,7 @@ void SysTailpatch::BmpCreate (void)
 
 	GET_RESULT_PTR ();
 
-	MetaMemory::RegisterBitmapPointer ((MemPtr) result);
+	MetaMemory::RegisterBitmapPointer (EmMemFakeT<MemPtr>(result));
 }
 
 
@@ -2319,7 +2320,7 @@ void SysTailpatch::DmGet1Resource (void)
 	if (type == iconType || type == bitmapRsc)
 	{
 		GET_RESULT_PTR ();
-		MetaMemory::RegisterBitmapHandle ((MemHandle) result);
+		MetaMemory::RegisterBitmapHandle (EmMemFakeT<MemHandle>(result));
 	}
 }
 
@@ -2348,7 +2349,7 @@ void SysTailpatch::DmGetResource (void)
 	if (type == iconType || type == bitmapRsc)
 	{
 		GET_RESULT_PTR ();
-		MetaMemory::RegisterBitmapHandle ((MemHandle) result);
+		MetaMemory::RegisterBitmapHandle (EmMemFakeT<MemHandle>(result));
 	}
 }
 
@@ -2738,8 +2739,8 @@ void SysTailpatch::SysAppStartup (void)
 				&type, &creator);
 
 		LogAppendMsg ("SysAppStartup called:");
-		LogAppendMsg ("	cardNo:			%ld",		(long) cardNo);
-		LogAppendMsg ("	dbID:			0x%08lX",	(long) dbID);
+		LogAppendMsg ("	cardNo:			%ld",		(int32) cardNo);
+		LogAppendMsg ("	dbID:			0x%08lX",	(int32) dbID);
 		LogAppendMsg ("		name:		%s",		name);
 		LogAppendMsg ("		type:		%04lX",		type);
 		LogAppendMsg ("		creator:	%04lX",		creator);
@@ -2844,8 +2845,8 @@ void SysTailpatch::TblHandleEvent (void)
 {
 	if (EmPatchState::HasSelectItemBug ())
 	{
-		long	curDrawStateStackLevel = ::PrvGetDrawStateStackLevel ();
-		long	levelDelta = curDrawStateStackLevel - gSaveDrawStateStackLevel;
+		int32	curDrawStateStackLevel = ::PrvGetDrawStateStackLevel ();
+		int32	levelDelta = curDrawStateStackLevel - gSaveDrawStateStackLevel;
 
 		if (levelDelta == 1)
 		{
@@ -3080,7 +3081,7 @@ void PrvSetCurrentDate (void)
 
 	// Get the current date.
 
-	long	year, month, day;
+	int32	year, month, day;
 	::GetHostDate (&year, &month, &day);
 
 	// Convert it to days -- and then hourse -- since 1/1/1904
@@ -3108,7 +3109,7 @@ void PrvSetCurrentDate (void)
  *
  ***********************************************************************/
 
-long PrvGetDrawStateStackLevel (void)
+int32 PrvGetDrawStateStackLevel (void)
 {
 	CEnableFullAccess	munge;
 	UInt16				level = EmLowMem_GetGlobal (uiGlobals.gStateV3.drawStateIndex);
@@ -3145,7 +3146,7 @@ void PrvCopyPalmClipboardToHost (void)
 			void*	dataCopy = Platform::AllocateMemory (length);
 			if (dataCopy)
 			{
-				EmMem_memcpy (dataCopy, (emuptr) dataPtr, length);
+				EmMem_memcpy (dataCopy, EmMemPtr(dataPtr), length);
 
 				ByteList	palmChars;
 				ByteList	hostChars;

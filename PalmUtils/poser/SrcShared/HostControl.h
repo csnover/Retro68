@@ -285,7 +285,7 @@ typedef Int32	HostTimeType;
 
 struct HostDIRType
 {
-	long	_field;
+	Int32	_field;
 };
 
 typedef struct HostDIRType HostDIRType;
@@ -293,6 +293,7 @@ typedef struct HostDIRType HostDIRType;
 
 	// * HostDirEntType
 
+#undef  HOST_NAME_MAX  // Avoid conflicts with the POSIX macro
 #define HOST_NAME_MAX	255
 
 struct HostDirEntType
@@ -307,7 +308,7 @@ typedef struct HostDirEntType HostDirEntType;
 
 struct HostFILEType
 {
-	long	_field;
+	Int32	_field;
 };
 
 typedef struct HostFILEType HostFILEType;
@@ -317,11 +318,11 @@ typedef struct HostFILEType HostFILEType;
 
 struct HostGremlinInfoType
 {
-	long		fFirstGremlin;
-	long		fLastGremlin;
-	long		fSaveFrequency;
-	long		fSwitchDepth;
-	long		fMaxDepth;
+	Int32		fFirstGremlin;
+	Int32		fLastGremlin;
+	Int32		fSaveFrequency;
+	Int32		fSwitchDepth;
+	Int32		fMaxDepth;
 	char		fAppNames[200];	// Comma-seperated list of application names
 								// to run Gremlins on.  If the string is empty,
 								// all applications are fair game.  If the string
@@ -340,20 +341,20 @@ typedef struct HostGremlinInfoType HostGremlinInfoType;
 
 struct HostStatType
 {
-	unsigned long	st_dev_;
-	unsigned long	st_ino_;
-	unsigned long	st_mode_;
-	unsigned long	st_nlink_;
-	unsigned long	st_uid_;
-	unsigned long	st_gid_;
-	unsigned long	st_rdev_;
+	UInt32			st_dev_;
+	UInt32			st_ino_;
+	UInt32			st_mode_;
+	UInt32			st_nlink_;
+	UInt32			st_uid_;
+	UInt32			st_gid_;
+	UInt32			st_rdev_;
 	HostTimeType	st_atime_;
 	HostTimeType	st_mtime_;
 	HostTimeType	st_ctime_;
-	unsigned long	st_size_;
-	unsigned long	st_blksize_;
-	unsigned long	st_blocks_;
-	unsigned long	st_flags_;
+	UInt32			st_size_;
+	UInt32			st_blksize_;
+	UInt32			st_blocks_;
+	UInt32			st_flags_;
 };
 
 typedef struct HostStatType HostStatType;
@@ -365,15 +366,15 @@ typedef struct HostStatType HostStatType;
 
 struct HostTmType
 {
-	long	tm_sec_;	/* seconds after the minute - [0,59] */
-	long	tm_min_;	/* minutes after the hour - [0,59] */
-	long	tm_hour_;	/* hours since midnight - [0,23] */
-	long	tm_mday_;	/* day of the month - [1,31] */
-	long	tm_mon_;	/* months since January - [0,11] */
-	long	tm_year_;	/* years since 1900 */
-	long	tm_wday_;	/* days since Sunday - [0,6] */
-	long	tm_yday_;	/* days since January 1 - [0,365] */
-	long	tm_isdst_;	/* daylight savings time flag */
+	UInt32	tm_sec_;	/* seconds after the minute - [0,59] */
+	UInt32	tm_min_;	/* minutes after the hour - [0,59] */
+	UInt32	tm_hour_;	/* hours since midnight - [0,23] */
+	UInt32	tm_mday_;	/* day of the month - [1,31] */
+	UInt32	tm_mon_;	/* months since January - [0,11] */
+	UInt32	tm_year_;	/* years since 1900 */
+	UInt32	tm_wday_;	/* days since Sunday - [0,6] */
+	UInt32	tm_yday_;	/* days since January 1 - [0,365] */
+	UInt32	tm_isdst_;	/* daylight savings time flag */
 };
 
 typedef struct HostTmType HostTmType;
@@ -549,10 +550,10 @@ HostIDType			HostGetHostID(void)
 HostPlatformType	HostGetHostPlatform(void)
 						HOST_TRAP(hostSelectorGetHostPlatform);
 
-HostBoolType		HostIsSelectorImplemented(long selector)
+HostBoolType		HostIsSelectorImplemented(int32 selector)
 						HOST_TRAP(hostSelectorIsSelectorImplemented);
 
-HostErrType			HostGestalt(long gestSel, long* response)
+HostErrType			HostGestalt(int32 gestSel, int32* response)
 						HOST_TRAP(hostSelectorGestalt);
 
 HostBoolType		HostIsCallingTrap(void)
@@ -563,7 +564,7 @@ HostBoolType		HostIsCallingTrap(void)
 /* Profiling-related calls												*/
 /* ==================================================================== */
 
-HostErrType			HostProfileInit(long maxCalls, long maxDepth)
+HostErrType			HostProfileInit(int32 maxCalls, int32 maxDepth)
 						HOST_TRAP(hostSelectorProfileInit);
 
 HostErrType			HostProfileDetailFn(void* addr, HostBoolType logDetails)
@@ -581,7 +582,7 @@ HostErrType			HostProfileDump(const char* filenameP)
 HostErrType			HostProfileCleanup(void)
 						HOST_TRAP(hostSelectorProfileCleanup);
 
-long				HostProfileGetCycles(void)
+int32				HostProfileGetCycles(void)
 						HOST_TRAP(hostSelectorProfileGetCycles);
 
 
@@ -589,68 +590,68 @@ long				HostProfileGetCycles(void)
 /* Std C Library-related calls											*/
 /* ==================================================================== */
 
-long				HostErrNo(void)
+Int32				HostErrNo(void)
 						HOST_TRAP(hostSelectorErrNo);
 
 
-long				HostFClose(HostFILEType* fileP)
+Int32				HostFClose(HostFILEType* fileP)
 						HOST_TRAP(hostSelectorFClose);
 
-long				HostFEOF(HostFILEType* fileP)
+Int32				HostFEOF(HostFILEType* fileP)
 						HOST_TRAP(hostSelectorFEOF);
 
-long				HostFError(HostFILEType* fileP)
+Int32				HostFError(HostFILEType* fileP)
 						HOST_TRAP(hostSelectorFError);
 
-long				HostFFlush(HostFILEType* fileP)
+Int32				HostFFlush(HostFILEType* fileP)
 						HOST_TRAP(hostSelectorFFlush);
 
-long				HostFGetC(HostFILEType* fileP)
+Int32				HostFGetC(HostFILEType* fileP)
 						HOST_TRAP(hostSelectorFGetC);
 
-long				HostFGetPos(HostFILEType* fileP, long* posP)
+Int32				HostFGetPos(HostFILEType* fileP, Int32* posP)
 						HOST_TRAP(hostSelectorFGetPos);
 
-char*				HostFGetS(char* s, long n, HostFILEType* fileP)
+char*				HostFGetS(char* s, Int32 n, HostFILEType* fileP)
 						HOST_TRAP(hostSelectorFGetS);
 
 HostFILEType*		HostFOpen(const char* name, const char* mode)
 						HOST_TRAP(hostSelectorFOpen);
 
-long				HostFPrintF(HostFILEType* fileP, const char* fmt, ...)
+Int32				HostFPrintF(HostFILEType* fileP, const char* fmt, ...)
 						HOST_TRAP(hostSelectorFPrintF);
 
-long				HostFPutC(long c, HostFILEType* fileP)
+Int32				HostFPutC(Int32 c, HostFILEType* fileP)
 						HOST_TRAP(hostSelectorFPutC);
 
-long				HostFPutS(const char* s, HostFILEType* fileP)
+Int32				HostFPutS(const char* s, HostFILEType* fileP)
 						HOST_TRAP(hostSelectorFPutS);
 
-long				HostFRead(void* buffer, long size, long count, HostFILEType* fileP)
+Int32				HostFRead(void* buffer, Int32 size, Int32 count, HostFILEType* fileP)
 						HOST_TRAP(hostSelectorFRead);
 
 HostFILEType*		HostFReopen(const char* name, const char* mode, HostFILEType* fileP)
 						HOST_TRAP(hostSelectorFReopen);
 
-long				HostFScanF(HostFILEType* fileP, const char* fmt, ...)
+Int32				HostFScanF(HostFILEType* fileP, const char* fmt, ...)
 						HOST_TRAP(hostSelectorFScanF);
 
-long				HostFSeek(HostFILEType* fileP, long offset, long origin)
+Int32				HostFSeek(HostFILEType* fileP, Int32 offset, Int32 origin)
 						HOST_TRAP(hostSelectorFSeek);
 
-long				HostFSetPos(HostFILEType* fileP, long* pos)
+Int32				HostFSetPos(HostFILEType* fileP, Int32* pos)
 						HOST_TRAP(hostSelectorFSetPos);
 
-long				HostFTell(HostFILEType* fileP)
+Int32				HostFTell(HostFILEType* fileP)
 						HOST_TRAP(hostSelectorFTell);
 
-long				HostFWrite(const void* buffer, long size, long count, HostFILEType* fileP)
+Int32				HostFWrite(const void* buffer, Int32 size, Int32 count, HostFILEType* fileP)
 						HOST_TRAP(hostSelectorFWrite);
 
-long				HostRemove(const char* nameP)
+Int32				HostRemove(const char* nameP)
 						HOST_TRAP(hostSelectorRemove);
 
-long				HostRename(const char* oldNameP, const char* newNameP)
+Int32				HostRename(const char* oldNameP, const char* newNameP)
 						HOST_TRAP(hostSelectorRename);
 
 HostFILEType*		HostTmpFile(void)
@@ -663,10 +664,10 @@ char*				HostGetEnv(const char* nameP)
 						HOST_TRAP(hostSelectorGetEnv);
 
 
-void*				HostMalloc(long size)
+void*				HostMalloc(Int32 size)
 						HOST_TRAP(hostSelectorMalloc);
 
-void*				HostRealloc(void* p, long size)
+void*				HostRealloc(void* p, Int32 size)
 						HOST_TRAP(hostSelectorRealloc);
 
 void				HostFree(void* p)
@@ -701,10 +702,10 @@ HostTimeType		HostTime(HostTimeType*)
 						HOST_TRAP(hostSelectorTime);
 
 
-long				HostMkDir(const char*)
+Int32				HostMkDir(const char*)
 						HOST_TRAP(hostSelectorMkDir);
 
-long				HostRmDir(const char*)
+Int32				HostRmDir(const char*)
 						HOST_TRAP(hostSelectorRmDir);
 
 HostDIRType*		HostOpenDir(const char*)
@@ -713,24 +714,24 @@ HostDIRType*		HostOpenDir(const char*)
 HostDirEntType*		HostReadDir(HostDIRType*)
 						HOST_TRAP(hostSelectorReadDir);
 
-long				HostCloseDir(HostDIRType*)
+Int32				HostCloseDir(HostDIRType*)
 						HOST_TRAP(hostSelectorCloseDir);
 
 
-long				HostStat(const char*, HostStatType*)
+Int32				HostStat(const char*, HostStatType*)
 						HOST_TRAP(hostSelectorStat);
 
-long				HostTruncate(const char*, long)
+Int32				HostTruncate(const char*, Int32)
 						HOST_TRAP(hostSelectorTruncate);
 
 
-long				HostUTime (const char*, HostUTimeType*)
+Int32				HostUTime (const char*, HostUTimeType*)
 						HOST_TRAP(hostSelectorUTime);
 
-long				HostGetFileAttr(const char*, long*)
+Int32				HostGetFileAttr(const char*, UInt32*)
 						HOST_TRAP(hostSelectorGetFileAttr);
 
-long				HostSetFileAttr(const char*, long)
+Int32				HostSetFileAttr(const char*, UInt32)
 						HOST_TRAP(hostSelectorSetFileAttr);
 
 
@@ -741,13 +742,13 @@ long				HostSetFileAttr(const char*, long)
 HostBoolType		HostGremlinIsRunning(void)
 						HOST_TRAP(hostSelectorGremlinIsRunning);
 
-long				HostGremlinNumber(void)
+Int32				HostGremlinNumber(void)
 						HOST_TRAP(hostSelectorGremlinNumber);
 
-long				HostGremlinCounter(void)
+Int32				HostGremlinCounter(void)
 						HOST_TRAP(hostSelectorGremlinCounter);
 
-long				HostGremlinLimit(void)
+Int32				HostGremlinLimit(void)
 						HOST_TRAP(hostSelectorGremlinLimit);
 
 HostErrType			HostGremlinNew(const HostGremlinInfoType*)
@@ -758,13 +759,13 @@ HostErrType			HostGremlinNew(const HostGremlinInfoType*)
 /* Import/export-related calls											*/
 /* ==================================================================== */
 
-HostErrType			HostImportFile(const char* fileName, long cardNum)
+HostErrType			HostImportFile(const char* fileName, Int32 cardNum)
 						HOST_TRAP(hostSelectorImportFile);
 
-HostErrType			HostImportFileWithID(const char* fileName, long cardNum, LocalID* newIDP)
+HostErrType			HostImportFileWithID(const char* fileName, Int32 cardNum, LocalID* newIDP)
 						HOST_TRAP(hostSelectorImportFileWithID);
 
-HostErrType			HostExportFile(const char* fileName, long cardNum, const char* dbName)
+HostErrType			HostExportFile(const char* fileName, Int32 cardNum, const char* dbName)
 						HOST_TRAP(hostSelectorExportFile);
 
 HostErrType			HostSaveScreen(const char* fileName)
@@ -834,7 +835,7 @@ void				HostSetPreference(const char*, const char*)
 HostFILEType*		HostLogFile(void)
 						HOST_TRAP(hostSelectorLogFile);
 
-void				HostSetLogFileSize(long)
+void				HostSetLogFileSize(Int32)
 						HOST_TRAP(hostSelectorSetLogFileSize);
 
 
@@ -842,7 +843,7 @@ void				HostSetLogFileSize(long)
 /* RPC-related calls													*/
 /* ==================================================================== */
 
-HostErrType			HostSessionCreate(const char* device, long ramSize, const char* romPath)
+HostErrType			HostSessionCreate(const char* device, Int32 ramSize, const char* romPath)
 						HOST_TRAP(hostSelectorSessionCreate);
 
 HostErrType			HostSessionOpen(const char* psfFileName)
@@ -860,7 +861,7 @@ HostErrType			HostSessionQuit(void)
 HostErrType			HostSignalSend(HostSignalType signalNumber)
 						HOST_TRAP(hostSelectorSignalSend);
 
-HostErrType			HostSignalWait(long timeout, HostSignalType* signalNumber)
+HostErrType			HostSignalWait(Int32 timeout, HostSignalType* signalNumber)
 						HOST_TRAP(hostSelectorSignalWait);
 
 HostErrType			HostSignalResume(void)
@@ -908,13 +909,13 @@ HostErr				HostDbgClearDataBreak (void)
 /* Slot related calls													*/
 /* ==================================================================== */
 
-long				HostSlotMax(void)
+Int32				HostSlotMax(void)
 						HOST_TRAP(hostSelectorSlotMax);
 
-const char*			HostSlotRoot(long slotNo)
+const char*			HostSlotRoot(Int32 slotNo)
 						HOST_TRAP(hostSelectorSlotRoot);
 
-HostBoolType		HostSlotHasCard(long slotNo)
+HostBoolType		HostSlotHasCard(Int32 slotNo)
 						HOST_TRAP(hostSelectorSlotHasCard);
 
 

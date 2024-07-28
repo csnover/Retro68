@@ -44,6 +44,7 @@
 // identifies platform that don't.
 //
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <time.h>
@@ -172,7 +173,7 @@ omni_condition::wait(void)
 }
 
 int
-omni_condition::timedwait(unsigned long secs, unsigned long nanosecs)
+omni_condition::timedwait(uint32_t secs, uint32_t nanosecs)
 {
     timespec rqts = { secs, nanosecs };
 
@@ -803,7 +804,7 @@ omni_thread::yield(void)
 
 
 void
-omni_thread::sleep(unsigned long secs, unsigned long nanosecs)
+omni_thread::sleep(uint32_t secs, uint32_t nanosecs)
 {
     timespec rqts = { secs, nanosecs };
 
@@ -819,7 +820,7 @@ omni_thread::sleep(unsigned long secs, unsigned long nanosecs)
 	throw omni_thread_fatal(errno);
 
 #elif defined(__linux__) || defined(__aix__) || defined(__svr4__) || defined(__bsdi__)
-
+    (void)rqts;
     if (secs > 2000) {
 	::sleep(secs);
     } else {
@@ -837,8 +838,8 @@ omni_thread::sleep(unsigned long secs, unsigned long nanosecs)
 
 
 void
-omni_thread::get_time(unsigned long* abs_sec, unsigned long* abs_nsec,
-		      unsigned long rel_sec, unsigned long rel_nsec)
+omni_thread::get_time(uint32_t* abs_sec, uint32_t* abs_nsec,
+		      uint32_t rel_sec, uint32_t rel_nsec)
 {
     timespec abs;
 

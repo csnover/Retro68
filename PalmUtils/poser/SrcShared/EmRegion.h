@@ -99,7 +99,7 @@ class EmRegion
 		const EmRect&			Bounds		(void) const;
 			// Returns an EmRect containing the bounds of the region.
 
-		long					GetRects	(EmRect* r) const;
+		int32					GetRects	(EmRect* r) const;
 			// Decompose the region into a set of rectangles, returning the
 			// number of rectangles. You pass in a pointer to a buffer that
 			// will receive the rectangles. If you pass in NULL, no rectangles
@@ -158,9 +158,9 @@ class EmRegion
 			eIntersection    = 3
 		};
 
-								EmRegion	(const EmCoord* s, long len);
+								EmRegion	(const EmCoord* s, int32 len);
 		EmCoord*				GetBuf		(void) const;
-		long					Length		(void) const;
+		int32					Length		(void) const;
 
 		static EmRegion			RegionOp	(EOpcode code, const EmRegion& r1, const EmRegion& r2);
 
@@ -170,14 +170,14 @@ class EmRegion
 		{
 			public:
 										EmRegionImpl	(void);
-										EmRegionImpl	(const EmCoord* s, long len);
+										EmRegionImpl	(const EmCoord* s, int32 len);
 										EmRegionImpl	(const EmRect& r);
 										EmRegionImpl	(const EmRegion& r);
 										~EmRegionImpl	(void);
 		
 				Bool					operator==		(const EmRegionImpl& other) const;
 
-				long					GetRects		(EmRect* r) const;
+				int32					GetRects		(EmRect* r) const;
 				Bool					IsEqual			(const EmRegionImpl&) const;
 				Bool					Contains		(const EmPoint& p) const;
 		
@@ -190,7 +190,7 @@ class EmRegion
 				friend class EmRegion;
 		
 				EmRect					fBounds;
-				long					fCapacity;
+				int32					fCapacity;
 				EmCoord*				fBuf;
 				EmCoord					fRectBuf[7];
 		};
@@ -209,7 +209,7 @@ class EmRegionRectIterator
 	private:
 		EmRegion				fRegion;
 		EmCoord*				fBufPtr;
-		long					fNext;
+		int32					fNext;
 };
 
 

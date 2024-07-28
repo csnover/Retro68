@@ -116,7 +116,7 @@ class EmPalmHeap
 
 	private:
 		static void				AddHeap					(UInt16 heapID);
-		static long				GetHeapVersion			(emuptr	heapHdr);
+		static int32			GetHeapVersion			(emuptr	heapHdr);
 
 	private:
 	
@@ -180,9 +180,9 @@ class EmPalmHeap
 			kVersion4	// 4 = has free master pointer list
 		};
 
-		long					Version					(void) const		{ return fVersion; }
-		long					HeapID					(void) const		{ return fHeapID; }
-		long					ChunkHeaderSize			(void) const		{ return fChunkHdrSize; }
+		int32					Version					(void) const		{ return fVersion; }
+		int32					HeapID					(void) const		{ return fHeapID; }
+		int32					ChunkHeaderSize			(void) const		{ return fChunkHdrSize; }
 
 		void					Validate				(void);
 
@@ -208,8 +208,8 @@ class EmPalmHeap
 		friend EmStream& operator << (EmStream&, const EmPalmHeap&);
 		friend EmStream& operator >> (EmStream&, EmPalmHeap&);
 
-		long					fVersion;
-		long					fHeapID;
+		int32					fVersion;
+		int32					fHeapID;
 
 		emuptr					fHeapHdrStart;
 		uint32					fHeapHdrSize;		// Up to the master pointer table struct
@@ -276,7 +276,7 @@ class EmPalmMPT
 			kVersion2	// 2 = >64K
 		};
 
-		long					Version					(void) const		{ return fVersion; }
+		int32					Version					(void) const		{ return fVersion; }
 		UInt32					NextTableOffset			(void) const		{ return fNextTblOffset; }
 
 	private:
@@ -287,7 +287,7 @@ class EmPalmMPT
 		friend EmStream& operator << (EmStream&, const EmPalmMPT&);
 		friend EmStream& operator >> (EmStream&, EmPalmMPT&);
 
-		long		fVersion;
+		int32		fVersion;
 
 		emuptr		fMptHdrStart;
 		uint32		fMptHdrSize;			// Up to the array of master pointers
@@ -337,7 +337,7 @@ class EmPalmChunk
 			kVersion2	// 2 = >64K
 		};
 
-		long					Version					(void) const		{ return fVersion; }
+		int32					Version					(void) const		{ return fVersion; }
 		Bool					Free					(void) const		{ return fFree; }
 		uint8					LockCount				(void) const		{ return fLockCount; }
 		uint8					Owner					(void) const		{ return fOwner; }
@@ -351,7 +351,7 @@ class EmPalmChunk
 		friend EmStream& operator << (EmStream&, const EmPalmChunk&);
 		friend EmStream& operator >> (EmStream&, EmPalmChunk&);
 
-		long		fVersion;
+		int32		fVersion;
 
 		emuptr		fChunkHdrStart;
 		uint32		fChunkHdrSize;

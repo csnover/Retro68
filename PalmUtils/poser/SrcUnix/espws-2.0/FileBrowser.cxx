@@ -465,9 +465,9 @@ FileBrowser::load(const char *directory)// I - Directory to load
     else if (filename[i] != '/' && filename[i] != '\\')
       strcat(filename, "/");
 
-    num_files = filename_list(filename, &files);
+    num_files = fl_filename_list(filename, &files);
 #else
-    num_files = filename_list(directory_, &files);
+    num_files = fl_filename_list(directory_, &files);
 #endif /* WIN32 || __EMX__ */
 
     if (num_files <= 0)
@@ -480,8 +480,8 @@ FileBrowser::load(const char *directory)// I - Directory to load
       {
 	sprintf(filename, "%s/%s", directory_, files[i]->d_name);
 
-	if (filename_isdir(filename) ||
-            filename_match(files[i]->d_name, pattern_))
+	if (fl_filename_isdir(filename) ||
+            fl_filename_match(files[i]->d_name, pattern_))
           add(files[i]->d_name, FileIcon::find(filename));
       }
 

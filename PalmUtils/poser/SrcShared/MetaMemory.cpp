@@ -99,7 +99,7 @@ void MetaMemory::Reset (void)
 
 void MetaMemory::Save (SessionFile& f)
 {
-	const long	kCurrentVersion = 1;
+	const int32	kCurrentVersion = 1;
 
 	Chunk			chunk;
 	EmStreamChunk	s (chunk);
@@ -128,7 +128,7 @@ void MetaMemory::Load (SessionFile& f)
 	Chunk	chunk;
 	if (f.ReadMetaInfo (chunk))
 	{
-		long			version;
+		int32			version;
 		EmStreamChunk	s (chunk);
 
 		s >> version;
@@ -329,7 +329,7 @@ void MetaMemory::Resync (const EmPalmChunkList& delta)
 //	it was.  These checks can be expensive, as they only occur when we're
 //	pretty sure we're about to report an error in a dialog.
 
-Errors::EAccessType MetaMemory::GetWhatHappened (emuptr address, long size, Bool forRead)
+Errors::EAccessType MetaMemory::GetWhatHappened (emuptr address, int32 size, Bool forRead)
 {
 	// If  we've whisked away all memory access checking, return now.
 
@@ -420,7 +420,7 @@ Errors::EAccessType MetaMemory::GetWhatHappened (emuptr address, long size, Bool
 //		¥ MetaMemory::AllowForBugs
 // ---------------------------------------------------------------------------
 
-Errors::EAccessType MetaMemory::AllowForBugs (emuptr address, long size, Bool forRead, Errors::EAccessType whatHappened)
+Errors::EAccessType MetaMemory::AllowForBugs (emuptr address, int32 size, Bool forRead, Errors::EAccessType whatHappened)
 {
 	if (whatHappened == Errors::kOKAccess)
 	{
@@ -613,7 +613,7 @@ emuptr MetaMemory::GetSysGlobalsEnd (void)
 	CEnableFullAccess	munge;	// Remove blocks on memory access.
 
 	return EmLowMem_GetGlobal (sysDispatchTableP) + 
-			EmLowMem_GetGlobal (sysDispatchTableSize) * (sizeof (void*));
+			EmLowMem_GetGlobal (sysDispatchTableSize) * (sizeof (emuptr));
 }
 // ---------------------------------------------------------------------------
 //		¥ MetaMemory::GetHeapHdrBegin
@@ -799,7 +799,7 @@ void MetaMemory::MarkRange (emuptr start, emuptr end, uint8 v)
 
 	uint8*	startP	= EmMemGetMetaAddress (start);
 	uint8*	endP	= startP + (end - start);	// EmMemGetMetaAddress (end);
-	uint8*	end4P	= (uint8*) (((uint32) endP) & ~3);
+	uint8*	end4P	= (uint8*) (((size_t) endP) & ~3);
 	uint8*	p		= startP;
 
 	EmAssert (end >= start);
@@ -819,11 +819,11 @@ void MetaMemory::MarkRange (emuptr start, emuptr end, uint8 v)
 	}
 	else
 	{
-		uint32	longValue = v;
+		size_t	longValue = v;
 		longValue |= (longValue << 8);
 		longValue |= (longValue << 16);
 
-		while (((uint32) p) & 3)		// while there are leading bytes
+		while (((size_t) p) & 3)		// while there are leading bytes
 		{
 			*p++ |= v;
 		}
@@ -879,7 +879,7 @@ void MetaMemory::UnmarkRange (emuptr start, emuptr end, uint8 v)
 
 	uint8*	startP	= EmMemGetMetaAddress (start);
 	uint8*	endP	= startP + (end - start);	// EmMemGetMetaAddress (end);
-	uint8*	end4P	= (uint8*) (((uint32) endP) & ~3);
+	uint8*	end4P	= (uint8*) (((size_t) endP) & ~3);
 	uint8*	p		= startP;
 
 	EmAssert (end >= start);
@@ -901,11 +901,11 @@ void MetaMemory::UnmarkRange (emuptr start, emuptr end, uint8 v)
 	}
 	else
 	{
-		uint32	longValue = v;
+		size_t	longValue = v;
 		longValue |= (longValue << 8);
 		longValue |= (longValue << 16);
 
-		while (((uint32) p) & 3)		// while there are leading bytes
+		while (((size_t) p) & 3)		// while there are leading bytes
 		{
 			*p++ &= v;
 		}
@@ -962,7 +962,7 @@ void MetaMemory::MarkUnmarkRange (emuptr start, emuptr end,
 
 	uint8*	startP	= EmMemGetMetaAddress (start);
 	uint8*	endP	= startP + (end - start);	// EmMemGetMetaAddress (end);
-	uint8*	end4P	= (uint8*) (((uint32) endP) & ~3);
+	uint8*	end4P	= (uint8*) (((size_t) endP) & ~3);
 	uint8*	p		= startP;
 
 	EmAssert (end >= start);
@@ -1007,7 +1007,7 @@ void MetaMemory::MarkUnmarkRange (emuptr start, emuptr end,
 			longOr |= (longOr << 8);
 			longOr |= (longOr << 16);
 
-			while (((uint32) p) & 3)		// while there are leading bytes
+			while (((size_t) p) & 3)		// while there are leading bytes
 			{
 				*p = (*p & andValue) | orValue;
 				p += sizeof (char);
@@ -1016,7 +1016,7 @@ void MetaMemory::MarkUnmarkRange (emuptr start, emuptr end,
 			while (p < end4P)				// while there are middle longs
 			{
 				*(uint32*) p = ((*(uint32*) p) & longAnd) | longOr;
-				p += sizeof (long);
+				p += sizeof (int32);
 			}
 
 			while (p < endP)				// while there are trailing bytes
@@ -3037,7 +3037,7 @@ static int PrvGetObjectSize (emuptr object, int type)
 		// Get the heap the window is in.  Use that to get information about
 		// the chunk the window is in.
 
-		const EmPalmHeap*	heap = EmPalmHeap::GetHeapByPtr ((MemPtr) object);
+		const EmPalmHeap*	heap = EmPalmHeap::GetHeapByPtr (EmMemFakeT<MemPtr>(object));
 
 		// Can't find the heap?  Aip!
 
@@ -3078,6 +3078,7 @@ static int PrvGetObjectSize (emuptr object, int type)
 //		¥ PrvGetNextBitmap
 // ---------------------------------------------------------------------------
 
+#if 0
 static emuptr PrvGetNextBitmap (emuptr p)
 {
 	emuptr	nextBitmap = EmMemNULL;
@@ -3118,7 +3119,7 @@ static emuptr PrvGetNextBitmap (emuptr p)
 
 	return nextBitmap;
 }
-
+#endif
 
 // ---------------------------------------------------------------------------
 //		¥ PrvCheckFormObject
@@ -3136,10 +3137,10 @@ static Bool PrvCheckFormObject (EmAliasFormType<PAS>& form,
 	FormObjectKind	kind		= formObject.objectType;
 	emuptr			objectAddr	= formObject.object;
 
-	static int	kSizeArray[] =
+	static size_t	kSizeArray[] =
 	{
 		EmAliasFieldType<PAS>::GetSize (),				// frmFieldObj
-		-1,												// frmControlObj
+		(size_t)-1,										// frmControlObj
 		EmAliasListType<PAS>::GetSize (),				// frmListObj
 		EmAliasTableType<PAS>::GetSize (),				// frmTableObj
 		EmAliasFormBitmapType<PAS>::GetSize (),			// frmBitmapObj
@@ -4014,7 +4015,7 @@ static void PrvSearchForCodeChunk (emuptr pc)
 			// Get the heap the resource is in.  Use that to get information about
 			// the chunk the resource is in.
 
-			const EmPalmHeap*	heap = EmPalmHeap::GetHeapByPtr ((MemPtr) resourceP);
+			const EmPalmHeap*	heap = EmPalmHeap::GetHeapByPtr (EmMemFakeT<MemPtr>(resourceP));
 
 			// Can't find the heap?  Aip!
 

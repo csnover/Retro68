@@ -84,13 +84,13 @@ static const HwrM68EZ328Type	kInitial68EZ328RegisterValues =
 	0x2430,		// Word		pllControl;						// $200: PLL Control Register
 	0x0123,		// Word		pllFreqSel;						// $202: PLL Frequency Select Register
 	0,		// !!! ---> Marked as reserved in 1.4 Word		pllTest;						// $204: PLL Test Register (do not access)
-	{ 0 },		// Byte											___filler44;
+	0,			// Byte											___filler44;
 	0x1F,		// Byte		pwrControl;						// $207: Power Control Register
 
 	{ 0 },		// Byte											___filler3[0x300-0x208];
 
 	0x00,		// Byte		intVector;						// $300: Interrupt Vector Register
-	{ 0 },		// Byte											___filler4;
+	0,			// Byte											___filler4;
 	0x0000,		// Word		intControl;						// $302: Interrupt Control Register
 	0x00FF,		// Word		intMaskHi;						// $304: Interrupt Mask Register/HIGH word
 	0xFFFF,		// Word		intMaskLo;						// $306: Interrupt Mask Register/LOW word
@@ -183,7 +183,7 @@ static const HwrM68EZ328Type	kInitial68EZ328RegisterValues =
 	{ 0 },		// Byte											___filler28[0xA00-0x90C];
 
 	0x00000000,	// DWord	lcdStartAddr;					// $A00: Screen Starting Address Register
-	{ 0 },		// Byte											___filler29;
+	0,			// Byte											___filler29;
 	0xFF,		// Byte		lcdPageWidth;					// $A05: Virtual Page Width Register
 	{ 0 },		// Byte											___filler30[2];
 	0x03FF,		// Word		lcdScreenWidth;					// $A08: Screen Width Register
@@ -192,17 +192,17 @@ static const HwrM68EZ328Type	kInitial68EZ328RegisterValues =
 	0x0000,		// Word		lcdCursorXPos;					// $A18: Cursor X Position
 	0x0000,		// Word		lcdCursorYPos;					// $A1A:	Cursor Y Position
 	0x0101,		// Word		lcdCursorWidthHeight;			// $A1C: Cursor Width and Height
-	{ 0 },		// Byte											___filler32;
+	0,			// Byte											___filler32;
 	0x7F,		// Byte		lcdBlinkControl;				// $A1F: Blink Control Register
 	0x00,		// Byte		lcdPanelControl;				// $A20: Panel Interface Control Register
 	0x00,		// Byte		lcdPolarity;					// $A21: Polarity Config Register
-	{ 0 },		// Byte											___filler33;						
+	0,			// Byte											___filler33;
 	0x00,		// Byte		lcdACDRate;						// $A23: ACD (M) Rate Control Register
-	{ 0 },		// Byte											___filler34;
+	0,			// Byte											___filler34;
 	0x00,		// Byte		lcdPixelClock;					// $A25: Pixel Clock Divider Register
-	{ 0 },		// Byte											___filler35;
+	0,			// Byte											___filler35;
 	0x40,		// Byte		lcdClockControl;				// $A27: Clocking Control Register
-	{ 0 },		// Byte											___filler36;
+	0,			// Byte											___filler36;
 	0xFF,		// Byte		lcdRefreshRateAdj;				// $A29: Refresh Rate Adjustment Register
 	{ 0 },		// Byte											___filler2003[0xA2D-0xA2A];
 	0x00,		// Byte		lcdPanningOffset;				// $A2D: Panning Offset Register
@@ -210,10 +210,10 @@ static const HwrM68EZ328Type	kInitial68EZ328RegisterValues =
 	{ 0 },		// Byte											___filler37[0xA31-0xA2E];
 
 	0xB9,		// Byte		lcdFrameRate;					// $A31: Frame Rate Control Modulation Register
-	{ 0 },		// Byte											___filler2004;
+	0,			// Byte											___filler2004;
 	0x84,		// Byte		lcdGrayPalette;					// $A33: Gray Palette Mapping Register
 	0x00,		// Byte		lcdReserved;					// $A34: Reserved
-	{ 0 },		// Byte											___filler2005;
+	0,			// Byte											___filler2005;
 	0x0000,		// Word		lcdContrastControlPWM;			// $A36: Contrast Control
 
 	{ 0 },		// Byte											___filler40[0xB00-0xA38];
@@ -332,7 +332,7 @@ void EmRegsEZ::Save (SessionFile& f)
 	f.WriteHwrDBallEZType (f68EZ328Regs);
 	f.FixBug (SessionFile::kBugByteswappedStructs);
 
-	const long	kCurrentVersion = 3;
+	const int32	kCurrentVersion = 3;
 
 	Chunk			chunk;
 	EmStreamChunk	s (chunk);
@@ -405,7 +405,7 @@ void EmRegsEZ::Load (SessionFile& f)
 	Chunk		chunk;
 	if (f.ReadDBallEZState (chunk))
 	{
-		long			version;
+		int32			version;
 		EmStreamChunk	s (chunk);
 
 		s >> version;
@@ -748,16 +748,16 @@ void EmRegsEZ::CycleSlowly (Bool sleeping)
 	{
 		uint32	rtcAlarm = READ_REGISTER (rtcAlarm);
 
-		long	almHour	 = (rtcAlarm & hwrEZ328RTCAlarmHoursMask) >> hwrEZ328RTCAlarmHoursOffset;
-		long	almMin	 = (rtcAlarm & hwrEZ328RTCAlarmMinutesMask) >> hwrEZ328RTCAlarmMinutesOffset;
-		long	almSec	 = (rtcAlarm & hwrEZ328RTCAlarmSecondsMask) >> hwrEZ328RTCAlarmSecondsOffset;
-		long	almInSeconds = (almHour * 60 * 60) + (almMin * 60) + almSec;
+		int32	almHour	 = (rtcAlarm & hwrEZ328RTCAlarmHoursMask) >> hwrEZ328RTCAlarmHoursOffset;
+		int32	almMin	 = (rtcAlarm & hwrEZ328RTCAlarmMinutesMask) >> hwrEZ328RTCAlarmMinutesOffset;
+		int32	almSec	 = (rtcAlarm & hwrEZ328RTCAlarmSecondsMask) >> hwrEZ328RTCAlarmSecondsOffset;
+		int32	almInSeconds = (almHour * 60 * 60) + (almMin * 60) + almSec;
 
-		long	nowHour;
-		long	nowMin;
-		long	nowSec;
+		int32	nowHour;
+		int32	nowMin;
+		int32	nowSec;
 		::GetHostTime (&nowHour, &nowMin, &nowSec);
-		long	nowInSeconds = (nowHour * 60 * 60) + (nowMin * 60) + nowSec;
+		int32	nowInSeconds = (nowHour * 60 * 60) + (nowMin * 60) + nowSec;
 
 		if (almInSeconds <= nowInSeconds)
 		{
@@ -942,8 +942,8 @@ void EmRegsEZ::GetLCDScanlines (EmScreenUpdateInfo& info)
 	emuptr lastLineAddr  = baseAddr + (info.fLastLine  * rowBytes);
 
 	// TODO: probably move to <M68EZ328Hwr.h>
-	const long hwrEZ328LcdPageSize = 0x00020000; // 128K
-	const long hwrEZ328LcdPageMask = 0xFFFE0000;
+	const int32 hwrEZ328LcdPageSize = 0x00020000; // 128K
+	const int32 hwrEZ328LcdPageMask = 0xFFFE0000;
 
 	uint8* dst = ((uint8*) info.fImage.GetBits () + firstLineAddr - baseAddr);
 	emuptr boundaryAddr = ((baseAddr & hwrEZ328LcdPageMask) + hwrEZ328LcdPageSize);
@@ -1438,7 +1438,7 @@ uint32 EmRegsEZ::rtcHourMinSecRead (emuptr address, int size)
 {
 	// Get the desktop machine's time.
 
-	long	hour, min, sec;
+	int32	hour, min, sec;
 
 	if (Hordes::IsOn ())
 	{
@@ -2313,7 +2313,7 @@ UInt8 EmRegsEZ::GetHardwareID (void)
 	EmAssert (gSession);
 
 	EmDevice	device		= gSession->GetDevice ();
-	long		miscFlags	= device.HardwareID ();
+	int32		miscFlags	= device.HardwareID ();
 
 	// Reverse map the following:
 
@@ -2374,12 +2374,12 @@ void EmRegsEZ::UpdateUARTInterrupts (const EmUARTDragonball::State& state)
 {
 	// Generate the appropriate interrupts.
 
-	if (state.RX_FULL_ENABLE	&& state.RX_FIFO_FULL	||
-		state.RX_HALF_ENABLE	&& state.RX_FIFO_HALF	||
-		state.RX_RDY_ENABLE		&& state.DATA_READY		||
-		state.TX_EMPTY_ENABLE	&& state.TX_FIFO_EMPTY	||
-		state.TX_HALF_ENABLE	&& state.TX_FIFO_HALF	||
-		state.TX_AVAIL_ENABLE	&& state.TX_AVAIL)
+	if ((state.RX_FULL_ENABLE	&& state.RX_FIFO_FULL)	||
+		(state.RX_HALF_ENABLE	&& state.RX_FIFO_HALF)	||
+		(state.RX_RDY_ENABLE	&& state.DATA_READY)	||
+		(state.TX_EMPTY_ENABLE	&& state.TX_FIFO_EMPTY)	||
+		(state.TX_HALF_ENABLE	&& state.TX_FIFO_HALF)	||
+		(state.TX_AVAIL_ENABLE	&& state.TX_AVAIL))
 	{
 		// Set the UART interrupt.
 
@@ -2588,7 +2588,7 @@ void EmRegsEZ::UnmarshalUARTState (const EmUARTDragonball::State& state)
 
 int EmRegsEZ::GetPort (emuptr address)
 {
-	const long	MASK = 0x00000FF8;
+	const int32	MASK = 0x00000FF8;
 
 	switch (address & MASK)
 	{
@@ -2634,13 +2634,13 @@ void EmRegsEZ::PrvGetPalette (RGBList& thePalette)
 			background = ::SkinGetBackgroundColor ();
 	}
 
-	long	br = ((long) background.fRed);
-	long	bg = ((long) background.fGreen);
-	long	bb = ((long) background.fBlue);
+	int32	br = ((int32) background.fRed);
+	int32	bg = ((int32) background.fGreen);
+	int32	bb = ((int32) background.fBlue);
 
-	long	dr = ((long) foreground.fRed) - ((long) background.fRed);
-	long	dg = ((long) foreground.fGreen) - ((long) background.fGreen);
-	long	db = ((long) foreground.fBlue) - ((long) background.fBlue);
+	int32	dr = ((int32) foreground.fRed) - ((int32) background.fRed);
+	int32	dg = ((int32) foreground.fGreen) - ((int32) background.fGreen);
+	int32	db = ((int32) foreground.fBlue) - ((int32) background.fBlue);
 
 	int32	bpp			= 1 << (READ_REGISTER (lcdPanelControl) & 0x03);
 	int32	numColors	= 1 << bpp;

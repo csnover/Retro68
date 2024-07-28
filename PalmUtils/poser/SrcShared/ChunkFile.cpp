@@ -17,6 +17,7 @@
 #include "Byteswapping.h"		// Canonical
 #include "Platform.h"			// ReallocMemory
 
+#include <cstring>
 
 /***********************************************************************
  *
@@ -72,18 +73,18 @@ ChunkFile::~ChunkFile (void)
  *
  ***********************************************************************/
 
-long ChunkFile::FindChunk (Tag targetTag)
+int32 ChunkFile::FindChunk (Tag targetTag)
 {
-	long	len = kChunkNotFound;
-	long	fileOffset = 0;
-	long	fileLength = fStream.GetLength ();
+	int32	len = kChunkNotFound;
+	int32	fileOffset = 0;
+	int32	fileLength = fStream.GetLength ();
 
 	fStream.SetMarker (fileOffset, kStreamFromStart);
 
 	while (fileOffset < fileLength)
 	{
 		Tag		chunkTag;
-		long	chunkLen;
+		int32	chunkLen;
 
 		fStream.GetBytes (&chunkTag, sizeof (chunkTag));
 		fStream.GetBytes (&chunkLen, sizeof (chunkLen));
@@ -122,8 +123,8 @@ long ChunkFile::FindChunk (Tag targetTag)
 
 Bool ChunkFile::ReadChunk (int index, Tag& tag, Chunk& chunk)
 {
-	long	fileOffset = 0;
-	long	fileLength = fStream.GetLength ();
+	int32	fileOffset = 0;
+	int32	fileLength = fStream.GetLength ();
 
 	fStream.SetMarker (fileOffset, kStreamFromStart);
 
@@ -132,7 +133,7 @@ Bool ChunkFile::ReadChunk (int index, Tag& tag, Chunk& chunk)
 		// Read the chunk's tag and length.
 
 		Tag		chunkTag;
-		long	chunkLen;
+		int32	chunkLen;
 
 		fStream.GetBytes (&chunkTag, sizeof (chunkTag));
 		fStream.GetBytes (&chunkLen, sizeof (chunkLen));
@@ -184,7 +185,7 @@ Bool ChunkFile::ReadChunk (int index, Tag& tag, Chunk& chunk)
 
 Bool ChunkFile::ReadChunk (Tag tag, Chunk& chunk)
 {
-	long	size = this->FindChunk (tag);
+	int32	size = this->FindChunk (tag);
 
 	if (size == kChunkNotFound)
 		return false;
@@ -300,7 +301,7 @@ Bool ChunkFile::ReadInt (Tag tag, int32& val)
 
 Bool ChunkFile::ReadString (Tag tag, char* s)
 {
-	long	len = ChunkFile::FindChunk (tag);
+	int32	len = ChunkFile::FindChunk (tag);
 	if (len == kChunkNotFound)
 		return false;
 
@@ -316,7 +317,7 @@ Bool ChunkFile::ReadString (Tag tag, char* s)
 
 Bool ChunkFile::ReadString (Tag tag, string& s)
 {
-	long	len = ChunkFile::FindChunk (tag);
+	int32	len = ChunkFile::FindChunk (tag);
 	if (len == kChunkNotFound)
 		return false;
 
@@ -558,7 +559,7 @@ Chunk::Chunk (void) :
  *
  ***********************************************************************/
 
-Chunk::Chunk (long inLength) :
+Chunk::Chunk (int32 inLength) :
 	fPtr (NULL),
 	fUsedSize (0),
 	fAllocatedSize (0)
@@ -665,7 +666,7 @@ void* Chunk::GetPointer (void) const
  *
  ***********************************************************************/
 
-long Chunk::GetLength (void) const
+int32 Chunk::GetLength (void) const
 {
 	return fUsedSize;
 }
@@ -687,12 +688,12 @@ long Chunk::GetLength (void) const
  *
  ***********************************************************************/
 
-void Chunk::SetLength (long inLength)
+void Chunk::SetLength (int32 inLength)
 {
 	if (inLength > fAllocatedSize)
 	{
-		const long	kSlushFund = 100;
-		long	newAllocatedLength = inLength + kSlushFund;
+		const int32	kSlushFund = 100;
+		int32	newAllocatedLength = inLength + kSlushFund;
 		fPtr = Platform::ReallocMemory (fPtr, newAllocatedLength);
 		fAllocatedSize = newAllocatedLength;
 	}

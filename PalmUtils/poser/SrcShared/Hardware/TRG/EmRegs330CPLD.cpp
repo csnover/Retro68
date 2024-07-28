@@ -198,16 +198,16 @@ void EmRegs330CPLD::SetWord (emuptr address, uint32 val)
             Reg4 = val;
 
             fPortMgr->LCDOn = (Reg4 & Cpld4LcdBiasOn);
-	        fPortMgr->BacklightOn = (Reg4 & Cpld4BlPdOn);
-	        fPortMgr->IRPortOn = (Reg4 & Cpld4IrdaOff) == 0;
-	        fPortMgr->SenseCurrent = (Reg4 & Cpld4SenseCurrent);
+            fPortMgr->BacklightOn = (Reg4 & Cpld4BlPdOn);
+            fPortMgr->IRPortOn = (Reg4 & Cpld4IrdaOff) == 0;
+            fPortMgr->SenseCurrent = (Reg4 & Cpld4SenseCurrent);
             fPortMgr->SDChipSelect = ((Reg4 & Cpld4MmcCsOn) == 0);
 
-        	if ((fPortMgr->LCDOn != lcdWasOn) || (fPortMgr->BacklightOn != backlightWasOn))
-		        EmScreen::InvalidateAll ();
+            if ((fPortMgr->LCDOn != lcdWasOn) || (fPortMgr->BacklightOn != backlightWasOn))
+                EmScreen::InvalidateAll ();
 
-			if (irWasOn != fPortMgr->IRPortOn)
-				EmHAL::LineDriverChanged (kUARTIR);
+            if (irWasOn != fPortMgr->IRPortOn)
+                EmHAL::LineDriverChanged (kUARTIR);
 
             break;
     }

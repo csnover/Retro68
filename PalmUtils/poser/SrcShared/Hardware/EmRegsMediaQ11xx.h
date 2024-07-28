@@ -225,7 +225,7 @@ class EmRegsMediaQ11xx : public EmRegs, public EmHALHandler
 		void					invalidateWrite			(emuptr address, int size, uint32 value);
 
 	private:
-		void					AddressError			(emuptr address, long size, Bool forRead);
+		void					AddressError			(emuptr address, int32 size, Bool forRead);
 		void					PrvGetPalette			(RGBList& thePalette);
 		void					PrvUpdateByteLanes		(void);
 

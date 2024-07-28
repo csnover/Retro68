@@ -44,7 +44,7 @@ struct EmuAppInfo
 	UInt16		fMemOwnerID;
 	emuptr		fStackP;
 	emuptr		fStackEndP;
-	long		fStackSize;
+	int32		fStackSize;
 	char		fName[dmDBNameLength];
 	char		fVersion[256];	// <gulp> I hope this is big enough...
 };
@@ -106,7 +106,7 @@ struct EmPatchStateData
 		uint32					fOSVersion;
 		uint32					fEncoding;
 
-		long 					fSysBinarySearchCount;
+		int32 					fSysBinarySearchCount;
 
 		uint16 					fQuitAppCardNo;
 		LocalID					fQuitAppDbID;
@@ -117,10 +117,10 @@ struct EmPatchStateData
 
 		bool 					fHeapInitialized;
 
-		long 					fMemMgrCount;
+		int32 					fMemMgrCount;
 		Bool					fMemMgrLeaks;
-		long 					fMemSemaphoreCount;
-		unsigned long			fMemSemaphoreReserveTime;
+		int32 					fMemSemaphoreCount;
+		uint32			fMemSemaphoreReserveTime;
 
 		uint32					fResizeOrigSize;
 		uint16 					fHeapID;
@@ -146,8 +146,8 @@ class EmPatchState
 			PSPersistStep2		// Backward compatability step 2
 		};
 
-		static Err				Save					(EmStreamChunk &s, long version = 1, PersistencePhase pass = PSPersistAll);
-		static Err				Load					(EmStreamChunk &s, long version = 1, PersistencePhase pass = PSPersistAll);
+		static Err				Save					(EmStreamChunk &s, int32 version = 1, PersistencePhase pass = PSPersistAll);
+		static Err				Load					(EmStreamChunk &s, int32 version = 1, PersistencePhase pass = PSPersistAll);
 
 		static Err				SaveCurAppInfo			(EmStreamChunk &s);
 		static Err				LoadCurAppInfo			(EmStreamChunk &s);

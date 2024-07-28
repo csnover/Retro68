@@ -281,7 +281,7 @@ void EmBankSRAM::SetBankHandlers (void)
 	// Memory banks 0x1000 to <mumble> are managed by the functions
 	// in EmBankSRAM.  <mumble> is based on the amount of RAM being emulated.
 
-	long	numBanks = EmMemBankIndex (gMemoryStart + gRAMBank_Size - 1) -
+	int32	numBanks = EmMemBankIndex (gMemoryStart + gRAMBank_Size - 1) -
 									EmMemBankIndex (gMemoryStart) + 1;
 	Memory::InitializeBanks (gAddressBank, EmMemBankIndex (gMemoryStart), numBanks);
 }
@@ -610,7 +610,7 @@ void EmBankSRAM::AddOpcodeCycles (void)
 //		¥ EmBankSRAM::AddressError
 // ---------------------------------------------------------------------------
 
-void EmBankSRAM::AddressError (emuptr address, long size, Bool forRead)
+void EmBankSRAM::AddressError (emuptr address, int32 size, Bool forRead)
 {
 	EmAssert (gCPU68K);
 	gCPU68K->AddressError (address, size, forRead);
@@ -621,7 +621,7 @@ void EmBankSRAM::AddressError (emuptr address, long size, Bool forRead)
 //		¥ EmBankSRAM::InvalidAccess
 // ---------------------------------------------------------------------------
 
-void EmBankSRAM::InvalidAccess (emuptr address, long size, Bool forRead)
+void EmBankSRAM::InvalidAccess (emuptr address, int32 size, Bool forRead)
 {
 	EmAssert (gCPU68K);
 	gCPU68K->BusError (address, size, forRead);
@@ -632,7 +632,7 @@ void EmBankSRAM::InvalidAccess (emuptr address, long size, Bool forRead)
 //		¥ EmBankSRAM::ProtectedAccess
 // ---------------------------------------------------------------------------
 
-void EmBankSRAM::ProtectedAccess (emuptr address, long size, Bool forRead)
+void EmBankSRAM::ProtectedAccess (emuptr address, int32 size, Bool forRead)
 {
 	EmAssert (gCPU68K);
 	gCPU68K->BusError (address, size, forRead);

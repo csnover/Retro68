@@ -89,7 +89,7 @@ void EmPatchModule::PrvLoadProtoPatchTable (uint16 tableNbr)
 	
 	ProtoPatchTableEntry *protoPatchTable = fProtoTables[tableNbr];
 
-	for (long ii = 0; protoPatchTable[ii].fTrapWord; ++ii)
+	for (int32 ii = 0; protoPatchTable[ii].fTrapWord; ++ii)
 	{
 		// If there is a headpatch function...
 

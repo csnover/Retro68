@@ -63,8 +63,8 @@ class EmDevice
 
 		RAMSizeType				MinRAMSize			(void) const;
 
-		long					HardwareID			(void) const;
-		long					HardwareSubID		(void) const;
+		int32					HardwareID			(void) const;
+		int32					HardwareSubID		(void) const;
 
 		string					GetMenuString		(void) const;
 		string					GetIDString			(void) const;

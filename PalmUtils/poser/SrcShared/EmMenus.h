@@ -155,11 +155,11 @@ class EmMenu : public EmMenuItemList
 								EmMenu	(const EmMenuItemList& o) : EmMenuItemList (o) {}
 								~EmMenu	(void) {}
 
-		unsigned long			GetChangeCount	(void)				{ return fChangeCount; };
-		void					SetChangeCount	(unsigned long v)	{ fChangeCount = v; }
+		uint32			GetChangeCount	(void)				{ return fChangeCount; };
+		void					SetChangeCount	(uint32 v)	{ fChangeCount = v; }
 
 	private:
-		unsigned long			fChangeCount;
+		uint32			fChangeCount;
 };
 
 

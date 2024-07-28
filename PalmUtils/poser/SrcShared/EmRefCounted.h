@@ -69,7 +69,7 @@ class EmRefCounted
 			// more than one client is pointing to this object.
 
 	private:
-		long					fRefCount;
+		int32					fRefCount;
 };
 
 template <class T>

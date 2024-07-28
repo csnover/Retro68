@@ -20,7 +20,7 @@
 class SessionFile;
 
 
-extern unsigned long int gGremlinNext;
+extern unsigned int gGremlinNext;
 
 class Gremlins
 {

@@ -50,8 +50,8 @@ class EmMinimize
 		static void				MinimizationComplete	(void);
 		static void				SaveMinimalEvents		(void);
 		static void				OutputEventsAsEnglish	(void);
-		static Bool				MakeAnotherPass			(long oldNumEvents, long newNumEvents);
-		static void				CurrentRange			(long& begin, long& end);
+		static Bool				MakeAnotherPass			(int32 oldNumEvents, int32 newNumEvents);
+		static void				CurrentRange			(int32& begin, int32& end);
 		static void				InitialLevel			(void);
 		static Bool				SplitCurrentLevel		(void);
 		static void				StartAgain				(void);
@@ -65,15 +65,15 @@ class EmMinimize
 
 	private:
 		static void				LoadEvents				(void);
-		static long				FindFirstError			(void);
+		static int32			FindFirstError			(void);
 		static void				GenerateStackCrawl		(StringList&);
 
 
 	private:
 		struct EmMinimizeLevel
 		{
-			long	fBegin;
-			long	fEnd;
+			int32	fBegin;
+			int32	fEnd;
 
 			// The following Boolean is used to indicate that the above range
 			// has already been checked in some fashion and that we know or
@@ -123,9 +123,9 @@ class EmMinimize
 		static EmMinimizeState	fgState;
 		static Bool				fgIsOn;
 		static uint32			fgStartTime;
-		static long				fgInitialNumberOfEvents;
-		static long				fgDiscardedNumberOfEvents;
-		static long				fgPassNumber;
+		static int32			fgInitialNumberOfEvents;
+		static int32			fgDiscardedNumberOfEvents;
+		static int32			fgPassNumber;
 		static Bool				fgPassEndedInError;
 		static StringList		fgLastStackCrawl;
 };

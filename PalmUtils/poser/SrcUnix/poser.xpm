@@ -1,5 +1,5 @@
 /* XPM */
-static char * poser_xpm[] = {
+static const char * poser_xpm[] = {
 "38 39 12 1",
 " 	c None",
 ".	c #C5C2C5",

@@ -29,7 +29,7 @@
 #include "SessionFile.h"		// SessionFile
 
 #include <math.h>				// pow
-#include <strstream>			// strstream
+#include <sstream>				// stringstream
 
 /*
 	Minimization Overview
@@ -297,9 +297,9 @@ omni_mutex					EmMinimize::fgMutex;
 EmMinimize::EmMinimizeState	EmMinimize::fgState;
 Bool						EmMinimize::fgIsOn;
 uint32						EmMinimize::fgStartTime;
-long						EmMinimize::fgInitialNumberOfEvents;
-long						EmMinimize::fgDiscardedNumberOfEvents;
-long						EmMinimize::fgPassNumber;
+int32						EmMinimize::fgInitialNumberOfEvents;
+int32						EmMinimize::fgDiscardedNumberOfEvents;
+int32						EmMinimize::fgPassNumber;
 Bool						EmMinimize::fgPassEndedInError;
 StringList					EmMinimize::fgLastStackCrawl;
 
@@ -475,9 +475,9 @@ void EmMinimize::NoErrorOccurred (void)
 
 	// Turn current set of events back on.
 
-	long	begin, end;
+	int32	begin, end;
 	EmMinimize::CurrentRange (begin, end);
-	PRINTF ("EmMinimize::NoErrorOccurred: re-enabling events %ld - %ld.", begin, end - 1);
+	PRINTF ("EmMinimize::NoErrorOccurred: re-enabling events %d - %d.", begin, end - 1);
 
 	EmEventPlayback::EnableEvents (begin, end);
 
@@ -523,7 +523,7 @@ void EmMinimize::ErrorOccurred (void)
 
 	// Keep the current set of events turned off.
 
-	long	begin, end;
+	int32	begin, end;
 	EmMinimize::CurrentRange (begin, end);
 	PRINTF ("EmMinimize::ErrorOccurred: discarding events %ld - %ld.", begin, end - 1);
 
@@ -538,12 +538,12 @@ void EmMinimize::ErrorOccurred (void)
 	// If the error occurred before the last event was played, then let's
 	// disable all subsequent events and start afresh.
 
-	long	currentEvent	= EmEventPlayback::GetCurrentEvent ();
-	long	numEvents		= EmEventPlayback::GetNumEvents ();
+	int32	currentEvent	= EmEventPlayback::GetCurrentEvent ();
+	int32	numEvents		= EmEventPlayback::GetNumEvents ();
 
 	if (currentEvent < numEvents)
 	{
-		PRINTF ("EmMinimize::ErrorOccurred: error occurred at event %ld of %ld.",
+		PRINTF ("EmMinimize::ErrorOccurred: error occurred at event %d of %d.",
 			currentEvent, numEvents);
 
 		omni_mutex_lock	lock (fgMutex);
@@ -585,7 +585,7 @@ uint32 EmMinimize::GetElapsedTime (void)
 
 void EmMinimize::GetCurrentRange (uint32& ubegin, uint32& uend)
 {
-	long	begin, end;
+	int32	begin, end;
 	EmMinimize::CurrentRange (begin, end);
 
 	ubegin = begin;
@@ -619,19 +619,19 @@ void EmMinimize::MinimizationPassComplete (void)
 	// Get the initial number of events, remove the masked-out events, and
 	// then get the remaining number of events.
 
-	long	oldNumEvents = EmEventPlayback::GetNumEvents ();
+	int32	oldNumEvents = EmEventPlayback::GetNumEvents ();
 
 	EmEventPlayback::CullEvents ();
 
-	long	newNumEvents = EmEventPlayback::GetNumEvents ();
+	int32	newNumEvents = EmEventPlayback::GetNumEvents ();
 
 	// If significant culling occurred, then let's make another pass.
 
 	if (EmMinimize::MakeAnotherPass (oldNumEvents, newNumEvents))
 	{
 		PRINTF ("EmMinimize::MinimizationPassComplete: making another pass.");
-		PRINTF ("	oldNumEvents = %ld", oldNumEvents);
-		PRINTF ("	newNumEvents = %ld", newNumEvents);
+		PRINTF ("	oldNumEvents = %d", oldNumEvents);
+		PRINTF ("	newNumEvents = %d", newNumEvents);
 
 		++fgPassNumber;
 
@@ -644,8 +644,8 @@ void EmMinimize::MinimizationPassComplete (void)
 	else if (fgPassNumber != kLastPass)
 	{
 		PRINTF ("EmMinimize::MinimizationPassComplete: making last pass.");
-		PRINTF ("	oldNumEvents = %ld", oldNumEvents);
-		PRINTF ("	newNumEvents = %ld", newNumEvents);
+		PRINTF ("	oldNumEvents = %d", oldNumEvents);
+		PRINTF ("	newNumEvents = %d", newNumEvents);
 
 		fgPassNumber = kLastPass;
 
@@ -662,8 +662,8 @@ void EmMinimize::MinimizationPassComplete (void)
 	else
 	{
 		PRINTF ("EmMinimize::MinimizationPassComplete: DONE.");
-		PRINTF ("	oldNumEvents = %ld", oldNumEvents);
-		PRINTF ("	newNumEvents = %ld", newNumEvents);
+		PRINTF ("	oldNumEvents = %d", oldNumEvents);
+		PRINTF ("	newNumEvents = %d", newNumEvents);
 
 		EmMinimize::MinimizationComplete ();
 	}
@@ -708,7 +708,7 @@ void EmMinimize::MinimizationComplete (void)
 		// Show a dialog telling the user about the results.
 
 		char buffer[200];
-		sprintf (buffer, "Minimization has been completed. %ld of %ld events discarded.",
+		sprintf (buffer, "Minimization has been completed. %d of %d events discarded.",
 			fgDiscardedNumberOfEvents, fgInitialNumberOfEvents);
 
 		EmDlg::DoCommonDialog (buffer, kDlgFlags_OK);
@@ -797,7 +797,7 @@ void EmMinimize::OutputEventsAsEnglish (void)
 	// directly to the file so that we can take advantage of the
 	// integer-to-text conversion facilities of ostream.
 
-	strstream	stream;
+	stringstream	stream;
 
 	// Write out our initial message.
 
@@ -864,11 +864,7 @@ void EmMinimize::OutputEventsAsEnglish (void)
 
 	// Write the event text to it.
 
-	textEventStream.PutBytes (stream.str (), stream.pcount ());
-
-	// Unfreeze the stream, or else its storage will be leaked.
-
-	stream.freeze (false);
+	textEventStream.PutBytes (stream.str().c_str(), stream.str().size());
 }
 
 
@@ -878,7 +874,7 @@ void EmMinimize::OutputEventsAsEnglish (void)
 // Return whether or not we feel that a significant amount of event culling
 // had occurred in the pass.  If so, we'll want to make another pass.
 
-Bool EmMinimize::MakeAnotherPass (long oldNumEvents, long newNumEvents)
+Bool EmMinimize::MakeAnotherPass (int32 oldNumEvents, int32 newNumEvents)
 {
 	// Make another pass if we've reduced the number of events in the previous
 	// pass by more than 10%.
@@ -892,7 +888,7 @@ Bool EmMinimize::MakeAnotherPass (long oldNumEvents, long newNumEvents)
 // ---------------------------------------------------------------------------
 // Return the current event range that we are examining.
 
-void EmMinimize::CurrentRange (long& begin, long& end)
+void EmMinimize::CurrentRange (int32& begin, int32& end)
 {
 	omni_mutex_lock	lock (fgMutex);
 
@@ -969,7 +965,7 @@ Bool EmMinimize::SplitCurrentLevel (void)
 	while (1)
 	{
 		EmMinimizeLevel	prevLevel = fgState.fLevels.back ();
-		long	prevRange = prevLevel.fEnd - prevLevel.fBegin;
+		int32	prevRange = prevLevel.fEnd - prevLevel.fBegin;
 
 		// If we're at the smallest range, leave and say we can't split this
 		// atom.
@@ -979,7 +975,7 @@ Bool EmMinimize::SplitCurrentLevel (void)
 
 		// Pop the top event range, split it, and put it back.
 
-		long	midpoint = (prevLevel.fBegin + prevLevel.fEnd) / 2;
+		int32	midpoint = (prevLevel.fBegin + prevLevel.fEnd) / 2;
 
 		EmAssert (prevLevel.fBegin < midpoint);
 		EmAssert (midpoint < prevLevel.fEnd);
@@ -1110,7 +1106,7 @@ void EmMinimize::SplitAndStartAgain (void)
 
 void EmMinimize::DisableAndStartAgain (void)
 {
-	long	begin, end;
+	int32	begin, end;
 	EmMinimize::CurrentRange (begin, end);
 
 	PRINTF ("EmMinimize::DisableAndStartAgain: disabling events %ld - %ld.", begin, end - 1);
@@ -1228,7 +1224,7 @@ void EmMinimize::LoadInitialState (void)
 
 void EmMinimize::RealLoadInitialState (void)
 {
-	ErrCode result = errNone;
+	// ErrCode result = errNone;
 
 	try
 	{
@@ -1239,7 +1235,7 @@ void EmMinimize::RealLoadInitialState (void)
 	}
 	catch (ErrCode errCode)
 	{
-		result = errCode;
+		// result = errCode;
 	}
 
 	// !!! Should probably do something on failure!
@@ -1268,7 +1264,7 @@ void EmMinimize::LoadEvents (void)
 // Return the index of the first error event record.  Return -1 if one could
 // not be found.
 
-long EmMinimize::FindFirstError (void)
+int32 EmMinimize::FindFirstError (void)
 {
 	// The actual implementation for this function is over in EmEventPlayback
 	// for now.  The current EmEventPlayback interface and implementation
@@ -1279,9 +1275,9 @@ long EmMinimize::FindFirstError (void)
 
 /*
 	EmRecordedEvent	event;
-	long			numEvents = EmEventPlayback::GetNumEvents ();
+	int32			numEvents = EmEventPlayback::GetNumEvents ();
 
-	for (long ii = 0; ii < numEvents; ++ii)
+	for (int32 ii = 0; ii < numEvents; ++ii)
 	{
 		EmEventPlayback::GetEvent (ii, event);
 

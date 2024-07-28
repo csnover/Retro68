@@ -38,7 +38,7 @@ struct SLPTimeout
 	{
 	}
 
-	SLPTimeout (SLP& slp, long timeout) :
+	SLPTimeout (SLP& slp, int32 timeout) :
 		fSLP (slp),
 		fStart (Platform::GetMilliseconds ()),
 		fTimeout (timeout)
@@ -151,7 +151,7 @@ void RPC::Idle (void)
 				response.resultException	= 0;
 			}
 
-			long	bodySize = slp.GetPacketSize () - (slp.Header().GetSize() + slp.Footer().GetSize());
+			int32	bodySize = slp.GetPacketSize () - (slp.Header().GetSize() + slp.Footer().GetSize());
 
 			slp.SendPacket (response.GetPtr (), bodySize);
 
@@ -229,7 +229,7 @@ void RPC::SignalWaiters (HostSignalType signal)
 			param.asLong				= signal;
 		}
 
-		long	bodySize = slp.GetPacketSize () - (slp.Header().GetSize() + slp.Footer().GetSize());
+		int32	bodySize = slp.GetPacketSize () - (slp.Header().GetSize() + slp.Footer().GetSize());
 
 		ErrCode result = slp.SendPacket (response.GetPtr (), bodySize);
 
@@ -346,7 +346,7 @@ Bool RPC::HandlingPacket (void)
  *
  ***********************************************************************/
 
-void RPC::DeferCurrentPacket (long timeout)
+void RPC::DeferCurrentPacket (int32 timeout)
 {
 	omni_mutex_lock	lock (gMutex);
 

@@ -14,6 +14,8 @@
 #ifndef EmSPISlave_h
 #define EmSPISlave_h
 
+#include "EmTypes.h"
+
 class EmSPISlave
 {
 	public:

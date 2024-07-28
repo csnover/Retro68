@@ -21,6 +21,7 @@
 #include "ROMStubs.h"			// MemNumHeaps, MemHeapID, MemHeapPtr
 #include "SessionFile.h"		// SessionFile
 
+#include <cstddef>
 #include <stdio.h>				// sprintf
 
 
@@ -86,7 +87,7 @@ void EmPalmHeap::Reset (void)
 
 void EmPalmHeap::Save (SessionFile& f)
 {
-	const long	kCurrentVersion = 1;
+	const int32	kCurrentVersion = 1;
 
 	Chunk			chunk;
 	EmStreamChunk	s (chunk);
@@ -117,7 +118,7 @@ void EmPalmHeap::Load (SessionFile& f)
 	Chunk	chunk;
 	if (f.ReadHeapInfo (chunk))
 	{
-		long			version;
+		int32			version;
 		EmStreamChunk	s (chunk);
 
 		s >> version;
@@ -240,7 +241,7 @@ const EmPalmHeap* EmPalmHeap::GetHeapByID (UInt16 heapID)
 
 const EmPalmHeap* EmPalmHeap::GetHeapByPtr (emuptr p)
 {
-	return GetHeapByPtr ((MemPtr) p);
+	return GetHeapByPtr (EmMemFakeT<MemPtr>(p));
 }
 
 const EmPalmHeap* EmPalmHeap::GetHeapByPtr (MemPtr p)
@@ -251,7 +252,7 @@ const EmPalmHeap* EmPalmHeap::GetHeapByPtr (MemPtr p)
 
 	while (iter != fgHeapList.end ())
 	{
-		if (iter->Contains ((emuptr) p))
+		if (iter->Contains (EmMemPtr(p)))
 		{
 			return &*iter;
 		}
@@ -624,8 +625,8 @@ MemPtr EmPalmHeap::DerefHandle (MemHandle h)
 
 	CEnableFullAccess	munge;	// Remove blocks on memory access.
 
-	emuptr	pp = (emuptr) memHandleUnProtect(h);
-	return (MemPtr) EmMemGet32 (pp);
+	emuptr	pp = EmMemPtr(memHandleUnProtect(h));
+	return EmMemFakeT<MemPtr>(EmMemGet32 (pp));
 }
 
 /***********************************************************************
@@ -655,15 +656,15 @@ MemHandle EmPalmHeap::RecoverHandle (MemPtr p)
 
 		if (heap)
 		{
-			const EmPalmChunk*	chunk = heap->GetChunkBodyContaining ((emuptr) p);
+			const EmPalmChunk*	chunk = heap->GetChunkBodyContaining (EmMemPtr(p));
 
 			if (chunk && !chunk->Free () && chunk->HOffset ())
 			{
-				h = (MemHandle) (((emuptr) p) - chunk->HOffset () * 2 - chunk->HeaderSize ());
+				h = EmMemFakeT<MemHandle>(EmMemPtr(p) - chunk->HOffset () * 2 - chunk->HeaderSize ());
 
 #if _DEBUG
 				CEnableFullAccess	munge;	// Remove blocks on memory access.
-				EmAssert (EmMemGet32 ((emuptr) h) == (emuptr) p);
+				EmAssert (EmMemGet32 (EmMemPtr(h)) == EmMemPtr(p));
 #endif
 
 				h = memHandleProtect (h);
@@ -691,11 +692,11 @@ MemHandle EmPalmHeap::RecoverHandle (MemPtr p)
  *
  ***********************************************************************/
 
-long EmPalmHeap::GetHeapVersion (emuptr heapHdr)
+int32 EmPalmHeap::GetHeapVersion (emuptr heapHdr)
 {
 	CEnableFullAccess	munge;	// Remove blocks on memory access.
 
-	long	heapVersion = kVersionUnknown;
+	int32	heapVersion = kVersionUnknown;
 
 	// Get the heap version.  If bit 14 is set, it's a version 3 heap.
 	// If bit 15 is set, it's a version 2 heap.  Otherwise, it's a
@@ -919,7 +920,7 @@ const EmPalmChunk* EmPalmHeap::GetChunkReferencedBy (MemHandle h) const
 {
 	// !!! Could do a binary search here, if needed.
 
-	emuptr	p = (emuptr) EmPalmHeap::DerefHandle (h);
+	emuptr	p = EmMemPtr(EmPalmHeap::DerefHandle (h));
 
 	ITERATE_CHUNKS (*this, iter, end)
 	{
@@ -1169,7 +1170,7 @@ void EmPalmHeap::GetHeapHeaderInfo (UInt16 heapID)
 {
 	MemPtr	heapHdr = MemHeapPtr (heapID);
 	if (heapHdr)
-		this->GetHeapHeaderInfo ((emuptr) heapHdr);
+		this->GetHeapHeaderInfo (EmMemPtr(heapHdr));
 }
 
 
@@ -1434,7 +1435,7 @@ void EmPalmHeap::ResyncPtr (MemPtr p, EmPalmChunkList* delta)
 
 	EmPalmChunkList::iterator	iter = fChunkList.begin ();
 
-	emuptr	chunkStart = ((emuptr) p) - fChunkHdrSize;
+	emuptr	chunkStart = EmMemPtr(p) - fChunkHdrSize;
 	
 	while (iter != fChunkList.end ())
 	{
@@ -1739,7 +1740,7 @@ void EmPalmMPT::GetMPTInfo (const EmPalmHeap& heap, emuptr mptHdr)
 			break;
 	}
 
-	fSize = fMptHdrSize + fNumEntries * sizeof (MemPtr);
+	fSize = fMptHdrSize + fNumEntries * sizeof (emuptr);
 }
 
 
@@ -2103,7 +2104,7 @@ void EmPalmChunk::GetChunkInfo (const EmPalmHeap& heap, emuptr chunkHdr)
 
 EmStream& operator << (EmStream& s, const EmPalmChunk& chunk)
 {
-	const long	kVersion = 1;
+	const int32	kVersion = 1;
 	
 	s << kVersion;
 
@@ -2132,7 +2133,7 @@ EmStream& operator << (EmStream& s, const EmPalmChunk& chunk)
 
 EmStream& operator >> (EmStream& s, EmPalmChunk& chunk)
 {
-	long	version;
+	int32	version;
 	s >> version;
 
 	if (version >= 1)
@@ -2163,7 +2164,7 @@ EmStream& operator >> (EmStream& s, EmPalmChunk& chunk)
 
 EmStream& operator << (EmStream& s, const EmPalmMPT& mpt)
 {
-	const long	kVersion = 1;
+	const int32	kVersion = 1;
 	
 	s << kVersion;
 
@@ -2185,7 +2186,7 @@ EmStream& operator << (EmStream& s, const EmPalmMPT& mpt)
 
 EmStream& operator >> (EmStream& s, EmPalmMPT& mpt)
 {
-	long	version;
+	int32	version;
 	s >> version;
 
 	if (version >= 1)
@@ -2209,7 +2210,7 @@ EmStream& operator >> (EmStream& s, EmPalmMPT& mpt)
 
 EmStream& operator << (EmStream& s, const EmPalmHeap& heap)
 {
-	const long	kVersion = 1;
+	const int32	kVersion = 1;
 	
 	s << kVersion;
 
@@ -2237,7 +2238,7 @@ EmStream& operator << (EmStream& s, const EmPalmHeap& heap)
 
 EmStream& operator >> (EmStream& s, EmPalmHeap& heap)
 {
-	long	version;
+	int32	version;
 	s >> version;
 
 	if (version >= 1)

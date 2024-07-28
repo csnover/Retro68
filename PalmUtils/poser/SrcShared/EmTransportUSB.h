@@ -52,12 +52,12 @@ class EmTransportUSB : public EmTransport
 		virtual ErrCode			Open					(void);
 		virtual ErrCode			Close					(void);
 
-		virtual ErrCode			Read					(long&, void*);
-		virtual ErrCode			Write					(long&, const void*);
+		virtual ErrCode			Read					(int32&, void*);
+		virtual ErrCode			Write					(int32&, const void*);
 
 		virtual Bool			CanRead					(void);
 		virtual Bool			CanWrite				(void);
-		virtual long			BytesInBuffer			(long minBytes);
+		virtual int32			BytesInBuffer			(int32 minBytes);
 		virtual string			GetSpecificName			(void);
 
 		ErrCode					SetConfig				(const ConfigUSB&);
@@ -76,12 +76,12 @@ class EmTransportUSB : public EmTransport
 		ErrCode					HostOpen				(void);
 		ErrCode					HostClose				(void);
 
-		ErrCode					HostRead				(long&, void*);
-		ErrCode					HostWrite				(long&, const void*);
+		ErrCode					HostRead				(int32&, void*);
+		ErrCode					HostWrite				(int32&, const void*);
 
 		Bool					HostCanRead				(void);
 		Bool					HostCanWrite			(void);
-		long					HostBytesInBuffer		(long minBytes);
+		int32					HostBytesInBuffer		(int32 minBytes);
 
 		ErrCode					HostSetConfig			(const ConfigUSB&);
 

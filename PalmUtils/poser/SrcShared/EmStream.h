@@ -9,6 +9,7 @@
 #define EmStream_h
 
 #include "EmTypes.h"			// ErrCode
+#include "EmMemory.h"
 
 #include <deque>
 #include <list>
@@ -90,7 +91,7 @@ class EmStream
 
 									container.resize (numElements);
 
-									deque<T>::iterator	iter = container.begin ();
+									typename deque<T>::iterator	iter = container.begin ();
 									while (iter != container.end ())
 									{
 										*this >> *iter;
@@ -108,7 +109,7 @@ class EmStream
 
 									container.resize (numElements);
 
-									list<T>::iterator	iter = container.begin ();
+									typename list<T>::iterator	iter = container.begin ();
 									while (iter != container.end ())
 									{
 										*this >> *iter;
@@ -126,7 +127,7 @@ class EmStream
 
 									container.resize (numElements);
 
-									vector<T>::iterator	iter = container.begin ();
+									typename vector<T>::iterator	iter = container.begin ();
 									while (iter != container.end ())
 									{
 										*this >> *iter;
@@ -143,7 +144,7 @@ class EmStream
 
 									*this << numElements;
 
-									deque<T>::const_iterator	iter = container.begin ();
+									typename deque<T>::const_iterator	iter = container.begin ();
 									while (iter != container.end ())
 									{
 										*this << *iter;
@@ -160,7 +161,7 @@ class EmStream
 
 									*this << numElements;
 
-									list<T>::const_iterator	iter = container.begin ();
+									typename list<T>::const_iterator	iter = container.begin ();
 									while (iter != container.end ())
 									{
 										*this << *iter;
@@ -177,7 +178,7 @@ class EmStream
 
 									*this << numElements;
 
-									vector<T>::const_iterator	iter = container.begin ();
+									typename vector<T>::const_iterator	iter = container.begin ();
 									while (iter != container.end ())
 									{
 										*this << *iter;
@@ -215,10 +216,9 @@ class EmStream
 
 
 
-
 inline EmStream& operator << (EmStream& s, const MemPtr& p)
 {
-	s << (emuptr) p;
+	s << EmMemPtr(p);
 
 	return s;
 }
@@ -228,14 +228,14 @@ inline EmStream& operator >> (EmStream& s, MemPtr& p)
 	emuptr	t;
 	s >> t;
 
-	p = (MemPtr) t;
+	p = EmMemFakeT<MemPtr>(t);
 
 	return s;
 }
 
 inline EmStream& operator << (EmStream& s, const MemHandle& h)
 {
-	s << (emuptr) h;
+	s << EmMemPtr(h);
 
 	return s;
 }
@@ -245,7 +245,7 @@ inline EmStream& operator >> (EmStream& s, MemHandle& h)
 	emuptr	t;
 	s >> t;
 
-	h = (MemHandle) t;
+	h = EmMemFakeT<MemHandle>(t);
 
 	return s;
 }

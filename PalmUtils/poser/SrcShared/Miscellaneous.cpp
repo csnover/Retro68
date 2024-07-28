@@ -34,7 +34,7 @@
 
 #include <algorithm>			// sort()
 #include <locale.h> 			// localeconv, lconv
-#include <strstream>			// strstream
+#include <sstream>				// stringstream
 #include <time.h>				// time, localtime
 
 
@@ -60,9 +60,9 @@ int exit_code = OK; 	 /* program exit code */
 int verbose = 2;		/* be verbose (-v) */
 int quiet = 0;			/* be quiet (-q) */
 
-char ifname[] = "ifname";
-char ofname[] = "ofname";
-char* progname = "progname";
+const char ifname[] = "ifname";
+const char ofname[] = "ofname";
+const char* progname = "progname";
 
 long bytes_in;			   /* number of input bytes */
 long bytes_out; 		   /* number of output bytes */
@@ -105,10 +105,10 @@ extern "C"
 
 static void*	gSrcP;
 static void*	gDstP;
-static long 	gSrcBytes;
-static long 	gDstBytes;
-static long 	gSrcOffset;
-static long 	gDstOffset;
+static int32 	gSrcBytes;
+static int32 	gDstBytes;
+static int32 	gSrcOffset;
+static int32 	gDstOffset;
 
 // ===========================================================================
 //	¥ StMemory Class
@@ -124,7 +124,7 @@ StMemory::StMemory(
 }
 
 StMemory::StMemory(
-	long	inSize, 				// Bytes to allocate
+	int32	inSize, 				// Bytes to allocate
 	Bool	inClearBytes)			// Whether to clear all bytes to zero
 {
 	mIsOwner = true;
@@ -195,7 +195,7 @@ StMemory::Dispose()
 
 
 
-StMemoryMapper::StMemoryMapper (const void* memory, long size) :
+StMemoryMapper::StMemoryMapper (const void* memory, int32 size) :
 	fMemory (memory)
 {
 	if (fMemory)
@@ -227,7 +227,7 @@ void	Platform_DisposeMemory	(void* p)
 }
 
 
-StWordSwapper::StWordSwapper (void* memory, long length) :
+StWordSwapper::StWordSwapper (void* memory, int32 length) :
 	fMemory (memory),
 	fLength (length)
 {
@@ -288,8 +288,9 @@ static Bool PrvFormObjectHasValidSize (FormPtr frm, FormObjectKind objType, UInt
 
 	if (objType == frmControlObj)
 	{
-		emuptr	ctrlPtr	= (emuptr) ::FrmGetObjectPtr (frm, objIndex);
-		uint8	style	= EmMemGet8 (ctrlPtr + offsetof (ControlType, style));
+		emuptr	ctrlPtr	= EmMemPtr(::FrmGetObjectPtr (frm, objIndex));
+		EmAliasControlType<PAS> ctrl(ctrlPtr);
+		uint8	style	= ctrl.style;
 
 		if (style == popupTriggerCtl)
 		{
@@ -305,8 +306,8 @@ static Bool PrvFormObjectHasValidSize (FormPtr frm, FormObjectKind objType, UInt
 
 	if (objType == frmListObj)
 	{
-		emuptr	listPtr = (emuptr) FrmGetObjectPtr (frm, objIndex);
-		Int16	numItems = ::LstGetNumberOfItems ((ListType*)listPtr);
+		emuptr	listPtr = EmMemPtr(FrmGetObjectPtr (frm, objIndex));
+		Int16	numItems = ::LstGetNumberOfItems (EmMemFakeT<ListType *>(listPtr));
 
 		if (numItems == 0)
 		{
@@ -382,7 +383,7 @@ static Bool PrvFormObjectIsUsable (FormPtr frmP, uint16 index, FormObjectKind ki
 
 	CEnableFullAccess	munge;	// Remove blocks on memory access.
 
-	emuptr objP = (emuptr)::FrmGetObjectPtr (frmP, index);
+	emuptr objP = EmMemPtr(::FrmGetObjectPtr (frmP, index));
 
 	if (objP == EmMemNULL)
 	{
@@ -396,35 +397,35 @@ static Bool PrvFormObjectIsUsable (FormPtr frmP, uint16 index, FormObjectKind ki
 		case frmFieldObj:
 		{
 			FieldAttrType attr;
-			::FldGetAttributes ((FieldType*)objP, &attr);
+			::FldGetAttributes (EmMemFakeT<FieldType *>(objP), &attr);
 
 			return attr.usable == true;
 		}
 
 		case frmControlObj:
 		{
-			EmAliasControlType<PAS>	control ((emuptr)objP);
+			EmAliasControlType<PAS>	control (objP);
 
 			return control.attr.flags & ControlAttrType_usable;
 		}
 
 		case frmGadgetObj:
 		{
-			EmAliasFormGadgetType<PAS> gadget ((emuptr)objP);
+			EmAliasFormGadgetType<PAS> gadget (objP);
 
 			return gadget.attr.flags & ControlAttrType_usable;
 		}
 
 		case frmListObj:
 		{
-			EmAliasListType<PAS> list ((emuptr)objP);
+			EmAliasListType<PAS> list (objP);
 
 			return list.attr.flags & ControlAttrType_usable;
 		}
 
 		case frmScrollBarObj:
 		{
-			EmAliasScrollBarType<PAS> scrollbar ((emuptr)objP);
+			EmAliasScrollBarType<PAS> scrollbar (objP);
 
 			return scrollbar.attr.flags & ControlAttrType_usable;
 		}
@@ -906,7 +907,7 @@ static Err AppGetExtraInfo (DatabaseInfo* infoP)
 		// copy launcher name, if present
 		if (strH != NULL)
 		{
-			emuptr strP = (emuptr) MemHandleLock (strH);
+			emuptr strP = EmMemPtr(MemHandleLock (strH));
 			EmMem_strcpy (infoP->name, strP);
 			MemHandleUnlock (strH);
 			DmReleaseResource (strH);
@@ -946,7 +947,7 @@ static Err AppGetExtraInfo (DatabaseInfo* infoP)
 
 			// See if this is the special launcher info and if so, get the icons
 			//	out of that.
-			specialInfoP = (emuptr) appInfoP;
+			specialInfoP = EmMemPtr(appInfoP);
 			DataAppInfoType specialInfo;
 
 			specialInfo.signature = EmMemGet32 (specialInfoP + offsetof (DataAppInfoType, signature));
@@ -1242,7 +1243,6 @@ void ResetCalibrationInfo (void)
 		#define target1X	(160-10)		// bottom right
 		#define target1Y	(160-10)
 
-		Err			err;
 		PointType	digPoints[2];
 		PointType	scrPoints[2];
 
@@ -1256,9 +1256,9 @@ void ResetCalibrationInfo (void)
 		digPoints[1].x = 0x100 - target1X;
 		digPoints[1].y = 0x100 - target1Y;
 
-		err = ::PenRawToScreen(&digPoints[0]);
-		err = ::PenRawToScreen(&digPoints[1]);
-		err = ::PenCalibrate(&digPoints[0], &digPoints[1], &scrPoints[0], &scrPoints[1]);
+		::PenRawToScreen(&digPoints[0]);
+		::PenRawToScreen(&digPoints[1]);
+		::PenCalibrate(&digPoints[0], &digPoints[1], &scrPoints[0], &scrPoints[1]);
 
 		DmOpenRef	dbP;
 		if (EmLowMem::TrapExists (sysTrapPrefOpenPreferenceDB))
@@ -1275,7 +1275,7 @@ void ResetCalibrationInfo (void)
 				MemPtr			resP = ::MemHandleLock (resourceH);
 				unsigned char	perfect_pattern[] = { 1, 0, 1, 0, 0, 0, 0, 0 };
 
-				perfect = (EmMem_memcmp ((void*) perfect_pattern, (emuptr) resP, 8) == 0);
+				perfect = (EmMem_memcmp ((void*) perfect_pattern, EmMemPtr(resP), 8) == 0);
 
 				::MemHandleUnlock (resourceH);
 				::DmReleaseResource (resourceH);
@@ -1416,7 +1416,8 @@ void SetHotSyncUserName (const char* userNameP)
 	// Patch up cmdP and map in the buffer it points to.
 
 	StMemoryMapper	mapper (session.cmdP, session.cmdLen);
-	session.cmdP = (void*) EmBankMapped::GetEmulatedAddress (session.cmdP);
+	// TODO: This seems weird.
+	session.cmdP = EmMemFakeT<void *>(EmBankMapped::GetEmulatedAddress (session.cmdP));
 
 	// Finally, install the name.
 	/*Err err =*/ DlkDispatchRequest (&session);
@@ -1529,7 +1530,7 @@ void SeparateList (StringList& stringList, string str, char delimiter)
  *
  ***********************************************************************/
 
-void RunLengthEncode (void** srcPP, void** dstPP, long srcBytes, long dstBytes)
+void RunLengthEncode (void** srcPP, void** dstPP, int32 srcBytes, int32 dstBytes)
 {
 	UNUSED_PARAM(dstBytes)
 
@@ -1538,9 +1539,9 @@ void RunLengthEncode (void** srcPP, void** dstPP, long srcBytes, long dstBytes)
 	uint8* srcP = (uint8*) *srcPP;
 	uint8* dstP = (uint8*) *dstPP;
 	uint8* opP = NULL;
-	long	sample[3] = { -1, -1, -1 }; // Type must be > uint8 so that it can hold -1.
-	long	opCount = 0;
-	long	state = kBeginRun;
+	int32	sample[3] = { -1, -1, -1 }; // Type must be > uint8 so that it can hold -1.
+	int32	opCount = 0;
+	int32	state = kBeginRun;
 
 	for (srcBytes += 1; srcBytes >= 0; --srcBytes)
 	{
@@ -1642,7 +1643,7 @@ void RunLengthEncode (void** srcPP, void** dstPP, long srcBytes, long dstBytes)
  *
  ***********************************************************************/
 
-void RunLengthDecode (void** srcPP, void** dstPP, long srcBytes, long dstBytes)
+void RunLengthDecode (void** srcPP, void** dstPP, int32 srcBytes, int32 dstBytes)
 {
 	UNUSED_PARAM(srcBytes)
 
@@ -1695,9 +1696,9 @@ void RunLengthDecode (void** srcPP, void** dstPP, long srcBytes, long dstBytes)
  *
  ***********************************************************************/
 
-long RunLengthWorstSize (long srcBytes)
+int32 RunLengthWorstSize (int32 srcBytes)
 {
-	long	maxDestBytes = (srcBytes + (srcBytes + 126) / 127);
+	int32	maxDestBytes = (srcBytes + (srcBytes + 126) / 127);
 
 	return maxDestBytes;
 }
@@ -1723,7 +1724,7 @@ long RunLengthWorstSize (long srcBytes)
  *
  ***********************************************************************/
 
-void GzipEncode (void** srcPP, void** dstPP, long srcBytes, long dstBytes)
+void GzipEncode (void** srcPP, void** dstPP, int32 srcBytes, int32 dstBytes)
 {
 	gSrcP		= *srcPP;
 	gDstP		= *dstPP;
@@ -1779,7 +1780,7 @@ void GzipEncode (void** srcPP, void** dstPP, long srcBytes, long dstBytes)
  *
  ***********************************************************************/
 
-void GzipDecode (void** srcPP, void** dstPP, long srcBytes, long dstBytes)
+void GzipDecode (void** srcPP, void** dstPP, int32 srcBytes, int32 dstBytes)
 {
 	gSrcP		= *srcPP;
 	gDstP		= *dstPP;
@@ -1812,9 +1813,9 @@ void GzipDecode (void** srcPP, void** dstPP, long srcBytes, long dstBytes)
  *
  ***********************************************************************/
 
-long GzipWorstSize (long srcBytes)
+int32 GzipWorstSize (int32 srcBytes)
 {
-	long	maxDestBytes = srcBytes * 2;
+	int32	maxDestBytes = srcBytes * 2;
 
 	return maxDestBytes;
 }
@@ -1906,7 +1907,7 @@ void StackCrawlStrings (const EmStackFrameList& stackCrawl, StringList& stackCra
 
 		if (strlen (funcName) == 0)
 		{
-			sprintf (funcName, "<Unknown @ 0x%08lX>", iter->fAddressInFunction);
+			sprintf (funcName, "<Unknown @ 0x%08X>", iter->fAddressInFunction);
 		}
 
 		stackCrawlStrings.push_back (string (funcName));
@@ -1928,7 +1929,7 @@ void StackCrawlStrings (const EmStackFrameList& stackCrawl, StringList& stackCra
  *
  ***********************************************************************/
 
-string StackCrawlString (const EmStackFrameList& stackCrawl, long maxLen, Bool includeFrameSize, emuptr oldStackLow)
+string StackCrawlString (const EmStackFrameList& stackCrawl, int32 maxLen, Bool includeFrameSize, emuptr oldStackLow)
 {
 	StringList	strings;
 	::StackCrawlStrings (stackCrawl, strings);
@@ -1954,14 +1955,14 @@ string StackCrawlString (const EmStackFrameList& stackCrawl, long maxLen, Bool i
 			// Get the stack size used by the function.
 
 			char	stackSize[20];
-			sprintf (stackSize, "%ld", iter->fA6 - oldStackLow);
+			sprintf (stackSize, "%d", iter->fA6 - oldStackLow);
 
 			stackCrawlString += string ("(") + string (stackSize) + ")";
 		}
 
 		// If the string looks long enough, stop.
 
-		if (maxLen > 0 && (long) stackCrawlString.size () > maxLen)
+		if (maxLen > 0 && (int32) stackCrawlString.size () > maxLen)
 		{
 			stackCrawlString += "...";
 			break;
@@ -2091,7 +2092,7 @@ uint32 NextPowerOf2 (uint32 x)
 
 	--x;
 
-	unsigned long	result = 0x80000000;
+	uint32	result = 0x80000000;
 	while (((x <<= 1) & 0x80000000) == 0)	// check for the highest set bit.
 		result >>= 1;
 
@@ -2133,7 +2134,7 @@ uint32 HighBitNumber (uint32 n)
 	// Seems pretty buggy, since it doesn't work for x == 0, 1, or 2.
 uint32 HighBitNumber (uint32 x)
 {
-	unsigned long mask=2, numBits=1;
+	uint32 mask=2, numBits=1;
 	while (mask < x)
 	{
 		mask += mask;
@@ -2303,13 +2304,17 @@ string GetLibraryName (uint16 refNum)
 
 	if (EmPatchState::OSMajorVersion () > 1)
 	{
-		libEntry		= sysLibTableP + refNum * sizeof (SysLibTblEntryType);
-		dispatchTblP	= EmMemGet32 (libEntry + offsetof (SysLibTblEntryType, dispatchTblP));
+		libEntry		= sysLibTableP + refNum *
+			EmAliasSysLibTblEntryType<PAS>::GetSize ();
+		dispatchTblP	= EmMemGet32 (libEntry +
+			EmAliasSysLibTblEntryType<PAS>::offsetof_dispatchTblP ());
 	}
 	else
 	{
-		libEntry		= sysLibTableP + refNum * sizeof (SysLibTblEntryTypeV10);
-		dispatchTblP	= EmMemGet32 (libEntry + offsetof (SysLibTblEntryTypeV10, dispatchTblP));
+		libEntry		= sysLibTableP + refNum *
+			EmAliasSysLibTblEntryTypeV10<PAS>::GetSize ();
+		dispatchTblP	= EmMemGet32 (libEntry +
+			EmAliasSysLibTblEntryTypeV10<PAS>::offsetof_dispatchTblP ());
 	}
 
 	// The first entry in the table is always the offset from the
@@ -2440,7 +2445,7 @@ Bool GetSystemCallContext (emuptr pc, SystemCallContext& context)
  *
  ***********************************************************************/
 
-void GetHostTime (long* hour, long* min, long* sec)
+void GetHostTime (int32* hour, int32* min, int32* sec)
 {
 	time_t t;
 	struct tm tm;
@@ -2466,7 +2471,7 @@ void GetHostTime (long* hour, long* min, long* sec)
  *
  ***********************************************************************/
 
-void GetHostDate (long* year, long* month, long* day)
+void GetHostDate (int32* year, int32* month, int32* day)
 {
 	time_t t;
 	struct tm tm;
@@ -2682,12 +2687,12 @@ static void PrvInsertString (char* dest, int insertBefore, const char* src)
 
 void FormatInteger (char* dest, uint32 integer)
 {
-	sprintf (dest, "%ld", integer);
+	sprintf (dest, "%d", integer);
 
 	// Get the thousands separator character(s).
 
 	struct lconv*	locale_data = localeconv ();
-	char*			thousands_sep = locale_data->thousands_sep;
+	const char*			thousands_sep = locale_data->thousands_sep;
 
 	if (strlen (thousands_sep) == 0)
 	{
@@ -2734,20 +2739,16 @@ string FormatInteger (uint32 integer)
 {
 	// Format the integer as a plain string.
 
-	strstream	stream;
-	
+	stringstream	stream;
+
 	stream << integer;
 
-	string	result (stream.str (), stream.pcount ());
-
-	// Unfreeze the stream, or else its storage will be leaked.
-
-	stream.freeze (false);
+	string result (stream.str());
 
 	// Get the thousands separator character(s).
 
 	struct lconv*	locale_data = localeconv ();
-	char*			thousands_sep = locale_data->thousands_sep;
+	const char*			thousands_sep = locale_data->thousands_sep;
 
 	if (strlen (thousands_sep) == 0)
 	{
@@ -2797,21 +2798,21 @@ string FormatElapsedTime (uint32 mSecs)
 {
 	// Get hours, minutes, and seconds.
 
-	const long	kMillisecondsPerSecond	= 1000;
-	const long	kSecondsPerMinute		= 60;
-	const long	kMinutesPerHour 		= 60;
+	const int32	kMillisecondsPerSecond	= 1000;
+	const int32	kSecondsPerMinute		= 60;
+	const int32	kMinutesPerHour 		= 60;
 
-	const long	kMillisecondsPerMinute	= kMillisecondsPerSecond * kSecondsPerMinute;
-	const long	kMillisecondsPerHour	= kMillisecondsPerMinute * kMinutesPerHour;
+	const int32	kMillisecondsPerMinute	= kMillisecondsPerSecond * kSecondsPerMinute;
+	const int32	kMillisecondsPerHour	= kMillisecondsPerMinute * kMinutesPerHour;
 
-	long	hours	= mSecs / kMillisecondsPerHour;		mSecs -= hours * kMillisecondsPerHour;
-	long	minutes	= mSecs / kMillisecondsPerMinute;	mSecs -= minutes * kMillisecondsPerMinute;
-	long	seconds	= mSecs / kMillisecondsPerSecond;	mSecs -= seconds * kMillisecondsPerSecond;
+	int32	hours	= mSecs / kMillisecondsPerHour;		mSecs -= hours * kMillisecondsPerHour;
+	int32	minutes	= mSecs / kMillisecondsPerMinute;	mSecs -= minutes * kMillisecondsPerMinute;
+	int32	seconds	= mSecs / kMillisecondsPerSecond;	mSecs -= seconds * kMillisecondsPerSecond;
 
 	// Format them into a string.
 
 	char	formattedTime[20];
-	sprintf (formattedTime, "%ld:%02ld:%02ld", hours, minutes, seconds);
+	sprintf (formattedTime, "%d:%02d:%02d", hours, minutes, seconds);
 
 	return string (formattedTime);
 }
@@ -2883,7 +2884,7 @@ const char* LaunchCmdToString (UInt16 cmd)
 	}
 
 	static char 	buffer[20];
-	sprintf (buffer, "#%ld", (long) cmd);
+	sprintf (buffer, "#%d", (int32) cmd);
 	return buffer;
 }
 

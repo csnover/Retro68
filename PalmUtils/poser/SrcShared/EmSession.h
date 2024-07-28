@@ -370,7 +370,7 @@ class EmSession
 #if HAS_OMNI_THREAD
 		// Pause the thread by the given number of milliseconds.
 
-		void					Sleep				(unsigned long msecs);
+		void					Sleep				(uint32 msecs);
 
 		// Return whether or not the calling function is executing in the context of
 		// the CPU thread or not.  If not, it's most likely executing in the UI

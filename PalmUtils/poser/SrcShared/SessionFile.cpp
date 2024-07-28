@@ -529,9 +529,9 @@ Bool SessionFile::ReadConfiguration (Configuration& cfg)
 }
 
 
-long SessionFile::GetRAMImageSize (void)
+int32 SessionFile::GetRAMImageSize (void)
 {
-	long	numBytes;
+	int32	numBytes;
 
 	Chunk	chunk;
 	if (fFile.ReadChunk (kRAMDataTag, chunk) || fFile.ReadChunk (kRLERAMDataTag, chunk))
@@ -950,7 +950,7 @@ Bool SessionFile::ReadChunk (ChunkFile::Tag tag, void* image,
 {
 	// Get the size of the chunk.
 
-	long	chunkSize = fFile.FindChunk (tag);
+	int32	chunkSize = fFile.FindChunk (tag);
 	if (chunkSize == ChunkFile::kChunkNotFound)
 	{
 		return false;
@@ -980,21 +980,21 @@ Bool SessionFile::ReadChunk (ChunkFile::Tag tag, void* image,
 			// The size of the unpacked image is stored as the first 4 bytes
 			// of the chunk.
 
-			long		unpackedSize = *(long*) packedImage.Get ();
+			int32		unpackedSize = *(int32*) packedImage.Get ();
 			Canonical (unpackedSize);
 
 			// Get pointers to the source (packed) data and
 			// destination (unpacked) data.
 
-			void*	src = packedImage.Get () + sizeof (long);
+			void*	src = packedImage.Get () + sizeof (int32);
 			void*	dest = image;
 
 			// Decompress the data into the dest buffer.
 
 			if (compType == kGzipCompression)
-				::GzipDecode (&src, &dest, chunkSize - sizeof (long), unpackedSize);
+				::GzipDecode (&src, &dest, chunkSize - sizeof (int32), unpackedSize);
 			else
-				::RunLengthDecode (&src, &dest, chunkSize - sizeof (long), unpackedSize);
+				::RunLengthDecode (&src, &dest, chunkSize - sizeof (int32), unpackedSize);
 		}
 	}
 	
@@ -1007,7 +1007,7 @@ Bool SessionFile::ReadChunk (ChunkFile::Tag tag, Chunk& chunk,
 {
 	// Get the size of the chunk.
 
-	long	chunkSize = fFile.FindChunk (tag);
+	int32	chunkSize = fFile.FindChunk (tag);
 	if (chunkSize == ChunkFile::kChunkNotFound)
 	{
 		return false;
@@ -1038,7 +1038,7 @@ Bool SessionFile::ReadChunk (ChunkFile::Tag tag, Chunk& chunk,
 			// The size of the unpacked image is stored as the first 4 bytes
 			// of the chunk.
 
-			long		unpackedSize = *(long*) packedImage.Get ();
+			int32		unpackedSize = *(int32*) packedImage.Get ();
 			Canonical (unpackedSize);
 
 			chunk.SetLength (unpackedSize);
@@ -1046,15 +1046,15 @@ Bool SessionFile::ReadChunk (ChunkFile::Tag tag, Chunk& chunk,
 			// Get pointers to the source (packed) data and
 			// destination (unpacked) data.
 
-			void*	src = packedImage.Get () + sizeof (long);
+			void*	src = packedImage.Get () + sizeof (int32);
 			void*	dest = chunk.GetPointer ();
 
 			// Decompress the data into the dest buffer.
 
 			if (compType == kGzipCompression)
-				::GzipDecode (&src, &dest, chunkSize - sizeof (long), unpackedSize);
+				::GzipDecode (&src, &dest, chunkSize - sizeof (int32), unpackedSize);
 			else
-				::RunLengthDecode (&src, &dest, chunkSize - sizeof (long), unpackedSize);
+				::RunLengthDecode (&src, &dest, chunkSize - sizeof (int32), unpackedSize);
 		}
 	}
 
@@ -1097,7 +1097,7 @@ void SessionFile::WriteChunk (ChunkFile::Tag tag, uint32 size,
 	{
 		// Get the worst-case size for the compressed data.
 
-		long		worstPackedSize = sizeof (long) +
+		int32		worstPackedSize = sizeof (int32) +
 						((compType == kGzipCompression)
 							? ::GzipWorstSize (size)
 							: ::RunLengthWorstSize (size));
@@ -1110,14 +1110,14 @@ void SessionFile::WriteChunk (ChunkFile::Tag tag, uint32 size,
 		// 4 bytes of the chunk.
 
 		Canonical (size);
-		*(long*) packedImage.Get () = size;
+		*(int32*) packedImage.Get () = size;
 		Canonical (size);
 
 		// Get pointers to the source (unpacked) data and
 		// destination (packed) data.
 
 		void*	src = (void*) image;
-		void*	dest = packedImage.Get () + sizeof (long);
+		void*	dest = packedImage.Get () + sizeof (int32);
 
 		// Compress the data.
 
@@ -1128,7 +1128,7 @@ void SessionFile::WriteChunk (ChunkFile::Tag tag, uint32 size,
 
 		// Calculate the compressed size of the data.
 
-		long	packedSize = (char*) dest - (char*) packedImage;
+		int32	packedSize = (char*) dest - (char*) packedImage;
 
 		// Write the compressed data to the file.
 

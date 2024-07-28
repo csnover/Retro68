@@ -1755,7 +1755,7 @@ Err FSCustomControl (UInt16 fsLibRefNum, UInt32 apiCreator, UInt16 apiSelector,
 	CALLER_PUT_PARAM_VAL (UInt16, fsLibRefNum);
 	CALLER_PUT_PARAM_VAL (UInt32, apiCreator);
 	CALLER_PUT_PARAM_VAL (UInt16, apiSelector);
-	CALLER_PUT_PARAM_VAL (emuptr, valueP);		// !!! Only works for our mount/unmount calls!
+	CALLER_PUT_PARAM_REF (UInt8, valueP, Marshal::kInOut);		// !!! Only works for our mount/unmount calls!
 	CALLER_PUT_PARAM_REF (UInt16, valueLenP, Marshal::kInOut);
 
 	// Call the function.

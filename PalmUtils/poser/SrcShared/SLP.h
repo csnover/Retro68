@@ -31,10 +31,10 @@ class SLP
 		ErrCode 				HandleDataReceived	(void);
 
 		ErrCode 				HandleNewPacket (void);
-		ErrCode 				SendPacket		(const void* body, long size);
+		ErrCode 				SendPacket		(const void* body, Int32 size);
 
 		Bool					HavePacket		(void) const;
-		long					GetPacketSize	(void) const;
+		Int32					GetPacketSize	(void) const;
 
 		const EmProxySlkPktHeaderType&	Header	(void) const;
 		const EmProxySysPktBodyType&	Body	(void) const;

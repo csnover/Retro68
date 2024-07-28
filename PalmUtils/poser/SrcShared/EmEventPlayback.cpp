@@ -283,7 +283,7 @@ void EmEventPlayback::LoadEvents (SessionFile& f)
 
 	// Iterate over all the events, counting them up.
 
-	long			ii = 0;
+	int32			ii = 0;
 	EmRecordedEvent	event;
 	EmStreamChunk	s (fgEvents);
 
@@ -469,9 +469,9 @@ void EmEventPlayback::CullEvents (void)
 // If we were to play all events right now given the current enabled state,
 // return how many events that would be.
 
-long EmEventPlayback::CountEnabledEvents (void)
+int32 EmEventPlayback::CountEnabledEvents (void)
 {
-	long			result = 0;
+	int32			result = 0;
 
 	// We may be in the middle of a playback right now, so save the
 	// playback state we'll be changing.
@@ -504,7 +504,7 @@ long EmEventPlayback::CountEnabledEvents (void)
 // one.  That is, it's the index of the event following the one we most
 // recently returned and presumably played.
 
-long EmEventPlayback::GetCurrentEvent (void)
+int32 EmEventPlayback::GetCurrentEvent (void)
 {
 	return fgIterationState.fIndex;
 }
@@ -516,7 +516,7 @@ long EmEventPlayback::GetCurrentEvent (void)
 // Return how many events we've recorded.  If we're playing back, this count
 // may include events that have been masked out.
 
-long EmEventPlayback::GetNumEvents (void)
+int32 EmEventPlayback::GetNumEvents (void)
 {
 	return fgMask.size ();
 }
@@ -527,9 +527,9 @@ long EmEventPlayback::GetNumEvents (void)
 // ---------------------------------------------------------------------------
 // Return how many events we've recorded.
 
-long EmEventPlayback::CountNumEvents (void)
+int32 EmEventPlayback::CountNumEvents (void)
 {
-	long			result = 0;
+	int32			result = 0;
 
 	// Iterate over all the events, counting them up.
 
@@ -551,7 +551,7 @@ long EmEventPlayback::CountNumEvents (void)
 // ---------------------------------------------------------------------------
 // Return an event on our list of recorded events.
 
-void EmEventPlayback::GetEvent (long index, EmRecordedEvent& event)
+void EmEventPlayback::GetEvent (int32 index, EmRecordedEvent& event)
 {
 	EmStreamChunk	s (fgEvents);
 
@@ -568,15 +568,15 @@ void EmEventPlayback::GetEvent (long index, EmRecordedEvent& event)
 //		¥ EmEventPlayback::EnableEvents
 // ---------------------------------------------------------------------------
 
-void EmEventPlayback::EnableEvents (long begin, long end)
+void EmEventPlayback::EnableEvents (int32 begin, int32 end)
 {
 	if (begin < 0)
 		begin = 0;
 
-	if (end > (long) fgMask.size ())
-		end = (long) fgMask.size ();
+	if (end > (int32) fgMask.size ())
+		end = (int32) fgMask.size ();
 
-	for (long ii = begin; ii < end; ++ii)
+	for (int32 ii = begin; ii < end; ++ii)
 	{
 		fgMask[ii] = true;
 	}
@@ -587,15 +587,15 @@ void EmEventPlayback::EnableEvents (long begin, long end)
 //		¥ EmEventPlayback::DisableEvents
 // ---------------------------------------------------------------------------
 
-void EmEventPlayback::DisableEvents (long begin, long end)
+void EmEventPlayback::DisableEvents (int32 begin, int32 end)
 {
 	if (begin < 0)
 		begin = 0;
 
-	if (end > (long) fgMask.size ())
-		end = (long) fgMask.size ();
+	if (end > (int32) fgMask.size ())
+		end = (int32) fgMask.size ();
 
-	for (long ii = begin; ii < end; ++ii)
+	for (int32 ii = begin; ii < end; ++ii)
 	{
 		fgMask[ii] = false;
 	}
@@ -800,9 +800,9 @@ void EmEventPlayback::RecordEvent (const EmRecordedEvent& event)
 // Return the index of the first error event record.  Return -1 if one could
 // not be found.
 
-long EmEventPlayback::FindFirstError (void)
+int32 EmEventPlayback::FindFirstError (void)
 {
-	long	result = 0;
+	int32	result = 0;
 
 	// Iterate over all the events, counting them up.
 
@@ -832,7 +832,7 @@ long EmEventPlayback::FindFirstError (void)
 
 void EmEventPlayback::LogEvents (void)
 {
-	long			counter = 0;
+	int32			counter = 0;
 	EmRecordedEvent	event;
 	EmStreamChunk	s (fgEvents);
 
@@ -880,14 +880,16 @@ void EmEventPlayback::LogEvent (const EmRecordedEvent& inEvent)
 
 			// If there's a keycode, print it.
 
-			if (inEvent.keyEvent.keycode)
+			if (inEvent.keyEvent.keycode) {
 				LogAppendMsg ("		keycode		= %d", inEvent.keyEvent.keycode);
+			}
 
 			// If there's a modifier, print it.
 
-			if (inEvent.keyEvent.modifiers)
+			if (inEvent.keyEvent.modifiers) {
 				LogAppendMsg ("		modifiers	= %d", inEvent.keyEvent.modifiers);
-			
+			}
+
 			break;
 
 		case kRecordedPenEvent:
@@ -1377,7 +1379,7 @@ EmStream&	operator << (EmStream& s, const Chunk& chunk)
 
 EmStream&	operator >> (EmStream& s, Chunk& chunk)
 {
-	long	len;
+	int32	len;
 
 	s >> len;
 

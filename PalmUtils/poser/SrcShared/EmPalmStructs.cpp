@@ -62,6 +62,9 @@ FOR_EACH_STRUCT_14(DEFINE_STRUCT_CLASSES)
 	template class EmAlias##type<LAS>;	\
 	template class EmAlias##type<PAS>;
 
+#define INSTANTIATE_SCALAR_CLASS_WITH_VOIDPTR(type, asType)	\
+	INSTANTIATE_SCALAR_CLASS(type, asType)
+
 #define INSTANTIATE_STRUCT_CLASS(type, size, FOR_EACH_FIELD)	\
 	template class EmAlias##type<LAS>;	\
 	template class EmAlias##type<PAS>;

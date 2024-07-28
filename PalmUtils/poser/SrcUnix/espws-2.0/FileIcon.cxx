@@ -230,7 +230,7 @@ FileIcon::find(const char *filename,	// I - Name of file */
   // is found...
   for (current = first_; current != (FileIcon *)0; current = current->next_)
     if ((current->type_ == filetype || current->type_ == ANY) &&
-        filename_match(filename, current->pattern_))
+        fl_filename_match(filename, current->pattern_))
       break;
 
   // Return the match (if any)...
@@ -472,7 +472,7 @@ FileIcon::load(const char *f)	// I - File to read from
   const char	*ext;		// File extension
 
 
-  if ((ext = filename_ext(f)) == NULL)
+  if ((ext = fl_filename_ext(f)) == NULL)
   {
     fprintf(stderr, "FileIcon::load(): Unknown file type for \"%s\".\n", f);
     return;
@@ -542,7 +542,7 @@ FileIcon::load_fti(const char *fti)	// I - File to read from
     // OK, this character better be a letter...
     if (!isalpha(ch))
     {
-      fprintf(stderr, "FileIcon::load_fti(): Expected a letter at file position %d (saw '%c')\n",
+      fprintf(stderr, "FileIcon::load_fti(): Expected a letter at file position %ld (saw '%c')\n",
               ftell(fp) - 1, ch);
       break;
     }
@@ -555,7 +555,7 @@ FileIcon::load_fti(const char *fti)	// I - File to read from
     {
       if (ch == '(')
         break;
-      else if ((ptr - command) < (sizeof(command) - 1))
+      else if ((ptr - command) < (ptrdiff_t)(sizeof(command) - 1))
         *ptr++ = ch;
     }
 
@@ -564,7 +564,7 @@ FileIcon::load_fti(const char *fti)	// I - File to read from
     // Make sure we stopped on a parenthesis...
     if (ch != '(')
     {
-      fprintf(stderr, "FileIcon::load_fti(): Expected a ( at file position %d (saw '%c')\n",
+      fprintf(stderr, "FileIcon::load_fti(): Expected a ( at file position %ld (saw '%c')\n",
               ftell(fp) - 1, ch);
       break;
     }
@@ -576,7 +576,7 @@ FileIcon::load_fti(const char *fti)	// I - File to read from
     {
       if (ch == ')')
         break;
-      else if ((ptr - params) < (sizeof(params) - 1))
+      else if ((ptr - params) < (ptrdiff_t)(sizeof(params) - 1))
         *ptr++ = ch;
     }
 
@@ -585,7 +585,7 @@ FileIcon::load_fti(const char *fti)	// I - File to read from
     // Make sure we stopped on a parenthesis...
     if (ch != ')')
     {
-      fprintf(stderr, "FileIcon::load_fti(): Expected a ) at file position %d (saw '%c')\n",
+      fprintf(stderr, "FileIcon::load_fti(): Expected a ) at file position %ld (saw '%c')\n",
               ftell(fp) - 1, ch);
       break;
     }
@@ -593,7 +593,7 @@ FileIcon::load_fti(const char *fti)	// I - File to read from
     // Make sure the next character is a semicolon...
     if ((ch = getc(fp)) != ';')
     {
-      fprintf(stderr, "FileIcon::load_fti(): Expected a ; at file position %d (saw '%c')\n",
+      fprintf(stderr, "FileIcon::load_fti(): Expected a ; at file position %ld (saw '%c')\n",
               ftell(fp) - 1, ch);
       break;
     }
@@ -684,7 +684,7 @@ FileIcon::load_fti(const char *fti)	// I - File to read from
     }
     else
     {
-      fprintf(stderr, "FileIcon::load_fti(): Unknown command \"%s\" at file position %d.\n",
+      fprintf(stderr, "FileIcon::load_fti(): Unknown command \"%s\" at file position %ld.\n",
               command, ftell(fp) - 1);
       break;
     }
@@ -1089,7 +1089,7 @@ load_kde_icons(const char *directory)	// I - Directory to load
 
 
   entries = (dirent **)0;
-  n       = filename_list(directory, &entries);
+  n       = fl_filename_list(directory, &entries);
 
   for (i = 0; i < n; i ++)
   {
@@ -1099,7 +1099,7 @@ load_kde_icons(const char *directory)	// I - Directory to load
       strcat(full,"/");
       strcat(full, entries[i]->d_name);
 
-      if (filename_isdir(full))
+      if (fl_filename_isdir(full))
 	load_kde_icons(full);
       else
 	load_kde_mimelnk(full);				
@@ -1125,27 +1125,34 @@ load_kde_mimelnk(const char *filename)
   char		pattern[1024];
   char		mimetype[1024];
   char		*val;
-  char		full_iconfilename[1024];
+  char		full_iconfilename[1024 + 17];
   FileIcon	*icon;
+  iconfilename[0] = '\0';
+  pattern[0] = '\0';
+  mimetype[0] = '\0';
 
 
   if ((fp = fopen(filename, "r")) != NULL)
   {
     while (fgets(tmp, sizeof(tmp), fp))
     {
-      if ((val = get_kde_val(tmp, "Icon")) != NULL)
-	strcpy(iconfilename, val);
-      else if ((val = get_kde_val(tmp, "MimeType")) != NULL)
-	strcpy(mimetype, val);
-      else if ((val = get_kde_val(tmp, "Patterns")) != NULL)
-	strcpy(pattern, val);
+      if ((val = get_kde_val(tmp, "Icon")) != NULL) {
+        strncpy(iconfilename, val, sizeof(iconfilename) - 1);
+        iconfilename[sizeof(iconfilename) - 1] = '\0';
+      } else if ((val = get_kde_val(tmp, "MimeType")) != NULL) {
+        strncpy(mimetype, val, sizeof(mimetype) - 1);
+        mimetype[sizeof(mimetype) - 1] = '\0';
+      } else if ((val = get_kde_val(tmp, "Patterns")) != NULL) {
+        strncpy(pattern, val, sizeof(pattern) - 1);
+        pattern[sizeof(pattern) - 1] = '\0';
+      }
     }
 
-    if (iconfilename && pattern)
+    if (iconfilename[0] && pattern[0])
     {
-      sprintf(full_iconfilename, "/usr/share/icons/%s", iconfilename);
+      snprintf(full_iconfilename, sizeof(full_iconfilename), "/usr/share/icons/%s", iconfilename);
 
-      if (mimetype && strcmp(mimetype, "inode/directory") == 0)
+      if (mimetype[0] && strcmp(mimetype, "inode/directory") == 0)
 	icon = new FileIcon("*", FileIcon::DIRECTORY);
       else
         icon = new FileIcon(kde_to_fltk_pattern(pattern), FileIcon::PLAIN);

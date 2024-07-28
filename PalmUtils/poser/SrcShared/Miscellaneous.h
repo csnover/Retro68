@@ -24,7 +24,7 @@ class StMemory
 	public:
 		StMemory		(	char*	inPtr = NULL);
 
-		StMemory		(	long	inSize,
+		StMemory		(	int32	inSize,
 							Bool	inClearBytes = false);
 
 		~StMemory		();
@@ -52,7 +52,7 @@ class StMemory
 class StMemoryMapper
 {
 	public:
-		StMemoryMapper	(const void* memory, long size);
+		StMemoryMapper	(const void* memory, int32 size);
 		~StMemoryMapper	(void);
 
 	private:
@@ -62,12 +62,12 @@ class StMemoryMapper
 class StWordSwapper
 {
 	public:
-		StWordSwapper (void* memory, long length);
+		StWordSwapper (void* memory, int32 length);
 		~StWordSwapper (void);
 
 	private:
 		void*	fMemory;
-		long	fLength;
+		int32	fLength;
 };
 
 
@@ -124,13 +124,13 @@ void		SetHotSyncUserName		(const char*);
 
 void		SeparateList			(StringList& stringList, string str, char delimiter);
 
-void		RunLengthEncode			(void** srcPP, void** dstPP, long srcBytes, long dstBytes);
-void		RunLengthDecode			(void** srcPP, void** dstPP, long srcBytes, long dstBytes);
-long		RunLengthWorstSize		(long);
+void		RunLengthEncode			(void** srcPP, void** dstPP, int32 srcBytes, int32 dstBytes);
+void		RunLengthDecode			(void** srcPP, void** dstPP, int32 srcBytes, int32 dstBytes);
+int32		RunLengthWorstSize		(int32);
 
-void		GzipEncode				(void** srcPP, void** dstPP, long srcBytes, long dstBytes);
-void		GzipDecode				(void** srcPP, void** dstPP, long srcBytes, long dstBytes);
-long		GzipWorstSize			(long);
+void		GzipEncode				(void** srcPP, void** dstPP, int32 srcBytes, int32 dstBytes);
+void		GzipDecode				(void** srcPP, void** dstPP, int32 srcBytes, int32 dstBytes);
+int32		GzipWorstSize			(int32);
 
 int			CountBits				(uint32 v);
 inline int	CountBits				(uint16 v) { return CountBits ((uint32) (uint16) v); }
@@ -150,8 +150,8 @@ string		GetLibraryName			(uint16 refNum);
 
 Bool		GetSystemCallContext	(emuptr, SystemCallContext&);
 
-void		GetHostTime				(long* hour, long* min, long* sec);
-void		GetHostDate				(long* year, long* month, long* day);
+void		GetHostTime				(int32* hour, int32* min, int32* sec);
+void		GetHostDate				(int32* year, int32* month, int32* day);
 
 Bool		StartsWith				(const char* s, const char* pattern);
 Bool		EndsWith				(const char* s, const char* pattern);
@@ -167,7 +167,7 @@ const char*	LaunchCmdToString		(UInt16 cmd);
 void		StackCrawlStrings		(const EmStackFrameList& stackCrawl,
 									 StringList& stackCrawlStrings);
 string		StackCrawlString 		(const EmStackFrameList& stackCrawl,
-									 long maxLen, Bool includeFrameSize,
+									 int32 maxLen, Bool includeFrameSize,
 									 emuptr oldStackLow);
 
 typedef pair <RAMSizeType, string>	MemoryText;

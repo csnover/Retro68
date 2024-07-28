@@ -429,7 +429,7 @@ enum EmCommonDialogFlags
 	//	An all-lower name
 	//		the button is visible but disabled.
 
-#define SET_BUTTON(p, x) (((long)(x) & kButtonFieldMask) << (kButtonFieldShift * (p)))
+#define SET_BUTTON(p, x) (((int32)(x) & kButtonFieldMask) << (kButtonFieldShift * (p)))
 #define GET_BUTTON(p, x) (((x) >> (kButtonFieldShift * (p))) & kButtonFieldMask)
 
 #define SET_BUTTON_DEFAULT(p, x)	SET_BUTTON(p, (x) | kButtonVisible | kButtonEnabled | kButtonDefault)
@@ -470,10 +470,10 @@ enum EmCommonDialogFlags
 
 typedef vector<EmDlgItemID>		EmDlgItemIDList;
 
-typedef long					EmDlgItemIndex;
+typedef int32					EmDlgItemIndex;
 typedef vector<EmDlgItemIndex>	EmDlgItemIndexList;
 
-typedef long					EmDlgListIndex;	// Zero-based
+typedef int32					EmDlgListIndex;	// Zero-based
 typedef vector<EmDlgListIndex>	EmDlgListIndexList;
 const EmDlgListIndex			kDlgItemListNone = -1;
 
@@ -815,7 +815,7 @@ class EmDlg
 		static string			PrvMenuItemText				(EmErrorHandlingOption item);
 		static void				PrvBuildMenu				(EmErrorHandlingMenuBundle&	menu,
 															 StringList&				items);
-		static long				PrvFindIndex				(EmErrorHandlingMenuBundle&	menu,
+		static int32				PrvFindIndex				(EmErrorHandlingMenuBundle&	menu,
 															 EmErrorHandlingOption		toFind);
 		static void				PrvErrorHandlingToDialog	(EmDlgContext&				context,
 															 EmErrorHandlingMenuBundle&	menu);
@@ -875,18 +875,18 @@ class EmDlg
 		static void				SetDlgDefaultButton			(EmDlgContext&, EmDlgItemID);
 		static void				SetDlgCancelButton			(EmDlgContext&, EmDlgItemID);
 
-		static void				SetItemMin					(EmDlgRef, EmDlgItemID, long max);
-		static void				SetItemValue				(EmDlgRef, EmDlgItemID, long value);
-		static void				SetItemMax					(EmDlgRef, EmDlgItemID, long max);
+		static void				SetItemMin					(EmDlgRef, EmDlgItemID, int32 max);
+		static void				SetItemValue				(EmDlgRef, EmDlgItemID, int32 value);
+		static void				SetItemMax					(EmDlgRef, EmDlgItemID, int32 max);
 		static void				SetItemBounds				(EmDlgRef, EmDlgItemID, const EmRect&);
 
 		static void				SetItemText					(EmDlgRef, EmDlgItemID, StrCode);
 		static void				SetItemText					(EmDlgRef, EmDlgItemID, const char*);
 		static void				SetItemText					(EmDlgRef, EmDlgItemID, string);
 
-		static long				GetItemMin					(EmDlgRef, EmDlgItemID);
-		static long				GetItemValue				(EmDlgRef, EmDlgItemID);
-		static long				GetItemMax					(EmDlgRef, EmDlgItemID);
+		static int32				GetItemMin					(EmDlgRef, EmDlgItemID);
+		static int32				GetItemValue				(EmDlgRef, EmDlgItemID);
+		static int32				GetItemMax					(EmDlgRef, EmDlgItemID);
 		static EmRect			GetItemBounds				(EmDlgRef, EmDlgItemID);
 		static string			GetItemText					(EmDlgRef, EmDlgItemID);
 
@@ -901,8 +901,8 @@ class EmDlg
 		static void				ClearMenu					(EmDlgRef, EmDlgItemID);
 		static void				AppendToMenu				(EmDlgRef, EmDlgItemID, const string&);
 		static void				AppendToMenu				(EmDlgRef, EmDlgItemID, const StringList&);
-		static void				EnableMenuItem				(EmDlgRef, EmDlgItemID, long);
-		static void				DisableMenuItem				(EmDlgRef, EmDlgItemID, long);
+		static void				EnableMenuItem				(EmDlgRef, EmDlgItemID, int32);
+		static void				DisableMenuItem				(EmDlgRef, EmDlgItemID, int32);
 
 		static void				ClearList					(EmDlgRef, EmDlgItemID);
 		static void				AppendToList				(EmDlgRef, EmDlgItemID, const string&);
@@ -916,7 +916,7 @@ class EmDlg
 
 		static int				GetTextHeight				(EmDlgRef, EmDlgItemID, const string&);
 
-		static Bool				StringToLong				(const char*, long*);
+		static Bool				StringToLong				(const char*, int32*);
 };
 
 #endif	/* EmDlg_h */

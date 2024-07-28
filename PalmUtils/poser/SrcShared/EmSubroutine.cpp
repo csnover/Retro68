@@ -105,8 +105,8 @@ class EmSubroutineCPU
 								EmSubroutineCPU			(void);
 		virtual					~EmSubroutineCPU		(void);
 
-		virtual long			FormatStack				(EmParamList&) = 0;
-		virtual Err				PrepareStack			(Bool forCalling, Bool forStdArg, long stackSize) = 0;
+		virtual int32			FormatStack				(EmParamList&) = 0;
+		virtual Err				PrepareStack			(Bool forCalling, Bool forStdArg, int32 stackSize) = 0;
 		virtual Err				PrepareStack			(emuptr) = 0;
 
 		virtual Err				Call					(uint16) = 0;
@@ -153,8 +153,8 @@ class EmSubroutineCPU68K : public EmSubroutineCPU
 								EmSubroutineCPU68K		(void);
 		virtual					~EmSubroutineCPU68K		(void);
 
-		virtual long			FormatStack				(EmParamList&);
-		virtual Err				PrepareStack			(Bool forCalling, Bool forStdArg, long stackSize);
+		virtual int32			FormatStack				(EmParamList&);
+		virtual Err				PrepareStack			(Bool forCalling, Bool forStdArg, int32 stackSize);
 		virtual Err				PrepareStack			(emuptr) ;
 
 		virtual Err				Call					(uint16);
@@ -186,8 +186,8 @@ class EmSubroutineCPUARM : public EmSubroutineCPU
 								EmSubroutineCPUARM		(void);
 		virtual					~EmSubroutineCPUARM		(void);
 
-		virtual long			FormatStack				(EmParamList&);
-		virtual Err				PrepareStack			(Bool forCalling, Bool forStdArg, long stackSize);
+		virtual int32			FormatStack				(EmParamList&);
+		virtual Err				PrepareStack			(Bool forCalling, Bool forStdArg, int32 stackSize);
 		virtual Err				PrepareStack			(emuptr) ;
 
 		virtual Err				Call					(uint16);
@@ -1615,7 +1615,7 @@ Err EmSubroutine::SetReturnVal (uint32 val)
 #endif
 
 	if (fReturnType.fByRef)
-		this->SetReturnRegPointer ((void*) val);
+		this->SetReturnRegPointer (EmMemFakeT<void *>(val));
 	else
 		this->SetReturnRegInteger (val);
 
@@ -2382,9 +2382,9 @@ EmSubroutineCPU68K::~EmSubroutineCPU68K (void)
 //		¥ EmSubroutineCPU68K::FormatStack
 // ---------------------------------------------------------------------------
 
-long EmSubroutineCPU68K::FormatStack (EmParamList& params)
+int32 EmSubroutineCPU68K::FormatStack (EmParamList& params)
 {
-	long	offset = 0;
+	int32	offset = 0;
 
 	EmParamList::iterator	iter = params.begin ();
 	while (iter != params.end ())
@@ -2427,7 +2427,7 @@ long EmSubroutineCPU68K::FormatStack (EmParamList& params)
 //		¥ EmSubroutineCPU68K::PrepareStack
 // ---------------------------------------------------------------------------
 
-Err EmSubroutineCPU68K::PrepareStack (Bool forCalling, Bool /*forStdArg*/, long stackSize)
+Err EmSubroutineCPU68K::PrepareStack (Bool forCalling, Bool /*forStdArg*/, int32 stackSize)
 {
 	if (forCalling)
 	{
@@ -2625,8 +2625,9 @@ void EmSubroutineCPU68K::SetReturnRegInteger (uint32 val)
 
 void EmSubroutineCPU68K::SetReturnRegPointer (void* val)
 {
-	fReturnedA0 = (uae_u32) val;
-	m68k_areg (regs, 0) = (uae_u32) val;
+	// TODO: Maybe this needs to use a 32-to-64 trampoline
+	fReturnedA0 = (uae_u32) EmMemPtr(val);
+	m68k_areg (regs, 0) = (uae_u32) EmMemPtr(val);
 }
 
 
@@ -2757,7 +2758,7 @@ char* EmSubroutineCPU68K::GetStackBase ()
 {
 	// Ensure that the stack is aligned to a longword address.
 
-	uint32	stackBase = (uint32) fStack;
+	size_t	stackBase = (size_t) fStack;
 
 	stackBase += 3;
 	stackBase &= ~3;
@@ -2794,7 +2795,7 @@ EmSubroutineCPUARM::~EmSubroutineCPUARM (void)
 //		¥ EmSubroutineCPUARM::FormatStack
 // ---------------------------------------------------------------------------
 
-long EmSubroutineCPUARM::FormatStack (EmParamList& /*params*/)
+int32 EmSubroutineCPUARM::FormatStack (EmParamList& /*params*/)
 {
 	EmAssert (false);
 	return 0;
@@ -2805,7 +2806,7 @@ long EmSubroutineCPUARM::FormatStack (EmParamList& /*params*/)
 //		¥ EmSubroutineCPUARM::PrepareStack
 // ---------------------------------------------------------------------------
 
-Err EmSubroutineCPUARM::PrepareStack (Bool /*forCalling*/, Bool /*forStdArg*/, long /*stackSize*/)
+Err EmSubroutineCPUARM::PrepareStack (Bool /*forCalling*/, Bool /*forStdArg*/, int32 /*stackSize*/)
 {
 	EmAssert (false);
 

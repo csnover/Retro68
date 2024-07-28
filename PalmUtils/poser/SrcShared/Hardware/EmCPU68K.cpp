@@ -30,6 +30,7 @@
 #include "UAE.h"				// cpuop_func, etc.
 
 #include <algorithm>			// find
+#include <cstddef>
 
 #if __profile__
 #include <Profiler.h>
@@ -1104,7 +1105,7 @@ void EmCPU68K::ProcessException (ExceptionNumber exception)
 
 	fExceptionHistoryIndex++;
 
-	long	index = fExceptionHistoryIndex & (kExceptionHistorySize - 1);
+	int32	index = fExceptionHistoryIndex & (kExceptionHistorySize - 1);
 	fExceptionHistory[index].name = kExceptionNames[exception];
 
 	fExceptionHistory[index].pc = m68k_getpc ();
@@ -1717,7 +1718,7 @@ uint32 EmCPU68K::GetCycleCount (void)
 //		¥ EmCPU68K::BusError
 // ---------------------------------------------------------------------------
 
-void EmCPU68K::BusError (emuptr address, long size, Bool forRead)
+void EmCPU68K::BusError (emuptr address, int32 size, Bool forRead)
 {
 	gExceptionAddress	= address;
 	gExceptionSize		= size;
@@ -1733,7 +1734,7 @@ void EmCPU68K::BusError (emuptr address, long size, Bool forRead)
 //		¥ EmCPU68K::AddressError
 // ---------------------------------------------------------------------------
 
-void EmCPU68K::AddressError (emuptr address, long size, Bool forRead)
+void EmCPU68K::AddressError (emuptr address, int32 size, Bool forRead)
 {
 	gExceptionAddress	= address;
 	gExceptionSize		= size;
@@ -1788,7 +1789,7 @@ void EmCPU68K::InitializeUAETables (void)
 
 	// The rest of this code is based on build_cpufunctbl in newcpu.c.
 
-	unsigned long	opcode;
+	uint32	opcode;
 	struct cputbl*	tbl = op_smalltbl_3;
 
 	for (opcode = 0; opcode < 65536; opcode++)

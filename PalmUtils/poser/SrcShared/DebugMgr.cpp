@@ -417,7 +417,7 @@ void Debug::Reset (void)
 
 void Debug::Save (SessionFile& f)
 {
-	const long	kCurrentVersion = 1;
+	const int32	kCurrentVersion = 1;
 
 	Chunk			chunk;
 	EmStreamChunk	s (chunk);
@@ -440,7 +440,7 @@ void Debug::Save (SessionFile& f)
 	int ii;
 	for (ii = 0; ii < dbgTotalBreakpoints; ++ii)
 	{
-		s << (emuptr) gDebuggerGlobals.bp[ii].addr;
+		s << EmMemPtr(gDebuggerGlobals.bp[ii].addr);
 		s << gDebuggerGlobals.bp[ii].enabled;
 		s << gDebuggerGlobals.bp[ii].installed;
 
@@ -505,7 +505,7 @@ void Debug::Load (SessionFile& f)
 	Chunk	chunk;
 	if (f.ReadDebugInfo (chunk))
 	{
-		long			version;
+		int32			version;
 		EmStreamChunk	s (chunk);
 
 		bool			dummyBool;
@@ -532,7 +532,7 @@ void Debug::Load (SessionFile& f)
 			for (ii = 0; ii < dbgTotalBreakpoints; ++ii)
 			{
 				emuptr temp;
-				s >> temp; gDebuggerGlobals.bp[ii].addr = (MemPtr) temp;
+				s >> temp; gDebuggerGlobals.bp[ii].addr = EmMemFakeT<MemPtr>(temp);
 				s >> gDebuggerGlobals.bp[ii].enabled;
 				s >> gDebuggerGlobals.bp[ii].installed;
 				
@@ -1273,7 +1273,7 @@ ErrCode Debug::ExitDebugger (void)
 		if (gDebuggerGlobals.bp[ii].enabled == false)
 			continue;
 
-		emuptr addr = (emuptr) gDebuggerGlobals.bp[ii].addr;
+		emuptr addr = EmMemPtr(gDebuggerGlobals.bp[ii].addr);
 		if (!addr)
 			continue;
 
@@ -1365,7 +1365,7 @@ void Debug::InstallInstructionBreaks (void)
 	{
 		if (gDebuggerGlobals.bp[ii].enabled)
 		{
-			MetaMemory::MarkInstructionBreak ((emuptr) gDebuggerGlobals.bp[ii].addr);
+			MetaMemory::MarkInstructionBreak (EmMemPtr(gDebuggerGlobals.bp[ii].addr));
 		}
 	}
 }
@@ -1391,7 +1391,7 @@ void Debug::RemoveInstructionBreaks (void)
 	{
 		if (gDebuggerGlobals.bp[ii].enabled)
 		{
-			MetaMemory::UnmarkInstructionBreak ((emuptr) gDebuggerGlobals.bp[ii].addr);
+			MetaMemory::UnmarkInstructionBreak (EmMemPtr(gDebuggerGlobals.bp[ii].addr));
 		}
 	}
 }
@@ -1541,7 +1541,7 @@ void Debug::SetBreakpoint (int index, emuptr addr, BreakpointCondition* c)
 
 	gDebuggerGlobals.bp[index].enabled		= true;
 	gDebuggerGlobals.bp[index].installed	= false;
-	gDebuggerGlobals.bp[index].addr			= (MemPtr) addr;
+	gDebuggerGlobals.bp[index].addr			= EmMemFakeT<MemPtr>(addr);
 	gDebuggerGlobals.bpCondition[index]		= c;
 
 	gSession->InstallInstructionBreaks ();
@@ -1808,7 +1808,7 @@ Bool PrvParseUnsigned (const char **ps, uint32 *u)
 {
 	const char *s = *ps;
 
-	if (sscanf (s, "%li", u) != 1)
+	if (sscanf (s, "%u", u) != 1)
 		return false;
 
 	if (s[0] == '0' && (s[1] == 'x' || s[1] == 'X'))	/* hex */
@@ -1869,7 +1869,7 @@ Bool BreakpointCondition::Evaluate (void)
 
 void Debug::ConditionalBreak (void)
 {
-	MemPtr	bpAddress = (MemPtr) m68k_getpc ();
+	MemPtr	bpAddress = EmMemFakeT<MemPtr>(m68k_getpc ());
 
 	// Loop over the breakpoints to see if we've hit one.
 

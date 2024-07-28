@@ -17,6 +17,8 @@
 #include "EmFileRef.h"
 #include "Platform.h"
 
+#include <cstring>
+#include <cstdlib>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>

@@ -281,13 +281,13 @@ extern int64 gWriteCycles;
 
 #if _DEBUG
 
-void ProfileIncrementClock(unsigned long by);
+void ProfileIncrementClock(uint32 by);
 void ProfileIncrementRead(int reads, int waitstates);
 void ProfileIncrementWrite(int writes, int waitstates);
 
 #else
 
-STATIC_INLINE void ProfileIncrementClock(unsigned long by)
+STATIC_INLINE void ProfileIncrementClock(uint32 by)
 {
 	gClockCycles += by;
 }
@@ -317,8 +317,8 @@ extern void ProfileInstructionExit(emuptr instructionAddress);
 
 // debugging stuff
 
-extern long gReadMismatch;
-extern long gWriteMismatch;
+extern int32 gReadMismatch;
+extern int32 gWriteMismatch;
 
 extern void ProfileTest();
 

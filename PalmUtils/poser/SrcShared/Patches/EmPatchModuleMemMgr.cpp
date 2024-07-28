@@ -127,20 +127,20 @@ CallROMType MemMgrHeadpatch::MemChunkFree (void)
 
 #endif
 
-	::PrvForgetChunk ((emuptr) (MemPtr) p);
+	::PrvForgetChunk (EmMemPtr(p));
 
 	// Remember what heap the chunk was in for later when
 	// we need to resync with that heap.
 
 	EmPalmHeap*	heap = const_cast<EmPalmHeap*>(EmPalmHeap::GetHeapByPtr (p));
-	::PrvRememberHeapAndPtr (heap, (emuptr) (MemPtr) p);
+	::PrvRememberHeapAndPtr (heap, EmMemPtr(p));
 
 	// In case this chunk contained a stack, forget all references
 	// to that stack (or those stacks).
 
 	if (heap)
 	{
-		const EmPalmChunk*	chunk = heap->GetChunkBodyContaining ((emuptr) (MemPtr) p);
+		const EmPalmChunk*	chunk = heap->GetChunkBodyContaining (EmMemPtr(p));
 		if (chunk)
 		{
 			EmPalmOS::ForgetStacksIn (chunk->BodyStart (), chunk->BodySize ());
@@ -192,13 +192,13 @@ CallROMType MemMgrHeadpatch::MemHandleFree (void)
 
 #endif
 
-	::PrvForgetHandle ((emuptr) (MemHandle) h);
+	::PrvForgetHandle (EmMemPtr(h));
 
 	// Remember what heap the chunk was in for later when
 	// we need to resync with that heap.
 
 	EmPalmHeap*	heap = const_cast<EmPalmHeap*>(EmPalmHeap::GetHeapByHdl (h));
-	::PrvRememberHeapAndPtr (heap, (emuptr) (MemHandle) h);
+	::PrvRememberHeapAndPtr (heap, EmMemPtr(h));
 
 	// In case this chunk contained a stack, forget all references
 	// to that stack (or those stacks).
@@ -217,7 +217,7 @@ CallROMType MemMgrHeadpatch::MemHandleFree (void)
 		// In case this chunk contained system code, invalid our cache
 		// of valid system code chunks.
 
-		emuptr	p = (emuptr) EmPalmHeap::DerefHandle (h);
+		emuptr	p = EmMemPtr(EmPalmHeap::DerefHandle (h));
 		MetaMemory::ChunkUnlocked (p);
 
 		// In case this chunk held a bitmap, drop it from our list of
@@ -261,13 +261,13 @@ CallROMType MemMgrHeadpatch::MemHandleUnlock (void)
 
 		if (heap)
 		{
-			emuptr	p = (emuptr) EmPalmHeap::DerefHandle (h) - heap->ChunkHeaderSize ();
+			emuptr	p = EmMemPtr(EmPalmHeap::DerefHandle (h)) - heap->ChunkHeaderSize ();
 
 			EmPalmChunk	chunk (*heap, p);
 
 			if (chunk.LockCount () == 1)
 			{
-				MetaMemory::UnregisterBitmapPointer ((MemPtr) p);
+				MetaMemory::UnregisterBitmapPointer (EmMemFakeT<MemPtr>(p));
 			}
 		}
 	}
@@ -344,12 +344,12 @@ CallROMType MemMgrHeadpatch::MemSemaphoreRelease (void)
 		// this threshold (in really, really full heaps when calling
 		// MemChunkNew, for example).  So let's double it.
 
-		const unsigned long	kMaxElapsedSeconds	= 120 /* seconds */ * 100 /* ticks per second */;
+		const uint32	kMaxElapsedSeconds	= 120 /* seconds */ * 100 /* ticks per second */;
 
 		CEnableFullAccess	munge;
 
-		unsigned long	curCount		= EmLowMem_GetGlobal (hwrCurTicks);
-		unsigned long	elapsedTicks	= curCount - EmPatchState::fgData.fMemSemaphoreReserveTime;
+		uint32	curCount		= EmLowMem_GetGlobal (hwrCurTicks);
+		uint32	elapsedTicks	= curCount - EmPatchState::fgData.fMemSemaphoreReserveTime;
 
 		if (elapsedTicks > kMaxElapsedSeconds)
 		{
@@ -419,7 +419,7 @@ void MemMgrTailpatch::MemChunkFree (void)
 
 	CALLED_GET_PARAM_VAL (MemPtr, p);
 
-	EmPalmHeap*	heap = ::PrvGetRememberedHeap ((emuptr) (MemPtr) p);
+	EmPalmHeap*	heap = ::PrvGetRememberedHeap (EmMemPtr(p));
 
 	EmPalmChunkList	delta;
 	EmPalmHeap::MemChunkFree (heap, &delta);
@@ -429,7 +429,7 @@ void MemMgrTailpatch::MemChunkFree (void)
 		CEnableFullAccess	munge;
 
 		emuptr	w = EmLowMem_GetGlobal (uiGlobals.firstWindow);
-		if (w == (emuptr) (MemPtr) p)
+		if (w == EmMemPtr(p))
 		{
 			EmPatchState::SetUIReset (false);
 		}
@@ -493,7 +493,7 @@ void MemMgrTailpatch::MemChunkNew (void)
 #endif
 
 	EmPalmChunkList	delta;
-	EmPalmHeap::MemChunkNew (heapID, (MemPtr) result, attr, &delta);
+	EmPalmHeap::MemChunkNew (heapID, EmMemFakeT<MemPtr>(result), attr, &delta);
 	MetaMemory::Resync (delta);
 
 #define TRACK_BOOT_ALLOCATION 0
@@ -503,7 +503,7 @@ void MemMgrTailpatch::MemChunkNew (void)
 		c = EmPalmHeap::DerefHandle (c);
 	}
 
-	const EmPalmHeap*	heap = EmPalmHeap::GetHeapByPtr ((MemPtr) result);
+	const EmPalmHeap*	heap = EmPalmHeap::GetHeapByPtr (EmMemFakeT<MemPtr>(result));
 	if (heap)
 	{
 		const EmPalmChunk*	chunk = heap->GetChunkContaining (result);
@@ -522,8 +522,8 @@ void MemMgrTailpatch::MemChunkNew (void)
 
 	else if (attr & memNewChunkFlagPreLock)
 	{
-		MemHandle	h = EmPalmHeap::RecoverHandle ((MemPtr) result);
-		::PrvRememberHandle ((emuptr) h);
+		MemHandle	h = EmPalmHeap::RecoverHandle (EmMemFakeT<MemPtr>(result));
+		::PrvRememberHandle (EmMemPtr(h));
 	}
 	else
 	{
@@ -555,7 +555,7 @@ void MemMgrTailpatch::MemHandleFree (void)
 
 	CALLED_GET_PARAM_VAL (MemHandle, h);
 
-	EmPalmHeap*	heap = ::PrvGetRememberedHeap ((emuptr) (MemHandle) h);
+	EmPalmHeap*	heap = ::PrvGetRememberedHeap (EmMemPtr(h));
 
 	EmPalmChunkList	delta;
 	EmPalmHeap::MemHandleFree (heap, &delta);
@@ -608,7 +608,7 @@ void MemMgrTailpatch::MemHandleNew (void)
 #endif
 
 	EmPalmChunkList	delta;
-	EmPalmHeap::MemHandleNew ((MemHandle) result, &delta);
+	EmPalmHeap::MemHandleNew (EmMemFakeT<MemHandle>(result), &delta);
 	MetaMemory::Resync (delta);
 
 #if TRACK_BOOT_ALLOCATION
@@ -619,7 +619,7 @@ void MemMgrTailpatch::MemHandleNew (void)
 		c = EmPalmHeap::DerefHandle (result);
 	}
 
-	const EmPalmHeap*	heap = EmPalmHeap::GetHeapByPtr ((MemPtr) c);
+	const EmPalmHeap*	heap = EmPalmHeap::GetHeapByPtr (EmMemFakeT<MemPtr>(c));
 	if (heap)
 	{
 		const EmPalmChunk*	chunk = heap->GetChunkContaining (c);
@@ -667,7 +667,7 @@ void MemMgrTailpatch::MemHandleLock (void)
 	if (MetaMemory::IsBitmapHandle (h))
 	{
 		GET_RESULT_PTR ();
-		MetaMemory::RegisterBitmapPointer ((MemPtr) result);
+		MetaMemory::RegisterBitmapPointer (EmMemFakeT<MemPtr>(result));
 	}
 
 	EmPatchState::ExitMemMgr ("MemHandleLock");
@@ -980,7 +980,7 @@ void MemMgrTailpatch::MemLocalIDToLockedPtr (void)
 	GET_RESULT_PTR ();
 
 	EmPalmChunkList	delta;
-	EmPalmHeap::MemLocalIDToLockedPtr ((MemPtr) result, &delta);
+	EmPalmHeap::MemLocalIDToLockedPtr (EmMemFakeT<MemPtr>(result), &delta);
 	MetaMemory::Resync (delta);
 
 	EmPatchState::ExitMemMgr ("MemLocalIDToLockedPtr");
@@ -1021,7 +1021,7 @@ void MemMgrTailpatch::MemPtrNew (void)
 #endif
 
 	EmPalmChunkList	delta;
-	EmPalmHeap::MemPtrNew ((MemPtr) result, &delta);
+	EmPalmHeap::MemPtrNew (EmMemFakeT<MemPtr>(result), &delta);
 	MetaMemory::Resync (delta);
 
 	::PrvRememberChunk (result);
@@ -1337,7 +1337,7 @@ void PrvRememberHandle (emuptr h)
 	// Track only allocations in the dynamic heap.
 	//
 
-	const EmPalmHeap*	heap = EmPalmHeap::GetHeapByHdl ((MemHandle) h);
+	const EmPalmHeap*	heap = EmPalmHeap::GetHeapByHdl (EmMemFakeT<MemHandle>(h));
 
 	if (!heap || heap->HeapID () != 0)
 		return;
@@ -1435,11 +1435,11 @@ void PrvForgetChunk (emuptr p)
 	// dispose by pointer.
 	//
 
-	MemHandle	h = EmPalmHeap::RecoverHandle ((MemPtr) p);
+	MemHandle	h = EmPalmHeap::RecoverHandle (EmMemFakeT<MemPtr>(p));
 
 	if (h)
 	{
-		::PrvForgetHandle ((emuptr) h);
+		::PrvForgetHandle (EmMemPtr(h));
 		return;
 	}
 
@@ -1528,11 +1528,11 @@ void PrvForgetAll (UInt16 heapID, UInt16 ownerID)
 
 		if (iter->isHandle)
 		{
-			heap = EmPalmHeap::GetHeapByHdl ((MemHandle) iter->ptr);
+			heap = EmPalmHeap::GetHeapByHdl (EmMemFakeT<MemHandle>(iter->ptr));
 
 			if (heap && heap->HeapID () == heapID)
 			{
-				chunk = heap->GetChunkReferencedBy ((MemHandle) iter->ptr);
+				chunk = heap->GetChunkReferencedBy (EmMemFakeT<MemHandle>(iter->ptr));
 			}
 		}
 		else
@@ -1586,11 +1586,11 @@ int PrvCountLeaks (UInt16 ownerID)
 
 		if (iter->isHandle)
 		{
-			heap = EmPalmHeap::GetHeapByHdl ((MemHandle) iter->ptr);
+			heap = EmPalmHeap::GetHeapByHdl (EmMemFakeT<MemHandle>(iter->ptr));
 
 			if (heap)
 			{
-				chunk = heap->GetChunkReferencedBy ((MemHandle) iter->ptr);
+				chunk = heap->GetChunkReferencedBy (EmMemFakeT<MemHandle>(iter->ptr));
 			}
 		}
 		else
@@ -1646,11 +1646,11 @@ void PrvReportMemoryLeaks (UInt16 ownerID)
 
 		if (iter->isHandle)
 		{
-			heap = EmPalmHeap::GetHeapByHdl ((MemHandle) iter->ptr);
+			heap = EmPalmHeap::GetHeapByHdl (EmMemFakeT<MemHandle>(iter->ptr));
 
 			if (heap)
 			{
-				chunk = heap->GetChunkReferencedBy ((MemHandle) iter->ptr);
+				chunk = heap->GetChunkReferencedBy (EmMemFakeT<MemHandle>(iter->ptr));
 			}
 		}
 		else
@@ -1723,7 +1723,7 @@ void PrvReportLeakedChunk (const EmTrackedChunk& tracked, const EmPalmChunk& chu
 
 		if (strlen (funcName) == 0)
 		{
-			sprintf (funcName, "<Unknown @ 0x%08lX>", iter->fAddressInFunction);
+			sprintf (funcName, "<Unknown @ 0x%08X>", iter->fAddressInFunction);
 		}
 
 		stackCrawlFunctions.push_back (string (funcName));

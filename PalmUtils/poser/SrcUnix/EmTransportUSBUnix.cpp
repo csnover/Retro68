@@ -137,7 +137,7 @@ ErrCode EmTransportUSB::HostClose (void)
  *
  ***********************************************************************/
 
-ErrCode EmTransportUSB::HostRead (long& len, void* data)
+ErrCode EmTransportUSB::HostRead (int32& len, void* data)
 {
 	ErrCode	err = serErrTimeOut;
 	len = 0;
@@ -173,7 +173,7 @@ ErrCode EmTransportUSB::HostRead (long& len, void* data)
  *
  ***********************************************************************/
 
-ErrCode EmTransportUSB::HostWrite (long& len, const void* data)
+ErrCode EmTransportUSB::HostWrite (int32& len, const void* data)
 {
 	ErrCode	err = errNone;
 	len = 0;
@@ -255,9 +255,9 @@ Bool EmTransportUSB::HostCanWrite (void)
  *
  ***********************************************************************/
 
-long EmTransportUSB::HostBytesInBuffer (long minBytes)
+int32 EmTransportUSB::HostBytesInBuffer (int32 minBytes)
 {
-	long	bytesRead = 0;
+	int32	bytesRead = 0;
 	
 	fHost->UpdateOpenState ();
 

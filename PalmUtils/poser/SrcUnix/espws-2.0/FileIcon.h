@@ -99,12 +99,6 @@ class FileIcon			//// Icon data
 
 #define _FL_ICON_LABEL	FL_FREE_LABELTYPE
 
-#if FL_MAJOR_VERSION == 1 && FL_MINOR_VERSION == 0
-// FLTK 1.0.x defined these functions without the "fl_" prefix.
-#define fl_contrast contrast
-#define fl_inactive inactive
-#endif
-
 #endif // !_GUI_FILEICON_H_
 
 //

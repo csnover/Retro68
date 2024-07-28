@@ -338,7 +338,7 @@ bool EmROMReader::AcquireCardHeader(void)
 
 	SetCardAddress(GuessCardAddress());
 
-	unsigned long bigROM = (fCardVersion < 2) ? 0x3000 : cardHdr.bigrom;
+	uint32 bigROM = (fCardVersion < 2) ? 0x3000 : cardHdr.bigrom;
 
 	if ((fCardAddress & 0x0FFFFF) != (bigROM & 0x0FFFFF))
 	{
@@ -363,7 +363,7 @@ UInt32 EmROMReader::GuessCardAddress(void)
 {
 	EmAliasROMCardHeader5Type<A>	cardHdr(fPtr);
 
-	return (unsigned long)cardHdr.ramlist - 0x200;
+	return (uint32)cardHdr.ramlist - 0x200;
 }
 
 
@@ -425,7 +425,7 @@ bool EmROMReader::AcquireROMHeap(void)
 			return false;	// Buffer big enough for heap list?
 
 		ptr_type romHeapPtr = A::add(fPtr, (UInt32)romHeapList[heap]-fCardAddress);
-		unsigned long checkSize;
+		uint32 checkSize;
 
 		if (romHeapPtr < fPtr)
 			return false;	// Heap within buffer?
@@ -442,7 +442,7 @@ bool EmROMReader::AcquireROMHeap(void)
 				return false;	// Buffer big enough for heap header?
 
 			ptr_type chunkPtr = heapHdr3[1].GetPtr();
-			unsigned long addr = A::diff(chunkPtr, fPtr) + fCardAddress;
+			uint32 addr = A::diff(chunkPtr, fPtr) + fCardAddress;
 
 			for (;;)
 			{
@@ -494,7 +494,7 @@ bool EmROMReader::AcquireROMHeap(void)
 				return false;	// Buffer big enough for heap header?
 
 			ptr_type chunkPtr = heapHdr3[1].GetPtr();
-			unsigned long addr = A::diff(chunkPtr, fPtr) + fCardAddress;
+			uint32 addr = A::diff(chunkPtr, fPtr) + fCardAddress;
 
 			for (;;)
 			{
@@ -545,7 +545,7 @@ bool EmROMReader::AcquireROMHeap(void)
 				return false;	// Buffer big enough for heap header?
 
 			ptr_type chunkPtr = heapHdr2[1].GetPtr();
-			unsigned long addr = A::diff(chunkPtr, fPtr) + fCardAddress;
+			uint32 addr = A::diff(chunkPtr, fPtr) + fCardAddress;
 
 			for (;;)
 			{
@@ -583,7 +583,7 @@ bool EmROMReader::AcquireROMHeap(void)
 				return false;	// Buffer big enough for heap header?
 
 			ptr_type chunkPtr = heapHdr1[1].GetPtr();
-			unsigned long addr = A::diff(chunkPtr, fPtr) + fCardAddress;
+			uint32 addr = A::diff(chunkPtr, fPtr) + fCardAddress;
 
 			for (;;)
 			{
@@ -813,7 +813,7 @@ void EmROMReader::Version(	int& major,
 	if (psys_1 == psys->second.end())
 		return;
 
-	unsigned long ver = psys_1->second;
+	uint32 ver = psys_1->second;
 	major	= (ver >> 24) & 0x00FF;
 	minor	= (ver >> 20) & 0x000F;
 	fix		= (ver >> 16) & 0x000F;
@@ -826,7 +826,7 @@ void EmROMReader::Version(	int& major,
 //		¥ EmROMReader::Version
 // ---------------------------------------------------------------------------
 
-unsigned long EmROMReader::Version(void) const
+uint32 EmROMReader::Version(void) const
 {
 	int major, minor, fix, state, build;
 	Version(major, minor, fix, state, build);
@@ -859,7 +859,7 @@ int EmROMReader::IsBitmapColor (ChunkType& chunk, bool bootScreen)
 		if (!bitmap.nextDepthOffset)
 			break;
 
-		unsigned long offset = bitmap.nextDepthOffset;
+		uint32 offset = bitmap.nextDepthOffset;
 
 		pos = A::add(pos, offset * 4);
 	}

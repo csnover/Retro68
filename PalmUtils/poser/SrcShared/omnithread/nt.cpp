@@ -33,7 +33,7 @@
 #define DB(x) // x 
 //#include <iostream.h> or #include <iostream> if DB is on.
 
-static void get_time_now(unsigned long* abs_sec, unsigned long* abs_nsec);
+static void get_time_now(uint32* abs_sec, uint32* abs_nsec);
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -205,7 +205,7 @@ omni_condition::wait(void)
 
 
 int
-omni_condition::timedwait(unsigned long abs_sec, unsigned long abs_nsec)
+omni_condition::timedwait(uint32 abs_sec, uint32 abs_nsec)
 {
     _internal_omni_thread_helper me;
 
@@ -224,7 +224,7 @@ omni_condition::timedwait(unsigned long abs_sec, unsigned long abs_nsec)
 
     mutex->unlock();
 
-    unsigned long now_sec, now_nsec;
+    uint32 now_sec, now_nsec;
 
     get_time_now(&now_sec, &now_nsec);
 
@@ -804,7 +804,7 @@ omni_thread::yield(void)
 #define MAX_SLEEP_SECONDS (DWORD)4294966	// (2**32-2)/1000
 
 void
-omni_thread::sleep(unsigned long secs, unsigned long nanosecs)
+omni_thread::sleep(uint32 secs, uint32 nanosecs)
 {
     if (secs <= MAX_SLEEP_SECONDS) {
 	Sleep(secs * 1000 + nanosecs / 1000000);
@@ -821,8 +821,8 @@ omni_thread::sleep(unsigned long secs, unsigned long nanosecs)
 
 
 void
-omni_thread::get_time(unsigned long* abs_sec, unsigned long* abs_nsec,
-		      unsigned long rel_sec, unsigned long rel_nsec)
+omni_thread::get_time(uint32* abs_sec, uint32* abs_nsec,
+		      uint32 rel_sec, uint32 rel_nsec)
 {
     get_time_now(abs_sec, abs_nsec);
     *abs_nsec += rel_nsec;
@@ -852,7 +852,7 @@ omni_thread::nt_priority(priority_t pri)
 
 
 static void
-get_time_now(unsigned long* abs_sec, unsigned long* abs_nsec)
+get_time_now(uint32* abs_sec, uint32* abs_nsec)
 {
     static int days_in_preceding_months[12]
 	= { 0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334 };

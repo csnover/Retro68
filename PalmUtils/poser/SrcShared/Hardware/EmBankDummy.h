@@ -40,7 +40,7 @@ class EmBankDummy
 		static void				AddOpcodeCycles		(void);
 
 	private:
-		static void				InvalidAccess		(emuptr address, long size, Bool forRead);
+		static void				InvalidAccess		(emuptr address, int32 size, Bool forRead);
 };
 
 

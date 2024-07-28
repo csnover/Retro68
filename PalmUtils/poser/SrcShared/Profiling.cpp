@@ -230,8 +230,8 @@ int64	gClockCycles;
 int64	gReadCycles;
 int64	gWriteCycles;
 
-long	gReadMismatch;		// debug
-long	gWriteMismatch;		// debug
+int32	gReadMismatch;		// debug
+int32	gWriteMismatch;		// debug
 
 int		gProfilingEnabled;
 int		gProfilingOn;
@@ -396,8 +396,8 @@ static int				gInterruptStack[MAXNESTEDINTERRUPTS];
 static int64			gInterruptCount;
 static int64			gInterruptCycles;
 
-static unsigned long	gMissedCount;			// debug
-static unsigned long	gExtraPopCount;			// debug
+static uint32	gMissedCount;			// debug
+static uint32	gExtraPopCount;			// debug
 static int				gInterruptMismatch;		// debug
 
 // for detailed (instruction level) profiling
@@ -563,7 +563,7 @@ static char * GetRoutineName (emuptr addr)
 	else
 	{
 		if (startAddr != addr)
-			sprintf(&buffer[strlen(buffer)], "+$%04lX", addr-startAddr);
+			sprintf(&buffer[strlen(buffer)], "+$%04X", addr-startAddr);
 
 #if 0
 	// Removed this for now.  From Catherine White (cewhite@llamagraphics.com):
@@ -575,7 +575,7 @@ static char * GetRoutineName (emuptr addr)
 	//	makes it easier to see what is going on.
 
 		// Hack the address onto the end
-		sprintf(&buffer[strlen(buffer)], " [$%08lX]", addr);
+		sprintf(&buffer[strlen(buffer)], " [$%08X]", addr);
 #endif
 	}
 	
@@ -820,17 +820,17 @@ static void RecursivePrintBlock(FILE* resultsLog, int i, int depth, int parent)
 		fprintf (resultsLog, "\t%d", parent);
 		fprintf (resultsLog, "\t%d", depth);
 		fprintf (resultsLog, "\t%s", GetRoutineName (gCallTree[i].address));
-		fprintf (resultsLog, "\t%ld", gCallTree[i].entries);
-		fprintf (resultsLog, "\t%lld", gCallTree[i].cyclesSelf);
+		fprintf (resultsLog, "\t%d", gCallTree[i].entries);
+		fprintf (resultsLog, "\t%lld", (long long int) gCallTree[i].cyclesSelf);
 		fprintf (resultsLog, "\t%.3f", cyclesSelfms);
 		fprintf (resultsLog, "\t%.1f", cyclesSelfpct);
-		fprintf (resultsLog, "\t%lld", gCallTree[i].cyclesPlusKids);
+		fprintf (resultsLog, "\t%lld", (long long int) gCallTree[i].cyclesPlusKids);
 		fprintf (resultsLog, "\t%.3f", cyclesKidsms);
 		fprintf (resultsLog, "\t%.1f", cyclesKidspct);
 		fprintf (resultsLog, "\t%.3f", temp1);
 		fprintf (resultsLog, "\t%.3f", temp2);
 		fprintf (resultsLog, "\t%.3f", temp3);
-		fprintf (resultsLog, "\t%ld\n", gCallTree[i].stackUsed);
+		fprintf (resultsLog, "\t%d\n", gCallTree[i].stackUsed);
 
 		RecursivePrintBlock (resultsLog, gCallTree[i].kid, depth + 1, i);
 
@@ -1255,14 +1255,14 @@ void ProfilePrint(const char* fileName)
 	fprintf (resultsLog, "\ttotal reads:\t\t%I64d\n", gReadCycles);
 	fprintf (resultsLog, "\ttotal writes:\t\t%I64d\n", gWriteCycles);
 #else // MAC
-	fprintf (resultsLog, "\tcycles counted:\t\t%lld\n", gCyclesCounted);
-	fprintf (resultsLog, "\ttotal clocks:\t\t%lld\n", gClockCycles);
-	fprintf (resultsLog, "\ttotal reads:\t\t%lld\n", gReadCycles);
-	fprintf (resultsLog, "\ttotal writes:\t\t%lld\n", gWriteCycles);
+	fprintf (resultsLog, "\tcycles counted:\t\t%lld\n", (long long int) gCyclesCounted);
+	fprintf (resultsLog, "\ttotal clocks:\t\t%lld\n", (long long int) gClockCycles);
+	fprintf (resultsLog, "\ttotal reads:\t\t%lld\n", (long long int) gReadCycles);
+	fprintf (resultsLog, "\ttotal writes:\t\t%lld\n", (long long int) gWriteCycles);
 #endif
 
-	fprintf (resultsLog, "\treturn level mis-matches:\t\t%ld\n", gExtraPopCount);
-	fprintf (resultsLog, "\tnon-matching returns:\t\t%ld\n", gMissedCount);
+	fprintf (resultsLog, "\treturn level mis-matches:\t\t%d\n", gExtraPopCount);
+	fprintf (resultsLog, "\tnon-matching returns:\t\t%d\n", gMissedCount);
 
 	fclose (resultsLog);
 }
@@ -1280,7 +1280,7 @@ static Boolean ScanROMMapFile(FILE* iROMMapFile, char* oRoutineName, emuptr* oAd
 	// 	MenuGetVisible                     $10d06916
 	// WARNING - the scan length for the name _must_ match MAX_ROUTINE_NAME
 
-	int numArgs = fscanf (iROMMapFile, " %256s $%lx \n", oRoutineName, oAddr);
+	int numArgs = fscanf (iROMMapFile, " %256s $%x \n", oRoutineName, oAddr);
 
 	if (numArgs != 2)
 	{
@@ -1939,15 +1939,15 @@ void ProfileInstructionExit(emuptr instructionAddress)
 	{
 		char hackBuffer[512];
 		sprintf(hackBuffer,
-			"$%08lX\t$%04X\t \t%lld\t%lld\t%lld\t \t%lld\t%lld\t%lld\n",
+			"$%08X\t$%04X\t \t%lld\t%lld\t%lld\t \t%lld\t%lld\t%lld\n",
 				instructionAddress,
 				gCallStack[gCallStackSP].opcode,
-				gClockCycles - gClockCyclesSaved,
-				gReadCycles - gReadCyclesSaved,
-				gWriteCycles - gWriteCyclesSaved,
-				gClockCycles,
-				gReadCycles,
-				gWriteCycles);
+				(long long int) gClockCycles - gClockCyclesSaved,
+				(long long int) gReadCycles - gReadCyclesSaved,
+				(long long int) gWriteCycles - gWriteCyclesSaved,
+				(long long int) gClockCycles,
+				(long long int) gReadCycles,
+				(long long int) gWriteCycles);
 		
 		if ((gClockCyclesLast - gClockCyclesSaved) != 0)
 			fputs("\n", gProfilingDetailLog);
@@ -1957,9 +1957,9 @@ void ProfileInstructionExit(emuptr instructionAddress)
 			
 		fputs(hackBuffer, gProfilingDetailLog);
 
-	if (gCallStack[gCallStackSP].opcode  == kOpcode_RTS)	// RTS
-		fputs("\t<--\tRTS\n", gProfilingDetailLog);
-			
+		if (gCallStack[gCallStackSP].opcode  == kOpcode_RTS) {	// RTS
+			fputs("\t<--\tRTS\n", gProfilingDetailLog);
+		}
 		gClockCyclesLast = gClockCycles;
 	}
 	
@@ -2049,7 +2049,7 @@ void ProfileTest()
 
 #if _DEBUG
 
-void ProfileIncrementClock(unsigned long by)
+void ProfileIncrementClock(uint32 by)
 {
 	gClockCycles += by;
 }
@@ -2099,9 +2099,9 @@ string CreateFileNameForProfile (Bool forText)
 		++fileIndex;
 
 		if (forText)
-			sprintf (buffer, "%s_%04ld.txt", "Profile Results", fileIndex);
+			sprintf (buffer, "%s_%04d.txt", "Profile Results", fileIndex);
 		else
-			sprintf (buffer, "%s_%04ld.mwp", "Profile Results", fileIndex);
+			sprintf (buffer, "%s_%04d.mwp", "Profile Results", fileIndex);
 
 		result = EmFileRef (poserDir, buffer);
 	}

@@ -43,7 +43,7 @@ class SystemPacket
 
 	private:
 		static ErrCode			SendResponse		(SLP&, UInt8 code);
-		static ErrCode			SendPacket			(SLP&, const void* body, long bodySize);
+		static ErrCode			SendPacket			(SLP&, const void* body, int32 bodySize);
 
 		static void 			GetRegs 			(M68KRegsType&);
 		static void 			SetRegs 			(const M68KRegsType&);

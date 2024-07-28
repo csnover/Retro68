@@ -161,10 +161,10 @@ void EmSPISlave330Current::ProcessCommand (uint8 command)
     // we should only get here for channel 2
 	EmAssert (((command & kChannelBits) >> 4) == 2);
 
-    if (fPowerConnected)
-        result = 0;    // no battery current with ext power connected.
-    else
-        result = 0x60; // just hard code some current for now.
+	if (fPowerConnected)
+		result = 0;    // no battery current with ext power connected.
+	else
+		result = 0x60; // just hard code some current for now.
 
 	fPendingResult = result << 4;
 	fHavePending = true;

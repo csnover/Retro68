@@ -14,6 +14,9 @@
 #ifndef _BYTESWAPPING_H_
 #define _BYTESWAPPING_H_
 
+#include "EmTypes.h"
+#include "Switches.h"
+
 #if !defined (BYTESWAP)
 #error "Must define BYTESWAP"
 #endif
@@ -73,52 +76,34 @@ inline void Byteswap(unsigned char&)
 {
 }
 
-inline void Byteswap(short& v)
+inline void Byteswap(int16& v)
 {
-	v = (short) BYTE_SWAP_16(v);
+	v = BYTE_SWAP_16(v);
 }
 
-inline void Byteswap(unsigned short& v)
+inline void Byteswap(uint16& v)
 {
-	v = (unsigned short) BYTE_SWAP_16(v);
+	v = BYTE_SWAP_16(v);
 }
 
-inline void Byteswap(int& v)
+inline void Byteswap(int32& v)
 {
-	if (sizeof(int) == 4)
-		v = (int) BYTE_SWAP_32(v);
-
-	else if (sizeof(int) == 2)
-		v = (int) BYTE_SWAP_16(v);
+	v = BYTE_SWAP_32(v);
 }
 
-inline void Byteswap(unsigned int& v)
+inline void Byteswap(uint32& v)
 {
-	if (sizeof(unsigned int) == 4)
-		v = (unsigned int) BYTE_SWAP_32(v);
-
-	else if (sizeof(unsigned int) == 2)
-		v = (unsigned int) BYTE_SWAP_16(v);
-}
-
-inline void Byteswap(long& v)
-{
-	v = (long) BYTE_SWAP_32(v);
-}
-
-inline void Byteswap(unsigned long& v)
-{
-	v = (unsigned long) BYTE_SWAP_32(v);
+	v = BYTE_SWAP_32(v);
 }
 
 inline void Byteswap(int64& v)
 {
-	v = (int64) BYTE_SWAP_64(v);
+	v = BYTE_SWAP_64(v);
 }
 
 inline void Byteswap(uint64& v)
 {
-	v = (uint64) BYTE_SWAP_64(v);
+	v = BYTE_SWAP_64(v);
 }
 
 template <class T>
@@ -153,19 +138,19 @@ void Byteswap (SED1375RegsType& p);
 
 #if WORDSWAP_MEMORY
 
-	inline void ByteswapWords (void* start, unsigned long length)
+	inline void ByteswapWords (void* start, uint32 length)
 	{
-		for (unsigned long ii = 0; ii < length / 2; ++ii)
+		for (uint32 ii = 0; ii < length / 2; ++ii)
 		{
-			unsigned short*	p = ((unsigned short*) start) + ii;
-			unsigned char*	bp = (unsigned char*) p;
-			*p = (((unsigned short) *bp) << 8) | (unsigned short) (*(bp + 1));
+			uint16*	p = ((uint16*) start) + ii;
+			uint8*	bp = (uint8*) p;
+			*p = (((uint16) *bp) << 8) | (uint16) (*(bp + 1));
 		}
 	}
 
 #else
 
-	inline void ByteswapWords (void*, unsigned long)
+	inline void ByteswapWords (void*, uint32)
 	{
 	}
 

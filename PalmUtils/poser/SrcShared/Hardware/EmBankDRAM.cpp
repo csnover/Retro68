@@ -32,6 +32,8 @@
 #include "MetaMemory.h"			// MetaMemory
 #include "Profiling.h"			// WAITSTATES_DRAM
 
+#include <cstddef>
+
 
 // ---------------------------------------------------------------------------
 #pragma mark ===== Types
@@ -621,7 +623,7 @@ void EmBankDRAM::AddOpcodeCycles (void)
 //		¥ EmBankDRAM::AddressError
 // ---------------------------------------------------------------------------
 
-void EmBankDRAM::AddressError (emuptr address, long size, Bool forRead)
+void EmBankDRAM::AddressError (emuptr address, int32 size, Bool forRead)
 {
 	EmAssert (gCPU68K);
 	gCPU68K->AddressError (address, size, forRead);
@@ -632,7 +634,7 @@ void EmBankDRAM::AddressError (emuptr address, long size, Bool forRead)
 //		¥ EmBankDRAM::InvalidAccess
 // ---------------------------------------------------------------------------
 
-void EmBankDRAM::InvalidAccess (emuptr address, long size, Bool forRead)
+void EmBankDRAM::InvalidAccess (emuptr address, int32 size, Bool forRead)
 {
 	EmAssert (gCPU68K);
 	gCPU68K->BusError (address, size, forRead);
@@ -643,7 +645,7 @@ void EmBankDRAM::InvalidAccess (emuptr address, long size, Bool forRead)
 //		¥ EmBankDRAM::ProbableCause
 // ---------------------------------------------------------------------------
 
-void EmBankDRAM::ProbableCause (emuptr address, long size, Bool forRead)
+void EmBankDRAM::ProbableCause (emuptr address, int32 size, Bool forRead)
 {
 	EmAssert (gSession);
 

@@ -79,9 +79,9 @@ struct SystemCallContext
 	Bool		fViaTrap;		// True if called via TRAP $F.
 	Bool		fViaJsrA1;		// True if called via SYSTRAP_FASTER.
 
-	long		fError;			// If an error occurred getting the context, error is here
-	long		fLibIndex;		// Resource base number for function name
-	long		fMaxRefNum;		// If the refNum was too big, this is the max value it could be.
+	int32		fError;			// If an error occurred getting the context, error is here
+	int32		fLibIndex;		// Resource base number for function name
+	int32		fMaxRefNum;		// If the refNum was too big, this is the max value it could be.
 };
 typedef vector<SystemCallContext>	SystemCallContextList;
 
@@ -118,7 +118,7 @@ typedef vector<DatabaseInfo>	DatabaseInfoList;
 
 struct SlotInfoType
 {
-	long		fSlotNumber;
+	int32		fSlotNumber;
 	Bool		fSlotOccupied;
 	EmDirRef	fSlotRoot;
 };
@@ -143,7 +143,7 @@ struct Configuration
 	{
 	}
 
-	Configuration (const EmDevice& dt, long size, const EmFileRef& rom) :
+	Configuration (const EmDevice& dt, int32 size, const EmFileRef& rom) :
 		fDevice (dt),
 		fRAMSize (size),
 		fROMFile (rom)
@@ -193,10 +193,10 @@ struct GremlinInfo
 	{
 	}
 
-	long				fNumber;
-	long				fSteps;
-	long				fFinal;
-	long				fSaveFrequency;
+	int32				fNumber;
+	int32				fSteps;
+	int32				fFinal;
+	int32				fSaveFrequency;
 	DatabaseInfoList	fAppList;
 };
 typedef vector<GremlinInfo>	GremlinInfoList;
@@ -224,12 +224,12 @@ struct HordeInfo
 		NewToOld ();
 	}
 
-	long				fStartNumber;
-	long				fStopNumber;
+	int32				fStartNumber;
+	int32				fStopNumber;
 
-	long				fDepthSwitch;
-	long				fDepthSave;
-	long				fDepthStop;
+	int32				fDepthSwitch;
+	int32				fDepthSave;
+	int32				fDepthStop;
 
 	Bool				fCanSwitch;
 	Bool				fCanSave;
@@ -240,9 +240,9 @@ struct HordeInfo
 	// Old fields that I want to get rid of, but
 	// I need to update Gremlins and Hordes first.
 
-	long				fSaveFrequency;
-	long				fSwitchDepth;
-	long				fMaxDepth;
+	int32				fSaveFrequency;
+	int32				fSwitchDepth;
+	int32				fMaxDepth;
 
 	// New field added so that the first application
 	// to be launched can be specified

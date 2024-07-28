@@ -145,9 +145,9 @@ extern long header_bytes;/* number of bytes in gzip header */
 
 extern int  ifd;        /* input file descriptor */
 extern int  ofd;        /* output file descriptor */
-extern char ifname[];   /* input file name or "stdin" */
-extern char ofname[];   /* output file name or "stdout" */
-extern char *progname;  /* program name */
+extern const char ifname[];   /* input file name or "stdin" */
+extern const char ofname[];   /* output file name or "stdout" */
+extern const char *progname;  /* program name */
 
 extern long time_stamp; /* original time stamp (modification time) */
 extern long ifile_size; /* input file size, -1 for devices (debug only) */

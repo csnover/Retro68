@@ -116,9 +116,13 @@
 #include <utility>		// pair
 #include <queue>
 
-#if FL_MAJOR_VERSION == 1 && FL_MINOR_VERSION == 0
-// FLTK 1.0.x had a different layout for the undocumented Fl_Label structure.
-#define HAVE_LEGACY_FL_LABEL
+#if PLATFORM_UNIX
+#include <spawn.h>
+#include <sys/wait.h>
+extern char **environ;
+#elif PLATFORM_WINDOWS
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
 #endif
 
 typedef string			FilterList;
@@ -384,7 +388,7 @@ EmDlgItemID PrvFindCancelItem (Fl_Group* w)
 void PrvWidgetCallback (Fl_Widget* w, void* c)
 {
 //	EmDlgItemID id = ::PrvFindIDByWidget (w);
-//	printf ("PrvWidgetCallback: id = 0x%08lX\n", (long) id);
+//	printf ("PrvWidgetCallback: id = 0x%08lX\n", (int32) id);
 
 	EmDlgContext*	context = (EmDlgContext*) c;
 	EmAssert (context);
@@ -611,10 +615,10 @@ void CloseAllDialogs (void)
 // callback used to close modal dialogs. modalResult is < 0 if not yet completed.
 // set modalResult to be >=0 to complete dialog. Typically 0=cancel, 1=ok
 
-static long modalResult;
+static int32 modalResult;
 void modalCallback(Fl_Return_Button*, void* result)
 {
-	modalResult = (long) result;
+	modalResult = (size_t) result;
 }
 
 
@@ -663,22 +667,28 @@ static int postModalDialog (Fl_Window* dlg)
 
 void openURL (Fl_Button* box, void*)
 {
-	char buffer[PATH_MAX];
-	char url[PATH_MAX];
-
 	box->labelcolor (FL_RED);
 
+	char url[PATH_MAX];
 	// get the label, trim the opening '<' and closing '>'
-	strcpy (url, &(box->label()[1]));
-	url [strlen (url) - 1] = '\0';
+	strncpy (url, box->label() + 1, sizeof(url) - 1);
+	url[strlen(url) - 1] = '\0';
 
-#ifdef __QNXNTO__
-	sprintf (buffer, "voyager -u %s &", url);
+#if PLATFORM_UNIX
+#ifdef __APPLE__
+	const char *program = "open";
 #else
-	sprintf (buffer, "netscape -remote 'openURL(%s,new-window)' || netscape '%s' &", url, url);
+	const char *program = "xdg-open";
 #endif
 
-	system (buffer);
+	const char *argv[] = { program, url, NULL };
+
+	pid_t pid;
+	if (posix_spawnp(&pid, program, NULL, NULL, const_cast<char **>(argv), environ) == 0)
+		waitpid(pid, NULL, 0);
+#elif PLATFORM_WINDOWS
+	(void)ShellExecute(0, 0, url, 0, 0, SW_SHOWNORMAL);
+#endif
 }
 
 
@@ -713,7 +723,7 @@ EmDlgItemID EmDlg::HostRunGetFile (const void* parameters)
 	while (chooser.shown ())
 		Fl::wait ();
 
-	long count = chooser.count ();
+	int32 count = chooser.count ();
 	if (count == 0)
 		return kDlgItemCancel;
 
@@ -756,11 +766,11 @@ EmDlgItemID EmDlg::HostRunGetFileList (const void* parameters)
 	while (chooser.shown ())
 		Fl::wait ();
 
-	long count = chooser.count ();
+	int32 count = chooser.count ();
 	if (count == 0)
 		return kDlgItemCancel;
 
-	for (long ii = 1; ii <= count; ++ii)
+	for (int32 ii = 1; ii <= count; ++ii)
 	{
 		data.fResults.push_back (EmFileRef (chooser.value (ii)));
 	}
@@ -800,7 +810,7 @@ EmDlgItemID EmDlg::HostRunPutFile (const void* parameters)
 	while (chooser.shown ())
 		Fl::wait ();
 
-	long count = chooser.count ();
+	int32 count = chooser.count ();
 	if (count == 0)
 		return kDlgItemCancel;
 
@@ -841,7 +851,7 @@ EmDlgItemID EmDlg::HostRunGetDirectory (const void* parameters)
 	while (chooser.shown ())
 		Fl::wait ();
 
-	long count = chooser.count ();
+	int32 count = chooser.count ();
 	if (count == 0)
 		return kDlgItemCancel;
 
@@ -1168,7 +1178,7 @@ void EmDlg::SetDlgCancelButton (EmDlgContext& context, EmDlgItemID item)
  *
  ***********************************************************************/
 
-void EmDlg::SetItemMin (EmDlgRef dlg, EmDlgItemID item, long minValue)
+void EmDlg::SetItemMin (EmDlgRef dlg, EmDlgItemID item, int32 minValue)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1192,7 +1202,7 @@ void EmDlg::SetItemMin (EmDlgRef dlg, EmDlgItemID item, long minValue)
  *
  ***********************************************************************/
 
-void EmDlg::SetItemValue (EmDlgRef dlg, EmDlgItemID item, long value)
+void EmDlg::SetItemValue (EmDlgRef dlg, EmDlgItemID item, int32 value)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1270,7 +1280,7 @@ void EmDlg::SetItemValue (EmDlgRef dlg, EmDlgItemID item, long value)
 	if (input)
 	{
 		char buffer[20];
-		sprintf (buffer, "%ld", (long) value);
+		sprintf (buffer, "%d", value);
 		EmDlg::SetItemText (dlg, item, buffer);
 	}
 
@@ -1300,7 +1310,7 @@ void EmDlg::SetItemValue (EmDlgRef dlg, EmDlgItemID item, long value)
  *
  ***********************************************************************/
 
-void EmDlg::SetItemMax (EmDlgRef dlg, EmDlgItemID item, long maxValue)
+void EmDlg::SetItemMax (EmDlgRef dlg, EmDlgItemID item, int32 maxValue)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1413,7 +1423,7 @@ void EmDlg::SetItemText (EmDlgRef dlg, EmDlgItemID item, string str)
  *
  ***********************************************************************/
 
-long EmDlg::GetItemValue (EmDlgRef dlg, EmDlgItemID item)
+int32 EmDlg::GetItemValue (EmDlgRef dlg, EmDlgItemID item)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1439,8 +1449,8 @@ long EmDlg::GetItemValue (EmDlgRef dlg, EmDlgItemID item)
 		if (menu->mvalue () == NULL)
 			return -1;
 
-		long	result = menu->value();
-		long	add = 0;
+		int32	result = menu->value();
+		int32	add = 0;
 
 		// Adjust for the fact that FLTK treats divider lines as
 		// an attribute of the preceding menu item, while our model
@@ -1473,7 +1483,7 @@ long EmDlg::GetItemValue (EmDlgRef dlg, EmDlgItemID item)
 
 	Fl_Valuator* valuator = dynamic_cast<Fl_Valuator*> (o);
 	if (valuator)
-		return (long) valuator->value ();		// !!! Really is a "double"!
+		return valuator->value ();		// !!! Really is a "double"!
 
 	// ...............................................................
 	// Includes: Fl_Input_, Fl_Input, Fl_Float_Input, Fl_Int_Input,
@@ -1485,8 +1495,8 @@ long EmDlg::GetItemValue (EmDlgRef dlg, EmDlgItemID item)
 	if (input)
 	{
 		const char* text = input->value ();
-		long value = 0;
-		sscanf (text, "%ld", &value);
+		int32 value = 0;
+		sscanf (text, "%d", &value);
 		return value;
 	}
 
@@ -1734,7 +1744,7 @@ void EmDlg::ClearList (EmDlgRef dlg, EmDlgItemID item)
  *
  ***********************************************************************/
 
-void EmDlg::EnableMenuItem (EmDlgRef dlg, EmDlgItemID item, long menuItem)
+void EmDlg::EnableMenuItem (EmDlgRef dlg, EmDlgItemID item, int32 menuItem)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1776,7 +1786,7 @@ void EmDlg::EnableMenuItem (EmDlgRef dlg, EmDlgItemID item, long menuItem)
  *
  ***********************************************************************/
 
-void EmDlg::DisableMenuItem (EmDlgRef dlg, EmDlgItemID item, long menuItem)
+void EmDlg::DisableMenuItem (EmDlgRef dlg, EmDlgItemID item, int32 menuItem)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1962,24 +1972,11 @@ int EmDlg::GetTextHeight (EmDlgRef dlg, EmDlgItemID item, const string& s)
 		Fl_Boxtype b = i->box () ? i->box () : FL_DOWN_BOX;
 		width -= Fl::box_dw (b) + 6;
 
-		// FIXME: The Fl_Label structure is not documented, and its layout
-		// has changed in the past.  These two measurements should be
-		// rewritten to use fl_measure or perhaps o->measure_label somehow.
-
-		Fl_Label label =
-		{
-			s.c_str (),
-#ifndef HAVE_LEGACY_FL_LABEL
-			NULL,
-			NULL,
-#endif
-			FL_NORMAL_LABEL,
-			i->textfont (),
-			i->textsize (),
-			i->textcolor ()
-		};
-
-		label.measure (width, result);
+		Fl_Font oldFont = fl_font();
+		Fl_Fontsize oldSize = fl_size();
+		fl_font(i->textfont(), i->textsize());
+		fl_measure(s.c_str(), width, result);
+		fl_font(oldFont, oldSize);
 
 		result += Fl::box_dh (b);
 	}
@@ -1996,20 +1993,11 @@ int EmDlg::GetTextHeight (EmDlgRef dlg, EmDlgItemID item, const string& s)
 			width -= 6;
 		}
 
-		Fl_Label label =
-		{
-			s.c_str (),
-#ifndef HAVE_LEGACY_FL_LABEL
-			NULL,
-			NULL,
-#endif
-			o->labeltype (),
-			o->labelfont (),
-			o->labelsize (),
-			o->labelcolor ()
-		};
-
-		label.measure (width, result);
+		Fl_Font oldFont = fl_font();
+		Fl_Fontsize oldSize = fl_size();
+		fl_font(o->labelfont(), o->labelsize());
+		fl_measure(s.c_str(), width, result);
+		fl_font(oldFont, oldSize);
 	}
 
 	return result;

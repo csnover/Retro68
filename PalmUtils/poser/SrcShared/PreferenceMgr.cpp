@@ -25,6 +25,7 @@
 #include "StringConversions.h"	// ToString, FromString
 
 #include <algorithm>			// find()
+#include <cstring>
 #include <ctype.h>				// isdigit
 
 Preferences*			gPrefs;
@@ -88,7 +89,7 @@ BasePreference::BasePreference (PrefKeyType name, bool acquireLock) :
 {
 }
 
-BasePreference::BasePreference (long index, bool acquireLock) :
+BasePreference::BasePreference (int32 index, bool acquireLock) :
 	fName (::ToString (index)),
 	fLoaded (false),
 	fChanged (false),
@@ -255,7 +256,7 @@ Preference<T>::Preference (PrefKeyType name, bool acquireLock) :
 }
 
 template <class T>
-Preference<T>::Preference (long index, bool acquireLock) :
+Preference<T>::Preference (int32 index, bool acquireLock) :
 	BasePreference (index, acquireLock),
 	fValue (T())
 {
@@ -471,7 +472,7 @@ bool Preference<DatabaseInfoList>::DoLoad (void)
 
 	gPrefs->PushPrefix (fName);
 
-	long	ii = 0;
+	int32	ii = 0;
 	while (1)
 	{
 		Preference<DatabaseInfo> pref (ii++, false);
@@ -493,7 +494,7 @@ void Preference<DatabaseInfoList>::DoSave (void)
 
 	gPrefs->PushPrefix (fName);
 
-	long	ii = 0;
+	int32	ii = 0;
 	DatabaseInfoList::iterator	iter = fValue.begin ();
 	while (iter != fValue.end ())
 	{
@@ -514,7 +515,7 @@ bool Preference<EmFileRefList>::DoLoad (void)
 	bool	loaded = true;
 	gPrefs->PushPrefix (fName);
 
-	long	ii = 0;
+	int32	ii = 0;
 	while (1)
 	{
 		Preference<EmFileRef>	pref (ii++, false);
@@ -536,7 +537,7 @@ void Preference<EmFileRefList>::DoSave (void)
 
 	gPrefs->PushPrefix (fName);
 
-	long	ii = 0;
+	int32	ii = 0;
 	EmFileRefList::iterator	iter = fValue.begin ();
 	while (iter != fValue.end ())
 	{
@@ -697,7 +698,7 @@ Preference<PointType>::Preference (PrefKeyType name, bool acquireLock) :
 }
 
 template <>
-Preference<PointType>::Preference (long index, bool acquireLock) :
+Preference<PointType>::Preference (int32 index, bool acquireLock) :
 	BasePreference (index, acquireLock)
 	//,	fValue ()
 {
@@ -754,7 +755,7 @@ Preference<EmPoint>::Preference (PrefKeyType name, bool acquireLock) :
 }
 
 template <>
-Preference<EmPoint>::Preference (long index, bool acquireLock) :
+Preference<EmPoint>::Preference (int32 index, bool acquireLock) :
 	BasePreference (index, acquireLock),
 	fValue ()
 {
@@ -808,7 +809,7 @@ Preference<RGBType>::Preference (PrefKeyType name, bool acquireLock) :
 }
 
 template <>
-Preference<RGBType>::Preference (long index, bool acquireLock) :
+Preference<RGBType>::Preference (int32 index, bool acquireLock) :
 	BasePreference (index, acquireLock),
 	fValue ()
 {
@@ -864,7 +865,7 @@ void Preference<StringList>::DoSave (void)
 
 	gPrefs->PushPrefix (fName);
 
-	long	ii = 0;
+	int32	ii = 0;
 	StringList::iterator	iter = fValue.begin ();
 	while (iter != fValue.end ())
 	{
@@ -884,7 +885,7 @@ bool Preference<StringList>::DoLoad (void)
 	bool	loaded = true;
 	gPrefs->PushPrefix (fName);
 
-	long	ii = 0;
+	int32	ii = 0;
 	while (1)
 	{
 		Preference<string>	pref (ii, false);
@@ -912,7 +913,7 @@ Preference<SlotInfoType>::Preference (PrefKeyType name, bool acquireLock) :
 }
 
 template <>
-Preference<SlotInfoType>::Preference (long index, bool acquireLock) :
+Preference<SlotInfoType>::Preference (int32 index, bool acquireLock) :
 	BasePreference (index, acquireLock),
 	fValue ()
 {
@@ -966,7 +967,7 @@ bool Preference<SlotInfoList>::DoLoad (void)
 	bool	loaded = true;
 	gPrefs->PushPrefix (fName);
 
-	long	ii = 0;
+	int32	ii = 0;
 	while (1)
 	{
 		Preference<SlotInfoType>	pref (ii++, false);
@@ -988,7 +989,7 @@ void Preference<SlotInfoList>::DoSave (void)
 
 	gPrefs->PushPrefix (fName);
 
-	long	ii = 0;
+	int32	ii = 0;
 	SlotInfoList::iterator	iter = fValue.begin ();
 	while (iter != fValue.end ())
 	{
@@ -1255,7 +1256,7 @@ void Preferences::PushPrefix (const string& prefix)
  *
  ***********************************************************************/
 
-void Preferences::PushPrefix (long index)
+void Preferences::PushPrefix (int32 index)
 {
 	this->PushPrefix (::ToString (index));
 }
@@ -2300,7 +2301,7 @@ void EmulatorPreferences::MigrateOldPrefs (void)
 			if (kDeviceName[index])
 			{
 				char	oldPrefKey[20];
-				sprintf (oldPrefKey, "%s[%d]", kPrefKeySkins, index);
+				sprintf (oldPrefKey, "%s[%ld]", kPrefKeySkins, index);
 
 				Preference<SkinName>	oldSkinPref (oldPrefKey);
 				if (!oldSkinPref.Loaded ())

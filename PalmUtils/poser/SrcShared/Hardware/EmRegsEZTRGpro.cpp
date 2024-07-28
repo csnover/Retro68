@@ -229,7 +229,7 @@ void EmRegsEZTRGpro::spiWrite(emuptr address, int size, uint32 value)
 void EmRegsEZTRGpro::SetSubBankHandlers(void)
 {
 	EmRegsEZ::SetSubBankHandlers();
-	this->SetHandler((ReadFunction)&EmRegs::StdRead,
+	this->SetHandler((ReadFunction)&EmRegsEZTRGpro::StdRead,
                          (WriteFunction)&EmRegsEZTRGpro::spiWrite,
 	                 addressof(spiMasterData),
 	                 sizeof(f68EZ328Regs.spiMasterData));

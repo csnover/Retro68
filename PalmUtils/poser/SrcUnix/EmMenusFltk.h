@@ -16,7 +16,7 @@
 
 #include "EmMenus.h"			// EmCommandID
 
-#include <FL/Fl_Menu_Item.h>
+#include <FL/Fl_Menu_Item.H>
 
 typedef vector<Fl_Menu_Item>	Fl_Menu_Item_List;
 

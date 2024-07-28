@@ -662,7 +662,7 @@ ErrCode SystemPacket::RPC (SLP& slp)
 	response.resultD0	= trap.GetD0 ();
 	response.resultA0	= trap.GetA0 ();
 
-	long numBytes = ((char*) paramPtr) - ((char*) packet.GetPtr ());	// or get from header...
+	int32 numBytes = ((char*) paramPtr) - ((char*) packet.GetPtr ());	// or get from header...
 
 	EXIT_PACKET ("RPC", sysPktRPCRsp, numBytes);
 }
@@ -804,7 +804,7 @@ ErrCode SystemPacket::RPC2 (SLP& slp)
 	response.resultA0			= trap.GetA0 ();
 	response.resultException	= 0;
 
-	long numBytes = ((char*) paramPtr) - ((char*) packet.GetPtr ());	// or get from header...
+	int32 numBytes = ((char*) paramPtr) - ((char*) packet.GetPtr ());	// or get from header...
 
 	EXIT_PACKET ("RPC2", sysPktRPC2Rsp, numBytes);
 }
@@ -1142,7 +1142,7 @@ ErrCode SystemPacket::SendResponse (SLP& slp, UInt8 code)
  *
  ***********************************************************************/
 
-ErrCode SystemPacket::SendPacket (SLP& slp, const void* body, long bodySize)
+ErrCode SystemPacket::SendPacket (SLP& slp, const void* body, int32 bodySize)
 {
 	PRINTF ("Entering SystemPacket::SendPacket.");
 

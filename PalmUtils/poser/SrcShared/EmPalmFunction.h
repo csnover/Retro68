@@ -137,25 +137,25 @@ emuptr	GetIntlDispatchAddress	(emuptr entryPt, uint32 regD2);
 class EmUnimplementedFunctionException
 {
 	public:
-		EmUnimplementedFunctionException (long n = 0) :
+		EmUnimplementedFunctionException (int32 n = 0) :
 			fLibIndex (n)
 		{
 		}
 
-		long	fLibIndex;
+		int32	fLibIndex;
 };
 
 class EmInvalidRefNumException
 {
 	public:
-		EmInvalidRefNumException (long n = 0, long m = sysInvalidRefNum) :
+		EmInvalidRefNumException (int32 n = 0, int32 m = sysInvalidRefNum) :
 			fLibIndex (n),
 			fMaxRefNum (m)
 		{
 		}
 
-		long	fLibIndex;
-		long	fMaxRefNum;
+		int32	fLibIndex;
+		int32	fMaxRefNum;
 };
 
 char*	GetTrapName				(const SystemCallContext&, Bool digDeep = false);
@@ -171,7 +171,7 @@ void	FindFunctionName		(emuptr addr,
 								 char* nameP,
 								 emuptr* startAddrP = NULL,
 								 emuptr* endAddrP = NULL,
-								 long nameCapacity = 32);
+								 int32 nameCapacity = 32);
 emuptr	FindFunctionStart		(emuptr addr);
 emuptr	FindFunctionEnd			(emuptr addr);
 Bool	EndOfFunctionSequence	(emuptr addr);
@@ -181,7 +181,7 @@ Bool	EndOfFunctionSequence	(emuptr addr);
 // capacity is 32, so callers that don't provide the extra argument
 // will get the same result as before.
 
-void	GetMacsbugInfo			(emuptr eof, char* name, long nameCapacity, emuptr* sof);
+void	GetMacsbugInfo			(emuptr eof, char* name, int32 nameCapacity, emuptr* sof);
 void	MacsbugNameLength		(emuptr addr, uint8* length, Bool* isFixed, emuptr* namePtr);
 Bool	ValidMacsbugChar		(uint8 ch);
 

@@ -617,7 +617,7 @@ static ParamList	gUserParameters;
 
 
 // This table should match up with gPalmOSLibraries in EmPalmFunction.cpp.
-static const long	gResourceBases [] =
+static const int32	gResourceBases [] =
 {
 	kStr_INetLibTrapBase,
 	kStr_IrLibTrapBase, // Also includes Exchange Lib
@@ -656,21 +656,21 @@ static Bool PrvEnterDebuggerFirst (int flags)
 static string PrvAsHex4 (uint16 value)
 {
 	char	buffer[20];
-	sprintf (buffer, "0x%04lX", (uint32) value);
+	sprintf (buffer, "0x%04X", (uint32) value);
 	return string (buffer);
 }
 
 static string PrvAsHex8 (uint32 value)
 {
 	char	buffer[20];
-	sprintf (buffer, "0x%08lX", value);
+	sprintf (buffer, "0x%08X", value);
 	return string (buffer);
 }
 
 static string PrvAsDecimal (int32 value)
 {
 	char	buffer[20];
-	sprintf (buffer, "%ld", value);
+	sprintf (buffer, "%d", value);
 	return string (buffer);
 }
 
@@ -806,7 +806,7 @@ void Errors::ReportIfNULL (StrCode operation, void* p, StrCode recovery, Bool th
 //		¥ Errors::ReportErrBusError
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrBusError (emuptr address, long size, Bool forRead)
+void Errors::ReportErrBusError (emuptr address, int32 size, Bool forRead)
 {
 	if (EmBankSRAM::ValidAddress (address, size))
 	{
@@ -838,7 +838,7 @@ void Errors::ReportErrBusError (emuptr address, long size, Bool forRead)
 //		¥ Errors::ReportErrAddressError
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrAddressError (emuptr address, long size, Bool forRead)
+void Errors::ReportErrAddressError (emuptr address, int32 size, Bool forRead)
 {
 	Errors::ReportErrAccessCommon (
 		kStr_ErrAddressError,
@@ -986,7 +986,7 @@ void Errors::ReportErrTRAPx (int trapNum)
 //		¥ Errors::ReportErrStorageHeap
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrStorageHeap (emuptr address, long size, Bool forRead)
+void Errors::ReportErrStorageHeap (emuptr address, int32 size, Bool forRead)
 {
 	Errors::ReportErrAccessCommon (
 		kStr_ErrStorageHeap,
@@ -1000,7 +1000,7 @@ void Errors::ReportErrStorageHeap (emuptr address, long size, Bool forRead)
 //		¥ Errors::ReportErrNoDrawWindow
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrNoDrawWindow (emuptr address, long size, Bool forRead)
+void Errors::ReportErrNoDrawWindow (emuptr address, int32 size, Bool forRead)
 {
 	Errors::ReportErrAccessCommon (
 		kStr_ErrNoDrawWindow,
@@ -1014,7 +1014,7 @@ void Errors::ReportErrNoDrawWindow (emuptr address, long size, Bool forRead)
 //		¥ Errors::ReportErrNoGlobals
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrNoGlobals (emuptr address, long size, Bool forRead)
+void Errors::ReportErrNoGlobals (emuptr address, int32 size, Bool forRead)
 {
 	// Set the %launch_code message variable.
 
@@ -1245,7 +1245,7 @@ void Errors::ReportErrInvalidPC (emuptr address, int reason)
 //		¥ Errors::ReportErrLowMemory
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrLowMemory (emuptr address, long size, Bool forRead)
+void Errors::ReportErrLowMemory (emuptr address, int32 size, Bool forRead)
 {
 	if (::ReportLowMemoryAccess ())
 	{
@@ -1258,7 +1258,7 @@ void Errors::ReportErrLowMemory (emuptr address, long size, Bool forRead)
 //		¥ Errors::ReportErrSystemGlobals
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrSystemGlobals (emuptr address, long size, Bool forRead)
+void Errors::ReportErrSystemGlobals (emuptr address, int32 size, Bool forRead)
 {
 	if (::ReportSystemGlobalAccess ())
 	{
@@ -1271,7 +1271,7 @@ void Errors::ReportErrSystemGlobals (emuptr address, long size, Bool forRead)
 //		¥ Errors::ReportErrScreen
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrScreen (emuptr address, long size, Bool forRead)
+void Errors::ReportErrScreen (emuptr address, int32 size, Bool forRead)
 {
 	if (::ReportScreenAccess ())
 	{
@@ -1284,7 +1284,7 @@ void Errors::ReportErrScreen (emuptr address, long size, Bool forRead)
 //		¥ Errors::ReportErrHardwareRegisters
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrHardwareRegisters (emuptr address, long size, Bool forRead)
+void Errors::ReportErrHardwareRegisters (emuptr address, int32 size, Bool forRead)
 {
 	if (::ReportHardwareRegisterAccess ())
 	{
@@ -1297,7 +1297,7 @@ void Errors::ReportErrHardwareRegisters (emuptr address, long size, Bool forRead
 //		¥ Errors::ReportErrROM
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrROM (emuptr address, long size, Bool forRead)
+void Errors::ReportErrROM (emuptr address, int32 size, Bool forRead)
 {
 	if (::ReportROMAccess ())
 	{
@@ -1310,7 +1310,7 @@ void Errors::ReportErrROM (emuptr address, long size, Bool forRead)
 //		¥ Errors::ReportErrMemMgrStructures
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrMemMgrStructures (emuptr address, long size, Bool forRead)
+void Errors::ReportErrMemMgrStructures (emuptr address, int32 size, Bool forRead)
 {
 	if (::ReportMemMgrDataAccess ())
 	{
@@ -1358,7 +1358,7 @@ void Errors::ReportErrMemMgrSemaphore (void)
 //		¥ Errors::ReportErrFreeChunk
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrFreeChunk (emuptr address, long size, Bool forRead)
+void Errors::ReportErrFreeChunk (emuptr address, int32 size, Bool forRead)
 {
 	if (::ReportFreeChunkAccess ())
 	{
@@ -1371,7 +1371,7 @@ void Errors::ReportErrFreeChunk (emuptr address, long size, Bool forRead)
 //		¥ Errors::ReportErrUnlockedChunk
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrUnlockedChunk (emuptr address, long size, Bool forRead)
+void Errors::ReportErrUnlockedChunk (emuptr address, int32 size, Bool forRead)
 {
 	if (::ReportUnlockedChunkAccess ())
 	{
@@ -1388,7 +1388,7 @@ void Errors::ReportErrLowStack (emuptr stackLow,
 								emuptr stackPointer,
 								emuptr stackHigh,
 								emuptr address,
-								long size,
+								int32 size,
 								Bool forRead)
 
 {
@@ -1457,7 +1457,7 @@ void Errors::ReportErrOffscreenObject (uint16 id, const EmRect& r)
 //		¥ Errors::ReportErrFormAccess
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrFormAccess (emuptr formAddress, emuptr address, long size, Bool forRead)
+void Errors::ReportErrFormAccess (emuptr formAddress, emuptr address, int32 size, Bool forRead)
 {
 	if (::ReportUIMgrDataAccess ())
 	{
@@ -1524,7 +1524,7 @@ void Errors::ReportErrFormAccess (emuptr formAddress, emuptr address, long size,
 //		¥ Errors::ReportErrFormObjectAccess
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrFormObjectAccess (emuptr objectAddress, emuptr formAddress, emuptr address, long size, Bool forRead)
+void Errors::ReportErrFormObjectAccess (emuptr objectAddress, emuptr formAddress, emuptr address, int32 size, Bool forRead)
 {
 	if (::ReportUIMgrDataAccess ())
 	{
@@ -1590,7 +1590,7 @@ void Errors::ReportErrFormObjectAccess (emuptr objectAddress, emuptr formAddress
 //		¥ Errors::ReportErrWindowAccess
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrWindowAccess (emuptr windowAddress, emuptr address, long size, Bool forRead)
+void Errors::ReportErrWindowAccess (emuptr windowAddress, emuptr address, int32 size, Bool forRead)
 {
 	if (::ReportUIMgrDataAccess ())
 	{
@@ -1620,7 +1620,7 @@ void Errors::ReportErrWindowAccess (emuptr windowAddress, emuptr address, long s
 //		¥ Errors::ReportErrBitmapAccess
 // ---------------------------------------------------------------------------
 
-void Errors::ReportErrBitmapAccess (emuptr bitmapAddress, emuptr address, long size, Bool forRead)
+void Errors::ReportErrBitmapAccess (emuptr bitmapAddress, emuptr address, int32 size, Bool forRead)
 {
 	if (::ReportUIMgrDataAccess ())
 	{
@@ -1823,7 +1823,7 @@ void Errors::ReportErrDbgMessage (const char* appMsg)
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrAccessCommon (StrCode strIndex, ExceptionNumber excNum, int flags,
-									emuptr address, long size, Bool forRead)
+									emuptr address, int32 size, Bool forRead)
 {
 	UNUSED_PARAM(size);
 
@@ -2028,10 +2028,10 @@ void Errors::SetParameter (const string& key, const unsigned char* value)
 	SetParameter (key, string ((char*) &value[1], value[0]));
 }
 
-void Errors::SetParameter (const string& key, long value)
+void Errors::SetParameter (const string& key, int32 value)
 {
 	char	buffer[20];
-	sprintf (buffer, "%ld", value);
+	sprintf (buffer, "%d", value);
 
 	SetParameter (key, string (buffer));
 }
@@ -2044,7 +2044,7 @@ void Errors::SetParameter (const string& key, long value)
 
 void Errors::ClearParameter (const string& key)
 {
-	long	index = (long) gUserParameters.size () - 2;
+	int32	index = (int32) gUserParameters.size () - 2;
 	
 	while (index >= 0)
 	{
@@ -2555,6 +2555,14 @@ void Errors::ThrowIfNULL (void* p)
 	}
 }
 
+void Errors::ThrowIfNULL (emuptr p)
+{
+	if (!p)
+	{
+		Errors::Throw (kError_OutOfMemory);
+	}
+}
+
 
 // ---------------------------------------------------------------------------
 //		¥ Errors::Scram
@@ -2747,7 +2755,7 @@ void Errors::GetAppVersion (string& appVersion)
 //		¥ Errors::LooksLikeA5Access
 // ---------------------------------------------------------------------------
 
-Bool Errors::LooksLikeA5Access (emuptr address, long size, Bool forRead)
+Bool Errors::LooksLikeA5Access (emuptr address, int32 size, Bool forRead)
 {
 	UNUSED_PARAM (forRead);
 
@@ -2893,7 +2901,7 @@ EmDeferredErr::~EmDeferredErr (void)
 //		¥ EmDeferredErrAccessCommon
 // ---------------------------------------------------------------------------
 
-EmDeferredErrAccessCommon::EmDeferredErrAccessCommon (emuptr address, long size, Bool forRead) :
+EmDeferredErrAccessCommon::EmDeferredErrAccessCommon (emuptr address, int32 size, Bool forRead) :
 	EmDeferredErr (),
 	fAddress (address),
 	fSize (size),
@@ -2912,7 +2920,7 @@ EmDeferredErrAccessCommon::~EmDeferredErrAccessCommon (void)
 //		¥ EmDeferredErrLowMemory
 // ---------------------------------------------------------------------------
 
-EmDeferredErrLowMemory::EmDeferredErrLowMemory (emuptr address, long size, Bool forRead) :
+EmDeferredErrLowMemory::EmDeferredErrLowMemory (emuptr address, int32 size, Bool forRead) :
 	EmDeferredErrAccessCommon (address, size, forRead)
 {
 }
@@ -2933,7 +2941,7 @@ void EmDeferredErrLowMemory::Do (void)
 //		¥ EmDeferredErrSystemGlobals
 // ---------------------------------------------------------------------------
 
-EmDeferredErrSystemGlobals::EmDeferredErrSystemGlobals (emuptr address, long size, Bool forRead) :
+EmDeferredErrSystemGlobals::EmDeferredErrSystemGlobals (emuptr address, int32 size, Bool forRead) :
 	EmDeferredErrAccessCommon (address, size, forRead)
 {
 }
@@ -2954,7 +2962,7 @@ void EmDeferredErrSystemGlobals::Do (void)
 //		¥ EmDeferredErrScreen
 // ---------------------------------------------------------------------------
 
-EmDeferredErrScreen::EmDeferredErrScreen (emuptr address, long size, Bool forRead) :
+EmDeferredErrScreen::EmDeferredErrScreen (emuptr address, int32 size, Bool forRead) :
 	EmDeferredErrAccessCommon (address, size, forRead)
 {
 }
@@ -2975,7 +2983,7 @@ void EmDeferredErrScreen::Do (void)
 //		¥ EmDeferredErrHardwareRegisters
 // ---------------------------------------------------------------------------
 
-EmDeferredErrHardwareRegisters::EmDeferredErrHardwareRegisters (emuptr address, long size, Bool forRead) :
+EmDeferredErrHardwareRegisters::EmDeferredErrHardwareRegisters (emuptr address, int32 size, Bool forRead) :
 	EmDeferredErrAccessCommon (address, size, forRead)
 {
 }
@@ -2996,7 +3004,7 @@ void EmDeferredErrHardwareRegisters::Do (void)
 //		¥ EmDeferredErrROM
 // ---------------------------------------------------------------------------
 
-EmDeferredErrROM::EmDeferredErrROM (emuptr address, long size, Bool forRead) :
+EmDeferredErrROM::EmDeferredErrROM (emuptr address, int32 size, Bool forRead) :
 	EmDeferredErrAccessCommon (address, size, forRead)
 {
 }
@@ -3017,7 +3025,7 @@ void EmDeferredErrROM::Do (void)
 //		¥ EmDeferredErrMemMgrStructures
 // ---------------------------------------------------------------------------
 
-EmDeferredErrMemMgrStructures::EmDeferredErrMemMgrStructures (emuptr address, long size, Bool forRead) :
+EmDeferredErrMemMgrStructures::EmDeferredErrMemMgrStructures (emuptr address, int32 size, Bool forRead) :
 	EmDeferredErrAccessCommon (address, size, forRead)
 {
 }
@@ -3059,7 +3067,7 @@ void EmDeferredErrMemMgrSemaphore::Do (void)
 //		¥ EmDeferredErrFreeChunk
 // ---------------------------------------------------------------------------
 
-EmDeferredErrFreeChunk::EmDeferredErrFreeChunk (emuptr address, long size, Bool forRead) :
+EmDeferredErrFreeChunk::EmDeferredErrFreeChunk (emuptr address, int32 size, Bool forRead) :
 	EmDeferredErrAccessCommon (address, size, forRead)
 {
 }
@@ -3080,7 +3088,7 @@ void EmDeferredErrFreeChunk::Do (void)
 //		¥ EmDeferredErrUnlockedChunk
 // ---------------------------------------------------------------------------
 
-EmDeferredErrUnlockedChunk::EmDeferredErrUnlockedChunk (emuptr address, long size, Bool forRead) :
+EmDeferredErrUnlockedChunk::EmDeferredErrUnlockedChunk (emuptr address, int32 size, Bool forRead) :
 	EmDeferredErrAccessCommon (address, size, forRead)
 {
 }
@@ -3105,7 +3113,7 @@ EmDeferredErrLowStack::EmDeferredErrLowStack (emuptr stackLow,
 											  emuptr stackPointer,
 											  emuptr stackHigh,
 											  emuptr address,
-											  long size,
+											  int32 size,
 											  Bool forRead) :
 	EmDeferredErrAccessCommon (address, size, forRead),
 	fStackLow (stackLow),
@@ -3214,7 +3222,7 @@ void EmDeferredErrOffscreenObject::Do (void)
 
 EmDeferredErrFormAccess::EmDeferredErrFormAccess (emuptr formAddress,
 												  emuptr address,
-												  long size,
+												  int32 size,
 												  Bool forRead) :
 	EmDeferredErrAccessCommon (address, size, forRead),
 	fFormAddress (formAddress)
@@ -3240,7 +3248,7 @@ void EmDeferredErrFormAccess::Do (void)
 EmDeferredErrFormObjectAccess::EmDeferredErrFormObjectAccess (emuptr objectAddress,
 															  emuptr formAddress,
 															  emuptr address,
-															  long size,
+															  int32 size,
 															  Bool forRead) :
 	EmDeferredErrAccessCommon (address, size, forRead),
 	fObjectAddress (objectAddress),
@@ -3266,7 +3274,7 @@ void EmDeferredErrFormObjectAccess::Do (void)
 
 EmDeferredErrWindowAccess::EmDeferredErrWindowAccess (emuptr windowAddress,
 													  emuptr address,
-													  long size,
+													  int32 size,
 													  Bool forRead) :
 	EmDeferredErrAccessCommon (address, size, forRead),
 	fWindowAddress (windowAddress)
@@ -3291,7 +3299,7 @@ void EmDeferredErrWindowAccess::Do (void)
 
 EmDeferredErrBitmapAccess::EmDeferredErrBitmapAccess (emuptr bitmapAddress,
 													  emuptr address,
-													  long size,
+													  int32 size,
 													  Bool forRead) :
 	EmDeferredErrAccessCommon (address, size, forRead),
 	fBitmapAddress (bitmapAddress)

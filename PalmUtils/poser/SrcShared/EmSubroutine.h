@@ -240,7 +240,7 @@ struct EmParam
 	EmParamName	fName;
 
 	EmParamType	fType;
-	long		fStackOffset;
+	int32		fStackOffset;
 	Bool		fByRef;
 };
 
@@ -371,7 +371,7 @@ class EmSubroutine
 		EmSubroutineCPU*		fCPU;
 		EmParamList				fParams;
 		EmParam					fReturnType;
-		long					fStackSize;
+		int32					fStackSize;
 };
 
 #endif	// EmSubroutine_h

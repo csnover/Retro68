@@ -17,6 +17,7 @@
 #include <vector>
 #include <string>
 
+#include "EmTypes.h"
 #include "EmCPU68K.h"			// ExceptionNumber
 #include "EmDlg.h"				// EmCommonDialogFlags
 #include "EmRect.h"				// ExceptionNumber
@@ -91,8 +92,8 @@ class Errors
 
 			// Hardware Exceptions
 
-		static void				ReportErrBusError			(emuptr address, long size, Bool forRead);
-		static void				ReportErrAddressError		(emuptr address, long size, Bool forRead);
+		static void				ReportErrBusError			(emuptr address, int32 size, Bool forRead);
+		static void				ReportErrAddressError		(emuptr address, int32 size, Bool forRead);
 		static void				ReportErrIllegalInstruction	(uint16 opcode);
 		static void				ReportErrDivideByZero		(void);
 		static void				ReportErrCHKInstruction		(void);
@@ -105,9 +106,9 @@ class Errors
 
 			// Special cases to hardware exceptions
 
-		static void				ReportErrStorageHeap		(emuptr address, long size, Bool forRead);
-		static void				ReportErrNoDrawWindow		(emuptr address, long size, Bool forRead);
-		static void				ReportErrNoGlobals			(emuptr address, long size, Bool forRead);
+		static void				ReportErrStorageHeap		(emuptr address, int32 size, Bool forRead);
+		static void				ReportErrNoDrawWindow		(emuptr address, int32 size, Bool forRead);
+		static void				ReportErrNoGlobals			(emuptr address, int32 size, Bool forRead);
 		static void				ReportErrSANE				(void);
 		static void				ReportErrTRAP0				(void);
 		static void				ReportErrTRAP8				(void);
@@ -122,24 +123,24 @@ class Errors
 
 			// Non-fatal Poser-detected errors
 
-		static void				ReportErrLowMemory			(emuptr address, long size, Bool forRead);
-		static void				ReportErrSystemGlobals		(emuptr address, long size, Bool forRead);
-		static void				ReportErrScreen				(emuptr address, long size, Bool forRead);
-		static void				ReportErrHardwareRegisters	(emuptr address, long size, Bool forRead);
-		static void				ReportErrROM				(emuptr address, long size, Bool forRead);
-		static void				ReportErrMemMgrStructures	(emuptr address, long size, Bool forRead);
+		static void				ReportErrLowMemory			(emuptr address, int32 size, Bool forRead);
+		static void				ReportErrSystemGlobals		(emuptr address, int32 size, Bool forRead);
+		static void				ReportErrScreen				(emuptr address, int32 size, Bool forRead);
+		static void				ReportErrHardwareRegisters	(emuptr address, int32 size, Bool forRead);
+		static void				ReportErrROM				(emuptr address, int32 size, Bool forRead);
+		static void				ReportErrMemMgrStructures	(emuptr address, int32 size, Bool forRead);
 		static void				ReportErrMemMgrLeaks		(int leaks);
 		static void				ReportErrMemMgrSemaphore	(void);
-		static void				ReportErrFreeChunk			(emuptr address, long size, Bool forRead);
-		static void				ReportErrUnlockedChunk		(emuptr address, long size, Bool forRead);
-		static void				ReportErrLowStack			(emuptr stackLow, emuptr stackPointer, emuptr stackHigh, emuptr address, long size, Bool forRead);
+		static void				ReportErrFreeChunk			(emuptr address, int32 size, Bool forRead);
+		static void				ReportErrUnlockedChunk		(emuptr address, int32 size, Bool forRead);
+		static void				ReportErrLowStack			(emuptr stackLow, emuptr stackPointer, emuptr stackHigh, emuptr address, int32 size, Bool forRead);
 		static void				ReportErrStackFull			(void);
 		static void				ReportErrSizelessObject		(uint16 id, const EmRect&);
 		static void				ReportErrOffscreenObject	(uint16 id, const EmRect&);
-		static void				ReportErrFormAccess			(emuptr formAddress, emuptr address, long size, Bool forRead);
-		static void				ReportErrFormObjectAccess	(emuptr objectAddress, emuptr formAddress, emuptr address, long size, Bool forRead);
-		static void				ReportErrWindowAccess		(emuptr windowAddress, emuptr address, long size, Bool forRead);
-		static void				ReportErrBitmapAccess		(emuptr bitmapAddress, emuptr address, long size, Bool forRead);
+		static void				ReportErrFormAccess			(emuptr formAddress, emuptr address, int32 size, Bool forRead);
+		static void				ReportErrFormObjectAccess	(emuptr objectAddress, emuptr formAddress, emuptr address, int32 size, Bool forRead);
+		static void				ReportErrWindowAccess		(emuptr windowAddress, emuptr address, int32 size, Bool forRead);
+		static void				ReportErrBitmapAccess		(emuptr bitmapAddress, emuptr address, int32 size, Bool forRead);
 		static void				ReportErrProscribedFunction	(const SystemCallContext&);
 		static void				ReportErrStepSpy			(emuptr writeAddress, int writeBytes, emuptr ssAddress, uint32 ssValue, uint32 newValue);
 		static void				ReportErrWatchpoint			(emuptr writeAddress, int writeBytes, emuptr watchAddress, uint32 watchBytes);
@@ -151,7 +152,7 @@ class Errors
 
 			// Helper functions for handling reporting of similar errors.
 
-		static void				ReportErrAccessCommon		(StrCode, ExceptionNumber, int flags, emuptr address, long size, Bool forRead);
+		static void				ReportErrAccessCommon		(StrCode, ExceptionNumber, int flags, emuptr address, int32 size, Bool forRead);
 		static void				ReportErrObjectCommon		(StrCode, ExceptionNumber, int flags, uint16 id, const EmRect&);
 		static void				ReportErrOpcodeCommon		(StrCode, ExceptionNumber, int flags, uint16 opcode);
 		static void				ReportErrStackCommon		(StrCode, ExceptionNumber, int flags);
@@ -188,7 +189,7 @@ class Errors
 		static void				SetParameter		(const string& key, const string& value);
 		static void				SetParameter		(const string& key, const char* value);
 		static void				SetParameter		(const string& key, const unsigned char* value);
-		static void				SetParameter		(const string& key, long);
+		static void				SetParameter		(const string& key, int32);
 		static void				ClearParameter		(const string& key);
 		static void				ClearAllParameters	(void);
 		static Bool				SetErrorParameters	(StrCode operation, ErrCode error, StrCode recovery);
@@ -229,7 +230,7 @@ class Errors
 													 string& appNameLC);
 		static void				GetAppVersion		(string& appVersion);
 
-		static Bool				LooksLikeA5Access	(emuptr address, long size, Bool forRead);
+		static Bool				LooksLikeA5Access	(emuptr address, int32 size, Bool forRead);
 
 
 		// If an error condition is detected, throws an error number.
@@ -240,6 +241,7 @@ class Errors
 		static void				ThrowIfPalmError	(Err error);
 		static void				ThrowIfStdCError	(int error);
 		static void				ThrowIfNULL			(void*);
+		static void				ThrowIfNULL			(emuptr);
 
 		// Call this function as a "silent failure" bottleneck.
 		// An exception will be thrown that will unwind the stack
@@ -260,19 +262,19 @@ class EmDeferredErr
 class EmDeferredErrAccessCommon : public EmDeferredErr
 {
 	public:
-								EmDeferredErrAccessCommon		(emuptr address, long size, Bool forRead);
+								EmDeferredErrAccessCommon		(emuptr address, int32 size, Bool forRead);
 		virtual					~EmDeferredErrAccessCommon		(void);
 
 	protected:
 		emuptr					fAddress;
-		long					fSize;
+		int32					fSize;
 		Bool					fForRead;
 };
 
 class EmDeferredErrLowMemory : public EmDeferredErrAccessCommon
 {
 	public:
-								EmDeferredErrLowMemory			(emuptr address, long size, Bool forRead);
+								EmDeferredErrLowMemory			(emuptr address, int32 size, Bool forRead);
 		virtual					~EmDeferredErrLowMemory			(void);
 
 		virtual void			Do								(void);
@@ -281,7 +283,7 @@ class EmDeferredErrLowMemory : public EmDeferredErrAccessCommon
 class EmDeferredErrSystemGlobals : public EmDeferredErrAccessCommon
 {
 	public:
-								EmDeferredErrSystemGlobals		(emuptr address, long size, Bool forRead);
+								EmDeferredErrSystemGlobals		(emuptr address, int32 size, Bool forRead);
 		virtual					~EmDeferredErrSystemGlobals		(void);
 
 		virtual void			Do								(void);
@@ -290,7 +292,7 @@ class EmDeferredErrSystemGlobals : public EmDeferredErrAccessCommon
 class EmDeferredErrScreen : public EmDeferredErrAccessCommon
 {
 	public:
-								EmDeferredErrScreen				(emuptr address, long size, Bool forRead);
+								EmDeferredErrScreen				(emuptr address, int32 size, Bool forRead);
 		virtual					~EmDeferredErrScreen			(void);
 
 		virtual void			Do								(void);
@@ -299,7 +301,7 @@ class EmDeferredErrScreen : public EmDeferredErrAccessCommon
 class EmDeferredErrHardwareRegisters : public EmDeferredErrAccessCommon
 {
 	public:
-								EmDeferredErrHardwareRegisters	(emuptr address, long size, Bool forRead);
+								EmDeferredErrHardwareRegisters	(emuptr address, int32 size, Bool forRead);
 		virtual					~EmDeferredErrHardwareRegisters	(void);
 
 		virtual void			Do								(void);
@@ -308,7 +310,7 @@ class EmDeferredErrHardwareRegisters : public EmDeferredErrAccessCommon
 class EmDeferredErrROM : public EmDeferredErrAccessCommon
 {
 	public:
-								EmDeferredErrROM				(emuptr address, long size, Bool forRead);
+								EmDeferredErrROM				(emuptr address, int32 size, Bool forRead);
 		virtual					~EmDeferredErrROM				(void);
 
 		virtual void			Do								(void);
@@ -317,7 +319,7 @@ class EmDeferredErrROM : public EmDeferredErrAccessCommon
 class EmDeferredErrMemMgrStructures : public EmDeferredErrAccessCommon
 {
 	public:
-								EmDeferredErrMemMgrStructures	(emuptr address, long size, Bool forRead);
+								EmDeferredErrMemMgrStructures	(emuptr address, int32 size, Bool forRead);
 		virtual					~EmDeferredErrMemMgrStructures	(void);
 
 		virtual void			Do								(void);
@@ -335,7 +337,7 @@ class EmDeferredErrMemMgrSemaphore : public EmDeferredErr
 class EmDeferredErrFreeChunk : public EmDeferredErrAccessCommon
 {
 	public:
-								EmDeferredErrFreeChunk			(emuptr address, long size, Bool forRead);
+								EmDeferredErrFreeChunk			(emuptr address, int32 size, Bool forRead);
 		virtual					~EmDeferredErrFreeChunk			(void);
 
 		virtual void			Do								(void);
@@ -344,7 +346,7 @@ class EmDeferredErrFreeChunk : public EmDeferredErrAccessCommon
 class EmDeferredErrUnlockedChunk : public EmDeferredErrAccessCommon
 {
 	public:
-								EmDeferredErrUnlockedChunk		(emuptr address, long size, Bool forRead);
+								EmDeferredErrUnlockedChunk		(emuptr address, int32 size, Bool forRead);
 		virtual					~EmDeferredErrUnlockedChunk		(void);
 
 		virtual void			Do								(void);
@@ -353,7 +355,7 @@ class EmDeferredErrUnlockedChunk : public EmDeferredErrAccessCommon
 class EmDeferredErrLowStack : public EmDeferredErrAccessCommon
 {
 	public:
-								EmDeferredErrLowStack			(emuptr stackLow, emuptr stackPointer, emuptr stackHigh, emuptr address, long size, Bool forRead);
+								EmDeferredErrLowStack			(emuptr stackLow, emuptr stackPointer, emuptr stackHigh, emuptr address, int32 size, Bool forRead);
 		virtual					~EmDeferredErrLowStack			(void);
 
 		virtual void			Do								(void);
@@ -407,7 +409,7 @@ class EmDeferredErrFormAccess : public EmDeferredErrAccessCommon
 	public:
 								EmDeferredErrFormAccess			(emuptr formAddress,
 																 emuptr address,
-																 long size,
+																 int32 size,
 																 Bool forRead);
 		virtual					~EmDeferredErrFormAccess		(void);
 
@@ -423,7 +425,7 @@ class EmDeferredErrFormObjectAccess : public EmDeferredErrAccessCommon
 								EmDeferredErrFormObjectAccess	(emuptr objectAddress,
 																 emuptr formAddress,
 																 emuptr address,
-																 long size,
+																 int32 size,
 																 Bool forRead);
 		virtual					~EmDeferredErrFormObjectAccess	(void);
 
@@ -439,7 +441,7 @@ class EmDeferredErrWindowAccess : public EmDeferredErrAccessCommon
 	public:
 								EmDeferredErrWindowAccess		(emuptr windowAddress,
 																 emuptr address,
-																 long size,
+																 int32 size,
 																 Bool forRead);
 		virtual					~EmDeferredErrWindowAccess		(void);
 
@@ -453,7 +455,7 @@ class EmDeferredErrBitmapAccess : public EmDeferredErrAccessCommon
 	public:
 								EmDeferredErrBitmapAccess		(emuptr bitmapAddress,
 																 emuptr address,
-																 long size,
+																 int32 size,
 																 Bool forRead);
 		virtual					~EmDeferredErrBitmapAccess		(void);
 

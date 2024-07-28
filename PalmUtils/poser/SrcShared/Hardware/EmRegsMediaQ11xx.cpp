@@ -660,9 +660,9 @@
 // in emulated space.
 
 #define addressof(x)	(											\
-							((emuptr) fRegs.x.GetPtr ()) -			\
-							((emuptr) fRegs.GetPtr ()) +			\
-							((emuptr) this->GetAddressStart ())		\
+							EmMemPtr(fRegs.x.GetPtr ()) -			\
+							EmMemPtr(fRegs.GetPtr ()) +			\
+							this->GetAddressStart ()		\
 						)
 
 
@@ -815,7 +815,7 @@ static const char*	kDirections[] =
 	"Negative"
 };
 
-const struct
+static const struct
 {
 	uint16		yIsMajor;		// 0 = x is major, 1 = y is major
 	uint16		xDirection;		// 0 = x is positive, 1 = x is negative
@@ -833,7 +833,7 @@ const struct
 	{ 0, 0, 1, "x-major, positive x and negative y directions" }
 };
 
-static char*	kROPs[] =
+static const char*	kROPs[] =
 {
 	"0 BLACKNESS",		"DPSoon",			"DPSona",			"PSon",
 	"SDPona",			"DPon",				"PDSxnon",			"PDSaon",
@@ -1182,7 +1182,7 @@ void EmRegsMediaQ11xx::Reset (Bool hardwareReset)
 
 void EmRegsMediaQ11xx::Save (SessionFile& f)
 {
-	const long kCurrentMediaQVersion	= 1;
+	const int32 kCurrentMediaQVersion	= 1;
 
 	EmRegs::Save (f);
 
@@ -1213,7 +1213,7 @@ void EmRegsMediaQ11xx::Load (SessionFile& f)
 	}
 	else
 	{
-		long version;
+		int32 version;
 
 		EmStreamChunk	s (chunk);
 
@@ -1603,8 +1603,8 @@ void EmRegsMediaQ11xx::GetLCDScanlines (EmScreenUpdateInfo& info)
 		info.fFirstLine		= (info.fScreenLow - baseAddr) / rowBytes;
 		info.fLastLine		= (info.fScreenHigh - baseAddr - 1) / rowBytes + 1;
 
-		long	firstLineOffset	= info.fFirstLine * rowBytes;
-		long	lastLineOffset	= info.fLastLine * rowBytes;
+		int32	firstLineOffset	= info.fFirstLine * rowBytes;
+		int32	lastLineOffset	= info.fLastLine * rowBytes;
 
 		EmMem_memcpy (
 			(void*) ((uint8*) info.fImage.GetBits () + firstLineOffset),
@@ -2027,7 +2027,7 @@ void EmRegsMediaQ11xx::invalidateWrite (emuptr address, int size, uint32 value)
 //		¥ EmRegsMediaQ11xx::AddressError
 // ---------------------------------------------------------------------------
 
-void EmRegsMediaQ11xx::AddressError (emuptr address, long size, Bool forRead)
+void EmRegsMediaQ11xx::AddressError (emuptr address, int32 size, Bool forRead)
 {
 	EmAssert (false);
 	EmAssert (gCPU68K);
@@ -3691,11 +3691,13 @@ void EmRegsMediaQ11xx::PrvIncBlitterInit (void)
 	fUsesPattern	= this->PrvUsesPattern ();
 	fUsesSource		= this->PrvUsesSource ();
 
-	if (!fUsesPattern)
+	if (!fUsesPattern) {
 		PRINTF_BLIT ("	PrvIncBlitterInit:	pattern not used...");
+	}
 
-	if (!fUsesSource)
+	if (!fUsesSource) {
 		PRINTF_BLIT ("	PrvIncBlitterInit:	source data not used...");
+	}
 
 	if (fState.monoSource)
 	{
@@ -3754,7 +3756,7 @@ void EmRegsMediaQ11xx::PrvIncBlitterRun (void)
 	if (!fBlitInProgress)
 		return;
 
-	static long	counter = 0;
+	static int32	counter = 0;
 
 	PRINTF_BLIT ("	PrvIncBlitterRun:	**************************************************");
 	PRINTF_BLIT ("	PrvIncBlitterRun:	counter:	%u", ++counter);

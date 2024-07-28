@@ -156,8 +156,9 @@ ErrCode EmTransportSerial::Open (void)
 		fgOpenPorts[fConfig.fPort] = this;
 	}
 
-	if (err)
+	if (err) {
 		PRINTF ("EmTransportSerial::Open: err = %ld", err);
+	}
 
 	return err;
 }
@@ -190,8 +191,9 @@ ErrCode EmTransportSerial::Close (void)
 
 	ErrCode	err = this->HostClose ();
 
-	if (err)
+	if (err) {
 		PRINTF ("EmTransportSerial::Close: err = %ld", err);
+	}
 
 	return err;
 }
@@ -212,7 +214,7 @@ ErrCode EmTransportSerial::Close (void)
  *
  ***********************************************************************/
 
-ErrCode EmTransportSerial::Read (long& len, void* data)
+ErrCode EmTransportSerial::Read (int32& len, void* data)
 {
 	PRINTF ("EmTransportSerial::Read...");
 
@@ -251,7 +253,7 @@ ErrCode EmTransportSerial::Read (long& len, void* data)
  *
  ***********************************************************************/
 
-ErrCode EmTransportSerial::Write (long& len, const void* data)
+ErrCode EmTransportSerial::Write (int32& len, const void* data)
 {
 	PRINTF ("EmTransportSerial::Write...");
 
@@ -337,7 +339,7 @@ Bool EmTransportSerial::CanWrite (void)
  *
  ***********************************************************************/
 
-long EmTransportSerial::BytesInBuffer (long minBytes)
+int32 EmTransportSerial::BytesInBuffer (int32 minBytes)
 {
 	if (!fCommEstablished)
 		return 0;
@@ -400,8 +402,9 @@ ErrCode EmTransportSerial::SetConfig (const ConfigSerial& config)
 
 	ErrCode	err = this->HostSetConfig (fConfig);
 
-	if (err)
+	if (err) {
 		PRINTF ("EmTransportSerial::SetConfig: err = %ld", err);
+	}
 
 	return err;
 }

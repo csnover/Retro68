@@ -30,7 +30,7 @@ class EmThreadSafeQueue
 		T						Peek 					(void);
 		int 					GetUsed					(void);
 		int 					GetFree					(void);
-		Bool					WaitForDataAvailable	(long timeoutms);
+		Bool					WaitForDataAvailable	(int32 timeoutms);
 
 		void					Clear					(void);
 		int						GetMaxSize				(void);

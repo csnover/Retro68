@@ -34,6 +34,7 @@
 #include "Strings.r.h"			// kStr_CmdOpen, etc.
 #include "SystemMgr.h"			// sysGetROMVerMajor
 
+#include <cstring>
 #include <math.h>				// sqrt
 #include <time.h>				// time, localtime
 
@@ -306,8 +307,8 @@ Hordes::NewGremlin (const GremlinInfo &info)
  ***********************************************************************/
 
 void
-Hordes::Status (unsigned short *currentNumber, unsigned long *currentStep,
-				unsigned long *currentUntil)
+Hordes::Status (uint16 *currentNumber, uint32 *currentStep,
+				uint32 *currentUntil)
 {
 	gTheGremlin.Status (currentNumber, currentStep, currentUntil);
 }
@@ -487,9 +488,9 @@ Hordes::TurnOn (Bool hordesOn)
 int32
 Hordes::EventCounter (void)
 {
-	unsigned short	number;
-	unsigned long	step;
-	unsigned long	until;
+	uint16	number;
+	uint32	step;
+	uint32	until;
 
 	Hordes::Status (&number, &step, &until);
 
@@ -513,9 +514,9 @@ Hordes::EventCounter (void)
 int32
 Hordes::EventLimit(void)
 {
-	unsigned short	number;
-	unsigned long	step;
-	unsigned long	until;
+	uint16	number;
+	uint32	step;
+	uint32	until;
 
 	Hordes::Status (&number, &step, &until);
 
@@ -583,7 +584,7 @@ Hordes::EndHordes (void)
 	LogAppendMsg ("ROM file name:           %s", (char *) romFileStr.c_str ());
 	LogAppendMsg ("Session file:			%s", (char *) sessionFileStr.c_str ());
 	LogAppendMsg ("Device name:             %s", (char *) deviceStr.c_str ());
-	LogAppendMsg ("RAM size:                %d KB\n", (long) ramSize);
+	LogAppendMsg ("RAM size:                %d KB\n", (int32) ramSize);
 
 	// Let's come up with some statistics from our new field in 
 	// gGremlinHaltedInError.
@@ -658,8 +659,8 @@ Hordes::EndHordes (void)
  ***********************************************************************/
 
 void
-Hordes::ProposeNextGremlin (long& outNextGremlin, long& outNextDepth,
-							long inFromGremlin, long inFromDepth)
+Hordes::ProposeNextGremlin (int32& outNextGremlin, int32& outNextDepth,
+							int32 inFromGremlin, int32 inFromDepth)
 {
 	outNextGremlin	= inFromGremlin + 1;
 	outNextDepth	= inFromDepth;
@@ -728,7 +729,7 @@ Hordes::StartGremlinFromLoadedSuspendedState (void)
 	// We reset the Gremlin to go until the next occurence of the
 	// depth-bound, or until gMaxDepth, whichever occurs first.
 
-	long newUntil = gSwitchDepth * (gCurrentDepth + 1);
+	int32 newUntil = gSwitchDepth * (gCurrentDepth + 1);
 
 	if (gMaxDepth != -1)
 	{
@@ -789,7 +790,7 @@ Hordes::NextGremlin (void)
 
 	// Find the next Gremlin to run.
 
-	long nextGremlin, nextDepth;
+	int32 nextGremlin, nextDepth;
 	
 	// Keep looking until we find a Gremlin in the range which has
 	// not halted in error.
@@ -936,7 +937,7 @@ Hordes::RecordErrorStats (StrCode messageID)
 
 			if (messageID != -1)
 			{
-				gGremlinHaltedInError[errorGremlin].fMessageID = (long) messageID;
+				gGremlinHaltedInError[errorGremlin].fMessageID = (int32) messageID;
 			}
 		}
 
@@ -1136,10 +1137,10 @@ string Hordes::SuggestFileName (HordeFileType category, uint32 num)
 {
 	static const char kStrSearchProgressFile[]	= "Gremlin_Search_Progress.dat";
 	static const char kStrRootStateFile[]		= "Gremlin_Root_State.psf";
-	static const char kStrSuspendedStateFile[]	= "Gremlin_%03ld_Suspended.psf";
-	static const char kStrAutoSaveFile[]		= "Gremlin_%03ld_Event_%08ld.psf";
-	static const char kStrEventFile[]			= "Gremlin_%03ld_Events.pev";
-	static const char kStrMinimalEventFile []	= "Gremlin_%03ld_Interim_Event_File_%08ld.pev";
+	static const char kStrSuspendedStateFile[]	= "Gremlin_%03d_Suspended.psf";
+	static const char kStrAutoSaveFile[]		= "Gremlin_%03d_Event_%08d.psf";
+	static const char kStrEventFile[]			= "Gremlin_%03d_Events.pev";
+	static const char kStrMinimalEventFile []	= "Gremlin_%03d_Interim_Event_File_%08d.pev";
 
 	char fileName[64];
 
@@ -1805,14 +1806,16 @@ Hordes::StartLog (void)
 	LogAppendMsg ("********************************************************************************");
 	LogAppendMsg ("Running Gremlins %ld to %ld", gGremlinStartNumber, gGremlinStopNumber);
 
-	if (gSwitchDepth != -1)
+	if (gSwitchDepth != -1) {
 		LogAppendMsg ("Will run each Gremlin %ld events at a time until all Gremlins have terminated in error", gSwitchDepth);
-
-	else
+	}
+	else {
 		LogAppendMsg ("Will run each Gremlin until all Gremlins have terminated in error", gSwitchDepth);
+	}
 
-	if (gMaxDepth != -1)
+	if (gMaxDepth != -1) {
 		LogAppendMsg ("or have reached a maximum of %ld events", gMaxDepth);
+	}
 
 	LogAppendMsg ("********************************************************************************");
 
@@ -1846,11 +1849,11 @@ Hordes::GetGremlinDirectory (void)
 		time (&now_time);
 		struct tm*	now_tm = localtime (&now_time);
 
-		char buffer[30];
+		char buffer[20];
 		strftime (buffer, countof (buffer), "%Y-%m-%d.%H-%M-%S", now_tm);	// 19 chars + NULL
 
 		char	stateName[30];
-		sprintf (stateName, "Gremlins.%s", buffer);
+		snprintf (stateName, countof (stateName), "Gremlins.%s", buffer);
 
 		EmAssert (strlen(stateName) <= 31);	// Max on Macs
 

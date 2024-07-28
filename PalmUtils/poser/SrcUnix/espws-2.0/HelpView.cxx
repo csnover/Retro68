@@ -259,7 +259,7 @@ HelpView::draw()
   const char	*ptr,		// Pointer to text in block
 		*attrs;		// Pointer to start of element attributes
   char		*s,		// Pointer into buffer
-		buf[1024],	// Text buffer
+		buf[1026],	// Text buffer
 		attr[1024];	// Attribute buffer
   int		xx, yy, ww, hh;	// Current positions and sizes
   int		line;		// Current line
@@ -546,7 +546,7 @@ HelpView::draw()
         	 get_attr(attrs, "ALT", attr, sizeof(attr)) != NULL)
 	{
 	  // Show alt text...
-	  sprintf(buf, "[%s]", attr);
+	  snprintf(buf, sizeof(buf), "[%s]", attr);
 	  ww = (int)fl_width(buf);
 
           if (needspace && xx > block->x)
@@ -1520,17 +1520,17 @@ HelpView::handle(int event)	// I - Event to handle
     if (strcmp(link->filename, filename_) != 0 && link->filename[0])
     {
       char	dir[1024];	// Current directory
-      char	temp[1024];	// Temporary filename
+      char	temp[1221];	// Temporary filename
 
 
       if (link->filename[0] != '/' && strchr(link->filename, ':') == NULL)
       {
 	if (directory_[0])
-	  sprintf(temp, "%s/%s", directory_, link->filename);
+	  snprintf(temp, sizeof(temp), "%s/%s", directory_, link->filename);
 	else
 	{
 	  getcwd(dir, sizeof(dir));
-	  sprintf(temp, "file:%s/%s", dir, link->filename);
+	  snprintf(temp, sizeof(temp), "file:%s/%s", dir, link->filename);
 	}
 
         load(temp);
@@ -1624,7 +1624,7 @@ HelpView::load(const char *f)	// I - Filename to load (may also have target)
   char		*target;	// Target in file
   char		*slash;		// Directory separator
   const char	*localname;	// Local filename
-  char		error[1024];	// Error buffer
+  char		error[1027];	// Error buffer
 
 
   strcpy(filename_, f);
@@ -1675,7 +1675,7 @@ HelpView::load(const char *f)	// I - Filename to load (may also have target)
     }
     else
     {
-      sprintf(error, "%s: %s\n", localname, strerror(errno));
+      snprintf(error, sizeof(error), "%s: %s\n", localname, strerror(errno));
       value_ = strdup(error);
     }
   }

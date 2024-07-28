@@ -27,7 +27,7 @@
 // ----- Binary buffer -----
 // -------------------------
 
-void* Marshal::GetBuffer (emuptr p, long len)
+void* Marshal::GetBuffer (emuptr p, int32 len)
 {
 	void*	result = NULL;
 
@@ -46,7 +46,7 @@ void* Marshal::GetBuffer (emuptr p, long len)
 
 #if 0	// inline
 template <class T>
-void Marshal::PutBuffer (emuptr p, const T*& buf, long len)
+void Marshal::PutBuffer (emuptr p, const T*& buf, int32 len)
 {
 	if (p)
 	{
@@ -55,7 +55,6 @@ void Marshal::PutBuffer (emuptr p, const T*& buf, long len)
 	}
 }
 #endif
-
 
 #pragma mark -
 
@@ -73,14 +72,14 @@ void Marshal::GetDlkServerSessionType (emuptr p, DlkServerSessionType& dest)
 
 		dest.htalLibRefNum		= src.htalLibRefNum;
 		dest.maxHtalXferSize	= src.maxHtalXferSize;
-		dest.eventProcP			= (DlkEventProcPtr) (emuptr) src.eventProcP;
+		dest.eventProcP			= EmMemFakeT<DlkEventProcPtr>(src.eventProcP);
 		dest.eventRef			= src.eventRef;
-		dest.canProcP			= (DlkUserCanProcPtr) (emuptr) src.canProcP;
+		dest.canProcP			= EmMemFakeT<DlkUserCanProcPtr>(src.canProcP);
 		dest.canRef				= src.canRef;
-		dest.condFilterH		= (MemHandle) (emuptr) src.condFilterH;
+		dest.condFilterH		= EmMemFakeT<MemHandle>(src.condFilterH);
 		dest.dlkDBID			= src.dlkDBID;
 		dest.reserved1			= src.reserved1;
-		dest.dbR				= (DmOpenRef) (emuptr) src.dbR;
+		dest.dbR				= EmMemFakeT<DmOpenRef>(src.dbR);
 		dest.cardNo				= src.cardNo;
 		dest.dbCreator			= src.dbCreator;
 	//	dest.dbName				= src.dbName;
@@ -102,8 +101,8 @@ void Marshal::GetDlkServerSessionType (emuptr p, DlkServerSessionType& dest)
 		dest.cmdTID				= src.cmdTID;
 		dest.reserved2			= src.reserved2;
 		dest.cmdLen				= src.cmdLen;
-		dest.cmdP				= (void *) (emuptr) src.cmdP;
-		dest.cmdH				= (MemHandle) (emuptr) src.cmdH;
+		dest.cmdP				= EmMemFakeT<void *>(src.cmdP);
+		dest.cmdH				= EmMemFakeT<MemHandle>(src.cmdH);
 		dest.wStateFlags		= src.wStateFlags;
 	//	dest.dbSearchState		= src.dbSearchState;
 	}
@@ -118,14 +117,14 @@ void Marshal::PutDlkServerSessionType (emuptr p, const DlkServerSessionType& src
 
 		dest.htalLibRefNum		= src.htalLibRefNum;
 		dest.maxHtalXferSize	= src.maxHtalXferSize;
-		dest.eventProcP			= (emuptr) (DlkEventProcPtr) src.eventProcP;
+		dest.eventProcP			= EmMemPtrFn(src.eventProcP);
 		dest.eventRef			= src.eventRef;
-		dest.canProcP			= (emuptr) (DlkUserCanProcPtr) src.canProcP;
+		dest.canProcP			= EmMemPtrFn(src.canProcP);
 		dest.canRef				= src.canRef;
-		dest.condFilterH		= (emuptr) (MemHandle) src.condFilterH;
+		dest.condFilterH		= EmMemPtr(src.condFilterH);
 		dest.dlkDBID			= src.dlkDBID;
 		dest.reserved1			= src.reserved1;
-		dest.dbR				= (emuptr) (DmOpenRef) src.dbR;
+		dest.dbR				= EmMemPtr(src.dbR);
 		dest.cardNo				= src.cardNo;
 		dest.dbCreator			= src.dbCreator;
 	//	dest.dbName				= src.dbName;
@@ -147,8 +146,8 @@ void Marshal::PutDlkServerSessionType (emuptr p, const DlkServerSessionType& src
 		dest.cmdTID				= src.cmdTID;
 		dest.reserved2			= src.reserved2;
 		dest.cmdLen				= src.cmdLen;
-		dest.cmdP				= (emuptr) (void *) src.cmdP;
-		dest.cmdH				= (emuptr) (MemHandle) src.cmdH;
+		dest.cmdP				= EmMemPtr(src.cmdP);
+		dest.cmdH				= EmMemPtr(src.cmdH);
 		dest.wStateFlags		= src.wStateFlags;
 	//	dest.dbSearchState		= src.dbSearchState;
 	}
@@ -243,96 +242,96 @@ void Marshal::GetEventType (emuptr p, EventType& dest)
 				break;
 
 			case winEnterEvent:
-				dest.data.winEnter.enterWindow	= (WinHandle) (emuptr) src.data.winEnter.enterWindow;
-				dest.data.winEnter.exitWindow	= (WinHandle) (emuptr) src.data.winEnter.exitWindow;
+				dest.data.winEnter.enterWindow	= EmMemFakeT<WinHandle>(src.data.winEnter.enterWindow);
+				dest.data.winEnter.exitWindow	= EmMemFakeT<WinHandle>(src.data.winEnter.exitWindow);
 				break;
 
 			case winExitEvent:
-				dest.data.winExit.enterWindow	= (WinHandle) (emuptr) src.data.winExit.enterWindow;
-				dest.data.winExit.exitWindow	= (WinHandle) (emuptr) src.data.winExit.exitWindow;
+				dest.data.winExit.enterWindow	= EmMemFakeT<WinHandle>(src.data.winExit.enterWindow);
+				dest.data.winExit.exitWindow	= EmMemFakeT<WinHandle>(src.data.winExit.exitWindow);
 				break;
 
 			case ctlEnterEvent:
 				dest.data.ctlEnter.controlID	= src.data.ctlEnter.controlID;
-				dest.data.ctlEnter.pControl		= (struct ControlType*) (emuptr) src.data.ctlEnter.pControl;
+				dest.data.ctlEnter.pControl		= EmMemFakeT<struct ControlType *>(src.data.ctlEnter.pControl);
 				break;
 
 			case ctlExitEvent:
 				dest.data.ctlExit.controlID		= src.data.ctlExit.controlID;
-				dest.data.ctlExit.pControl		= (struct ControlType*) (emuptr) src.data.ctlExit.pControl;
+				dest.data.ctlExit.pControl		= EmMemFakeT<struct ControlType *>(src.data.ctlExit.pControl);
 				break;
 
 			case ctlSelectEvent:
 				dest.data.ctlSelect.controlID	= src.data.ctlSelect.controlID;
-				dest.data.ctlSelect.pControl	= (struct ControlType*) (emuptr) src.data.ctlSelect.pControl;
+				dest.data.ctlSelect.pControl	= EmMemFakeT<struct ControlType *>(src.data.ctlSelect.pControl);
 				dest.data.ctlSelect.on			= src.data.ctlSelect.on;
 				break;
 
 			case ctlRepeatEvent:
 				dest.data.ctlRepeat.controlID	= src.data.ctlRepeat.controlID;
-				dest.data.ctlRepeat.pControl	= (struct ControlType*) (emuptr) src.data.ctlRepeat.pControl;
+				dest.data.ctlRepeat.pControl	= EmMemFakeT<struct ControlType *>(src.data.ctlRepeat.pControl);
 				dest.data.ctlRepeat.time		= src.data.ctlRepeat.time;
 				break;
 
 			case lstEnterEvent:
 				dest.data.lstEnter.listID		= src.data.lstEnter.listID;
-				dest.data.lstEnter.pList		= (struct ListType*) (emuptr) src.data.lstEnter.pList;
+				dest.data.lstEnter.pList		= EmMemFakeT<struct ListType *>(src.data.lstEnter.pList);
 				dest.data.lstEnter.selection	= src.data.lstEnter.selection;
 				break;
 
 			case lstSelectEvent:
 				dest.data.lstSelect.listID		= src.data.lstSelect.listID;
-				dest.data.lstSelect.pList		= (struct ListType*) (emuptr) src.data.lstSelect.pList;
+				dest.data.lstSelect.pList		= EmMemFakeT<struct ListType *>(src.data.lstSelect.pList);
 				dest.data.lstSelect.selection	= src.data.lstSelect.selection;
 				break;
 
 			case lstExitEvent:
 				dest.data.lstExit.listID		= src.data.lstExit.listID;
-				dest.data.lstExit.pList			= (struct ListType*) (emuptr) src.data.lstExit.pList;
+				dest.data.lstExit.pList			= EmMemFakeT<struct ListType *>(src.data.lstExit.pList);
 				break;
 
 			case popSelectEvent:
 				dest.data.popSelect.controlID			= src.data.popSelect.controlID;
-				dest.data.popSelect.controlP			= (struct ControlType*) (emuptr) src.data.popSelect.controlP;
+				dest.data.popSelect.controlP			= EmMemFakeT<struct ControlType *>(src.data.popSelect.controlP);
 				dest.data.popSelect.listID				= src.data.popSelect.listID;
-				dest.data.popSelect.listP				= (struct ListType*) (emuptr) src.data.popSelect.listP;
+				dest.data.popSelect.listP				= EmMemFakeT<struct ListType *>(src.data.popSelect.listP);
 				dest.data.popSelect.selection			= src.data.popSelect.selection;
 				dest.data.popSelect.priorSelection		= src.data.popSelect.priorSelection;
 				break;
 
 			case fldEnterEvent:
 				dest.data.fldEnter.fieldID				= src.data.fldEnter.fieldID;
-				dest.data.fldEnter.pField				= (struct FieldType*) (emuptr) src.data.fldEnter.pField;
+				dest.data.fldEnter.pField				= EmMemFakeT<struct FieldType *>(src.data.fldEnter.pField);
 				break;
 
 			case fldHeightChangedEvent:
 				dest.data.fldHeightChanged.fieldID		= src.data.fldHeightChanged.fieldID;
-				dest.data.fldHeightChanged.pField		= (struct FieldType*) (emuptr) src.data.fldHeightChanged.pField;
+				dest.data.fldHeightChanged.pField		= EmMemFakeT<struct FieldType *>(src.data.fldHeightChanged.pField);
 				dest.data.fldHeightChanged.newHeight	= src.data.fldHeightChanged.newHeight;
 				dest.data.fldHeightChanged.currentPos	= src.data.fldHeightChanged.currentPos;
 				break;
 
 			case fldChangedEvent:
 				dest.data.fldChanged.fieldID	= src.data.fldChanged.fieldID;
-				dest.data.fldChanged.pField		= (struct FieldType*) (emuptr) src.data.fldChanged.pField;
+				dest.data.fldChanged.pField		= EmMemFakeT<struct FieldType *>(src.data.fldChanged.pField);
 				break;
 
 			case tblEnterEvent:
 				dest.data.tblEnter.tableID		= src.data.tblEnter.tableID;
-				dest.data.tblEnter.pTable		= (struct TableType*) (emuptr) src.data.tblEnter.pTable;
+				dest.data.tblEnter.pTable		= EmMemFakeT<struct TableType *>(src.data.tblEnter.pTable);
 				dest.data.tblEnter.row			= src.data.tblEnter.row;
 				dest.data.tblEnter.column		= src.data.tblEnter.column;
 				break;
 
 			case tblSelectEvent:
 				dest.data.tblEnter.tableID		= src.data.tblEnter.tableID;
-				dest.data.tblEnter.pTable		= (struct TableType*) (emuptr) src.data.tblEnter.pTable;
+				dest.data.tblEnter.pTable		= EmMemFakeT<struct TableType *>(src.data.tblEnter.pTable);
 				dest.data.tblEnter.row			= src.data.tblEnter.row;
 				dest.data.tblEnter.column		= src.data.tblEnter.column;
 				break;
 
 			case daySelectEvent:
-				dest.data.daySelect.pSelector	= (struct DaySelectorType*) (emuptr) src.data.daySelect.pSelector;
+				dest.data.daySelect.pSelector	= EmMemFakeT<DaySelectorType *>(src.data.daySelect.pSelector);
 				dest.data.daySelect.selection	= src.data.daySelect.selection;
 				dest.data.daySelect.useThisDate	= src.data.daySelect.useThisDate;
 				break;
@@ -383,33 +382,33 @@ void Marshal::GetEventType (emuptr p, EventType& dest)
 
 			case tblExitEvent:
 				dest.data.tblExit.tableID		= src.data.tblExit.tableID;
-				dest.data.tblExit.pTable		= (struct TableType*) (emuptr) src.data.tblExit.pTable;
+				dest.data.tblExit.pTable		= EmMemFakeT<struct TableType *>(src.data.tblExit.pTable);
 				dest.data.tblExit.row			= src.data.tblExit.row;
 				dest.data.tblExit.column		= src.data.tblExit.column;
 				break;
 
 			case sclEnterEvent:
 				dest.data.sclEnter.scrollBarID	= src.data.sclEnter.scrollBarID;
-				dest.data.sclEnter.pScrollBar	= (struct ScrollBarType*) (emuptr) src.data.sclEnter.pScrollBar;
+				dest.data.sclEnter.pScrollBar	= EmMemFakeT<struct ScrollBarType *>(src.data.sclEnter.pScrollBar);
 				break;
 
 			case sclExitEvent:
 				dest.data.sclExit.scrollBarID	= src.data.sclExit.scrollBarID;
-				dest.data.sclExit.pScrollBar	= (struct ScrollBarType*) (emuptr) src.data.sclExit.pScrollBar;
+				dest.data.sclExit.pScrollBar	= EmMemFakeT<struct ScrollBarType *>(src.data.sclExit.pScrollBar);
 				dest.data.sclExit.value			= src.data.sclExit.value;
 				dest.data.sclExit.newValue		= src.data.sclExit.newValue;
 				break;
 
 			case sclRepeatEvent:
 				dest.data.sclRepeat.scrollBarID	= src.data.sclRepeat.scrollBarID;
-				dest.data.sclRepeat.pScrollBar	= (struct ScrollBarType*) (emuptr) src.data.sclRepeat.pScrollBar;
+				dest.data.sclRepeat.pScrollBar	= EmMemFakeT<struct ScrollBarType *>(src.data.sclRepeat.pScrollBar);
 				dest.data.sclRepeat.value		= src.data.sclRepeat.value;
 				dest.data.sclRepeat.newValue	= src.data.sclRepeat.newValue;
 				dest.data.sclRepeat.time		= src.data.sclRepeat.time;
 				break;
 
 			case tsmConfirmEvent:
-				dest.data.tsmConfirm.yomiText	= (Char*) (emuptr) src.data.tsmConfirm.yomiText;
+				dest.data.tsmConfirm.yomiText	= EmMemFakeT<Char *>(src.data.tsmConfirm.yomiText);
 				dest.data.tsmConfirm.formID		= src.data.tsmConfirm.formID;
 				break;
 
@@ -445,14 +444,14 @@ void Marshal::GetEventType (emuptr p, EventType& dest)
 
 			case frmGadgetEnterEvent:
 				dest.data.gadgetEnter.gadgetID	= src.data.gadgetEnter.gadgetID;
-				dest.data.gadgetEnter.gadgetP	= (struct FormGadgetType*) (emuptr) src.data.gadgetEnter.gadgetP;
+				dest.data.gadgetEnter.gadgetP	= EmMemFakeT<struct FormGadgetType *>(src.data.gadgetEnter.gadgetP);
 				break;
 
 			case frmGadgetMiscEvent:
 				dest.data.gadgetMisc.gadgetID	= src.data.gadgetMisc.gadgetID;
-				dest.data.gadgetMisc.gadgetP	= (struct FormGadgetType*) (emuptr) src.data.gadgetMisc.gadgetP;
+				dest.data.gadgetMisc.gadgetP	= EmMemFakeT<struct FormGadgetType *>(src.data.gadgetMisc.gadgetP);
 				dest.data.gadgetMisc.selector	= src.data.gadgetMisc.selector;
-				dest.data.gadgetMisc.dataP		= (void*) (emuptr) src.data.gadgetMisc.dataP;
+				dest.data.gadgetMisc.dataP		= EmMemFakeT<void *>(src.data.gadgetMisc.dataP);
 				break;
 
 			default:
@@ -519,96 +518,96 @@ void Marshal::PutEventType (emuptr p, const EventType& src)
 				break;
 
 			case winEnterEvent:
-				dest.data.winEnter.enterWindow	= (WinHandle) (emuptr) src.data.winEnter.enterWindow;
-				dest.data.winEnter.exitWindow	= (WinHandle) (emuptr) src.data.winEnter.exitWindow;
+				dest.data.winEnter.enterWindow	= EmMemPtr(src.data.winEnter.enterWindow);
+				dest.data.winEnter.exitWindow	= EmMemPtr(src.data.winEnter.exitWindow);
 				break;
 
 			case winExitEvent:
-				dest.data.winExit.enterWindow	= (WinHandle) (emuptr) src.data.winExit.enterWindow;
-				dest.data.winExit.exitWindow	= (WinHandle) (emuptr) src.data.winExit.exitWindow;
+				dest.data.winExit.enterWindow	= EmMemPtr(src.data.winExit.enterWindow);
+				dest.data.winExit.exitWindow	= EmMemPtr(src.data.winExit.exitWindow);
 				break;
 
 			case ctlEnterEvent:
 				dest.data.ctlEnter.controlID	= src.data.ctlEnter.controlID;
-				dest.data.ctlEnter.pControl		= (struct ControlType*) (emuptr) src.data.ctlEnter.pControl;
+				dest.data.ctlEnter.pControl		= EmMemPtr(src.data.ctlEnter.pControl);
 				break;
 
 			case ctlExitEvent:
 				dest.data.ctlExit.controlID		= src.data.ctlExit.controlID;
-				dest.data.ctlExit.pControl		= (struct ControlType*) (emuptr) src.data.ctlExit.pControl;
+				dest.data.ctlExit.pControl		= EmMemPtr(src.data.ctlExit.pControl);
 				break;
 
 			case ctlSelectEvent:
 				dest.data.ctlSelect.controlID	= src.data.ctlSelect.controlID;
-				dest.data.ctlSelect.pControl	= (struct ControlType*) (emuptr) src.data.ctlSelect.pControl;
+				dest.data.ctlSelect.pControl	= EmMemPtr(src.data.ctlSelect.pControl);
 				dest.data.ctlSelect.on			= src.data.ctlSelect.on;
 				break;
 
 			case ctlRepeatEvent:
 				dest.data.ctlRepeat.controlID	= src.data.ctlRepeat.controlID;
-				dest.data.ctlRepeat.pControl	= (struct ControlType*) (emuptr) src.data.ctlRepeat.pControl;
+				dest.data.ctlRepeat.pControl	= EmMemPtr(src.data.ctlRepeat.pControl);
 				dest.data.ctlRepeat.time		= src.data.ctlRepeat.time;
 				break;
 
 			case lstEnterEvent:
 				dest.data.lstEnter.listID		= src.data.lstEnter.listID;
-				dest.data.lstEnter.pList		= (struct ListType*) (emuptr) src.data.lstEnter.pList;
+				dest.data.lstEnter.pList		= EmMemPtr(src.data.lstEnter.pList);
 				dest.data.lstEnter.selection	= src.data.lstEnter.selection;
 				break;
 
 			case lstSelectEvent:
 				dest.data.lstSelect.listID		= src.data.lstSelect.listID;
-				dest.data.lstSelect.pList		= (struct ListType*) (emuptr) src.data.lstSelect.pList;
+				dest.data.lstSelect.pList		= EmMemPtr(src.data.lstSelect.pList);
 				dest.data.lstSelect.selection	= src.data.lstSelect.selection;
 				break;
 
 			case lstExitEvent:
 				dest.data.lstExit.listID		= src.data.lstExit.listID;
-				dest.data.lstExit.pList			= (struct ListType*) (emuptr) src.data.lstExit.pList;
+				dest.data.lstExit.pList			= EmMemPtr(src.data.lstExit.pList);
 				break;
 
 			case popSelectEvent:
 				dest.data.popSelect.controlID			= src.data.popSelect.controlID;
-				dest.data.popSelect.controlP			= (struct ControlType*) (emuptr) src.data.popSelect.controlP;
+				dest.data.popSelect.controlP			= EmMemPtr(src.data.popSelect.controlP);
 				dest.data.popSelect.listID				= src.data.popSelect.listID;
-				dest.data.popSelect.listP				= (struct ListType*) (emuptr) src.data.popSelect.listP;
+				dest.data.popSelect.listP				= EmMemPtr(src.data.popSelect.listP);
 				dest.data.popSelect.selection			= src.data.popSelect.selection;
 				dest.data.popSelect.priorSelection		= src.data.popSelect.priorSelection;
 				break;
 
 			case fldEnterEvent:
 				dest.data.fldEnter.fieldID				= src.data.fldEnter.fieldID;
-				dest.data.fldEnter.pField				= (struct FieldType*) (emuptr) src.data.fldEnter.pField;
+				dest.data.fldEnter.pField				= EmMemPtr(src.data.fldEnter.pField);
 				break;
 
 			case fldHeightChangedEvent:
 				dest.data.fldHeightChanged.fieldID		= src.data.fldHeightChanged.fieldID;
-				dest.data.fldHeightChanged.pField		= (struct FieldType*) (emuptr) src.data.fldHeightChanged.pField;
+				dest.data.fldHeightChanged.pField		= EmMemPtr(src.data.fldHeightChanged.pField);
 				dest.data.fldHeightChanged.newHeight	= src.data.fldHeightChanged.newHeight;
 				dest.data.fldHeightChanged.currentPos	= src.data.fldHeightChanged.currentPos;
 				break;
 
 			case fldChangedEvent:
 				dest.data.fldChanged.fieldID	= src.data.fldChanged.fieldID;
-				dest.data.fldChanged.pField		= (struct FieldType*) (emuptr) src.data.fldChanged.pField;
+				dest.data.fldChanged.pField		= EmMemPtr(src.data.fldChanged.pField);
 				break;
 
 			case tblEnterEvent:
 				dest.data.tblEnter.tableID		= src.data.tblEnter.tableID;
-				dest.data.tblEnter.pTable		= (struct TableType*) (emuptr) src.data.tblEnter.pTable;
+				dest.data.tblEnter.pTable		= EmMemPtr(src.data.tblEnter.pTable);
 				dest.data.tblEnter.row			= src.data.tblEnter.row;
 				dest.data.tblEnter.column		= src.data.tblEnter.column;
 				break;
 
 			case tblSelectEvent:
 				dest.data.tblEnter.tableID		= src.data.tblEnter.tableID;
-				dest.data.tblEnter.pTable		= (struct TableType*) (emuptr) src.data.tblEnter.pTable;
+				dest.data.tblEnter.pTable		= EmMemPtr(src.data.tblEnter.pTable);
 				dest.data.tblEnter.row			= src.data.tblEnter.row;
 				dest.data.tblEnter.column		= src.data.tblEnter.column;
 				break;
 
 			case daySelectEvent:
-				dest.data.daySelect.pSelector	= (struct DaySelectorType*) (emuptr) src.data.daySelect.pSelector;
+				dest.data.daySelect.pSelector	= EmMemPtr(src.data.daySelect.pSelector);
 				dest.data.daySelect.selection	= src.data.daySelect.selection;
 				dest.data.daySelect.useThisDate	= src.data.daySelect.useThisDate;
 				break;
@@ -659,33 +658,33 @@ void Marshal::PutEventType (emuptr p, const EventType& src)
 
 			case tblExitEvent:
 				dest.data.tblExit.tableID		= src.data.tblExit.tableID;
-				dest.data.tblExit.pTable		= (struct TableType*) (emuptr) src.data.tblExit.pTable;
+				dest.data.tblExit.pTable		= EmMemPtr(src.data.tblExit.pTable);
 				dest.data.tblExit.row			= src.data.tblExit.row;
 				dest.data.tblExit.column		= src.data.tblExit.column;
 				break;
 
 			case sclEnterEvent:
 				dest.data.sclEnter.scrollBarID	= src.data.sclEnter.scrollBarID;
-				dest.data.sclEnter.pScrollBar	= (struct ScrollBarType*) (emuptr) src.data.sclEnter.pScrollBar;
+				dest.data.sclEnter.pScrollBar	= EmMemPtr(src.data.sclEnter.pScrollBar);
 				break;
 
 			case sclExitEvent:
 				dest.data.sclExit.scrollBarID	= src.data.sclExit.scrollBarID;
-				dest.data.sclExit.pScrollBar	= (struct ScrollBarType*) (emuptr) src.data.sclExit.pScrollBar;
+				dest.data.sclExit.pScrollBar	= EmMemPtr(src.data.sclExit.pScrollBar);
 				dest.data.sclExit.value			= src.data.sclExit.value;
 				dest.data.sclExit.newValue		= src.data.sclExit.newValue;
 				break;
 
 			case sclRepeatEvent:
 				dest.data.sclRepeat.scrollBarID	= src.data.sclRepeat.scrollBarID;
-				dest.data.sclRepeat.pScrollBar	= (struct ScrollBarType*) (emuptr) src.data.sclRepeat.pScrollBar;
+				dest.data.sclRepeat.pScrollBar	= EmMemPtr(src.data.sclRepeat.pScrollBar);
 				dest.data.sclRepeat.value		= src.data.sclRepeat.value;
 				dest.data.sclRepeat.newValue	= src.data.sclRepeat.newValue;
 				dest.data.sclRepeat.time		= src.data.sclRepeat.time;
 				break;
 
 			case tsmConfirmEvent:
-				dest.data.tsmConfirm.yomiText	= (Char*) (emuptr) src.data.tsmConfirm.yomiText;
+				dest.data.tsmConfirm.yomiText	= EmMemPtr(src.data.tsmConfirm.yomiText);
 				dest.data.tsmConfirm.formID		= src.data.tsmConfirm.formID;
 				break;
 
@@ -721,14 +720,14 @@ void Marshal::PutEventType (emuptr p, const EventType& src)
 
 			case frmGadgetEnterEvent:
 				dest.data.gadgetEnter.gadgetID	= src.data.gadgetEnter.gadgetID;
-				dest.data.gadgetEnter.gadgetP	= (struct FormGadgetType*) (emuptr) src.data.gadgetEnter.gadgetP;
+				dest.data.gadgetEnter.gadgetP	= EmMemPtr(src.data.gadgetEnter.gadgetP);
 				break;
 
 			case frmGadgetMiscEvent:
 				dest.data.gadgetMisc.gadgetID	= src.data.gadgetMisc.gadgetID;
-				dest.data.gadgetMisc.gadgetP	= (struct FormGadgetType*) (emuptr) src.data.gadgetMisc.gadgetP;
+				dest.data.gadgetMisc.gadgetP	= EmMemPtr(src.data.gadgetMisc.gadgetP);
 				dest.data.gadgetMisc.selector	= src.data.gadgetMisc.selector;
-				dest.data.gadgetMisc.dataP		= (void*) (emuptr) src.data.gadgetMisc.dataP;
+				dest.data.gadgetMisc.dataP		= EmMemPtr(src.data.gadgetMisc.dataP);
 				break;
 
 			default:
@@ -1599,27 +1598,27 @@ void Marshal::GetSysAppInfoType (emuptr p, SysAppInfoType& dest)
 		EmAliasSysAppInfoType<PAS>	src(p);
 
 		dest.cmd			= src.cmd;
-		dest.cmdPBP			= (MemPtr) (emuptr) src.cmdPBP;
+		dest.cmdPBP			= EmMemFakeT<MemPtr>(src.cmdPBP);
 		dest.launchFlags	= src.launchFlags;
 		dest.taskID			= src.taskID;
-		dest.codeH			= (MemHandle) (emuptr) src.codeH;
-		dest.dbP			= (DmOpenRef) (emuptr) src.dbP;
-		dest.stackP			= (UInt8*) (emuptr) src.stackP;
-		dest.globalsChunkP	= (UInt8*) (emuptr) src.globalsChunkP;
+		dest.codeH			= EmMemFakeT<MemHandle>(src.codeH);
+		dest.dbP			= EmMemFakeT<DmOpenRef>(src.dbP);
+		dest.stackP			= EmMemFakeT<UInt8 *>(src.stackP);
+		dest.globalsChunkP	= EmMemFakeT<UInt8 *>(src.globalsChunkP);
 		dest.memOwnerID		= src.memOwnerID;
-		dest.dmAccessP		= (MemPtr) (emuptr) src.dmAccessP;
+		dest.dmAccessP		= EmMemFakeT<MemPtr>(src.dmAccessP);
 		dest.dmLastErr		= src.dmLastErr;
-		dest.errExceptionP	= (MemPtr) (emuptr) src.errExceptionP;
+		dest.errExceptionP	= EmMemFakeT<MemPtr>(src.errExceptionP);
 
 		// PalmOS v3.0 fields begin here
 
 		if (EmPatchState::OSMajorVersion () >= 3)
 		{
-			dest.a5Ptr			= (UInt8*) (emuptr) src.a5Ptr;
-			dest.stackEndP		= (UInt8*) (emuptr) src.stackEndP;
-			dest.globalEndP		= (UInt8*) (emuptr) src.globalEndP;
-			dest.rootP			= (struct SysAppInfoType*) (emuptr) src.rootP;
-			dest.extraP			= (MemPtr) (emuptr) src.extraP;
+			dest.a5Ptr			= EmMemFakeT<UInt8 *>(src.a5Ptr);
+			dest.stackEndP		= EmMemFakeT<UInt8 *>(src.stackEndP);
+			dest.globalEndP		= EmMemFakeT<UInt8 *>(src.globalEndP);
+			dest.rootP			= EmMemFakeT<SysAppInfoType *>(src.rootP);
+			dest.extraP			= EmMemFakeT<MemPtr>(src.extraP);
 		}
 	}
 }
@@ -1632,27 +1631,27 @@ void Marshal::PutSysAppInfoType (emuptr p, const SysAppInfoType& src)
 		EmAliasSysAppInfoType<PAS>	dest(p);
 
 		dest.cmd			= src.cmd;
-		dest.cmdPBP			= (emuptr) src.cmdPBP;
+		dest.cmdPBP			= EmMemPtr(src.cmdPBP);
 		dest.launchFlags	= src.launchFlags;
 		dest.taskID			= src.taskID;
-		dest.codeH			= (emuptr) src.codeH;
-		dest.dbP			= (emuptr) src.dbP;
-		dest.stackP			= (emuptr) src.stackP;
-		dest.globalsChunkP	= (emuptr) src.globalsChunkP;
+		dest.codeH			= EmMemPtr(src.codeH);
+		dest.dbP			= EmMemPtr(src.dbP);
+		dest.stackP			= EmMemPtr(src.stackP);
+		dest.globalsChunkP	= EmMemPtr(src.globalsChunkP);
 		dest.memOwnerID		= src.memOwnerID;
-		dest.dmAccessP		= (emuptr) src.dmAccessP;
+		dest.dmAccessP		= EmMemPtr(src.dmAccessP);
 		dest.dmLastErr		= src.dmLastErr;
-		dest.errExceptionP	= (emuptr) src.errExceptionP;
+		dest.errExceptionP	= EmMemPtr(src.errExceptionP);
 
 		// PalmOS v3.0 fields begin here
 
 		if (EmPatchState::OSMajorVersion () >= 3)
 		{
-			dest.a5Ptr			= (emuptr) src.a5Ptr;
-			dest.stackEndP		= (emuptr) src.stackEndP;
-			dest.globalEndP		= (emuptr) src.globalEndP;
-			dest.rootP			= (emuptr) src.rootP;
-			dest.extraP			= (emuptr) src.extraP;
+			dest.a5Ptr			= EmMemPtr(src.a5Ptr);
+			dest.stackEndP		= EmMemPtr(src.stackEndP);
+			dest.globalEndP		= EmMemPtr(src.globalEndP);
+			dest.rootP			= EmMemPtr(src.rootP);
+			dest.extraP			= EmMemPtr(src.extraP);
 		}
 	}
 }
@@ -1676,8 +1675,8 @@ void Marshal::GetSysNVParamsType (emuptr p, SysNVParamsType& dest)
 		dest.rtcHourMinSecCopy		= src.rtcHourMinSecCopy;
 		dest.swrLCDContrastValue	= src.swrLCDContrastValue;
 		dest.swrLCDBrightnessValue	= src.swrLCDBrightnessValue;
-		dest.splashScreenPtr		= (void*) (emuptr) src.splashScreenPtr;
-		dest.hardResetScreenPtr		= (void*) (emuptr) src.hardResetScreenPtr;
+		dest.splashScreenPtr		= EmMemFakeT<void *>(src.splashScreenPtr);
+		dest.hardResetScreenPtr		= EmMemFakeT<void *>(src.hardResetScreenPtr);
 		dest.localeLanguage			= src.localeLanguage;
 		dest.localeCountry			= src.localeCountry;
 		dest.sysNVOEMStorage1		= src.sysNVOEMStorage1;
@@ -1696,8 +1695,8 @@ void Marshal::PutSysNVParamsType (emuptr p, const SysNVParamsType& src)
 		dest.rtcHourMinSecCopy		= src.rtcHourMinSecCopy;
 		dest.swrLCDContrastValue	= src.swrLCDContrastValue;
 		dest.swrLCDBrightnessValue	= src.swrLCDBrightnessValue;
-		dest.splashScreenPtr		= (emuptr) src.splashScreenPtr;
-		dest.hardResetScreenPtr		= (emuptr) src.hardResetScreenPtr;
+		dest.splashScreenPtr		= EmMemPtr(src.splashScreenPtr);
+		dest.hardResetScreenPtr		= EmMemPtr(src.hardResetScreenPtr);
 		dest.localeLanguage			= src.localeLanguage;
 		dest.localeCountry			= src.localeCountry;
 		dest.sysNVOEMStorage1		= src.sysNVOEMStorage1;

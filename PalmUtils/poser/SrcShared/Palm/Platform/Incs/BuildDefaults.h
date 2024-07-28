@@ -119,7 +119,7 @@
 // This default option is probably ok for now
 #ifndef PUBLIC_STUFF_STRIPPED
 #ifndef CPU_TYPE
-   #if defined(__INTEL__) || defined(__i386__)
+   #if defined(__INTEL__) || defined(__i386__) || defined(__x86_64__)
       #define  CPU_TYPE          CPU_x86
    #elif defined(__POWERPC__) || defined(__powerpc__)
       #define  CPU_TYPE          CPU_PPC
@@ -131,7 +131,7 @@
 #endif
 #else  // PUBLIC_STUFF_STRIPPED
 #ifndef CPU_TYPE
-   #if defined(__INTEL__) || defined(__i386__)
+   #if defined(__INTEL__) || defined(__i386__) || defined(__x86_64__)
       #define  CPU_TYPE          CPU_x86
    #else
 	   #define	CPU_TYPE				CPU_68K

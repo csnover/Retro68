@@ -21,7 +21,7 @@
 
 #include <FL/Fl.H>				// Fl::wait
 #include <FL/x.H>				// fl_display
-#include <FL/Fl_Widget.h>
+#include <FL/Fl_Widget.H>
 
 #ifdef __QNXNTO__
 #include <sys/neutrino.h>

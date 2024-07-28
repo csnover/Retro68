@@ -431,7 +431,7 @@ char* ATrap::GetStackBase ()
 {
 	// Ensure that the stack is aligned to a longword address.
 
-	uint32	stackBase = (uint32) fStack;
+	size_t	stackBase = (size_t) fStack;
 
 	stackBase += 3;
 	stackBase &= ~3;

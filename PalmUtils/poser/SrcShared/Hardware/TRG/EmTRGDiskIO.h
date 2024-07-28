@@ -34,7 +34,7 @@ private:
 	EmCurrDiskType	m_currDisk;
 
     int     Format(void);
-    char   *GetFilePath(int driveNo);
+    const char   *GetFilePath(int driveNo);
 
     int     Read(uint32 sectorNum, void *buffer);
     int     Write(uint32 sectorNum, void *buffer);

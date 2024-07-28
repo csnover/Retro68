@@ -39,7 +39,7 @@ EmTRGDiskIO::~EmTRGDiskIO()
 }
 
 
-char * EmTRGDiskIO::GetFilePath(int driveNo)
+const char * EmTRGDiskIO::GetFilePath(int driveNo)
 {
 #if PLATFORM_WINDOWS
 	static char tmp[MAX_PATH];

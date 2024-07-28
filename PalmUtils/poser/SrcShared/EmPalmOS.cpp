@@ -159,16 +159,17 @@ void EmPalmOS::Reset (void)
 	if (Platform::StopOnResetKeyDown ())
 	{
 		emuptr	romStart		= EmBankROM::GetMemoryStart ();
-		emuptr	headerVersion	= EmMemGet32 (romStart + offsetof (CardHeaderType, hdrVersion));
-		long	bigROMOffset	= 0x03000;
+		EmAliasCardHeaderType<PAS> header(romStart);
+		emuptr	headerVersion	= header.hdrVersion;
+		int32	bigROMOffset	= 0x03000;
 
 		if (headerVersion > 1)
 		{
-			bigROMOffset = EmMemGet32 (romStart + offsetof (CardHeaderType, bigROMOffset));
+			bigROMOffset = header.bigROMOffset;
 			bigROMOffset &= 0x000FFFFF; 	// Allows for 1 Meg offset.
 		}
 
-		emuptr	resetVector = EmMemGet32 (romStart + bigROMOffset + offsetof (CardHeaderType, resetVector));
+		emuptr	resetVector = header.resetVector;
 
 		Debug::SetBreakpoint (dbgTempBPIndex, resetVector, NULL);
 	}
@@ -197,7 +198,7 @@ void EmPalmOS::Save (SessionFile& f)
 	EmPalmHeap::Save (f);
 	EmLowMem::Save (f);
 
-	const long	kCurrentVersion = 2;
+	const int32	kCurrentVersion = 2;
 
 	Chunk			chunk;
 	EmStreamChunk	s (chunk);
@@ -245,7 +246,7 @@ void EmPalmOS::Load (SessionFile& f)
 	Chunk	chunk;
 	if (f.ReadStackInfo (chunk))
 	{
-		long			version;
+		int32			version;
 		EmStreamChunk	s (chunk);
 
 		s >> version;
@@ -1593,7 +1594,7 @@ Bool EmPalmOS::HandleSystemCall (Bool fromTrap)
 		string	dots ("|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-|-");
 		dots.resize (stackCrawl.size ());
 
-		LogAppendMsg ("--- System Call 0x%04X: %s%s.", (long) context.fTrapWord, dots.c_str (), name);
+		LogAppendMsg ("--- System Call 0x%04X: %s%s.", context.fTrapWord, dots.c_str (), name);
 	}
 
 

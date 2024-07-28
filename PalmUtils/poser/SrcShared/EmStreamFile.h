@@ -45,7 +45,7 @@ class EmStreamFile : public EmStream
 {
 	public:
 								EmStreamFile	(const EmFileRef&,
-												 long			openMode,
+												 int32			openMode,
 												 EmFileCreator	creator = kFileCreatorNone,
 												 EmFileType		fileType = kFileTypeNone);
 		virtual					~EmStreamFile	(void);
@@ -69,7 +69,7 @@ class EmStreamFile : public EmStream
 
 	protected:
 		void					Open			(const EmFileRef&,
-												 long			openMode,
+												 int32			openMode,
 												 EmFileCreator	creator,
 												 EmFileType		fileType);
 

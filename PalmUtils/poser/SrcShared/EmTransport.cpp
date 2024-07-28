@@ -121,7 +121,7 @@ ErrCode EmTransport::Close (void)
  *
  ***********************************************************************/
 
-ErrCode EmTransport::Read (long&, void*)
+ErrCode EmTransport::Read (int32&, void*)
 {
 	return errNone;
 }
@@ -142,7 +142,7 @@ ErrCode EmTransport::Read (long&, void*)
  *
  ***********************************************************************/
 
-ErrCode EmTransport::Write (long&, const void*)
+ErrCode EmTransport::Write (int32&, const void*)
 {
 	return errNone;
 }
@@ -210,7 +210,7 @@ Bool EmTransport::CanWrite (void)
  *
  ***********************************************************************/
 
-long EmTransport::BytesInBuffer (long /*minBytes*/)
+int32 EmTransport::BytesInBuffer (int32 /*minBytes*/)
 {
 	return 0;
 }
@@ -280,14 +280,14 @@ ErrCode EmTransportNull::Close (void)
 }
 
 
-ErrCode EmTransportNull::Read (long& size, void*)
+ErrCode EmTransportNull::Read (int32& size, void*)
 {
 	size = 0;
 	return errNone;
 }
 
 
-ErrCode EmTransportNull::Write (long&, const void*)
+ErrCode EmTransportNull::Write (int32&, const void*)
 {
 	return errNone;
 }
@@ -305,7 +305,7 @@ Bool EmTransportNull::CanWrite (void)
 }
 
 
-long EmTransportNull::BytesInBuffer (long /*minBytes*/)
+int32 EmTransportNull::BytesInBuffer (int32 /*minBytes*/)
 {
 	return 0;
 }

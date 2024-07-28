@@ -212,7 +212,7 @@ void EmJPEGDecompressSource::term_source_cb (j_decompress_ptr cinfo)
  *
  ***********************************************************************/
 
-EmJPEGDecompressMemSource::EmJPEGDecompressMemSource (const void* data, long len) :
+EmJPEGDecompressMemSource::EmJPEGDecompressMemSource (const void* data, int32 len) :
 	fData (data),
 	fDataLen (len)
 {
@@ -291,7 +291,7 @@ boolean EmJPEGDecompressMemSource::FillInputBuffer (j_decompress_ptr /*cinfo*/)
  *
  ***********************************************************************/
 
-void EmJPEGDecompressMemSource::SkipInputData (j_decompress_ptr /*cinfo*/, long num_bytes)
+void EmJPEGDecompressMemSource::SkipInputData (j_decompress_ptr /*cinfo*/, int32 num_bytes)
 {
 	this->next_input_byte += (size_t) num_bytes;
 	this->bytes_in_buffer -= (size_t) num_bytes;
@@ -414,7 +414,7 @@ boolean EmJPEGDecompressStreamSource::FillInputBuffer (j_decompress_ptr /*cinfo*
  *
  ***********************************************************************/
 
-void EmJPEGDecompressStreamSource::SkipInputData (j_decompress_ptr /*cinfo*/, long num_bytes)
+void EmJPEGDecompressStreamSource::SkipInputData (j_decompress_ptr /*cinfo*/, int32 num_bytes)
 {
 	this->next_input_byte += (size_t) num_bytes;
 	this->bytes_in_buffer -= (size_t) num_bytes;

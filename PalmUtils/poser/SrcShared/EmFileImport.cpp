@@ -397,7 +397,7 @@ Bool EmFileImport::Done (void)
  *
  ***********************************************************************/
 
-long EmFileImport::GetProgress (void)
+int32 EmFileImport::GetProgress (void)
 {
 	if (fUsingExgMgr)
 	{
@@ -453,9 +453,9 @@ LocalID EmFileImport::GetLocalID (void)
  *
  ***********************************************************************/
 
-long EmFileImport::CalculateProgressMax	(const EmFileRefList& files, EmFileImportMethod method)
+int32 EmFileImport::CalculateProgressMax	(const EmFileRefList& files, EmFileImportMethod method)
 {
-	long	result = 0;
+	int32	result = 0;
 	Bool	useExgMgr = ::PrvDetermineMethod (method);
 
 	EmFileRefList::const_iterator	iter = files.begin ();
@@ -1154,7 +1154,7 @@ void EmFileImport::ValidateStream (void)
 		fileRef.IsType (kFileTypePalmDB) ||
 		fileRef.IsType (kFileTypePalmQA))
 	{
-		long		len = fStream.GetLength ();
+		int32		len = fStream.GetLength ();
 		StMemory	buffer (len);
 		void*		bufferP = buffer.Get ();
 
@@ -1531,7 +1531,7 @@ static ErrCode PrvValidateEntries(const EmAliasDatabaseHdrType<LAS>& hdr, UInt32
 	for (UInt16 recordNumber = 0; recordNumber < hdr.recordList.numRecords; ++recordNumber)
 	{
 		LocalID 	itsLocalID;
-		long		itsSize;	// Use a signed value to detect decreasing LocalIDs
+		int32		itsSize;	// Use a signed value to detect decreasing LocalIDs
 
 		// Check for negative sizes and get the LocalID.
 		// ---------------------------------------------
@@ -1756,11 +1756,11 @@ void PrvSetExgMgr (void* mgr)
 {
 	if (gHostExgLibRefNum)
 	{
-		emuptr	tblP = (emuptr) ::SysLibTblEntry (gHostExgLibRefNum);
+		emuptr	tblP = EmMemPtr(::SysLibTblEntry (gHostExgLibRefNum));
 		if (tblP)
 		{
 			EmAliasSysLibTblEntryType<PAS>	tbl (tblP);
-			tbl.globalsP = (emuptr) mgr;
+			tbl.globalsP = EmMemPtr(mgr);
 		}
 	}
 }

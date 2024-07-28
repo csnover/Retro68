@@ -190,7 +190,7 @@ void EmWindow::WindowReset (void)
 
 	// Clear our color caches.  They'll get filled again on demand.
 
-	for (int ii = 0; ii < (long) countof (fSkinColors); ++ii)
+	for (int ii = 0; ii < (int32) countof (fSkinColors); ++ii)
 	{
 		fSkinColors[ii].clear ();
 	}

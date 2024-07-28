@@ -36,7 +36,7 @@
  * RETURNED:    None
  *
  ***********************************************************************/
-void OEMCreateTRGRegObjs(long hardwareSubID)
+void OEMCreateTRGRegObjs(int32 hardwareSubID)
 {
     CFBusManager *          fCFBus;
     HandEra330PortManager * fPortMgr;

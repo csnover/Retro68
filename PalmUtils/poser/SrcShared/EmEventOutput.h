@@ -18,7 +18,7 @@
 #include "EmStructs.h"			// StringList
 
 #include <string>				// string
-#include <strstream>			// strstream
+#include <sstream>				// stringstream
 
 
 /*
@@ -210,20 +210,20 @@ class EmEventOutput
 		// Called by Minimization when minimization is done and the accumulated
 		// information needs to be written out.
 
-		static void				OutputEvents			(strstream&);
+		static void				OutputEvents			(stringstream&);
 
 		// Utility routine to list a stack crawl.  Exported here so that we
 		// can share it with EmMinimize, which uses it when reporting that
 		// it failed to produce an error on the last run.
 
-		static void				OutputStack				(strstream&, const StringList&);
+		static void				OutputStack				(stringstream&, const StringList&);
 
 	private:
-		static void				OutputStartStep			(strstream&);
-		static void				OutputKeyEventStep		(EmEventInfoList::iterator&, strstream&);
-		static void				OutputPenEventStep		(const EmEventInfo&, strstream&);
-		static void				OutputAppSwitchEventStep(const EmEventInfo&, strstream&);
-		static void				OutputErrorEvent		(const EmEventInfo&, strstream&);
+		static void				OutputStartStep			(stringstream&);
+		static void				OutputKeyEventStep		(EmEventInfoList::iterator&, stringstream&);
+		static void				OutputPenEventStep		(const EmEventInfo&, stringstream&);
+		static void				OutputAppSwitchEventStep(const EmEventInfo&, stringstream&);
+		static void				OutputErrorEvent		(const EmEventInfo&, stringstream&);
 
 	// Globals:
 

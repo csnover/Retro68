@@ -280,11 +280,11 @@ void EmEventOutput::GetEventInfo (const EmRecordedEvent& event)
 			{
 				EmEventInfo&	prevEvent = fgEventInfo.back ();
 
-				EmAliasFormType<PAS> form ((emuptr) frmP);
+				EmAliasFormType<PAS> form (EmMemPtr(frmP));
 
 				// Get the new form's title.
 
-				emuptr emuTitle = (emuptr)::FrmGetTitle (frmP);
+				emuptr emuTitle = EmMemPtr(::FrmGetTitle (frmP));
 
 				if (emuTitle)
 				{
@@ -594,7 +594,7 @@ static Boolean PrvPointInTableItem (TableType* tableP, Coord x, Coord y, Int16& 
 	Int16 numRows, numCols;
 	RectangleType r;
 
-	EmAliasTableType<PAS> table ((emuptr)tableP);
+	EmAliasTableType<PAS> table (EmMemPtr(tableP));
 
 	RectangleType bounds;
 	bounds.topLeft.x = table.bounds.topLeft.x;
@@ -758,7 +758,7 @@ void EmEventOutput::GetPenEventInfo (EmEventInfo& eventInfo)
 
 			case frmControlObj:
 			{
-				emuptr	ctlP = (emuptr) ::FrmGetObjectPtr (frmP, *iter);
+				emuptr	ctlP = EmMemPtr(::FrmGetObjectPtr (frmP, *iter));
 
 				if (ctlP)
 				{
@@ -838,7 +838,7 @@ void EmEventOutput::GetPenEventInfo (EmEventInfo& eventInfo)
 	{
 		UInt16						numButtons;
 		const PenBtnInfoType*		buttonListP = EvtGetPenBtnList(&numButtons);
-		EmAliasPenBtnInfoType<PAS>	buttonList ((emuptr) buttonListP);
+		EmAliasPenBtnInfoType<PAS>	buttonList (EmMemPtr(buttonListP));
 
 		for (UInt16 buttonIndex = 0; buttonIndex < numButtons; ++buttonIndex)
 		{
@@ -996,7 +996,7 @@ void EmEventOutput::GetAwaitedEventInfo (void)
 
 						if (fldP)
 						{
-							emuptr txtP = (emuptr) ::FldGetTextPtr (fldP);
+							emuptr txtP = EmMemPtr(::FldGetTextPtr (fldP));
 
 							if (txtP)
 							{
@@ -1041,7 +1041,7 @@ void EmEventOutput::GetAwaitedEventInfo (void)
 							{
 								// Use text if it exists, else use row number.
 
-								emuptr textP = (emuptr) ::LstGetSelectionText (lstP, currentItem);
+								emuptr textP = EmMemPtr(::LstGetSelectionText (lstP, currentItem));
 
 								if (textP && ::EmMem_strlen(textP) > 0)
 								{
@@ -1100,7 +1100,7 @@ void EmEventOutput::GetAwaitedEventInfo (void)
  *
  ***********************************************************************/
 
-void EmEventOutput::OutputEvents (strstream& stream)
+void EmEventOutput::OutputEvents (stringstream& stream)
 {
 	// Start step counter from one. The current step number is not necessarily
 	// the same as the current event index, because multiple events can go into 
@@ -1169,7 +1169,7 @@ void EmEventOutput::OutputEvents (strstream& stream)
  *
  ***********************************************************************/
 
-void EmEventOutput::OutputStartStep (strstream& stream)
+void EmEventOutput::OutputStartStep (stringstream& stream)
 {
 	stream << endl;
 	stream << fgCounter << ". ";
@@ -1224,7 +1224,7 @@ enum KeyType
 
 struct KeyDescription
 {
-	char *	description;
+	const char *	description;
 	uint16	chrcode;
 	KeyType type;
 };
@@ -1432,7 +1432,7 @@ static Bool PrvIsKeyWriteable (KeyDescription* kd, uint16 chrcode, uint16 modifi
  *
  ***********************************************************************/
 
-void EmEventOutput::OutputKeyEventStep (EmEventInfoList::iterator& eventInfoIter, strstream& stream)
+void EmEventOutput::OutputKeyEventStep (EmEventInfoList::iterator& eventInfoIter, stringstream& stream)
 {
 	EmAssert (eventInfoIter->event.eType == kRecordedKeyEvent);
 
@@ -1699,7 +1699,7 @@ static string PrvGetObjectKindString (FormObjectKind objKind, ControlStyleType s
  *
  ***********************************************************************/
 
-void EmEventOutput::OutputPenEventStep (const EmEventInfo& eventInfo, strstream& stream)
+void EmEventOutput::OutputPenEventStep (const EmEventInfo& eventInfo, stringstream& stream)
 {
 	EmAssert (eventInfo.event.eType == kRecordedPenEvent);
 
@@ -1913,7 +1913,7 @@ void EmEventOutput::OutputPenEventStep (const EmEventInfo& eventInfo, strstream&
  *
  ***********************************************************************/
 
-void EmEventOutput::OutputAppSwitchEventStep (const EmEventInfo& eventInfo, strstream& stream)
+void EmEventOutput::OutputAppSwitchEventStep (const EmEventInfo& eventInfo, stringstream& stream)
 {
 	EmAssert (eventInfo.event.eType == kRecordedAppSwitchEvent);
 
@@ -1961,7 +1961,7 @@ void EmEventOutput::OutputAppSwitchEventStep (const EmEventInfo& eventInfo, strs
  *
  ***********************************************************************/
 
-void EmEventOutput::OutputErrorEvent (const EmEventInfo& eventInfo, strstream& stream)
+void EmEventOutput::OutputErrorEvent (const EmEventInfo& eventInfo, stringstream& stream)
 {
 	EmAssert (eventInfo.event.eType == kRecordedErrorEvent);
 
@@ -2000,7 +2000,7 @@ void EmEventOutput::OutputErrorEvent (const EmEventInfo& eventInfo, strstream& s
 }
 
 
-void EmEventOutput::OutputStack (strstream& stream, const StringList& stackCrawl)
+void EmEventOutput::OutputStack (stringstream& stream, const StringList& stackCrawl)
 {
 	StringList::const_iterator	iter = stackCrawl.begin ();
 

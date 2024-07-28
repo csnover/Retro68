@@ -139,22 +139,22 @@ class EmEventPlayback
 
 		static void				Clear				(void);
 		static void				CullEvents			(void);
-		static long				CountEnabledEvents	(void);
+		static int32				CountEnabledEvents	(void);
 
-		static long				GetCurrentEvent		(void);
-		static long				GetNumEvents		(void);
-		static long				CountNumEvents		(void);
-		static void				GetEvent			(long, EmRecordedEvent&);
+		static int32				GetCurrentEvent		(void);
+		static int32				GetNumEvents		(void);
+		static int32				CountNumEvents		(void);
+		static void				GetEvent			(int32, EmRecordedEvent&);
 
-		static void				EnableEvents		(long begin = 0, long end = LONG_MAX);
-		static void				DisableEvents		(long begin = 0, long end = LONG_MAX);
+		static void				EnableEvents		(int32 begin = 0, int32 end = INT32_MAX);
+		static void				DisableEvents		(int32 begin = 0, int32 end = INT32_MAX);
 
 		static void				ReplayEvents		(Bool);
 		static Bool				ReplayingEvents		(void);
 		static Bool				ReplayGetEvent		(void);
 		static Bool				ReplayGetPen		(void);
 
-		static long				FindFirstError		(void);
+		static int32			FindFirstError		(void);
 		static void				LogEvents			(void);
 
 	private:
@@ -188,8 +188,8 @@ class EmEventPlayback
 				fPenIsDown (false)
 				{}
 
-			long				fIndex;
-			long				fOffset;
+			int32				fIndex;
+			int32				fOffset;
 			Bool				fPenIsDown;
 		};
 

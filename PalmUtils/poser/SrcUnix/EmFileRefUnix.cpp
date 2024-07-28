@@ -17,6 +17,7 @@
 #include "Miscellaneous.h"		// EndsWith
 #include "Platform.h"			// stricmp
 
+#include <cstring>
 #include <errno.h>				// ENOENT
 #include <sys/stat.h>
 #include <unistd.h>

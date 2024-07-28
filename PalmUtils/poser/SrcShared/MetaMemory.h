@@ -111,9 +111,9 @@ class MetaMemory
 		static Bool				CanMemMgrSetByte		(uint8*);	// Inlined, defined below
 
 		static Errors::EAccessType
-								GetWhatHappened			(emuptr address, long size, Bool forRead);
+								GetWhatHappened			(emuptr address, int32 size, Bool forRead);
 		static Errors::EAccessType
-								AllowForBugs			(emuptr address, long size, Bool forRead, Errors::EAccessType);
+								AllowForBugs			(emuptr address, int32 size, Bool forRead, Errors::EAccessType);
 		static void				CheckUIObjectAccess		(emuptr address, size_t size, Bool forRead,
 														 Bool& isInUIObject, Bool& butItsOK);
 		static Bool				InRAMOSComponent		(emuptr pc);

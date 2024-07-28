@@ -47,6 +47,7 @@ $output_vcpp = $output . "Strings.rc";
 	prefix => sub { local($_); $_=<<'-EOT-'; s/^#//gm; $_ },
 #/* This file is generated from SrcShared/Strings.txt */
 #
+##include <cstddef>
 ##include <map>
 #
 #static std::map<int, const char*> _ResStrMap;
@@ -98,6 +99,7 @@ $output_vcpp = $output . "Strings.rc";
 	prefix => sub { local($_); $_=<<'-EOT-'; s/^#//gm; $_ },
 #/* This file is generated from SrcShared/Strings.txt */
 #
+##include <cstddef>
 ##include <map>
 #
 #static std::map<int, const char*> _ResStrMap;

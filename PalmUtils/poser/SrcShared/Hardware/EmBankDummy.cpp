@@ -285,7 +285,7 @@ int EmBankDummy::ValidAddress (emuptr, uint32)
 
 uint8* EmBankDummy::GetRealAddress (emuptr address)
 {
-	return (uint8*) address;
+	return reinterpret_cast<uint8*>(size_t(address));
 }
 
 
@@ -316,7 +316,7 @@ void EmBankDummy::AddOpcodeCycles (void)
 //		¥ EmBankDummy::InvalidAccess
 // ---------------------------------------------------------------------------
 
-void EmBankDummy::InvalidAccess (emuptr address, long size, Bool forRead)
+void EmBankDummy::InvalidAccess (emuptr address, int32 size, Bool forRead)
 {
 	if (CEnableFullAccess::AccessOK ())
 		return;

@@ -1,5 +1,5 @@
 /* XPM */
-static char *DefaultLarge[] = {
+static const char *DefaultLarge[] = {
 /* width height ncolors chars_per_pixel */
 "436 664 61 1",
 /* colors */

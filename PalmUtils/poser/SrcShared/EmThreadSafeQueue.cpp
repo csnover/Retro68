@@ -50,7 +50,7 @@ void EmThreadSafeQueue<T>::Put (const T& value)
 {
 	omni_mutex_lock	lock (fMutex);
 
-	EmAssert (fMaxSize == 0 || (long) fContainer.size () < fMaxSize);
+	EmAssert (fMaxSize == 0 || (int32) fContainer.size () < fMaxSize);
 
 	fContainer.push_back (value);
 
@@ -133,13 +133,13 @@ int EmThreadSafeQueue<T>::GetUsed (void)
 // ---------------------------------------------------------------------------
 
 template <class T>
-Bool EmThreadSafeQueue<T>::WaitForDataAvailable (long timeoutms)
+Bool EmThreadSafeQueue<T>::WaitForDataAvailable (int32 timeoutms)
 {
 #if HAS_OMNI_THREAD
 
 	// calc absolute time to wait until:
-	unsigned long	sec;
-	unsigned long	nanosec;
+	uint32	sec;
+	uint32	nanosec;
 	omni_thread::get_time (&sec, &nanosec, 0, timeoutms * 1000);
 
 	return fAvailable.timedwait (sec, nanosec) == 1;

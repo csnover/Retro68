@@ -85,6 +85,8 @@ class EcmObject :
 		{
 		}
 
+		virtual ~EcmObject() {}
+
 
 
 		//This forms the root of the interface request implementation:
@@ -184,7 +186,7 @@ class EcmObject :
 		}
 
 	protected:
-		unsigned long fRefCount;
+		uint32 fRefCount;
 };
 
 

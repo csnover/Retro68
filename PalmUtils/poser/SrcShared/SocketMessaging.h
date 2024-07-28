@@ -41,9 +41,9 @@ class CSocket
 
 		virtual ErrCode 		Open				(void) = 0;
 		virtual ErrCode 		Close				(void) = 0;
-		virtual ErrCode 		Write				(const void* buffer, long amountToWrite, long* amtWritten) = 0;
-		virtual ErrCode 		Read				(void* buffer, long sizeOfBuffer, long* amtRead) = 0;
-		virtual Bool			HasUnreadData		(long timeout) = 0;
+		virtual ErrCode 		Write				(const void* buffer, int32 amountToWrite, int32* amtWritten) = 0;
+		virtual ErrCode 		Read				(void* buffer, int32 sizeOfBuffer, int32* amtRead) = 0;
+		virtual Bool			HasUnreadData		(int32 timeout) = 0;
 		virtual ErrCode 		Idle				(void) = 0;
 
 		virtual Bool			ShortPacketHack 	(void);
@@ -67,9 +67,9 @@ class CTCPSocket : public CSocket
 
 		virtual ErrCode 		Open				(void);
 		virtual ErrCode 		Close				(void);
-		virtual ErrCode 		Write				(const void* buffer, long amountToWrite, long* amtWritten);
-		virtual ErrCode 		Read				(void* buffer, long sizeOfBuffer, long* amtRead);
-		virtual Bool			HasUnreadData		(long timeout);
+		virtual ErrCode 		Write				(const void* buffer, int32 amountToWrite, int32* amtWritten);
+		virtual ErrCode 		Read				(void* buffer, int32 sizeOfBuffer, int32* amtRead);
+		virtual Bool			HasUnreadData		(int32 timeout);
 		virtual ErrCode 		Idle				(void);
 
 		Bool					ConnectPending		(void);

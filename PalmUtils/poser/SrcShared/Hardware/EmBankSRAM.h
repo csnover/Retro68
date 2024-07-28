@@ -50,9 +50,9 @@ class EmBankSRAM
 		static emuptr			GetMemoryStart		(void) { return gMemoryStart; }
 
 	private:
-		static void				AddressError		(emuptr address, long size, Bool forRead);
-		static void				InvalidAccess		(emuptr address, long size, Bool forRead);
-		static void				ProtectedAccess		(emuptr address, long size, Bool forRead);
+		static void				AddressError		(emuptr address, int32 size, Bool forRead);
+		static void				InvalidAccess		(emuptr address, int32 size, Bool forRead);
+		static void				ProtectedAccess		(emuptr address, int32 size, Bool forRead);
 };
 
 #endif /* EmBankSRAM_h */

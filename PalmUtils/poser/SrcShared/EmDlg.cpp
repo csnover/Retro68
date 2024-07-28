@@ -570,7 +570,7 @@ EmDlgFnResult EmDlg::PrvSessionNew (EmDlgContext& context)
 
 					SkinNameList	skins;
 					::SkinGetSkinNames (cfg.fDevice, skins);
-					long	menuID = EmDlg::GetItemValue (dlg, kDlgItemNewSkin);
+					int32	menuID = EmDlg::GetItemValue (dlg, kDlgItemNewSkin);
 
 					::SkinSetSkinName (cfg.fDevice, skins[menuID]);
 
@@ -1228,11 +1228,11 @@ struct DatabaseImportData
 	EmFileImportMethod	fMethod;
 	EmStreamFile*		fStream;
 	EmFileImport*		fImporter;
-	long				fProgressCurrent;	// Progress into the current file
-	long				fProgressBase;		// Progress accumulated by previous files
-	long				fProgressMax;		// Progress max value.
-	long				fCurrentFile;		// Current file we're installing.
-	long				fDoneStart;
+	int32				fProgressCurrent;	// Progress into the current file
+	int32				fProgressBase;		// Progress accumulated by previous files
+	int32				fProgressMax;		// Progress max value.
+	int32				fCurrentFile;		// Current file we're installing.
+	int32				fDoneStart;
 };
 
 
@@ -1258,7 +1258,7 @@ EmDlgFnResult EmDlg::PrvDatabaseImport (EmDlgContext& context)
 				data.fProgressMax		= EmFileImport::CalculateProgressMax (data.fFiles, data.fMethod);
 				data.fDoneStart		= 0;
 
-				long	remainingFiles	= data.fFiles.size () - data.fCurrentFile;
+				int32	remainingFiles	= data.fFiles.size () - data.fCurrentFile;
 				string	curAppName		= data.fFiles[data.fCurrentFile].GetName ();
 
 				EmDlg::SetItemValue	(dlg, kDlgItemImpNumFiles,		remainingFiles);
@@ -1306,8 +1306,8 @@ EmDlgFnResult EmDlg::PrvDatabaseImport (EmDlgContext& context)
 				// If it changed, update the dialog.
 				else
 				{
-					long	progressCurrent	= data.fImporter->GetProgress ();
-					long	progressMax		= data.fProgressMax;
+					int32	progressCurrent	= data.fImporter->GetProgress ();
+					int32	progressMax		= data.fProgressMax;
 
 					if (data.fProgressCurrent != progressCurrent)
 					{
@@ -1318,12 +1318,12 @@ EmDlgFnResult EmDlg::PrvDatabaseImport (EmDlgContext& context)
 						// Scale progressMax to < 32K (progress control on Windows
 						// prefers it that way).
 
-						long	divider = progressMax / (32 * 1024L) + 1;
+						int32	divider = progressMax / (32 * 1024L) + 1;
 
 						progressMax /= divider;
 						progressCurrent /= divider;
 
-						long	remainingFiles	= data.fFiles.size () - data.fCurrentFile;
+						int32	remainingFiles	= data.fFiles.size () - data.fCurrentFile;
 						string	curAppName		= data.fFiles[data.fCurrentFile].GetName ();
 
 						EmDlg::SetItemValue	(dlg, kDlgItemImpNumFiles,		remainingFiles);
@@ -1350,7 +1350,7 @@ EmDlgFnResult EmDlg::PrvDatabaseImport (EmDlgContext& context)
 					data.fStream = NULL;
 
 					data.fCurrentFile++;
-					if (data.fCurrentFile < (long) data.fFiles.size ())
+					if (data.fCurrentFile < (int32) data.fFiles.size ())
 					{
 						try
 						{
@@ -1883,7 +1883,7 @@ EmDlgFnResult EmDlg::PrvROMTransferQuery (EmDlgContext& context)
 					string					portName	= EmDlg::GetItemText (dlg, kDlgItemDlqPortList);
 					EmTransportDescriptor	portDesc (portName);
 #else
-					long					portNum		= EmDlg::GetItemValue (dlg, kDlgItemDlqPortList);
+					int32					portNum		= EmDlg::GetItemValue (dlg, kDlgItemDlqPortList);
 					EmTransportDescriptor	portDesc	= data.fPortNameList [portNum];
 					string					portName	= portDesc.GetSchemeSpecific ();
 #endif
@@ -1895,7 +1895,7 @@ EmDlgFnResult EmDlg::PrvROMTransferQuery (EmDlgContext& context)
 					{
 						case kTransportSerial:
 						{
-							long	baudNum = EmDlg::GetItemValue (dlg, kDlgItemDlqBaudList);
+							int32	baudNum = EmDlg::GetItemValue (dlg, kDlgItemDlqBaudList);
 
 							EmTransportSerial::BaudList		baudList;
 							EmTransportSerial::GetSerialBaudList (baudList);
@@ -2932,7 +2932,7 @@ EmDlgItemID EmDlg::DoEditDebuggingOptions (void)
 
 // Map from an EmErrorHandlingOption to the menu string for it.
 
-struct
+static struct
 {
 	EmErrorHandlingOption	fOption;
 	StrCode					fString;
@@ -3085,7 +3085,7 @@ void EmDlg::PrvBuildMenu (	EmErrorHandlingMenuBundle&	menu,
 // given EmErrorHandlingOption.  This function is used when selecting
 // the initial menu item based on the current preference settings.
 
-long EmDlg::PrvFindIndex (	EmErrorHandlingMenuBundle&	menu,
+int32 EmDlg::PrvFindIndex (	EmErrorHandlingMenuBundle&	menu,
 							EmErrorHandlingOption		toFind)
 {
 	size_t	numItems = menu.fNumItems;
@@ -3093,7 +3093,7 @@ long EmDlg::PrvFindIndex (	EmErrorHandlingMenuBundle&	menu,
 	for (size_t ii = 0; ii < numItems; ++ii)
 	{
 		if (menu.fMenuItems[ii].fOption == toFind)
-			return (long) ii;
+			return ii;
 	}
 
 	return -1;
@@ -3112,7 +3112,7 @@ void EmDlg::PrvErrorHandlingToDialog (	EmDlgContext&				context,
 	EmDlg::PrvBuildMenu (menu, menuItemsText);
 
 	Preference<EmErrorHandlingOption>	pref (menu.fPrefKey);
-	long index = EmDlg::PrvFindIndex (menu, *pref);
+	int32 index = EmDlg::PrvFindIndex (menu, *pref);
 	if (index < 0)
 		index = 0;
 
@@ -3128,10 +3128,10 @@ void EmDlg::PrvErrorHandlingFromDialog (EmDlgContext&				context,
 										EmErrorHandlingMenuBundle&	menu)
 {
 	EmDlgRef	dlg		= context.fDlg;
-	long		index	= EmDlg::GetItemValue (dlg, menu.fDlgItem);
+	int32		index	= EmDlg::GetItemValue (dlg, menu.fDlgItem);
 
 	EmAssert (index >= 0);
-	EmAssert (index < (long) menu.fNumItems);
+	EmAssert (index < (int32) menu.fNumItems);
 
 	Preference<EmErrorHandlingOption>	pref (menu.fPrefKey);
 	pref = menu.fMenuItems[index].fOption;
@@ -3159,7 +3159,7 @@ void EmDlg::PrvCheckSetting (	EmDlgContext&				context,
 	Preference<uint8>		pref (menu.fLogPrefKey);
 
 	EmDlgRef				dlg			= context.fDlg;
-	long					index		= EmDlg::GetItemValue (dlg, menu.fDlgItem);
+	int32					index		= EmDlg::GetItemValue (dlg, menu.fDlgItem);
 	EmErrorHandlingOption	option		= menu.fMenuItems[index].fOption;
 
 	Bool					needLogging	= option != kShow;
@@ -3586,7 +3586,7 @@ void EmDlg::PrvEditHostFSOptionsOK (EmDlgContext& context)
 					const UInt16	kUnmounted	= 0;
 
 					UInt16	selector = iter2->fSlotOccupied ? kMounted : kUnmounted;
-					void*	cardNum = (void*) iter1->fSlotNumber;
+					void*	cardNum = (void*) (size_t) iter1->fSlotNumber;
 
 					// Note, in order to make this call, the CPU should be stopped
 					// in the UI task.  That's because mounting and unmounting can
@@ -3631,7 +3631,7 @@ EmDlgFnResult EmDlg::PrvEditHostFSOptions (EmDlgContext& context)
 			// Make sure there are at least kMaxVolume entries.  If not, then
 			// fill in the missing ones.
 
-			long	curSize = data.fWorkingInfo.size ();
+			int32	curSize = data.fWorkingInfo.size ();
 			while (curSize < kMaxVolumes)
 			{
 				SlotInfoType	info;
@@ -3853,7 +3853,7 @@ void EmDlg::PrvRefreshCodeBreakpointList (EmDlgContext& context)
 
 		if (data.fCodeBreakpoints[ii].fEnabled)
 		{
-			sprintf (text, "at 0x%08lX", data.fCodeBreakpoints[ii].fAddress);
+			sprintf (text, "at 0x%08X", data.fCodeBreakpoints[ii].fAddress);
 			string	condition = data.fCodeBreakpoints[ii].fCondition;
 			if (!condition.empty ())
 			{
@@ -3885,7 +3885,7 @@ void EmDlg::PrvGetCodeBreakpoints (EmDlgContext& context)
 	for (int ii = 0; ii < dbgTotalBreakpoints; ++ii)
 	{
 		data.fCodeBreakpoints[ii].fEnabled		= gDebuggerGlobals.bp[ii].enabled;
-		data.fCodeBreakpoints[ii].fAddress		= (emuptr) gDebuggerGlobals.bp[ii].addr;
+		data.fCodeBreakpoints[ii].fAddress		= EmMemPtr(gDebuggerGlobals.bp[ii].addr);
 		data.fCodeBreakpoints[ii].fCondition	= "";
 
 		BreakpointCondition*	c = gDebuggerGlobals.bpCondition[ii];
@@ -3951,10 +3951,10 @@ EmDlgFnResult EmDlg::PrvEditBreakpoints (EmDlgContext& context)
 			EmDlg::SetItemValue (dlg, kDlgItemBrkCheckEnabled,
 				gDebuggerGlobals.watchEnabled ? 1 : 0);
 
-			sprintf (text, "0x%08lX", gDebuggerGlobals.watchAddr);
+			sprintf (text, "0x%08X", gDebuggerGlobals.watchAddr);
 			EmDlg::SetItemText (dlg, kDlgItemBrkStartAddress, text);
 
-			sprintf (text, "0x%08lX", gDebuggerGlobals.watchBytes);
+			sprintf (text, "0x%08X", gDebuggerGlobals.watchBytes);
 			EmDlg::SetItemText (dlg, kDlgItemBrkNumberOfBytes, text);
 
 			EmDlg::PrvEnableDataBreakpointControls (context, gDebuggerGlobals.watchEnabled);
@@ -4031,7 +4031,7 @@ EmDlgFnResult EmDlg::PrvEditBreakpoints (EmDlgContext& context)
 
 				case kDlgItemBrkCheckEnabled:
 				{
-					long	enabled = EmDlg::GetItemValue (dlg, kDlgItemBrkCheckEnabled);
+					int32	enabled = EmDlg::GetItemValue (dlg, kDlgItemBrkCheckEnabled);
 					EmDlg::PrvEnableDataBreakpointControls (context, enabled != 0);
 					break;
 				}
@@ -4100,7 +4100,7 @@ EmDlgFnResult EmDlg::PrvEditCodeBreakpoint (EmDlgContext& context)
 		{
 			char	text[256];
 
-			sprintf (text, "0x%08lX", data.fAddress);
+			sprintf (text, "0x%08X", data.fAddress);
 			EmDlg::SetItemText (dlg, kDlgItemBrkAddress, text);
 
 			EmDlg::SetItemText (dlg, kDlgItemBrkCondition, data.fCondition);
@@ -5900,9 +5900,9 @@ EmDlgListIndex EmDlg::GetSelectedItem (EmDlgRef dlg, EmDlgItemID item)
  *
  ***********************************************************************/
 
-Bool EmDlg::StringToLong (const char* s, long* num)
+Bool EmDlg::StringToLong (const char* s, int32* num)
 {
-	if (sscanf(s, "%li", num) == 1)
+	if (sscanf(s, "%i", num) == 1)
 		return true;
 
 	return false;

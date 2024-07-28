@@ -270,7 +270,7 @@ static const HwrM68VZ328Type	kInitial68VZ328RegisterValues =
 	{ 0 },		// UInt8									___filler28a[0xA00-0x91E];
 
 	0x00000000,	// UInt32	lcdStartAddr;				// $A00: Screen Starting Address Register
-	{ 0 },		// UInt8									___filler29;
+	0,			// UInt8									___filler29;
 	0xFF,		// UInt8	lcdPageWidth;				// $A05: Virtual Page Width Register
 	{ 0 },		// UInt8									___filler30[2];
 	0x03F0,		// UInt16	lcdScreenWidth;				// $A08: Screen Width Register
@@ -279,29 +279,29 @@ static const HwrM68VZ328Type	kInitial68VZ328RegisterValues =
 	0x0000,		// UInt16	lcdCursorXPos;				// $A18: Cursor X Position
 	0x0000,		// UInt16	lcdCursorYPos;				// $A1A: Cursor Y Position
 	0x0101,		// UInt16	lcdCursorWidthHeight;		// $A1C: Cursor Width and Height
-	{ 0 },		// UInt8									___filler32;
+	0,			// UInt8									___filler32;
 	0x7F,		// UInt8	lcdBlinkControl;			// $A1F: Blink Control Register
 	0x00,		// UInt8	lcdPanelControl;			// $A20: Panel Interface Configuration Register
 	0x00,		// UInt8	lcdPolarity;				// $A21: Polarity Config Register
-	{ 0 },		// UInt8									___filler33;						
+	0,			// UInt8									___filler33;
 	0x00,		// UInt8	lcdACDRate;					// $A23: ACD (M) Rate Control Register
-	{ 0 },		// UInt8									___filler34;
+	0,			// UInt8									___filler34;
 	0x00,		// UInt8	lcdPixelClock;				// $A25: Pixel Clock Divider Register
-	{ 0 },		// UInt8									___filler35;
+	0,			// UInt8									___filler35;
 	0x00,		// UInt8	lcdClockControl;			// $A27: Clocking Control Register
 	0x00FF,		// UInt16	lcdRefreshRateAdj;			// $A28: Refresh Rate Adjustment Register
-	{ 0 },		// UInt8									___filler37;
+	0,			// UInt8									___filler37;
 	0x00,		// UInt8	lcdReserved1;				// $A2B: Reserved
-	{ 0 },		// UInt8									___filler38;
+	0,			// UInt8									___filler38;
 	0x00,		// UInt8    lcdPanningOffset;			// $A2D: Panning Offset Register
 
 	{ 0 },		// UInt8									___filler39[0xA31-0xA2E];
 
 	0x00,		// UInt8	lcdFrameRate;				// $A31: Frame Rate Control Modulation Register
-	{ 0 },		// UInt8									___filler2004;
+	0,			// UInt8									___filler2004;
 	0x84,		// UInt8	lcdGrayPalette;				// $A33: Gray Palette Mapping Register
 	0x00,		// UInt8	lcdReserved2;				// $A34: Reserved
-	{ 0 },		// UInt8									___filler2005;
+	0,			// UInt8									___filler2005;
 	0x0000,		// UInt16	lcdContrastControlPWM;		// $A36: Contrast Control
 	0x00,		// UInt8	lcdRefreshModeControl;		// $A38: Refresh Mode Control Register
 	0x62,		// UInt8	lcdDMAControl;				// $A39: DMA Control Register
@@ -428,7 +428,7 @@ void EmRegsVZ::Save (SessionFile& f)
 	f.WriteHwrDBallVZType (f68VZ328Regs);
 	f.FixBug (SessionFile::kBugByteswappedStructs);
 
-	const long	kCurrentVersion = 3;
+	const int32	kCurrentVersion = 3;
 
 	Chunk			chunk;
 	EmStreamChunk	s (chunk);
@@ -503,7 +503,7 @@ void EmRegsVZ::Load (SessionFile& f)
 	Chunk		chunk;
 	if (f.ReadDBallVZState (chunk))
 	{
-		long			version;
+		int32			version;
 		EmStreamChunk	s (chunk);
 
 		s >> version;
@@ -954,16 +954,16 @@ void EmRegsVZ::CycleSlowly (Bool sleeping)
 	{
 		uint32	rtcAlarm = READ_REGISTER (rtcAlarm);
 
-		long	almHour	 = (rtcAlarm & hwrVZ328RTCAlarmHoursMask) >> hwrVZ328RTCAlarmHoursOffset;
-		long	almMin	 = (rtcAlarm & hwrVZ328RTCAlarmMinutesMask) >> hwrVZ328RTCAlarmMinutesOffset;
-		long	almSec	 = (rtcAlarm & hwrVZ328RTCAlarmSecondsMask) >> hwrVZ328RTCAlarmSecondsOffset;
-		long	almInSeconds = (almHour * 60 * 60) + (almMin * 60) + almSec;
+		int32	almHour	 = (rtcAlarm & hwrVZ328RTCAlarmHoursMask) >> hwrVZ328RTCAlarmHoursOffset;
+		int32	almMin	 = (rtcAlarm & hwrVZ328RTCAlarmMinutesMask) >> hwrVZ328RTCAlarmMinutesOffset;
+		int32	almSec	 = (rtcAlarm & hwrVZ328RTCAlarmSecondsMask) >> hwrVZ328RTCAlarmSecondsOffset;
+		int32	almInSeconds = (almHour * 60 * 60) + (almMin * 60) + almSec;
 
-		long	nowHour;
-		long	nowMin;
-		long	nowSec;
+		int32	nowHour;
+		int32	nowMin;
+		int32	nowSec;
 		::GetHostTime (&nowHour, &nowMin, &nowSec);
-		long	nowInSeconds = (nowHour * 60 * 60) + (nowMin * 60) + nowSec;
+		int32	nowInSeconds = (nowHour * 60 * 60) + (nowMin * 60) + nowSec;
 
 		if (almInSeconds <= nowInSeconds)
 		{
@@ -1209,8 +1209,8 @@ void EmRegsVZ::GetLCDScanlines (EmScreenUpdateInfo& info)
 	info.fFirstLine		= (info.fScreenLow - baseAddr) / rowBytes;
 	info.fLastLine		= (info.fScreenHigh - baseAddr - 1) / rowBytes + 1;
 
-	long	firstLineOffset	= info.fFirstLine * rowBytes;
-	long	lastLineOffset	= info.fLastLine * rowBytes;
+	int32	firstLineOffset	= info.fFirstLine * rowBytes;
+	int32	lastLineOffset	= info.fLastLine * rowBytes;
 
 	EmMem_memcpy (
 		(void*) ((uint8*) info.fImage.GetBits () + firstLineOffset),
@@ -1246,7 +1246,7 @@ int32 EmRegsVZ::GetDynamicHeapSize (void)
 
 		// Determine Chip-select Size.
 
-		long chip_select_size = (32 * 1024L) << csDSIZ;
+		int32 chip_select_size = (32 * 1024L) << csDSIZ;
 
 		if ((csControl & DSIZ3Mask) != 0 &&
 			(csDSelect & DRAMMask) != 0 &&
@@ -1725,7 +1725,7 @@ uint32 EmRegsVZ::rtcHourMinSecRead (emuptr address, int size)
 {
 	// Get the desktop machine's time.
 
-	long	hour, min, sec;
+	int32	hour, min, sec;
 
 	if (Hordes::IsOn ())
 	{
@@ -2581,9 +2581,9 @@ void EmRegsVZ::UpdatePortDInterrupts (void)
 	//
 	// Edge interrupts on INT[3:0] should not wake up a sleeping device.
 
+#if 0
 	uint16	pllControl	= READ_REGISTER (pllControl);
 
-#if 0
 	if ((pllControl & hwrVZ328PLLControlDisable) && !(gSession->GetDevice ().EdgeHack ()))
 	{
 		newBits |= portDIntEdge & fPortDEdge & portDPolarity & 0xF0;
@@ -2760,12 +2760,12 @@ void EmRegsVZ::UpdateUARTInterrupts (const EmUARTDragonball::State& state, int u
 	}
 #endif
 
-	if (state.RX_FULL_ENABLE	&& state.RX_FIFO_FULL	||
-		state.RX_HALF_ENABLE	&& state.RX_FIFO_HALF	||
-		state.RX_RDY_ENABLE		&& state.DATA_READY		||
-		state.TX_EMPTY_ENABLE	&& state.TX_FIFO_EMPTY	||
-		state.TX_HALF_ENABLE	&& state.TX_FIFO_HALF	||
-		state.TX_AVAIL_ENABLE	&& state.TX_AVAIL)
+	if ((state.RX_FULL_ENABLE	&& state.RX_FIFO_FULL)	||
+		(state.RX_HALF_ENABLE	&& state.RX_FIFO_HALF)	||
+		(state.RX_RDY_ENABLE	&& state.DATA_READY)	||
+		(state.TX_EMPTY_ENABLE	&& state.TX_FIFO_EMPTY)	||
+		(state.TX_HALF_ENABLE	&& state.TX_FIFO_HALF)	||
+		(state.TX_AVAIL_ENABLE	&& state.TX_AVAIL))
 	{
 		// Set the UART interrupt.
 
@@ -3046,7 +3046,7 @@ void EmRegsVZ::UnmarshalUARTState (const EmUARTDragonball::State& state, int uar
 
 int EmRegsVZ::GetPort (emuptr address)
 {
-	const long	MASK = 0x00000FF8;
+	const int32	MASK = 0x00000FF8;
 
 	switch (address & MASK)
 	{
@@ -3095,13 +3095,13 @@ void EmRegsVZ::PrvGetPalette (RGBList& thePalette)
 			background = ::SkinGetBackgroundColor ();
 	}
 
-	long	br = ((long) background.fRed);
-	long	bg = ((long) background.fGreen);
-	long	bb = ((long) background.fBlue);
+	int32	br = ((int32) background.fRed);
+	int32	bg = ((int32) background.fGreen);
+	int32	bb = ((int32) background.fBlue);
 
-	long	dr = ((long) foreground.fRed) - ((long) background.fRed);
-	long	dg = ((long) foreground.fGreen) - ((long) background.fGreen);
-	long	db = ((long) foreground.fBlue) - ((long) background.fBlue);
+	int32	dr = ((int32) foreground.fRed) - ((int32) background.fRed);
+	int32	dg = ((int32) foreground.fGreen) - ((int32) background.fGreen);
+	int32	db = ((int32) foreground.fBlue) - ((int32) background.fBlue);
 
 	int32	bpp			= 1 << (READ_REGISTER (lcdPanelControl) & 0x03);
 	int32	numColors	= 1 << bpp;

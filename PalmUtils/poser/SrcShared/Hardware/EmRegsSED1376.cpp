@@ -529,8 +529,8 @@ void EmRegsSED1376VisorPrism::GetLCDScanlines (EmScreenUpdateInfo& info)
 		info.fFirstLine		= (info.fScreenLow - baseAddr) / rowBytes;
 		info.fLastLine		= (info.fScreenHigh - baseAddr - 1) / rowBytes + 1;
 
-		long	firstLineOffset	= info.fFirstLine * rowBytes;
-		long	lastLineOffset	= info.fLastLine * rowBytes;
+		int32	firstLineOffset	= info.fFirstLine * rowBytes;
+		int32	lastLineOffset	= info.fLastLine * rowBytes;
 
 		EmMem_memcpy (
 			(void*) ((uint8*) info.fImage.GetBits () + firstLineOffset),
@@ -769,8 +769,8 @@ void EmRegsSED1376PalmGeneric::GetLCDScanlines (EmScreenUpdateInfo& info)
 		info.fFirstLine		= (info.fScreenLow - baseAddr) / rowBytes;
 		info.fLastLine		= (info.fScreenHigh - baseAddr - 1) / rowBytes + 1;
 
-		long	firstLineOffset	= info.fFirstLine * rowBytes;
-		long	lastLineOffset	= info.fLastLine * rowBytes;
+		int32	firstLineOffset	= info.fFirstLine * rowBytes;
+		int32	lastLineOffset	= info.fLastLine * rowBytes;
 
 		EmMem_memcpy (
 			(void*) ((uint8*) info.fImage.GetBits () + firstLineOffset),

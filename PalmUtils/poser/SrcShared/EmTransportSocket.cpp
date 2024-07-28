@@ -18,6 +18,8 @@
 #include "Logging.h"			// LogSerial
 #include "Platform.h"			// Platform::AllocateMemory
 
+#include <cstdlib>
+
 #if PLATFORM_MAC
 #include <GUSIPOSIX.h>			// inet_addr
 #endif
@@ -223,8 +225,9 @@ ErrCode EmTransportSocket::Open (void)
 			err = CloseCommPortListen ();
 			fCommEstablished = false;
 
-			if (err)
+			if (err) {
 				PRINTF ("EmTransportSocket::Open: err = %ld when closing listen socket", err);
+			}
 		}
 		else if (fDataListenSocket->ConnectPending ())
 		{
@@ -270,8 +273,9 @@ ErrCode EmTransportSocket::Open (void)
 
 			err = CloseCommPortConnect ();
 
-			if (err)
+			if (err) {
 				PRINTF ("EmTransportSocket::Open: err %ld in connect socket close", err);
+			}
 
 			PRINTF ("EmTransportSocket::Open: falling back to listening");
 
@@ -327,8 +331,9 @@ ErrCode EmTransportSocket::Close (void)
 
 	ErrCode	err = CloseCommPort ();
 
-	if (err)
+	if (err) {
 		PRINTF ("EmTransportSocket::Close: err = %ld", err);
+	}
 
 	return err;
 }
@@ -349,7 +354,7 @@ ErrCode EmTransportSocket::Close (void)
  *
  ***********************************************************************/
 
-ErrCode EmTransportSocket::Read (long& len, void* data)
+ErrCode EmTransportSocket::Read (int32& len, void* data)
 {
 	PRINTF ("EmTransportSocket::Read...");
 
@@ -385,7 +390,7 @@ ErrCode EmTransportSocket::Read (long& len, void* data)
  *
  ***********************************************************************/
 
-ErrCode EmTransportSocket::Write (long& len, const void* data)
+ErrCode EmTransportSocket::Write (int32& len, const void* data)
 {
 	PRINTF ("EmTransportSocket::Write...");
 	
@@ -485,7 +490,7 @@ Bool EmTransportSocket::CanWrite (void)
  *
  ***********************************************************************/
 
-long EmTransportSocket::BytesInBuffer (long /*minBytes*/)
+int32 EmTransportSocket::BytesInBuffer (int32 /*minBytes*/)
 {
 	if (!fCommEstablished)
 		return 0;
@@ -653,7 +658,7 @@ void EmTransportSocket::EventCallBack (CSocket* s, int event)
 		case CSocket::kDataReceived:
 			while (s->HasUnreadData(1))
 			{
-				long len = 1;
+				int32 len = 1;
 				char buf;
 
 				s->Read(&buf, len, &len);
@@ -776,7 +781,7 @@ ErrCode EmTransportSocket::CloseCommPortListen (void)
  *
  ***********************************************************************/
 
-void EmTransportSocket::PutIncomingData	(const void* data, long& len)
+void EmTransportSocket::PutIncomingData	(const void* data, int32& len)
 {
 	if (len == 0)
 		return;
@@ -805,12 +810,12 @@ void EmTransportSocket::PutIncomingData	(const void* data, long& len)
  *
  ***********************************************************************/
 
-void EmTransportSocket::GetIncomingData	(void* data, long& len)
+void EmTransportSocket::GetIncomingData	(void* data, int32& len)
 {
 	omni_mutex_lock lock (fReadMutex);
 
-	if (len > (long) fReadBuffer.size ())
-		len = (long) fReadBuffer.size ();
+	if (len > (int32) fReadBuffer.size ())
+		len = (int32) fReadBuffer.size ();
 
 	char*	p = (char*) data;
 	deque<char>::iterator	begin = fReadBuffer.begin ();
@@ -835,7 +840,7 @@ void EmTransportSocket::GetIncomingData	(void* data, long& len)
  ***********************************************************************/
 
 
-long EmTransportSocket::IncomingDataSize (void)
+int32 EmTransportSocket::IncomingDataSize (void)
 {
 	omni_mutex_lock lock (fReadMutex);
 
@@ -864,7 +869,7 @@ long EmTransportSocket::IncomingDataSize (void)
  *
  ***********************************************************************/
 
-ErrCode EmTransportSocket::PutOutgoingData	(const void* data, long& len)
+ErrCode EmTransportSocket::PutOutgoingData	(const void* data, int32& len)
 {
 	ErrCode err = kError_CommNotOpen;
 
@@ -1182,7 +1187,7 @@ sockaddr* CTCPClientSocket::FillAddress (sockaddr* addr)
 
 	sockaddr_in*	addr_in = (sockaddr_in*) addr;
 	const char*		name = fTargetHost.c_str ();
-	unsigned long ip;
+	uint32 ip;
 
 	// Check for common "localhost" case in order to avoid a name lookup on the Mac
 
@@ -1204,7 +1209,7 @@ sockaddr* CTCPClientSocket::FillAddress (sockaddr* addr)
 
 			if (entry)
 			{
-				ip = *(unsigned long*) entry->h_addr;
+				ip = *(uint32*) entry->h_addr;
 			}
 		}
 	}

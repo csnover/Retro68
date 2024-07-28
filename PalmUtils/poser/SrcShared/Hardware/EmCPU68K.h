@@ -292,8 +292,8 @@ class EmCPU68K : public EmCPU
 
 		uint32					GetCycleCount			(void);
 
-		void					BusError				(emuptr address, long size, Bool forRead);
-		void					AddressError			(emuptr address, long size, Bool forRead);
+		void					BusError				(emuptr address, int32 size, Bool forRead);
+		void					AddressError			(emuptr address, int32 size, Bool forRead);
 
 	private:
 		Bool 					ExecuteSpecial			(void);
@@ -320,13 +320,13 @@ class EmCPU68K : public EmCPU
 
 #if REGISTER_HISTORY
 		#define kRegHistorySize	512
-		long					fRegHistoryIndex;
+		int32					fRegHistoryIndex;
 		struct regstruct		fRegHistory[kRegHistorySize];
 #endif
 
 #if EXCEPTION_HISTORY
 		#define kExceptionHistorySize	512
-		long					fExceptionHistoryIndex;
+		int32					fExceptionHistoryIndex;
 		struct ExceptionHistoryType		fExceptionHistory[kExceptionHistorySize];
 #endif
 };

@@ -160,10 +160,10 @@ struct DeviceInfo
 	RAMSizeType	fMinRAMSize;		// Minimum RAM size (in K).  Used to prune back the
 									// RAM size menu.
 
-	long		fHardwareID;		// Some devices have a hardware ID they report via
+	int32		fHardwareID;		// Some devices have a hardware ID they report via
 									// hardware register munging.
 
-	long		fHardwareSubID;		// Some devices have a hardware sub-ID they report via
+	int32		fHardwareSubID;		// Some devices have a hardware sub-ID they report via
 									// hardware registr munging.
 
 	struct
@@ -194,8 +194,8 @@ static const uint32	kSupportsARM			= 0x00000010;
 
 static const uint32	kHasFlash				= 0x00000100;
 
-static const long	hwrMiscFlagIDNone		= 0xFF;
-static const long	hwrMiscFlagExtSubIDNone	= 0xFF;
+static const int32	hwrMiscFlagIDNone		= 0xFF;
+static const int32	hwrMiscFlagExtSubIDNone	= 0xFF;
 
 #define UNSUPPORTED			0
 
@@ -987,7 +987,7 @@ void EmDevice::CreateRegs (void) const
 
 		case kDevicePalmIIIc:
 			EmBankRegs::AddSubBank (new EmRegsEZPalmIIIc);
-			EmBankRegs::AddSubBank (new EmRegsSED1375 ((emuptr) sed1375RegsAddr, sed1375BaseAddress));
+			EmBankRegs::AddSubBank (new EmRegsSED1375 (sed1375RegsAddr, sed1375BaseAddress));
 			EmBankRegs::AddSubBank (new EmRegsFrameBuffer (sed1375BaseAddress, sed1375VideoMemSize));
 			break;
 
@@ -1171,7 +1171,7 @@ RAMSizeType EmDevice::MinRAMSize (void) const
  *
  ***********************************************************************/
 
-long EmDevice::HardwareID (void) const
+int32 EmDevice::HardwareID (void) const
 {
 	const DeviceInfo*	info = this->GetDeviceInfo ();
 
@@ -1195,7 +1195,7 @@ long EmDevice::HardwareID (void) const
  *
  ***********************************************************************/
 
-long EmDevice::HardwareSubID (void) const
+int32 EmDevice::HardwareSubID (void) const
 {
 	const DeviceInfo*	info = this->GetDeviceInfo ();
 

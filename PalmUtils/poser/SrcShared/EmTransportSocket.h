@@ -76,12 +76,12 @@ class EmTransportSocket : public EmTransport
 		virtual ErrCode			Open					(void);
 		virtual ErrCode			Close					(void);
 
-		virtual ErrCode			Read					(long&, void*);
-		virtual ErrCode			Write					(long&, const void*);
+		virtual ErrCode			Read					(int32&, void*);
+		virtual ErrCode			Write					(int32&, const void*);
 
 		virtual Bool			CanRead					(void);
 		virtual Bool			CanWrite				(void);
-		virtual long			BytesInBuffer			(long minBytes);
+		virtual int32			BytesInBuffer			(int32 minBytes);
 		virtual string			GetSpecificName			(void);
 
 		static EmTransportSocket*	GetTransport		(const ConfigSocket&);
@@ -95,13 +95,13 @@ class EmTransportSocket : public EmTransport
 		ErrCode					CloseCommPortListen		(void);
 
 		// Manage data coming in the host socket.
-		void					PutIncomingData			(const void*, long&);
-		void					GetIncomingData			(void*, long&);
-		long					IncomingDataSize		(void);
+		void					PutIncomingData			(const void*, int32&);
+		void					GetIncomingData			(void*, int32&);
+		int32					IncomingDataSize		(void);
 
 		// Manage data going out the host socket.
-		ErrCode					PutOutgoingData			(const void*, long&);
-		long					OutgoingDataSize		(void);
+		ErrCode					PutOutgoingData			(const void*, int32&);
+		int32					OutgoingDataSize		(void);
 
 		static void				EventCallBack			(CSocket* s, int event);
 

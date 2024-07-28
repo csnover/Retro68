@@ -60,8 +60,8 @@ public:
 	// User feedback
 	virtual bool			IsLibraryLoaded			(void) = 0;
 	virtual void			GetLibraryVersionString	(char* buffer, size_t bufferLen) = 0;
-	virtual unsigned long	GetLibraryVersionNumber	(void) { return 0; };
-	virtual long			GetConnectionStatus		(void) = 0;
+	virtual uint32	GetLibraryVersionNumber	(void) { return 0; };
+	virtual int32			GetConnectionStatus		(void) = 0;
 	
 	virtual void			LoadTracerTypeList		(void);
 	virtual void			DisposeTracerTypeList	(void);
@@ -75,7 +75,7 @@ public:
 	virtual void			GetCapsToken			(char* src, char* tag, char* dst, size_t dstSize);
 
 protected:
-	unsigned long	tracerRefCounter;		// Number of referenced subsystem users
+	uint32	tracerRefCounter;		// Number of referenced subsystem users
 	unsigned short	supportedTypesCount;
 	unsigned short	runningTracerType;
 	unsigned short	previousTracerType;

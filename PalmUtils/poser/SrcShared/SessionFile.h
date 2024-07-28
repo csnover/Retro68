@@ -141,7 +141,7 @@ class SessionFile
 		// ---------- Other ----------
 
 		Bool					ReadConfiguration		(Configuration&);
-		long					GetRAMImageSize			(void);
+		int32					GetRAMImageSize			(void);
 
 		// As information is saved to the file, certain parts are recorded
 		// here.  That way, this information can be save to the preference

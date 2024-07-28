@@ -37,7 +37,7 @@ enum HordeFileType
 class SessionFile;
 
 // Gremlins::Save, Gremlins::Load
-extern	long				gGremlinSaveFrequency;
+extern	int32				gGremlinSaveFrequency;
 extern	DatabaseInfoList	gGremlinAppList;
 
 extern	Bool				gWarningHappened;
@@ -72,9 +72,9 @@ class Hordes
 		static Bool				CanResume				(void);
 		static Bool				CanStop					(void);
 
-		static void				Status					(unsigned short* currentNumber,
-														 unsigned long* currentStep,
-														 unsigned long* currentUntil);
+		static void				Status					(uint16* currentNumber,
+														 uint32* currentStep,
+														 uint32* currentUntil);
 
 		static void				TurnOn					(Bool hordesOn);
 
@@ -130,10 +130,10 @@ class Hordes
 
 	private:
 		static void				NextGremlin();
-		static void				ProposeNextGremlin		(long& outNextGremlin,
-														 long& outNextDepth,
-														 long inFromGremlin,
-														 long inFromDepth);
+		static void				ProposeNextGremlin		(int32& outNextGremlin,
+														 int32& outNextDepth,
+														 int32 inFromGremlin,
+														 int32 inFromDepth);
 		static void				EndHordes				(void);
 
 		static ErrCode			LoadState				(const EmFileRef& ref);

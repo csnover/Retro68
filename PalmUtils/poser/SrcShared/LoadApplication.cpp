@@ -41,7 +41,7 @@ static void PrvMyShlExportAsPilotFile(EmStreamFile& fh, UInt16 cardNo, const cha
 	Err 		err;
 	UInt16		numRecords;
 	int 		size;
-	long		offset;
+	int32		offset;
 	int 		i;
 
 	try
@@ -170,21 +170,21 @@ static void PrvMyShlExportAsPilotFile(EmStreamFile& fh, UInt16 cardNo, const cha
 			// Write out the appInfo followed by sortInfo, if they exist
 			if (appInfoID && appInfoSize)
 			{
-				UInt32		srcP;
+				MemPtr		srcP;
 				StMemory	outP (appInfoSize);
-				srcP = (UInt32) ::MemHandleLock (appInfoH);
-				EmMem_memcpy ((void*) outP.Get(), srcP, appInfoSize);
-				::MemPtrUnlock ((MemPtr) srcP);
+				srcP = ::MemHandleLock (appInfoH);
+				EmMem_memcpy ((void*) outP.Get(), EmMemPtr(srcP), appInfoSize);
+				::MemPtrUnlock (srcP);
 				fh.PutBytes (outP.Get (), appInfoSize);
 			}
 
 			if (sortInfoID && sortInfoSize)
 			{
-				UInt32		srcP;
+				MemPtr		srcP;
 				StMemory	outP (sortInfoSize);
-				srcP = (UInt32) ::MemHandleLock (sortInfoH);
-				EmMem_memcpy ((void*) outP.Get(), srcP, sortInfoSize);
-				::MemPtrUnlock ((MemPtr) srcP);
+				srcP = ::MemHandleLock (sortInfoH);
+				EmMem_memcpy ((void*) outP.Get(), EmMemPtr(srcP), sortInfoSize);
+				::MemPtrUnlock (srcP);
 				fh.PutBytes (outP.Get (), sortInfoSize);
 			}
 
@@ -198,7 +198,7 @@ static void PrvMyShlExportAsPilotFile(EmStreamFile& fh, UInt16 cardNo, const cha
 
 				if (resChunkID)
 				{
-					UInt32	srcP;
+					MemPtr	srcP;
 					srcResH = ::DmGetResourceIndex (dbP, i);
 					if (!srcResH)
 					{
@@ -207,9 +207,9 @@ static void PrvMyShlExportAsPilotFile(EmStreamFile& fh, UInt16 cardNo, const cha
 					resSize = ::MemHandleSize (srcResH);
 
 					StMemory	outP (resSize);
-					srcP = (UInt32) ::MemHandleLock (srcResH);
-					EmMem_memcpy ((void*) outP.Get (), srcP, resSize);
-					::MemPtrUnlock ((MemPtr) srcP);
+					srcP = ::MemHandleLock (srcResH);
+					EmMem_memcpy ((void*) outP.Get (), EmMemPtr(srcP), resSize);
+					::MemPtrUnlock (srcP);
 					fh.PutBytes (outP.Get (), resSize);
 
 					::DmReleaseResource (srcResH);
@@ -312,21 +312,21 @@ static void PrvMyShlExportAsPilotFile(EmStreamFile& fh, UInt16 cardNo, const cha
 			// Write out the appInfo followed by sortInfo, if they exist
 			if (appInfoID && appInfoSize)
 			{
-				UInt32		srcP;
+				MemPtr		srcP;
 				StMemory	outP (appInfoSize);
-				srcP = (UInt32) ::MemHandleLock (appInfoH);
-				EmMem_memcpy ((void*) outP.Get(), srcP, appInfoSize);
-				::MemPtrUnlock ((MemPtr) srcP);
+				srcP = ::MemHandleLock (appInfoH);
+				EmMem_memcpy ((void*) outP.Get(), EmMemPtr(srcP), appInfoSize);
+				::MemPtrUnlock (srcP);
 				fh.PutBytes (outP.Get (), appInfoSize);
 			}
 
 			if (sortInfoID && sortInfoSize)
 			{
-				UInt32		srcP;
+				MemPtr		srcP;
 				StMemory	outP (sortInfoSize);
-				srcP = (UInt32) ::MemHandleLock (sortInfoH);
-				EmMem_memcpy ((void*) outP.Get(), srcP, sortInfoSize);
-				::MemPtrUnlock ((MemPtr) srcP);
+				srcP = ::MemHandleLock (sortInfoH);
+				EmMem_memcpy ((void*) outP.Get(), EmMemPtr(srcP), sortInfoSize);
+				::MemPtrUnlock (srcP);
 				fh.PutBytes (outP.Get (), sortInfoSize);
 			}
 
@@ -345,13 +345,13 @@ static void PrvMyShlExportAsPilotFile(EmStreamFile& fh, UInt16 cardNo, const cha
 
 				if (srcH)
 				{
-					UInt32	srcP;
+					MemPtr	srcP;
 
 					recSize = ::MemHandleSize(srcH);
 					StMemory	outP (recSize);
-					srcP = (UInt32) ::MemHandleLock (srcH);
-					EmMem_memcpy ((void*) outP.Get(), srcP, recSize);
-					::MemPtrUnlock ((MemPtr) srcP);
+					srcP = ::MemHandleLock (srcH);
+					EmMem_memcpy ((void*) outP.Get(), EmMemPtr(srcP), recSize);
+					::MemPtrUnlock (srcP);
 					fh.PutBytes (outP.Get (), recSize);
 				}
 			}

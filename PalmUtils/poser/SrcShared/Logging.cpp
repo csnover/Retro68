@@ -23,7 +23,9 @@
 #include "ROMStubs.h"			// FrmGetTitle, WinGetFirstWindow
 #include "Strings.r.h"			// kStr_LogFileSize
 #include "StringData.h"			// virtual key descriptions
+#include "EmPalmStructs.h"
 
+#include <cstddef>
 #include <ctype.h>				// isprint
 
 //#define LOG_TO_TRACE
@@ -95,10 +97,10 @@ void LogShutdown (void)
 //		¥ CLASS LogStream
 // ---------------------------------------------------------------------------
 
-const long		kFindUniqueFile			= -1;
+const int32		kFindUniqueFile			= -1;
 const uint32	kInvalidTimestamp		= (uint32) -1;
 const int32		kInvalidGremlinCounter	= -2;
-const long		kEventTextMaxLen		= 255;
+const int32		kEventTextMaxLen		= 255;
 
 
 /***********************************************************************
@@ -223,7 +225,7 @@ int LogStream::PrintfNoTime (const char* fmt, ...)
  *
  ***********************************************************************/
 
-int LogStream::DataPrintf (const void* data, long dataLen, const char* fmt, ...)
+int LogStream::DataPrintf (const void* data, int32 dataLen, const char* fmt, ...)
 {
 	omni_mutex_lock	lock (fMutex);
 
@@ -277,7 +279,7 @@ int LogStream::VPrintf (const char* fmt, va_list args)
  *
  ***********************************************************************/
 
-int LogStream::Write (const void* buffer, long size)
+int LogStream::Write (const void* buffer, int32 size)
 {
 	omni_mutex_lock	lock (fMutex);
 
@@ -318,7 +320,7 @@ void LogStream::Clear (void)
  *
  ***********************************************************************/
 
-long LogStream::GetLogSize (void)
+int32 LogStream::GetLogSize (void)
 {
 	omni_mutex_lock	lock (fMutex);
 
@@ -339,7 +341,7 @@ long LogStream::GetLogSize (void)
  *
  ***********************************************************************/
 
-void LogStream::SetLogSize (long size)
+void LogStream::SetLogSize (int32 size)
 {
 	omni_mutex_lock	lock (fMutex);
 
@@ -488,14 +490,14 @@ LogStreamInner::~LogStreamInner (void)
  *
  ***********************************************************************/
 
-int LogStreamInner::DumpHex (const void* data, long dataLen)
+int LogStreamInner::DumpHex (const void* data, int32 dataLen)
 {
 	int n = 0;
 	const uint8*	dataP = (const uint8*) data;
 
 	if (dataP && dataLen)
 	{
-		for (long ii = 0; ii < dataLen; ii += 16)
+		for (int32 ii = 0; ii < dataLen; ii += 16)
 		{
 			char	text[16 * 4 + 4];	// 16 bytes * (3 for hex + 1 for ASCII) + 2 tabs + 1 space + 1 NULL
 			char*	p = text;
@@ -503,7 +505,7 @@ int LogStreamInner::DumpHex (const void* data, long dataLen)
 			*p++ = '\t';
 
 			// Print up to 16 bytes of hex on the left
-			long	jj;
+			int32	jj;
 			for (jj = ii; jj < ii + 16 ; ++jj)
 			{
 				if (jj < dataLen)
@@ -584,7 +586,7 @@ int LogStreamInner::VPrintf (const char* fmt, va_list args, Bool timestamp)
  *
  ***********************************************************************/
 
-int LogStreamInner::Write (const void* buffer, long size, Bool timestamp)
+int LogStreamInner::Write (const void* buffer, int32 size, Bool timestamp)
 {
 	if (timestamp)
 		this->Timestamp ();
@@ -628,7 +630,7 @@ void LogStreamInner::Clear (void)
  *
  ***********************************************************************/
 
-long LogStreamInner::GetLogSize (void)
+int32 LogStreamInner::GetLogSize (void)
 {
 	return fBufferSize;
 }
@@ -647,7 +649,7 @@ long LogStreamInner::GetLogSize (void)
  *
  ***********************************************************************/
 
-void LogStreamInner::SetLogSize (long size)
+void LogStreamInner::SetLogSize (int32 size)
 {
 	fBufferSize = size;
 
@@ -725,8 +727,8 @@ void LogStreamInner::DumpToFile (void)
 
 	while (iter != fBuffer.end ())
 	{
-		long	amtToCopy = kChunkSize;
-		long	amtLeft = fBuffer.end () - iter;
+		int32	amtToCopy = kChunkSize;
+		int32	amtLeft = fBuffer.end () - iter;
 
 		if (amtToCopy > amtLeft)
 		{
@@ -760,10 +762,10 @@ void LogStreamInner::DumpToFile (void)
  *
  ***********************************************************************/
 
-void LogStreamInner::DumpToFile (EmStreamFile& f, const char* s, long size)
+void LogStreamInner::DumpToFile (EmStreamFile& f, const char* s, int32 size)
 {
 	StMemory	converted;
-	long		convertedLength;
+	int32		convertedLength;
 
 	Platform::ToHostEOL (converted, convertedLength, s, size);
 
@@ -830,7 +832,7 @@ EmFileRef LogStreamInner::CreateFileReference (void)
 		{
 			++fFileIndex;
 
-			sprintf (buffer, "%s_%04ld.txt", fBaseName, fFileIndex);
+			sprintf (buffer, "%s_%04d.txt", fBaseName, fFileIndex);
 
 			result = EmFileRef (logDir, buffer);
 		}
@@ -841,7 +843,7 @@ EmFileRef LogStreamInner::CreateFileReference (void)
 
 	else
 	{
-		sprintf (buffer, "%s_%04ld.txt", fBaseName, fFileIndex);
+		sprintf (buffer, "%s_%04d.txt", fBaseName, fFileIndex);
 
 		result = EmFileRef (logDir, buffer);
 	}
@@ -896,11 +898,11 @@ void LogStreamInner::Timestamp (void)
 		if (Hordes::IsOn ())
 		{
 			fLastGremlinEventCounter = Hordes::EventCounter ();
-			sprintf (fLastTimestampString, "%ld.%03ld (%ld):\t", now / 1000, now % 1000, fLastGremlinEventCounter);
+			sprintf (fLastTimestampString, "%d.%03d (%d):\t", now / 1000, now % 1000, fLastGremlinEventCounter);
 		}
 		else
 		{
-			sprintf (fLastTimestampString, "%ld.%03ld:\t", now / 1000, now % 1000);
+			sprintf (fLastTimestampString, "%d.%03d:\t", now / 1000, now % 1000);
 		}
 	}
 
@@ -944,7 +946,7 @@ void LogStreamInner::NewLine (void)
  *
  ***********************************************************************/
 
-void LogStreamInner::Append (const char* buffer, long size)
+void LogStreamInner::Append (const char* buffer, int32 size)
 {
 	if (size != 0)
 	{
@@ -998,7 +1000,7 @@ void LogStreamInner::Append (const char* buffer, long size)
 
 void LogStreamInner::TrimLeading (void)
 {
-	long	amtToDiscard = fBuffer.size () - fBufferSize;
+	int32	amtToDiscard = fBuffer.size () - fBufferSize;
 
 	if (amtToDiscard > 0)
 	{
@@ -1032,7 +1034,7 @@ static string StubEmFrmGetTitle (const FormPtr frm)
 	if (title)
 	{
 		char	buffer[256];
-		EmMem_strcpy (buffer, (emuptr) title);
+		EmMem_strcpy (buffer, EmMemPtr(title));
 		return string (buffer);
 	}
 
@@ -1045,7 +1047,7 @@ static string StubEmFrmGetTitle (const FormPtr frm)
 // ---------------------------------------------------------------------------
 // Displays the form resource id associated with the window passed.
 
-static void StubEmPrintFormID (WinHandle winHandle, char* desc, char* eventText)
+static void StubEmPrintFormID (WinHandle winHandle, const char* desc, char* eventText)
 {
 	emuptr winPtr;
 	emuptr exitWinPtr;
@@ -1056,32 +1058,32 @@ static void StubEmPrintFormID (WinHandle winHandle, char* desc, char* eventText)
 	
 	if (winHandle)
 		{
-		exitWinPtr = (emuptr) WinGetWindowPointer (winHandle);
+		exitWinPtr = EmMemPtr(WinGetWindowPointer (winHandle));
 		
 		// Check if the handle is still valid.  If the form has been deleted 
 		// then we can't dereference the window pointer.
 		
 		// Search the window list for the pointer.
 		winHandle = WinGetFirstWindow ();
+
+		EmAliasFormType<PAS> frm(EmMemNULL);
 		while (winHandle)
 			{
-			winPtr = (emuptr) WinGetWindowPointer (winHandle);
+			winPtr = EmMemPtr(WinGetWindowPointer (winHandle));
 			if (winPtr == exitWinPtr)
 				break;
 			
-			winHandle = (WinHandle) EmMemGet32 (winPtr + offsetof (WindowType, nextWindow));
+			frm = EmAliasFormType<PAS>(winPtr);
+			winHandle = EmMemFakeT<WindowType *>(frm.window.nextWindow);
 			}
 		
-		
-		if (winHandle && /*winPtr->windowFlags.dialog*/
-			((EmMemGet16 (winPtr + offsetof (WindowType, windowFlags)) & 0x0200) != 0))
+		if (winHandle && (frm.window.windowFlags.flags & /* dialog */ 0x0200) != 0)
 			{
-			string	title = StubEmFrmGetTitle((FormPtr) winPtr);
+			string	title = StubEmFrmGetTitle(EmMemFakeT<FormType *>(winPtr));
 			if (!title.empty())
 				sprintf (&eventText[strlen(eventText)],"%s: \"%s\"", desc, title.c_str());
 			else
-				sprintf (&eventText[strlen(eventText)],"%s ID: %ld", desc, /*frm->formId*/
-						EmMemGet16 (winPtr + offsetof (FormType, formId)));
+				sprintf (&eventText[strlen(eventText)],"%s ID: %d", desc, (int) frm.formId);
 			}
 		}
 }
@@ -1119,7 +1121,7 @@ static const char* StubEmKeyDescription (Int16 key)
 
 static Bool PrvGetEventText(const EventType* eventP, char* eventText)
 {
-	long curLen = strlen (eventText);
+	int32 curLen = strlen (eventText);
 	eventText += curLen;
 
 	switch (eventP->eType)
@@ -1188,7 +1190,7 @@ static Bool PrvGetEventText(const EventType* eventP, char* eventText)
 			break;
 
 		case ctlRepeatEvent:
-			sprintf(eventText,"ctlRepeatEvent  ID: %u   Time: %lu", 
+			sprintf(eventText,"ctlRepeatEvent  ID: %u   Time: %u",
 					eventP->data.ctlRepeat.controlID, eventP->data.ctlRepeat.time);					
 			break;
 
@@ -1329,7 +1331,7 @@ static Bool PrvGetEventText(const EventType* eventP, char* eventText)
 		case tsmConfirmEvent:
 			curLen += sprintf(eventText,"tsmConfirmEvent   ID: %u  Text: ", 
 					eventP->data.tsmConfirm.formID);
-			EmMem_strncat(eventText, (emuptr)eventP->data.tsmConfirm.yomiText, kEventTextMaxLen - curLen);
+			EmMem_strncat(eventText, EmMemPtr(eventP->data.tsmConfirm.yomiText), kEventTextMaxLen - curLen);
 			eventText[kEventTextMaxLen] = 0;	// Make sure we're terminated
 			break;
 			
@@ -1361,13 +1363,13 @@ static Bool PrvGetEventText(const EventType* eventP, char* eventText)
 		case frmGadgetEnterEvent:
 			sprintf(eventText,"frmGadgetEnterEvent   RscID:%u, gadget:0x%08lX",
 					eventP->data.gadgetEnter.gadgetID,
-					(unsigned long) eventP->data.gadgetEnter.gadgetP);
+					(size_t) eventP->data.gadgetEnter.gadgetP);
 			break;
 
 		case frmGadgetMiscEvent:
 			sprintf(eventText,"frmGadgetMiscEvent   ID:%u, gadget:0x%08lX, selector:%u",
 					eventP->data.gadgetMisc.gadgetID,
-					(unsigned long) eventP->data.gadgetMisc.gadgetP,
+					(size_t) eventP->data.gadgetMisc.gadgetP,
 					eventP->data.gadgetMisc.selector);
 			break;
 
@@ -1500,7 +1502,7 @@ void LogEvtGetPen (Int16 screenX, Int16 screenY, Boolean penDown)
 		static Int16	lastScreenX = -2;
 		static Int16	lastScreenY = -2;
 		static Boolean	lastPenDown = false;
-		static long		numCollapsedEvents;
+		static int32		numCollapsedEvents;
 
 		if (screenX != lastScreenX ||
 			screenY != lastScreenY ||
@@ -1518,8 +1520,9 @@ void LogEvtGetPen (Int16 screenX, Int16 screenY, Boolean penDown)
 		else
 		{
 			++numCollapsedEvents;
-			if (numCollapsedEvents == 1)
+			if (numCollapsedEvents == 1) {
 				LogAppendMsg ("<-  EvtGetPen: <<<eliding identical events>>>.");
+			}
 		}
 	}
 }

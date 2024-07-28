@@ -454,7 +454,7 @@ void EmBankMapped::AddOpcodeCycles (void)
 //		¥ EmBankMapped::AddressError
 // ---------------------------------------------------------------------------
 
-void EmBankMapped::AddressError (emuptr address, long size, Bool forRead)
+void EmBankMapped::AddressError (emuptr address, int32 size, Bool forRead)
 {
 	EmAssert (gCPU68K);
 	gCPU68K->AddressError (address, size, forRead);
@@ -465,7 +465,7 @@ void EmBankMapped::AddressError (emuptr address, long size, Bool forRead)
 //		¥ EmBankMapped::InvalidAccess
 // ---------------------------------------------------------------------------
 
-void EmBankMapped::InvalidAccess (emuptr address, long size, Bool forRead)
+void EmBankMapped::InvalidAccess (emuptr address, int32 size, Bool forRead)
 {
 	EmAssert (gCPU68K);
 	gCPU68K->BusError (address, size, forRead);
@@ -658,7 +658,7 @@ emuptr PrvEnsureAligned (emuptr candidate, const void* addr)
 	// mapped address -- maintains the same alignment as
 	// the incoming address.
 
-	while ((candidate & 0x03) != ((uint32) addr & 0x03))
+	while ((candidate & 0x03) != ((size_t) addr & 0x03))
 		++candidate;
 
 	return candidate;

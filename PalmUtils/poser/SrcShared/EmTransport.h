@@ -88,13 +88,13 @@ class EmTransport
 		virtual ErrCode			Open				(void);
 		virtual ErrCode			Close				(void);
 
-		virtual ErrCode			Read				(long&, void*);
-		virtual ErrCode			Write				(long&, const void*);
+		virtual ErrCode			Read				(int32&, void*);
+		virtual ErrCode			Write				(int32&, const void*);
 
 		virtual Bool			CanRead				(void);
 		virtual Bool			CanWrite			(void);
 
-		virtual long			BytesInBuffer		(long minBytes);
+		virtual int32			BytesInBuffer		(int32 minBytes);
 
 		virtual string			GetSpecificName		(void) = 0;
 
@@ -126,13 +126,13 @@ class EmTransportNull : public EmTransport
 		virtual ErrCode			Open					(void);
 		virtual ErrCode			Close					(void);
 
-		virtual ErrCode			Read					(long&, void*);
-		virtual ErrCode			Write					(long&, const void*);
+		virtual ErrCode			Read					(int32&, void*);
+		virtual ErrCode			Write					(int32&, const void*);
 
 		virtual Bool			CanRead					(void);
 		virtual Bool			CanWrite				(void);
 
-		virtual long			BytesInBuffer			(long minBytes);
+		virtual int32			BytesInBuffer			(int32 minBytes);
 
 		virtual string			GetSpecificName			(void);
 

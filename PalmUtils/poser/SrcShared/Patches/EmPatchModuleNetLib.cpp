@@ -20,6 +20,7 @@
 #include "Logging.h"			// LogAppendMsg
 #include "Marshal.h"			// PARAM_VAL, etc.
 #include "Platform_NetLib.h"	// Platform_NetLib
+#include "EmPalmStructs.h"
 
 #if PLATFORM_UNIX || PLATFORM_MAC
 #include <netinet/in.h>			// ntohs, ntohs
@@ -323,7 +324,7 @@ void NetLibTailpatch::NetLibOpen (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*netIFErrsP = %s (0x%04X)", PrvGetErrorString (*netIFErrsP), (long) *netIFErrsP);
+	PRINTF ("\t*netIFErrsP = %s (0x%04X)", PrvGetErrorString (*netIFErrsP), (int32) *netIFErrsP);
 }
 
 
@@ -353,7 +354,7 @@ CallROMType NetLibHeadpatch::NetLibClose (void)
 	CALLED_GET_PARAM_VAL (UInt16, immediate);
 
 	// Examine the parameters
-	PRINTF ("\timmediate = 0x%08X", (long) immediate);
+	PRINTF ("\timmediate = 0x%08X", (int32) immediate);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -635,10 +636,10 @@ CallROMType NetLibHeadpatch::NetLibSocketOpen (void)
 	CALLED_GET_PARAM_REF (Err, errP, Marshal::kOutput);
 
 	// Examine the parameters
-	PRINTF ("\tdomain = 0x%08X", (long) domain);
-	PRINTF ("\ttype = 0x%08X", (long) type);
-	PRINTF ("\tprotocol = 0x%08X", (long) protocol);
-	PRINTF ("\ttimeout = 0x%08X", (long) timeout);
+	PRINTF ("\tdomain = 0x%08X", (int32) domain);
+	PRINTF ("\ttype = 0x%08X", (int32) type);
+	PRINTF ("\tprotocol = 0x%08X", (int32) protocol);
+	PRINTF ("\ttimeout = 0x%08X", (int32) timeout);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -679,7 +680,7 @@ void NetLibTailpatch::NetLibSocketOpen (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 }
 
 
@@ -712,8 +713,8 @@ CallROMType NetLibHeadpatch::NetLibSocketClose (void)
 	CALLED_GET_PARAM_REF (Err, errP, Marshal::kOutput);
 
 	// Examine the parameters
-	PRINTF ("\tsocket = 0x%08X", (long) socket);
-	PRINTF ("\ttimeout = 0x%08X", (long) timeout);
+	PRINTF ("\tsocket = 0x%08X", (int32) socket);
+	PRINTF ("\ttimeout = 0x%08X", (int32) timeout);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -752,7 +753,7 @@ void NetLibTailpatch::NetLibSocketClose (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 }
 
 
@@ -795,11 +796,11 @@ CallROMType NetLibHeadpatch::NetLibSocketOptionSet (void)
 	CALLED_GET_PARAM_PTR (void, optValueP, optValueLen, Marshal::kInput);
 
 	// Examine the parameters
-	PRINTF ("\tsocket = 0x%08X", (long) socket);
-	PRINTF ("\tlevel = %s (0x%08X)", PrvGetOptLevelString ((NetSocketOptLevelEnum) (UInt16) level), (long) (UInt16) level);
-	PRINTF ("\toption = %s (0x%08X)", PrvGetOptString ((NetSocketOptLevelEnum) (UInt16) level, (NetSocketOptEnum) (UInt16) option), (long) (UInt16) option);
-	PRINTF ("\toptValueP = 0x%08X", (long) (void*) optValueP);
-	PRINTF ("\toptValueLen = 0x%08X", (long) optValueLen);
+	PRINTF ("\tsocket = 0x%08X", (int32) socket);
+	PRINTF ("\tlevel = %s (0x%08X)", PrvGetOptLevelString ((NetSocketOptLevelEnum) (UInt16) level), (int32) (UInt16) level);
+	PRINTF ("\toption = %s (0x%08X)", PrvGetOptString ((NetSocketOptLevelEnum) (UInt16) level, (NetSocketOptEnum) (UInt16) option), (int32) (UInt16) option);
+	PRINTF ("\toptValueP = 0x%08X", (size_t) optValueP);
+	PRINTF ("\toptValueLen = 0x%08X", (int32) optValueLen);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -851,7 +852,7 @@ void NetLibTailpatch::NetLibSocketOptionSet (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 }
 
 
@@ -894,12 +895,12 @@ CallROMType NetLibHeadpatch::NetLibSocketOptionGet (void)
 	CALLED_GET_PARAM_PTR (void, optValueP, *optValueLenP, Marshal::kOutput);
 
 	// Examine the parameters
-	PRINTF ("\tsocket = 0x%08X", (long) socket);
-	PRINTF ("\tlevel = 0x%08X", (long) level);
-	PRINTF ("\toption = 0x%08X", (long) option);
-	PRINTF ("\toptValueP = 0x%08X", (long) (void*) optValueP);
-	PRINTF ("\toptValueLenP = 0x%08X", (long) *optValueLenP);
-	PRINTF ("\ttimeout = 0x%08X", (long) timeout);
+	PRINTF ("\tsocket = 0x%08X", (int32) socket);
+	PRINTF ("\tlevel = 0x%08X", (int32) level);
+	PRINTF ("\toption = 0x%08X", (int32) option);
+	PRINTF ("\toptValueP = 0x%08X", (size_t) optValueP);
+	PRINTF ("\toptValueLenP = 0x%08X", (int32) *optValueLenP);
+	PRINTF ("\ttimeout = 0x%08X", (int32) timeout);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -952,8 +953,8 @@ void NetLibTailpatch::NetLibSocketOptionGet (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
-	PRINTF ("\t*optValueLenP = 0x%08X", (long) *optValueLenP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
+	PRINTF ("\t*optValueLenP = 0x%08X", (int32) *optValueLenP);
 }
 
 
@@ -991,12 +992,12 @@ CallROMType NetLibHeadpatch::NetLibSocketBind (void)
 	CALLED_GET_PARAM_REF (Err, errP, Marshal::kOutput);
 
 	// Examine the parameters
-	PRINTF ("\tsocket = 0x%08X", (long) socket);
+	PRINTF ("\tsocket = 0x%08X", (int32) socket);
 	PRINTF ("\tsockAddr.family = 0x%04X", (uint16) (*sockAddrP).family);
 	PRINTF ("\tsockAddr.port = %s", PrvGetPortString (*sockAddrP));
 	PRINTF ("\tsockAddr.address = %s", PrvGetDottedIPString (*sockAddrP));
-	PRINTF ("\taddrLen = 0x%08X", (long) addrLen);
-	PRINTF ("\ttimeout = 0x%08X", (long) timeout);
+	PRINTF ("\taddrLen = 0x%08X", (int32) addrLen);
+	PRINTF ("\ttimeout = 0x%08X", (int32) timeout);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -1044,7 +1045,7 @@ void NetLibTailpatch::NetLibSocketBind (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 }
 
 
@@ -1082,12 +1083,12 @@ CallROMType NetLibHeadpatch::NetLibSocketConnect (void)
 	CALLED_GET_PARAM_REF (Err, errP, Marshal::kOutput);
 
 	// Examine the parameters
-	PRINTF ("\tsocket = 0x%08X", (long) socket);
+	PRINTF ("\tsocket = 0x%08X", (int32) socket);
 	PRINTF ("\tsockAddr.family = 0x%04X", (uint16) (*sockAddrP).family);
 	PRINTF ("\tsockAddr.port = %s", PrvGetPortString (*sockAddrP));
 	PRINTF ("\tsockAddr.address = %s", PrvGetDottedIPString (*sockAddrP));
-	PRINTF ("\taddrLen = 0x%08X", (long) addrLen);
-	PRINTF ("\ttimeout = 0x%08X", (long) timeout);
+	PRINTF ("\taddrLen = 0x%08X", (int32) addrLen);
+	PRINTF ("\ttimeout = 0x%08X", (int32) timeout);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -1135,7 +1136,7 @@ void NetLibTailpatch::NetLibSocketConnect (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 }
 
 
@@ -1170,9 +1171,9 @@ CallROMType NetLibHeadpatch::NetLibSocketListen (void)
 	CALLED_GET_PARAM_REF (Err, errP, Marshal::kOutput);
 
 	// Examine the parameters
-	PRINTF ("\tsocket = 0x%08X", (long) socket);
-	PRINTF ("\tqueueLen = 0x%08X", (long) queueLen);
-	PRINTF ("\ttimeout = 0x%08X", (long) timeout);
+	PRINTF ("\tsocket = 0x%08X", (int32) socket);
+	PRINTF ("\tqueueLen = 0x%08X", (int32) queueLen);
+	PRINTF ("\ttimeout = 0x%08X", (int32) timeout);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -1213,7 +1214,7 @@ void NetLibTailpatch::NetLibSocketListen (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 }
 
 
@@ -1251,9 +1252,9 @@ CallROMType NetLibHeadpatch::NetLibSocketAccept (void)
 	CALLED_GET_PARAM_REF (Err, errP, Marshal::kOutput);
 
 	// Examine the parameters
-	PRINTF ("\tsocket = 0x%08X", (long) socket);
-	PRINTF ("\taddrLen = 0x%08X", (long) *addrLenP);
-	PRINTF ("\ttimeout = 0x%08X", (long) timeout);
+	PRINTF ("\tsocket = 0x%08X", (int32) socket);
+	PRINTF ("\taddrLen = 0x%08X", (int32) *addrLenP);
+	PRINTF ("\ttimeout = 0x%08X", (int32) timeout);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -1302,11 +1303,11 @@ void NetLibTailpatch::NetLibSocketAccept (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 	PRINTF ("\tsockAddr.family = 0x%04X", (uint16) (*sockAddrP).family);
 	PRINTF ("\tsockAddr.port = %s", PrvGetPortString (*sockAddrP));
 	PRINTF ("\tsockAddr.address = %s", PrvGetDottedIPString (*sockAddrP));
-	PRINTF ("\taddrLen = 0x%08X", (long) *addrLenP);
+	PRINTF ("\taddrLen = 0x%08X", (int32) *addrLenP);
 }
 
 
@@ -1341,9 +1342,9 @@ CallROMType NetLibHeadpatch::NetLibSocketShutdown (void)
 	CALLED_GET_PARAM_REF (Err, errP, Marshal::kOutput);
 
 	// Examine the parameters
-	PRINTF ("\tsocket = 0x%08X", (long) socket);
-	PRINTF ("\tdirection = 0x%08X", (long) direction);
-	PRINTF ("\ttimeout = 0x%08X", (long) timeout);
+	PRINTF ("\tsocket = 0x%08X", (int32) socket);
+	PRINTF ("\tdirection = 0x%08X", (int32) direction);
+	PRINTF ("\ttimeout = 0x%08X", (int32) timeout);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -1384,7 +1385,7 @@ void NetLibTailpatch::NetLibSocketShutdown (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 }
 
 
@@ -1420,9 +1421,9 @@ CallROMType NetLibHeadpatch::NetLibSendPB (void)
 	CALLED_GET_PARAM_REF (Err, errP, Marshal::kOutput);
 
 	// Examine the parameters
-	PRINTF ("\tsocket = 0x%08X", (long) socket);
-	PRINTF ("\tflags = 0x%08X", (long) flags);
-	PRINTF ("\ttimeout = 0x%08X", (long) timeout);
+	PRINTF ("\tsocket = 0x%08X", (int32) socket);
+	PRINTF ("\tflags = 0x%08X", (int32) flags);
+	PRINTF ("\ttimeout = 0x%08X", (int32) timeout);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -1465,7 +1466,7 @@ void NetLibTailpatch::NetLibSendPB (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 }
 
 
@@ -1507,13 +1508,13 @@ CallROMType NetLibHeadpatch::NetLibSend (void)
 	CALLED_GET_PARAM_PTR (void, bufP, bufLen, Marshal::kInput);
 
 	// Examine the parameters
-	PRINTF ("\tsocket = 0x%08X", (long) socket);
-//	PRINTF ("\tbufP = 0x%08X", (long) bufP);
-	PRINTF ("\tbufLen = 0x%08X", (long) bufLen);
-	PRINTF ("\tflags = 0x%08X", (long) flags);
-//	PRINTF ("\ttoAddrP = 0x%08X", (long) toAddrP);
-	PRINTF ("\ttoLen = 0x%08X", (long) toLen);
-	PRINTF ("\ttimeout = 0x%08X", (long) timeout);
+	PRINTF ("\tsocket = 0x%08X", (int32) socket);
+//	PRINTF ("\tbufP = 0x%08X", (int32) bufP);
+	PRINTF ("\tbufLen = 0x%08X", (int32) bufLen);
+	PRINTF ("\tflags = 0x%08X", (int32) flags);
+//	PRINTF ("\ttoAddrP = 0x%08X", (int32) toAddrP);
+	PRINTF ("\ttoLen = 0x%08X", (int32) toLen);
+	PRINTF ("\ttimeout = 0x%08X", (int32) timeout);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -1563,7 +1564,7 @@ void NetLibTailpatch::NetLibSend (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 }
 
 
@@ -1599,10 +1600,10 @@ CallROMType NetLibHeadpatch::NetLibReceivePB (void)
 	CALLED_GET_PARAM_REF (Err, errP, Marshal::kOutput);
 
 	// Examine the parameters
-	PRINTF ("\tsocket = 0x%08X", (long) socket);
-//	PRINTF ("\tpbP = 0x%08X", (long) pbP);
-	PRINTF ("\tflags = 0x%08X", (long) flags);
-	PRINTF ("\ttimeout = 0x%08X", (long) timeout);
+	PRINTF ("\tsocket = 0x%08X", (int32) socket);
+//	PRINTF ("\tpbP = 0x%08X", (int32) pbP);
+	PRINTF ("\tflags = 0x%08X", (int32) flags);
+	PRINTF ("\ttimeout = 0x%08X", (int32) timeout);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -1645,7 +1646,7 @@ void NetLibTailpatch::NetLibReceivePB (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 }
 
 
@@ -1687,13 +1688,13 @@ CallROMType NetLibHeadpatch::NetLibReceive (void)
 	CALLED_GET_PARAM_PTR (void, bufP, bufLen, Marshal::kInOut);
 
 	// Examine the parameters
-	PRINTF ("\tsocket = 0x%08X", (long) socket);
-//	PRINTF ("\tbufP = 0x%08X", (long) bufP);
-	PRINTF ("\tbufLen = 0x%08X", (long) bufLen);
-	PRINTF ("\tflags = 0x%08X", (long) flags);
-//	PRINTF ("\tfromAddrP = 0x%08X", (long) fromAddrP);
-	PRINTF ("\tfromLen = 0x%08X", (long) *fromLenP);
-	PRINTF ("\ttimeout = 0x%08X", (long) timeout);
+	PRINTF ("\tsocket = 0x%08X", (int32) socket);
+//	PRINTF ("\tbufP = 0x%08X", (int32) bufP);
+	PRINTF ("\tbufLen = 0x%08X", (int32) bufLen);
+	PRINTF ("\tflags = 0x%08X", (int32) flags);
+//	PRINTF ("\tfromAddrP = 0x%08X", (int32) fromAddrP);
+	PRINTF ("\tfromLen = 0x%08X", (int32) *fromLenP);
+	PRINTF ("\ttimeout = 0x%08X", (int32) timeout);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -1744,9 +1745,9 @@ void NetLibTailpatch::NetLibReceive (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 
-	if (LogNetLibData () && (((long) *errP) == 0) && (result > 0))
+	if (LogNetLibData () && (((int32) *errP) == 0) && (result > 0))
 	{
 		LogAppendData (bufP, result, "Received Data");
 	}
@@ -1844,7 +1845,7 @@ void NetLibTailpatch::NetLibDmReceive (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 }
 
 
@@ -1883,11 +1884,11 @@ CallROMType NetLibHeadpatch::NetLibSelect (void)
 	CALLED_GET_PARAM_REF (Err, errP, Marshal::kOutput);
 
 	// Examine the parameters
-	PRINTF ("\twidth = 0x%08X", (long) width);
-	PRINTF ("\treadFDs = 0x%08X", (long) *readFDs);
-	PRINTF ("\twriteFDs = 0x%08X", (long) *writeFDs);
-	PRINTF ("\texceptFDs = 0x%08X", (long) *exceptFDs);
-	PRINTF ("\ttimeout = 0x%08X", (long) timeout);
+	PRINTF ("\twidth = 0x%08X", (int32) width);
+	PRINTF ("\treadFDs = 0x%08X", (int32) *readFDs);
+	PRINTF ("\twriteFDs = 0x%08X", (int32) *writeFDs);
+	PRINTF ("\texceptFDs = 0x%08X", (int32) *exceptFDs);
+	PRINTF ("\ttimeout = 0x%08X", (int32) timeout);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -1935,10 +1936,10 @@ void NetLibTailpatch::NetLibSelect (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
-	PRINTF ("\treadFDs = 0x%08X", (long) *readFDs);
-	PRINTF ("\twriteFDs = 0x%08X", (long) *writeFDs);
-	PRINTF ("\texceptFDs = 0x%08X", (long) *exceptFDs);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
+	PRINTF ("\treadFDs = 0x%08X", (int32) *readFDs);
+	PRINTF ("\twriteFDs = 0x%08X", (int32) *writeFDs);
+	PRINTF ("\texceptFDs = 0x%08X", (int32) *exceptFDs);
 }
 
 
@@ -2025,7 +2026,7 @@ CallROMType NetLibHeadpatch::NetLibGetHostByName (void)
 
 	// Examine the parameters
 	PRINTF ("\tnameP = %s", (Char*) nameP);
-	PRINTF ("\ttimeout = 0x%08X", (long) timeout);
+	PRINTF ("\ttimeout = 0x%08X", (int32) timeout);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -2034,7 +2035,8 @@ CallROMType NetLibHeadpatch::NetLibGetHostByName (void)
 		// Call the host function.
 		NetHostInfoPtr	p = Platform_NetLib::GetHostByName (libRefNum,
 			nameP, bufP, timeout, errP);
-		emuptr	result = p ? (emuptr) bufP + offsetof (NetHostInfoBufType, hostInfo) : EmMemNULL;
+		emuptr	result = p ? (emuptr) bufP +
+			EmAliasNetHostInfoBufType<PAS>::offsetof_hostInfo() : EmMemNULL;
 		PUT_RESULT_VAL (emuptr, result);
 
 		// Return any pass-by-reference values.
@@ -2081,7 +2083,7 @@ void NetLibTailpatch::NetLibGetHostByName (void)
 //	PRINTF ("\t\tname = %s", hostInfo.name);
 //	PRINTF ("\t\taddress = 0x%08X", hostInfo.address[0]);
 
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 }
 
 
@@ -2571,7 +2573,7 @@ CallROMType NetLibHeadpatch::NetLibGetHostByAddr (void)
 		// Call the host function.
 		NetHostInfoPtr	p	= Platform_NetLib::GetHostByAddr (libRefNum,
 			(UInt8*) addrP, len, type, bufP, timeout, errP);
-		emuptr	result = p ? (emuptr) bufP + offsetof (NetHostInfoBufType, hostInfo) : EmMemNULL;
+		emuptr	result = p ? (emuptr) bufP + EmAliasNetHostInfoBufType<PAS>::offsetof_hostInfo() : EmMemNULL;
 		PUT_RESULT_VAL (emuptr, result);
 
 		// Return any pass-by-reference values.
@@ -2614,7 +2616,7 @@ void NetLibTailpatch::NetLibGetHostByAddr (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 }
 
 
@@ -2654,7 +2656,7 @@ CallROMType NetLibHeadpatch::NetLibGetServByName (void)
 	// Examine the parameters
 	PRINTF ("\tservNameP = %s", (Char*) servNameP);
 	PRINTF ("\tprotoNameP = %s", (Char*) protoNameP);
-	PRINTF ("\ttimeout = 0x%08X", (long) timeout);
+	PRINTF ("\ttimeout = 0x%08X", (int32) timeout);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -2663,7 +2665,8 @@ CallROMType NetLibHeadpatch::NetLibGetServByName (void)
 		// Call the host function.
 		NetServInfoPtr	p	= Platform_NetLib::GetServByName (libRefNum,
 			servNameP, protoNameP, bufP, timeout, errP);
-		emuptr	result = p ? (emuptr) bufP + offsetof (NetServInfoBufType, servInfo) : EmMemNULL;
+		emuptr	result = p ? (emuptr) bufP
+			+ EmAliasNetServInfoBufType<PAS>::offsetof_servInfo() : EmMemNULL;
 		PUT_RESULT_VAL (emuptr, result);
 
 		// Return any pass-by-reference values.
@@ -2715,7 +2718,7 @@ void NetLibTailpatch::NetLibGetServByName (void)
 //	PRINTF ("\t\tport = 0x%04X", (UInt16) servInfo.servInfo.port);
 //	PRINTF ("\t\tprotoName = %s", servInfo.protoName);
 
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 }
 
 
@@ -2757,10 +2760,10 @@ CallROMType NetLibHeadpatch::NetLibSocketAddr (void)
 	CALLED_GET_PARAM_REF (Err, errP, Marshal::kOutput);
 
 	// Examine the parameters
-	PRINTF ("\tsocket = 0x%08X", (long) socket);
-	PRINTF ("\tlocAddrLen = 0x%08X", (long) *locAddrLenP);
-	PRINTF ("\tremAddrLen = 0x%08X", (long) *remAddrLenP);
-	PRINTF ("\ttimeout = 0x%08X", (long) timeout);
+	PRINTF ("\tsocket = 0x%08X", (int32) socket);
+	PRINTF ("\tlocAddrLen = 0x%08X", (int32) *locAddrLenP);
+	PRINTF ("\tremAddrLen = 0x%08X", (int32) *remAddrLenP);
+	PRINTF ("\ttimeout = 0x%08X", (int32) timeout);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -2815,15 +2818,15 @@ void NetLibTailpatch::NetLibSocketAddr (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 	PRINTF ("\tlocAddr.family = 0x%04X", (uint16) (*locAddrP).family);
 	PRINTF ("\tlocAddr.port = %s", PrvGetPortString (*locAddrP));
 	PRINTF ("\tlocAddr.address = %s", PrvGetDottedIPString (*locAddrP));
-	PRINTF ("\tlocAddrLen = 0x%08X", (long) *locAddrLenP);
+	PRINTF ("\tlocAddrLen = 0x%08X", (int32) *locAddrLenP);
 	PRINTF ("\tremAddr.family = 0x%04X", (uint16) (*remAddrP).family);
 	PRINTF ("\tremAddr.port = %s", PrvGetPortString (*remAddrP));
 	PRINTF ("\tremAddr.address = %s", PrvGetDottedIPString (*remAddrP));
-	PRINTF ("\tremAddrLen = 0x%08X", (long) *remAddrLenP);
+	PRINTF ("\tremAddrLen = 0x%08X", (int32) *remAddrLenP);
 }
 
 
@@ -2936,7 +2939,7 @@ void NetLibTailpatch::NetLibGetMailExchangeByName (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (long) *errP);
+	PRINTF ("\t*errP = %s (0x%04X)", PrvGetErrorString (*errP), (int32) *errP);
 }
 
 
@@ -2998,7 +3001,7 @@ void NetLibTailpatch::NetLibOpenCount (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\tcount = 0x%08X", (long) *countP);
+	PRINTF ("\tcount = 0x%08X", (int32) *countP);
 }
 
 
@@ -3245,7 +3248,7 @@ CallROMType NetLibHeadpatch::NetLibConnectionRefresh (void)
 	CALLED_GET_PARAM_REF (UInt16, netIFErrP, Marshal::kOutput);
 
 	// Examine the parameters
-	PRINTF ("\trefresh = 0x%08X", (long) refresh);
+	PRINTF ("\trefresh = 0x%08X", (int32) refresh);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -3286,8 +3289,8 @@ void NetLibTailpatch::NetLibConnectionRefresh (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*netIFErrP = %s (0x%04X)", PrvGetErrorString (*netIFErrP), (long) *netIFErrP);
-	PRINTF ("\t*allInterfacesUpP = 0x%08X", (long) *allInterfacesUpP);
+	PRINTF ("\t*netIFErrP = %s (0x%04X)", PrvGetErrorString (*netIFErrP), (int32) *netIFErrP);
+	PRINTF ("\t*allInterfacesUpP = 0x%08X", (int32) *allInterfacesUpP);
 }
 
 
@@ -3321,8 +3324,8 @@ CallROMType NetLibHeadpatch::NetLibOpenConfig (void)
 	CALLED_GET_PARAM_REF (UInt16, netIFErrP, Marshal::kOutput);
 
 	// Examine the parameters
-	PRINTF ("\tconfigIndex = 0x%08X", (long) configIndex);
-	PRINTF ("\topenFlags = 0x%08X", (long) openFlags);
+	PRINTF ("\tconfigIndex = 0x%08X", (int32) configIndex);
+	PRINTF ("\topenFlags = 0x%08X", (int32) openFlags);
 
 	if (Platform_NetLib::Redirecting ())
 	{
@@ -3362,7 +3365,7 @@ void NetLibTailpatch::NetLibOpenConfig (void)
 
 	// Examine the results.
 	PRINTF ("\tResult = 0x%08X", result);
-	PRINTF ("\t*netIFErrP = %s (0x%04X)", PrvGetErrorString (*netIFErrP), (long) *netIFErrP);
+	PRINTF ("\t*netIFErrP = %s (0x%04X)", PrvGetErrorString (*netIFErrP), (int32) *netIFErrP);
 }
 
 
@@ -3915,11 +3918,11 @@ const char* PrvGetOptString (NetSocketOptLevelEnum level, NetSocketOptEnum opt)
 const char* PrvGetDottedIPString (const NetSocketAddrType& addr)
 {
 	NetSocketAddrINType	ipAddr = (const NetSocketAddrINType&) addr;
-	long				tempIP = ntohl (ipAddr.addr);
+	int32				tempIP = ntohl (ipAddr.addr);
 
 	static char			dottedIPStr[20];
 
-	sprintf (dottedIPStr, "%ld.%ld.%ld.%ld",
+	sprintf (dottedIPStr, "%d.%d.%d.%d",
 		((tempIP >> 24) & 0xFF),
 		((tempIP >> 16) & 0xFF),
 		((tempIP >> 8) & 0xFF),

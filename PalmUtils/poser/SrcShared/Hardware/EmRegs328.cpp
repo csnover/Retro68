@@ -141,13 +141,13 @@ const HwrM68328Type	kInitial68328RegisterValues =
 	0x2400,		//	Word		pllControl;					// $200: PLL Control Register
 	0x0123,		//	Word		pllFreqSel;					// $202: PLL Frequency Select Register
 	0x0000,		//	Word		pllTest;					// $204: PLL Test Register
-	{ 0 },		//	Byte										__filler44;
+	0,			//	Byte										__filler44;
 	0x1F,		//	Byte		pwrControl;					// $207: Power Control Register
 
 	{ 0 },		//	Byte										___filler3[0x300-0x208];
 
 	0x00,		//	Byte		intVector;					// $300: Interrupt Vector Register
-	{ 0 },		//	Byte										___filler4;
+	0,			//	Byte										___filler4;
 	0x0000,		//	Word		intControl;					// $302: Interrupt Control Register
 	0x00FF,		//	Word		intMaskHi;					// $304: Interrupt Mask Register/HIGH word
 	0xFFFF,		//	Word		intMaskLo;					// $306: Interrupt Mask Register/LOW word
@@ -162,21 +162,21 @@ const HwrM68328Type	kInitial68328RegisterValues =
 
 	0x00,		//	Byte		portADir;					// $400: Port A Direction Register
 	0x00,		//	Byte		portAData;					// $401: Port A Data Register
-	{ 0 },		//	Byte										___filler5;
+	0,			//	Byte										___filler5;
 	0x00,		//	Byte		portASelect;				// $403: Port A Select Register
 
 	{ 0 },		//	Byte										___filler6[4];
 
 	0x00,		//	Byte		portBDir;					// $408: Port B Direction Register
 	0x00,		//	Byte		portBData;					// $409: Port B Data Register
-	{ 0 },		//	Byte										___filler7;
+	0,			//	Byte										___filler7;
 	0x00,		//	Byte		portBSelect;				// $40B: Port B Select Register
 
 	{ 0 },		//	Byte										___filler8[4];
 
 	0x00,		//	Byte		portCDir;					// $410: Port C Direction Register
 	0x00,		//	Byte		portCData;					// $411: Port C Data Register
-	{ 0 },		//	Byte										___filler9;
+	0,			//	Byte										___filler9;
 	0x00,		//	Byte		portCSelect;				// $413: Port C Select Register
 
 	{ 0 },		//	Byte										___filler10[4];
@@ -184,10 +184,10 @@ const HwrM68328Type	kInitial68328RegisterValues =
 	0x00,		//	Byte		portDDir;					// $418: Port D Direction Register
 	0x00,		//	Byte		portDData;					// $419: Port D Data Register
 	0xFF,		//	Byte		portDPullupEn;				// $41A: Port D Pull-up Enable
-	{ 0 },		//	Byte										___filler11;
+	0,			//	Byte										___filler11;
 	0x00,		//	Byte		portDPolarity;				// $41C: Port D Polarity Register
 	0x00,		//	Byte		portDIntReqEn;				// $41D: Port D Interrupt Request Enable
-	{ 0 },		//	Byte										___filler12;
+	0,			//	Byte										___filler12;
 	0x00,		//	Byte		portDIntEdge;				// $41F: Port D IRQ Edge Register
 
 	0x00,		//	Byte		portEDir;					// $420: Port E Direction Register
@@ -213,7 +213,7 @@ const HwrM68328Type	kInitial68328RegisterValues =
 
 	0x00,		//	Byte		portJDir;					// $438: Port J Direction Register
 	0x00,		//	Byte		portJData;					// $439: Port J Data Register
-	{ 0 },		//	Byte										___filler19;
+	0,			//	Byte										___filler19;
 	0x00,		//	Byte		portJSelect;				// $43B: Port J Select Register
 
 	{ 0 },		//	Byte										___filler19a[4];
@@ -279,7 +279,7 @@ const HwrM68328Type	kInitial68328RegisterValues =
 	{ 0 },		//	Byte										___filler28[0xA00-0x90A];
 
 	0x00000000,	//	DWord		lcdStartAddr;				// $A00: Screen Starting Address Register
-	{ 0 },		//	Byte										___filler29;
+	0,			//	Byte										___filler29;
 	0xFF,		//	Byte		lcdPageWidth;				// $A05: Virtual Page Width Register
 	{ 0 },		//	Byte										___filler30[2];
 	0x03FF,		//	Word		lcdScreenWidth;				// $A08: Screen Width Register
@@ -288,7 +288,7 @@ const HwrM68328Type	kInitial68328RegisterValues =
 	0x0000,		//	Word		lcdCursorXPos;				// $A18: Cursor X Position
 	0x0000,		//	Word		lcdCursorYPos;				// $A1A:	Cursor Y Position
 	0x0101,		//	Word		lcdCursorWidthHeight;		// $A1C: Cursor Width and Height
-	{ 0 },		//	Byte										___filler32;
+	0,			//	Byte										___filler32;
 	0x7F,		//	Byte		lcdBlinkControl;			// $A1F: Blink Control Register
 	0x00,		//	Byte		lcdPanelControl;			// $A20: Panel Interface Control Register
 	0x00,		//	Byte		lcdPolarity;				// $A21: Polarity Config Register
@@ -410,7 +410,7 @@ void EmRegs328::Save (SessionFile& f)
 	f.WriteHwrDBallType (f68328Regs);
 	f.FixBug (SessionFile::kBugByteswappedStructs);
 
-	const long	kCurrentVersion = 4;
+	const int32	kCurrentVersion = 4;
 
 	Chunk			chunk;
 	EmStreamChunk	s (chunk);
@@ -485,7 +485,7 @@ void EmRegs328::Load (SessionFile& f)
 	Chunk		chunk;
 	if (f.ReadDBallState (chunk))
 	{
-		long			version;
+		int32			version;
 		EmStreamChunk	s (chunk);
 
 		s >> version;
@@ -922,16 +922,16 @@ void EmRegs328::CycleSlowly (Bool sleeping)
 	{
 		uint32	rtcAlarm = READ_REGISTER (rtcAlarm);
 
-		long	almHour	 = (rtcAlarm & hwr328RTCAlarmHoursMask) >> hwr328RTCAlarmHoursOffset;
-		long	almMin	 = (rtcAlarm & hwr328RTCAlarmMinutesMask) >> hwr328RTCAlarmMinutesOffset;
-		long	almSec	 = (rtcAlarm & hwr328RTCAlarmSecondsMask) >> hwr328RTCAlarmSecondsOffset;
-		long	almInSeconds = (almHour * 60 * 60) + (almMin * 60) + almSec;
+		int32	almHour	 = (rtcAlarm & hwr328RTCAlarmHoursMask) >> hwr328RTCAlarmHoursOffset;
+		int32	almMin	 = (rtcAlarm & hwr328RTCAlarmMinutesMask) >> hwr328RTCAlarmMinutesOffset;
+		int32	almSec	 = (rtcAlarm & hwr328RTCAlarmSecondsMask) >> hwr328RTCAlarmSecondsOffset;
+		int32	almInSeconds = (almHour * 60 * 60) + (almMin * 60) + almSec;
 
-		long	nowHour;
-		long	nowMin;
-		long	nowSec;
+		int32	nowHour;
+		int32	nowMin;
+		int32	nowSec;
 		::GetHostTime (&nowHour, &nowMin, &nowSec);
-		long	nowInSeconds = (nowHour * 60 * 60) + (nowMin * 60) + nowSec;
+		int32	nowInSeconds = (nowHour * 60 * 60) + (nowMin * 60) + nowSec;
 
 		if (almInSeconds <= nowInSeconds)
 		{
@@ -1105,8 +1105,8 @@ void EmRegs328::GetLCDScanlines (EmScreenUpdateInfo& info)
 	info.fFirstLine		= (info.fScreenLow - baseAddr) / rowBytes;
 	info.fLastLine		= (info.fScreenHigh - baseAddr - 1) / rowBytes + 1;
 
-	long	firstLineOffset	= info.fFirstLine * rowBytes;
-	long	lastLineOffset	= info.fLastLine * rowBytes;
+	int32	firstLineOffset	= info.fFirstLine * rowBytes;
+	int32	lastLineOffset	= info.fLastLine * rowBytes;
 
 	EmMem_memcpy (
 		(void*) ((uint8*) info.fImage.GetBits () + firstLineOffset),
@@ -1612,7 +1612,7 @@ uint32 EmRegs328::rtcHourMinSecRead (emuptr address, int size)
 {
 	// Get the desktop machine's time.
 
-	long	hour, min, sec;
+	int32	hour, min, sec;
 
 	if (Hordes::IsOn ())
 	{
@@ -2457,7 +2457,7 @@ UInt8 EmRegs328::GetHardwareID (void)
 	EmAssert (gSession);
 
 	EmDevice	device		= gSession->GetDevice ();
-	long		miscFlags	= device.HardwareID ();
+	int32		miscFlags	= device.HardwareID ();
 
 	// Reverse map the following:
 //	GHwrMiscFlags = 0;
@@ -2517,12 +2517,12 @@ void EmRegs328::UpdateUARTInterrupts (const EmUARTDragonball::State& state)
 {
 	// Generate the appropriate interrupts.
 
-	if (state.RX_FULL_ENABLE	&& state.RX_FIFO_FULL	||
-		state.RX_HALF_ENABLE	&& state.RX_FIFO_HALF	||
-		state.RX_RDY_ENABLE		&& state.DATA_READY		||
-		state.TX_EMPTY_ENABLE	&& state.TX_FIFO_EMPTY	||
-		state.TX_HALF_ENABLE	&& state.TX_FIFO_HALF	||
-		state.TX_AVAIL_ENABLE	&& state.TX_AVAIL)
+	if ((state.RX_FULL_ENABLE	&& state.RX_FIFO_FULL)	||
+		(state.RX_HALF_ENABLE	&& state.RX_FIFO_HALF)	||
+		(state.RX_RDY_ENABLE	&& state.DATA_READY)	||
+		(state.TX_EMPTY_ENABLE	&& state.TX_FIFO_EMPTY)	||
+		(state.TX_HALF_ENABLE	&& state.TX_FIFO_HALF)	||
+		(state.TX_AVAIL_ENABLE	&& state.TX_AVAIL))
 	{
 		// Set the UART interrupt.
 
@@ -2731,7 +2731,7 @@ void EmRegs328::UnmarshalUARTState (const EmUARTDragonball::State& state)
 
 int EmRegs328::GetPort (emuptr address)
 {
-	const long	MASK = 0x00000FF8;
+	const int32	MASK = 0x00000FF8;
 
 	switch (address & MASK)
 	{
@@ -2780,13 +2780,13 @@ void EmRegs328::PrvGetPalette (RGBList& thePalette)
 			background = ::SkinGetBackgroundColor ();
 	}
 
-	long	br = ((long) background.fRed);
-	long	bg = ((long) background.fGreen);
-	long	bb = ((long) background.fBlue);
+	int32	br = ((int32) background.fRed);
+	int32	bg = ((int32) background.fGreen);
+	int32	bb = ((int32) background.fBlue);
 
-	long	dr = ((long) foreground.fRed) - ((long) background.fRed);
-	long	dg = ((long) foreground.fGreen) - ((long) background.fGreen);
-	long	db = ((long) foreground.fBlue) - ((long) background.fBlue);
+	int32	dr = ((int32) foreground.fRed) - ((int32) background.fRed);
+	int32	dg = ((int32) foreground.fGreen) - ((int32) background.fGreen);
+	int32	db = ((int32) foreground.fBlue) - ((int32) background.fBlue);
 
 	int32	bpp			= 1 << (READ_REGISTER (lcdPanelControl) & 0x01);
 	int32	numColors	= 1 << bpp;

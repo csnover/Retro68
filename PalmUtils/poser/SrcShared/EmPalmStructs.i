@@ -2374,13 +2374,25 @@
 // ========================================
 
 #define FOR_SysLibTblEntryType_STRUCT(DO_TO_STRUCT)								\
-	DO_TO_STRUCT (SysLibTblEntryType, 10, FOR_SysLibTblEntryType_FIELDS)
+	DO_TO_STRUCT (SysLibTblEntryType, 16, FOR_SysLibTblEntryType_FIELDS)
 
 #define FOR_SysLibTblEntryType_FIELDS(DO_TO_FIELD)								\
 	DO_TO_FIELD (0,		emuptr,						dispatchTblP)				\
 	DO_TO_FIELD (4,		emuptr,						globalsP)					\
 	DO_TO_FIELD (8,		LocalID,					dbID)						\
 	DO_TO_FIELD (12,	emuptr,						codeRscH)					\
+
+
+// ========================================
+// ===== SysLibTblEntryTypeV10 =====
+// ========================================
+
+#define FOR_SysLibTblEntryTypeV10_STRUCT(DO_TO_STRUCT)							\
+	DO_TO_STRUCT (SysLibTblEntryTypeV10, 8, FOR_SysLibTblEntryTypeV10_FIELDS)
+
+#define FOR_SysLibTblEntryTypeV10_FIELDS(DO_TO_FIELD)							\
+	DO_TO_FIELD (0,		emuptr,						dispatchTblP)				\
+	DO_TO_FIELD (4,		emuptr,						globalsP)					\
 
 
 // ========================================
@@ -2397,6 +2409,37 @@
 	DO_TO_FIELD (6,		kernel_info_task,			task)						\
 	DO_TO_FIELD (6,		kernel_info_semaphore,		semaphore)					\
 	DO_TO_FIELD (6,		kernel_info_timer,			timer)						\
+
+
+// ========================================
+// ===== SysEvtMgrGlobalsType =====
+// ========================================
+
+#define FOR_SysEvtMgrGlobalsType_STRUCT(DO_TO_STRUCT)							\
+	DO_TO_STRUCT (SysEvtMgrGlobalsType, 40, FOR_SysEvtMgrGlobalsType_FIELDS)
+
+#define FOR_SysEvtMgrGlobalsType_FIELDS(DO_TO_FIELD)							\
+	DO_TO_FIELD (0,		Boolean,					sendNullEvent)				\
+	DO_TO_FIELD (1,		Boolean,					enableGraffiti)				\
+	DO_TO_FIELD (2,		Boolean,					enableSoftKeys)				\
+	DO_TO_FIELD (3,		Boolean,					removeTopStroke)			\
+	DO_TO_FIELD (4,		emuptr,						penQP)						\
+	DO_TO_FIELD (8,		UInt16,						penQStrokesRemoved)			\
+	DO_TO_FIELD (10,	emuptr,						keyQP)						\
+	DO_TO_FIELD (14,	RectangleType,				writingR)					\
+	DO_TO_FIELD (22,	UInt16,						appAreaBottom)				\
+	DO_TO_FIELD (24,	Int16,						penX)						\
+	DO_TO_FIELD (26,	Int16,						penY)						\
+	DO_TO_FIELD (28,	Boolean,					penDown)					\
+	DO_TO_FIELD (29,	Boolean,					displayingBatteryAlert)		\
+	DO_TO_FIELD (30,	Int16,						lastPenX)					\
+	DO_TO_FIELD (32,	Int16,						lastPenY)					\
+	DO_TO_FIELD (34,	Boolean,					lastPenDown)				\
+	DO_TO_FIELD (35,	Boolean,					needRemoteScrUpdate)		\
+	DO_TO_FIELD (36,	UInt8,						gremlinsFlags)				\
+	DO_TO_FIELD (37,	Boolean,					idle)						\
+	DO_TO_FIELD (38,	Boolean,					gotUserEvent)				\
+	DO_TO_FIELD (39,	UInt8,						reserved)					\
 
 
 // ========================================

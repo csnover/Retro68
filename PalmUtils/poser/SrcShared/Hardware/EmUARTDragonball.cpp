@@ -627,13 +627,12 @@ void EmUARTDragonball::TransmitTxFIFO (EmTransport* transport)
 	{
 		// Write out any outgoing bytes.
 
-		ErrCode	err = errNone;
 		char	buffer[kMaxFifoSize];
-		long	spaceInTxFIFO = fTxFIFO.GetUsed ();
+		int32	spaceInTxFIFO = fTxFIFO.GetUsed ();
 
 		if (spaceInTxFIFO > 0)
 		{
-			for (long ii = 0; ii < spaceInTxFIFO; ++ii)
+			for (int32 ii = 0; ii < spaceInTxFIFO; ++ii)
 			{
 				buffer[ii] = fTxFIFO.Get ();
 			}
@@ -642,8 +641,6 @@ void EmUARTDragonball::TransmitTxFIFO (EmTransport* transport)
 				LogAppendData (buffer, spaceInTxFIFO, "UART: Transmitted data:");
 			else
 				PRINTF ("UART: Transmitted %ld serial bytes.", spaceInTxFIFO);
-
-			err = transport->Write (spaceInTxFIFO, buffer);
 		}
 	}
 }
@@ -673,11 +670,11 @@ void EmUARTDragonball::ReceiveRxFIFO (EmTransport* transport)
 
 		ErrCode	err = errNone;
 		char	buffer[kMaxFifoSize];
-		long	spaceInRxFIFO = fRxFIFO.GetFree ();
+		int32	spaceInRxFIFO = fRxFIFO.GetFree ();
 
 		// See how many bytes are waiting.
 
-		long	bytesToBuffer = transport->BytesInBuffer (fRxFIFO.GetMaxSize ());
+		int32	bytesToBuffer = transport->BytesInBuffer (fRxFIFO.GetMaxSize ());
 
 		// See if we have that much room in the FIFO. If not, limit our read
 		// to that many bytes.
@@ -724,7 +721,7 @@ void EmUARTDragonball::ReceiveRxFIFO (EmTransport* transport)
 				else
 					PRINTF ("UART: Received %ld serial bytes.", bytesToBuffer);
 
-				for (long ii = 0; ii < bytesToBuffer; ++ii)
+				for (int32 ii = 0; ii < bytesToBuffer; ++ii)
 				{
 					fRxFIFO.Put (buffer[ii]);
 				}	// end loop that puts bytes into FIFO

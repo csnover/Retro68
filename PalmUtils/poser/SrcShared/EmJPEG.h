@@ -52,7 +52,7 @@ class EmJPEGDecompressSource : public jpeg_source_mgr
 	private:
 		virtual void			InitSource			(j_decompress_ptr cinfo) = 0;
 		virtual boolean			FillInputBuffer		(j_decompress_ptr cinfo) = 0;
-		virtual void			SkipInputData		(j_decompress_ptr cinfo, long num_bytes) = 0;
+		virtual void			SkipInputData		(j_decompress_ptr cinfo, int32 num_bytes) = 0;
 		virtual void			TermSource			(j_decompress_ptr cinfo) = 0;
 
 	private:
@@ -68,18 +68,18 @@ class EmJPEGDecompressSource : public jpeg_source_mgr
 class EmJPEGDecompressMemSource : public EmJPEGDecompressSource
 {
 	public:
-								EmJPEGDecompressMemSource	(const void* data, long len);
+								EmJPEGDecompressMemSource	(const void* data, int32 len);
 		virtual					~EmJPEGDecompressMemSource	(void);
 
 	private:
 		virtual void			InitSource			(j_decompress_ptr cinfo);
 		virtual boolean			FillInputBuffer		(j_decompress_ptr cinfo);
-		virtual void			SkipInputData		(j_decompress_ptr cinfo, long num_bytes);
+		virtual void			SkipInputData		(j_decompress_ptr cinfo, int32 num_bytes);
 		virtual void			TermSource			(j_decompress_ptr cinfo);
 
 	private:
 		const void*				fData;
-		long					fDataLen;
+		int32					fDataLen;
 };
 
 
@@ -94,7 +94,7 @@ class EmJPEGDecompressStreamSource : public EmJPEGDecompressSource
 	private:
 		virtual void			InitSource			(j_decompress_ptr cinfo);
 		virtual boolean			FillInputBuffer		(j_decompress_ptr cinfo);
-		virtual void			SkipInputData		(j_decompress_ptr cinfo, long num_bytes);
+		virtual void			SkipInputData		(j_decompress_ptr cinfo, int32 num_bytes);
 		virtual void			TermSource			(j_decompress_ptr cinfo);
 
 	private:
