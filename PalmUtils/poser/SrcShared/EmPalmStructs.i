@@ -3674,6 +3674,19 @@
 	DO_TO_FIELD (3,		UInt8,						___filler1)					\
 
 
+// ========================================
+// ===== UsbHwrISP1161Type =====
+// ========================================
+
+#define FOR_UsbHwrISP1161Type_STRUCT(DO_TO_STRUCT)								\
+	DO_TO_STRUCT (UsbHwrISP1161Type, 8, FOR_UsbHwrISP1161Type_FIELDS)
+
+#define FOR_UsbHwrISP1161Type_FIELDS(DO_TO_FIELD)								\
+	DO_TO_FIELD (0,		UInt16,						hostData)					\
+	DO_TO_FIELD (2,		UInt16,						hostCommand)				\
+	DO_TO_FIELD (4,		UInt16,						deviceData)					\
+	DO_TO_FIELD (6,		UInt16,						deviceCommand)				\
+
 
 // ========================================
 // ===== WindowFlagsType =====

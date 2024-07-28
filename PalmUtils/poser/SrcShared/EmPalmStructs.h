@@ -845,6 +845,7 @@ typedef uint8	ScrOperation;
 	FOR_M68KRegsType_STRUCT (DO_TO_STRUCT)						\
 																\
 	FOR_UsbHwrType_STRUCT (DO_TO_STRUCT)						\
+	FOR_UsbHwrISP1161Type_STRUCT (DO_TO_STRUCT)					\
 	FOR_HwrBatCmdReadType_STRUCT (DO_TO_STRUCT)					\
 	FOR_HwrJerryPLDType_STRUCT (DO_TO_STRUCT)					\
 	FOR_HwrLAPType_STRUCT (DO_TO_STRUCT)						\

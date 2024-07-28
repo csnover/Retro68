@@ -1021,6 +1021,9 @@ void EmPatchMgr::PuppetString (CallROMType& callROM, Bool& clearTimeout)
 
 		else if (gSession->HasKeyEvent ())
 		{
+			if (gSession->fHasSTMicroSlave && !gSession->PeekKeyEvent ().fControlDown)
+				return;
+
 			EmKeyEvent	event = gSession->GetKeyEvent ();
 
 			UInt16	modifiers = 0;

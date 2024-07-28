@@ -18,9 +18,11 @@
 #include "EmRegs.h"				// EmRegs
 #include "EmStructs.h"			// RGBList
 #include "EmUARTDragonball.h"	// EmUARTDragonball::State
+#include "PalmTypes.h"
 
 class EmScreenUpdateInfo;
 class EmSPISlave;
+class SessionFile;
 
 
 class EmRegsVZ : public EmRegs, public EmHALHandler
@@ -110,7 +112,7 @@ class EmRegsVZ : public EmRegs, public EmHALHandler
 
 	protected:
 		void					UpdateInterrupts		(void);
-		void					UpdatePortDInterrupts	(void);
+		virtual void			UpdatePortDInterrupts	(void);
 		void					UpdateRTCInterrupts		(void);
 
 	protected:

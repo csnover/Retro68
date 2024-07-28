@@ -127,7 +127,9 @@ EmSession::EmSession (void) :
 	fKeyQueue (),
 	fPenQueue (),
 	fLastPenEvent (EmPoint (-1, -1), false),
-	fBootKeys (0)
+	fBootKeys (0),
+	fHasSTMicroSlave (false),
+	fHasVZAlphaSmart (false)
 {
 	fSuspendState.fAllCounters = 0;
 

@@ -4058,6 +4058,9 @@ static void PrvSearchForCodeChunk (emuptr pc)
 
 Bool MetaMemory::InRAMOSComponent (emuptr pc)
 {
+	if (gSession->fHasVZAlphaSmart)
+		return true;
+
 	// If any access is OK, return true.
 
 	if (CEnableFullAccess::AccessOK ())

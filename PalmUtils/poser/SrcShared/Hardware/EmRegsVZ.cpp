@@ -1492,7 +1492,7 @@ void EmRegsVZ::PortDataChanged (int port, uint8, uint8 newValue)
 
 		// Set the new interrupt state.
 
-		EmRegsVZ::UpdatePortDInterrupts ();
+		UpdatePortDInterrupts ();
 	}
 }
 
@@ -1999,7 +1999,7 @@ void EmRegsVZ::portDIntReqEnWrite (emuptr address, int size, uint32 value)
 
 	// Set the new interrupt state.
 
-	EmRegsVZ::UpdatePortDInterrupts ();
+	UpdatePortDInterrupts ();
 }
 
 
@@ -2376,7 +2376,7 @@ void EmRegsVZ::ButtonEvent (SkinElementType button, Bool buttonIsDown)
 
 	// Set the new interrupt state.
 
-	EmRegsVZ::UpdatePortDInterrupts ();
+	UpdatePortDInterrupts ();
 }
 
 

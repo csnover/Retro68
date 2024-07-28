@@ -104,7 +104,32 @@ static const char* kElementNames[] =
 
 	"Touchscreen",
 	"LCD",
-	"LED"
+	"LED",
+	"F1_KEY",
+	"F2_KEY",
+	"F3_KEY",
+	"F4_KEY",
+	"F5_KEY",
+	"F6_KEY",
+	"F7_KEY",
+	"F8_KEY",
+	"F9_KEY",
+	"F10_KEY",
+	"F11_KEY",
+	"F12_KEY",
+	"F13_KEY",
+	"F14_KEY",
+	"F15_KEY",
+	"F16_KEY",
+	"CONTROL_KEY",
+	"ALT_LEFT_KEY",
+	"COMMAND_KEY",
+	"CLEAR_MODIFIERS_KEY",
+	"PC_DELETE_KEY",
+	"SHIFT_RIGHT_KEY",
+	"SHIFT_LEFT_KEY",
+	"CAPS_LOCK_KEY",
+	"ESCAPE_KEY",
 };
 
 

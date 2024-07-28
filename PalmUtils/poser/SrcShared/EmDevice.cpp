@@ -95,6 +95,7 @@
 #include "EmRegsVZVisorPlatinum.h"
 #include "EmRegsVZVisorEdge.h"
 #include "EmRegsVZTemp.h"
+#include "EmRegsVZAlphaSmart.h"
 
 #include "EmRegsASICSymbol1700.h"
 #include "EmRegsFrameBuffer.h"
@@ -103,6 +104,7 @@
 #include "EmRegsSED1376.h"
 #include "EmRegsUSBPhilipsPDIUSBD12.h"
 #include "EmRegsUSBVisor.h"
+#include "EmRegsUSBISP_1161.h"
 
 #include "EmTRG.h"
 
@@ -140,6 +142,7 @@ enum	// DeviceType
 	kDeviceVisorPrism,
 	kDeviceVisorPlatinum,
 	kDeviceVisorEdge,
+	kDeviceAlphaSmart,
 	kDeviceLast
 };
 
@@ -392,6 +395,14 @@ static const DeviceInfo kDeviceInfo[] =
 		kDeviceVisorEdge, "Visor Edge",
 		{ "VisorEdge" },
 		kSupports68VZ328, 8192, halModelIDVisorEdge, 0
+	},
+
+	// ===== AlphaSmart Devices =====
+	{
+		kDeviceAlphaSmart, "AlphaSmart Dana",
+		{ "DanaDevice" },
+		kSupports68VZ328, 8192, hwrMiscFlagIDNone, hwrMiscFlagExtSubIDNone,
+		{{ 'asmt', 'Dana' }}
 	}
 };
 
@@ -1106,6 +1117,11 @@ void EmDevice::CreateRegs (void) const
 		case kDeviceVisorEdge:
 			EmBankRegs::AddSubBank (new EmRegsVZVisorEdge);
 			EmBankRegs::AddSubBank (new EmRegsUSBVisor);
+			break;
+
+		case kDeviceAlphaSmart:
+			EmBankRegs::AddSubBank (new EmRegsVZAlphaSmart);
+			EmBankRegs::AddSubBank (new EmRegsUSBISP_1161 (0x1f000000));
 			break;
 
 		default:

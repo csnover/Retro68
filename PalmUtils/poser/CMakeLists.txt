@@ -328,12 +328,16 @@ add_executable(pose
     SrcShared/Hardware/EmRegsSZPrv.h
     SrcShared/Hardware/EmRegsSZTemp.cpp
     SrcShared/Hardware/EmRegsSZTemp.h
+    SrcShared/Hardware/EmRegsUSBISP_1161.cpp
+    SrcShared/Hardware/EmRegsUSBISP_1161.h
     SrcShared/Hardware/EmRegsUSBPhilipsPDIUSBD12.cpp
     SrcShared/Hardware/EmRegsUSBPhilipsPDIUSBD12.h
     SrcShared/Hardware/EmRegsUSBVisor.cpp
     SrcShared/Hardware/EmRegsUSBVisor.h
     SrcShared/Hardware/EmRegsVZ.cpp
     SrcShared/Hardware/EmRegsVZ.h
+    SrcShared/Hardware/EmRegsVZAlphaSmart.cpp
+    SrcShared/Hardware/EmRegsVZAlphaSmart.h
     SrcShared/Hardware/EmRegsVZHandEra330.cpp
     SrcShared/Hardware/EmRegsVZHandEra330.h
     SrcShared/Hardware/EmRegsVZPalmM500.cpp
@@ -353,6 +357,8 @@ add_executable(pose
     SrcShared/Hardware/EmSPISlave.h
     SrcShared/Hardware/EmSPISlaveADS784x.cpp
     SrcShared/Hardware/EmSPISlaveADS784x.h
+    SrcShared/Hardware/EmSPISlaveSTMicro.cpp
+    SrcShared/Hardware/EmSPISlaveSTMicro.h
     SrcShared/Hardware/EmUAEGlue.cpp
     SrcShared/Hardware/EmUAEGlue.h
     SrcShared/Hardware/EmUARTDragonball.cpp

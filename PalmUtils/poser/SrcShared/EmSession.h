@@ -691,6 +691,10 @@ class EmSession
 	private:
 		InstructionBreakFuncList	fInstructionBreakFuncs;
 		DataBreakFuncList			fDataBreakFuncs;
+
+	public:
+		Boolean					fHasSTMicroSlave;
+		Boolean					fHasVZAlphaSmart;
 };
 
 

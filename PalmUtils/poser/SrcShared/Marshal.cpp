@@ -18,6 +18,7 @@
 #include "EmPatchState.h"		// EmPatchState::OSMajorVersion
 #include "HostControl.h"		// HostGremlinInfoType, etc.
 #include "ROMStubs.h"			// NetHToNL, NetHToNS
+#include "EmSession.h"
 
 #if PLATFORM_UNIX || PLATFORM_MAC
 #include <netinet/in.h>			// ntohl, ntohs
@@ -191,6 +192,15 @@ void Marshal::PutDmSearchStateType (emuptr p, const DmSearchStateType& src)
 
 
 #pragma mark -
+
+// This check was not in the original emulator code, but it was compiled without
+// optional assertions, so seems like it would just silently do nothing for
+// these events. This event range is defined in WideTallAppChars.h of the Dana
+// SDK
+static inline bool PrvIsAlphaSmartEvent (Int16 eType)
+{
+	return gSession->fHasVZAlphaSmart && eType >= 0x4000 && eType < 0x4008;
+}
 
 // ---------------------
 // ----- EventType -----
@@ -457,7 +467,8 @@ void Marshal::GetEventType (emuptr p, EventType& dest)
 			default:
 				if ((dest.eType >= firstINetLibEvent &&
 					 dest.eType < firstWebLibEvent + 0x100) ||
-					dest.eType >= firstUserEvent)
+					dest.eType >= firstUserEvent ||
+					PrvIsAlphaSmartEvent(dest.eType))
 				{
 					// We don't know what's in here, so let's just blockmove it.
 

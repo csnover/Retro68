@@ -18,6 +18,9 @@
 #include <utility>				// pair
 #include <string>				// string
 
+#include "EmCommon.h"
+#include "PalmTypes.h"
+
 class EmCPU;
 class EmFileRef;
 class EmRegs;
