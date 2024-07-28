@@ -26,6 +26,8 @@
 #include "Strings.r.h"			// kStr_MissingSkins
 
 #include <algorithm>			// find()
+#include <cstdlib>
+#include <sstream>
 
 struct ButtonBounds
 {
@@ -1160,29 +1162,28 @@ void PrvBuildSkinList (SkinList& skins)
 
 	EmDirRef	scanDir (EmDirRef::GetEmulatorDirectory (), "Skins");
 
-	if (!scanDir.Exists ())
-		scanDir = EmDirRef (EmDirRef::GetEmulatorDirectory (), "skins");
+	if (scanDir.Exists ())
+		::PrvScanForSkinFiles (skins, scanDir);
 
 #if PLATFORM_UNIX
-	// On Unix, also look in the /usr/local/share/pose and /usr/share/pose directories.
-
-	if (!scanDir.Exists ())
-		scanDir = EmDirRef ("/usr/local/share/pose/Skins");
-
-	if (!scanDir.Exists ())
-		scanDir = EmDirRef ("/usr/local/share/pose/skins");
-
-	if (!scanDir.Exists ())
-		scanDir = EmDirRef ("/usr/share/pose/Skins");
-
-	if (!scanDir.Exists ())
-		scanDir = EmDirRef ("/usr/share/pose/skins");
-#endif
-
-	if (scanDir.Exists ())
+	const char *dataDirs = getenv ("XDG_DATA_DIRS");
+	if (dataDirs)
 	{
-		::PrvScanForSkinFiles (skins, scanDir);
+		std::stringstream ss(dataDirs);
+		std::string dir;
+		while (std::getline(ss, dir, ':'))
+		{
+			dir += "/" PROJECT_NAME "/Skins";
+			scanDir = EmDirRef(dir);
+			if (scanDir.Exists ())
+				::PrvScanForSkinFiles (skins, scanDir);
+		}
 	}
+
+	scanDir = EmDirRef(EmFileRef::GetEmulatorRef().GetParent(), "../" SKINS_DIR);
+	if (scanDir.Exists ())
+		::PrvScanForSkinFiles (skins, scanDir);
+#endif
 }
 
 

@@ -460,7 +460,18 @@ EmDirRef::GetEmulatorDirectory (void)
 	const char*	dir = getenv ("POSER_DIR");
 
 	if (dir == NULL)
+	{
+		dir = getenv ("XDG_DATA_HOME");
+		if (dir != NULL)
+			return EmDirRef (dir, PROJECT_NAME);
+	}
+
+	if (dir == NULL)
+	{
 		dir = getenv ("HOME");
+		if (dir != NULL)
+			return EmDirRef (dir, ".local/share/" PROJECT_NAME);
+	}
 
 	return EmDirRef (dir);
 }
@@ -481,7 +492,16 @@ EmDirRef::GetEmulatorDirectory (void)
 EmDirRef
 EmDirRef::GetPrefsDirectory (void)
 {
-	return GetEmulatorDirectory ();
+	const char *dir = getenv ("XDG_CONFIG_HOME");
+
+	if (dir == NULL)
+	{
+		dir = getenv ("HOME");
+		if (dir != NULL)
+			return EmDirRef (dir, ".config");
+	}
+
+	return EmDirRef (dir);
 }
 
 

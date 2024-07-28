@@ -18,10 +18,14 @@
 #include "EmDocument.h"			// gDocument
 #include "EmMenus.h"			// MenuInitialize
 #include "EmWindowFltk.h"
+#include "EmFileRef.h"
 
 #include <FL/Fl.H>				// Fl::wait
 #include <FL/x.H>				// fl_display
 #include <FL/Fl_Widget.H>
+#if HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 
 #ifdef __QNXNTO__
 #include <sys/neutrino.h>
@@ -77,6 +81,20 @@ int main (int argc, char** argv)
 {
 	EmulatorPreferences		prefs;
 	EmApplicationFltk		theApp;
+
+	if (argc > 0)
+	{
+		EmFileRef emRef;
+#if HAVE_UNISTD_H
+		char cwd[1024];
+		if (getcwd(cwd, sizeof(cwd)))
+			emRef = EmFileRef(cwd, argv[0]);
+		else
+#endif
+			emRef = EmFileRef(argv[0]);
+
+		EmFileRef::SetEmulatorRef(emRef);
+	}
 
 	try
 	{

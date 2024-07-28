@@ -1572,7 +1572,7 @@ EmFileRef Preferences::GetPrefRef (void)
 
 #elif PLATFORM_UNIX
 
-	string		name (".poserrc");
+	string		name ("poserrc");
 
 #elif PLATFORM_WINDOWS
 
