@@ -47,10 +47,10 @@ ENGLISH=Could not %operation because %reason. %recovery.
 // Hardware Exceptions
 
 ID=kStr_ErrBusError
-ENGLISH=%App just %op memory location %mem, causing a bus error.\n\nA “bus error” means that the application accessed a memory location that is not in RAM or ROM, nor corresponds to a memory-mapped hardware register.
+ENGLISH=%App just %op memory location %mem, causing a bus error.\n\nA ‚Äúbus error‚Äù means that the application accessed a memory location that is not in RAM or ROM, nor corresponds to a memory-mapped hardware register.
 
 ID=kStr_ErrAddressError
-ENGLISH=%App just %op memory location %mem, causing an address error.\n\nAn “address error” means that the application accessed a 2- or 4-byte value at an odd (i.e., not even) memory address.
+ENGLISH=%App just %op memory location %mem, causing an address error.\n\nAn ‚Äúaddress error‚Äù means that the application accessed a 2- or 4-byte value at an odd (i.e., not even) memory address.
 
 ID=kStr_ErrIllegalInstruction
 ENGLISH=%App just executed an illegal or unknown machine language instruction. The opcode executed was %ins.
@@ -65,10 +65,10 @@ ID=kStr_ErrTRAPVInstruction
 ENGLISH=%App just executed a TRAPV machine language instruction that failed. Invoking this instruction is not supported in Palm OS applications.
 
 ID=kStr_ErrPrivilegeViolation
-ENGLISH=%App just executed opcode %ins, a privileged machine language instruction.\n\nA “privileged machine language instruction” is one reserved for use by the operating system. Invoking such instructions is not supported in Palm OS applications.
+ENGLISH=%App just executed opcode %ins, a privileged machine language instruction.\n\nA ‚Äúprivileged machine language instruction‚Äù is one reserved for use by the operating system. Invoking such instructions is not supported in Palm OS applications.
 
 ID=kStr_ErrTrace
-ENGLISH=%App just executed an instruction with the CPU’s “trace” mode enabled. Normally, this mode is enabled by a debugger for the purpose of single-stepping through an application. However, no debugger is currently connected to handle trace mode.
+ENGLISH=%App just executed an instruction with the CPU‚Äôs ‚Äútrace‚Äù mode enabled. Normally, this mode is enabled by a debugger for the purpose of single-stepping through an application. However, no debugger is currently connected to handle trace mode.
 
 ID=kStr_ErrATrap
 ENGLISH=%App just executed an illegal or unknown machine language instruction. The opcode executed was %ins.
@@ -77,28 +77,28 @@ ID=kStr_ErrFTrap
 ENGLISH=%App just executed an illegal or unknown machine language instruction. The opcode executed was %ins.
 
 ID=kStr_ErrTRAPx
-ENGLISH=%App just executed a “TRAP #%num” machine language instruction. Invoking such instructions is not supported in Palm OS applications.
+ENGLISH=%App just executed a ‚ÄúTRAP #%num‚Äù machine language instruction. Invoking such instructions is not supported in Palm OS applications.
 
 
 // Special cases to hardware exceptions
 
 ID=kStr_ErrStorageHeap
-ENGLISH=%App just %op memory location %mem, which is in the storage heap. In order to protect the integrity of the user’s data, such direct access is not allowed. Instead, applications should use special Palm OS functions for this purpose.
+ENGLISH=%App just %op memory location %mem, which is in the storage heap. In order to protect the integrity of the user‚Äôs data, such direct access is not allowed. Instead, applications should use special Palm OS functions for this purpose.
 
 ID=kStr_ErrNoDrawWindow
 ENGLISH=%App just %op memory location %mem. This access usually indicates that the application is calling a Window Manager function without first establishing a valid DrawWindow.
 
 ID=kStr_ErrNoGlobals
-ENGLISH=%App just %op memory location %mem. This access usually means that the application accessed a global variable after PilotMain was called with a launch code that does not support globals. The last launch code sent to the application was “%launch_code”.
+ENGLISH=%App just %op memory location %mem. This access usually means that the application accessed a global variable after PilotMain was called with a launch code that does not support globals. The last launch code sent to the application was ‚Äú%launch_code‚Äù.
 
 ID=kStr_ErrSANE
 ENGLISH=%App just performed a floating point operation using a calling sequence specific to the Mac OS. This indicates that the application was compiled with the incorrect Floating Point option in the development environment that created it.
 
 ID=kStr_ErrTRAP0
-ENGLISH=%App just executed a “TRAP #0” machine language instruction. This instruction is often used by debuggers to set breakpoints. However, no debugger is currently connected to handle the breakpoint.
+ENGLISH=%App just executed a ‚ÄúTRAP #0‚Äù machine language instruction. This instruction is often used by debuggers to set breakpoints. However, no debugger is currently connected to handle the breakpoint.
 
 ID=kStr_ErrTRAP8
-ENGLISH=%App just executed a “TRAP #8” machine language instruction. This instruction is generated when calling the DbgBreak function as a method for breaking into an external debugger. However, no debugger is currently connected.
+ENGLISH=%App just executed a ‚ÄúTRAP #8‚Äù machine language instruction. This instruction is generated when calling the DbgBreak function as a method for breaking into an external debugger. However, no debugger is currently connected.
 
 
 // Fatal Poser-detected errors
@@ -125,34 +125,34 @@ ENGLISH=%App just changed the emulated program counter to %mem. This address is 
 // Non-fatal Poser-detected errors
 
 ID=kStr_ErrLowMemory
-ENGLISH=%App just %op memory location %mem, which is in low memory.\n\n“Low memory” is defined as the first 256 bytes of memory. It should not be directly accessed by applications under any circumstances.
+ENGLISH=%App just %op memory location %mem, which is in low memory.\n\n‚ÄúLow memory‚Äù is defined as the first 256 bytes of memory. It should not be directly accessed by applications under any circumstances.
 
 ID=kStr_ErrSystemGlobals
-ENGLISH=%App just %op memory location %mem, which is in the Palm OS global variables.\n\n“Palm OS global variables” are memory locations reserved for the private use of the Palm OS. They should not be directly accessed by applications under any circumstances.
+ENGLISH=%App just %op memory location %mem, which is in the Palm OS global variables.\n\n‚ÄúPalm OS global variables‚Äù are memory locations reserved for the private use of the Palm OS. They should not be directly accessed by applications under any circumstances.
 
 ID=kStr_ErrScreen
-ENGLISH=%App just %op memory location %mem, which is in screen memory.\n\n“Screen memory” is the area of RAM containing the pixels appearing on the LCD display. It should not be directly accessed by applications under any circumstances. Instead, they should use the Window Manager functions for altering the contents of the display.
+ENGLISH=%App just %op memory location %mem, which is in screen memory.\n\n‚ÄúScreen memory‚Äù is the area of RAM containing the pixels appearing on the LCD display. It should not be directly accessed by applications under any circumstances. Instead, they should use the Window Manager functions for altering the contents of the display.
 
 ID=kStr_ErrHardwareRegisters
-ENGLISH=%App just %op memory location %mem, which is in the memory-mapped hardware registers.\n\n“Memory-mapped hardware registers” are memory locations that control the operation of your handheld device’s hardware. They should not be directly accessed by applications under any circumstances.
+ENGLISH=%App just %op memory location %mem, which is in the memory-mapped hardware registers.\n\n‚ÄúMemory-mapped hardware registers‚Äù are memory locations that control the operation of your handheld device‚Äôs hardware. They should not be directly accessed by applications under any circumstances.
 
 ID=kStr_ErrROM
 ENGLISH=%App just %op memory location %mem, which is in the ROM.\n\nSuch an access has no effect, and usually indicates an error in the application.
 
 ID=kStr_ErrMemMgrStructures
-ENGLISH=%App just %op memory location %mem, which is in Memory Manager data structures.\n\nThese data structures include things like the headers preceding each block in a heap, as well as the heap header itself. Such an access usually means that an application allocated a buffer (possibly with MemPtrNew) that wasn’t large enough for its purpose. When the application then tries to write data to the buffer, it writes off the end of the buffer, accessing the start of the buffer following it in memory.
+ENGLISH=%App just %op memory location %mem, which is in Memory Manager data structures.\n\nThese data structures include things like the headers preceding each block in a heap, as well as the heap header itself. Such an access usually means that an application allocated a buffer (possibly with MemPtrNew) that wasn‚Äôt large enough for its purpose. When the application then tries to write data to the buffer, it writes off the end of the buffer, accessing the start of the buffer following it in memory.
 
 ID=kStr_ErrMemMgrSemaphore
 ENGLISH=The Memory Manager semaphore has been held for longer than 1 minute. Palm recommends that applications not acquire the Memory Manager semaphore at all, but that if they do, they should not hold the semaphore any longer than that.
 
 ID=kStr_ErrFreeChunk
-ENGLISH=%App just %op memory location %mem, which is in an unallocated chunk of memory.\n\nAn “unallocated chunk of memory” is a chunk of memory that has not been reserved for use by the application through calling MemPtrNew or MemHandleNew. It should not be accessed by applications under any circumstances. Such an access usually means that an application is accessing a chunk that used to be allocated to the application but has since been returned with MemPtrFree or MemHandleFree.
+ENGLISH=%App just %op memory location %mem, which is in an unallocated chunk of memory.\n\nAn ‚Äúunallocated chunk of memory‚Äù is a chunk of memory that has not been reserved for use by the application through calling MemPtrNew or MemHandleNew. It should not be accessed by applications under any circumstances. Such an access usually means that an application is accessing a chunk that used to be allocated to the application but has since been returned with MemPtrFree or MemHandleFree.
 
 ID=kStr_ErrUnlockedChunk
-ENGLISH=%App just %op memory location %mem, which is in an unlocked chunk of memory.\n\nAn “unlocked chunk of memory” is one that has been allocated with MemHandleNew but that has not been locked with MemHandleLock. Such an access usually means that an application allocated a buffer with MemHandleNew, locked it with MemHandleLock, unlocked it with MemHandleUnlock, and then used the pointer that was returned by MemHandleLock.
+ENGLISH=%App just %op memory location %mem, which is in an unlocked chunk of memory.\n\nAn ‚Äúunlocked chunk of memory‚Äù is one that has been allocated with MemHandleNew but that has not been locked with MemHandleLock. Such an access usually means that an application allocated a buffer with MemHandleNew, locked it with MemHandleLock, unlocked it with MemHandleUnlock, and then used the pointer that was returned by MemHandleLock.
 
 ID=kStr_ErrLowStack
-ENGLISH=%App just %op memory location %mem, which is in the unused portion of the stack. The stack range is %stack_low - %stack_high, and the stack pointer is %stack_pointer.\n\nThe “stack” is the area of RAM used to contain function parameters and local variables. The used portion of the stack is indicated by the stack pointer. Applications may access the area of the stack above the stack pointer, but not below it.
+ENGLISH=%App just %op memory location %mem, which is in the unused portion of the stack. The stack range is %stack_low - %stack_high, and the stack pointer is %stack_pointer.\n\nThe ‚Äústack‚Äù is the area of RAM used to contain function parameters and local variables. The used portion of the stack is indicated by the stack pointer. Applications may access the area of the stack above the stack pointer, but not below it.
 
 ID=kStr_ErrStackFull
 ENGLISH=%App is close to overflowing the stack. The functions currently using the stack are: %sc.
@@ -164,22 +164,22 @@ ID=kStr_ErrOffscreenObject
 ENGLISH=Form object ID #%obj_id (left = %left, top = %top, right = %right, bottom = %bottom) from %app is completely offscreen. Applications should hide objects by calling FrmHideObject instead of placing them completely offscreen.\n\nAnother way to get this error message is to call FrmCopyTitle or FrmCopyLabel to change a title or label to a string larger than what was specified in the form resource. Doing this often corrupts other objects on the form.
 
 ID=kStr_ErrFormAccess
-ENGLISH=%App just %op memory location %mem, which is in the “%field” field of the form starting at %form.\n\nThe data at this memory location is owned by the Form Manager. Applications should not access the data directly. Instead, they should make the appropriate Form Manager calls.
+ENGLISH=%App just %op memory location %mem, which is in the ‚Äú%field‚Äù field of the form starting at %form.\n\nThe data at this memory location is owned by the Form Manager. Applications should not access the data directly. Instead, they should make the appropriate Form Manager calls.
 
 ID=kStr_ErrFormObjectListAccess
-ENGLISH=%App just %op memory location %mem, which is in the “%field” field of the form object list entry with index #%index, which belongs to the form starting at %form.\n\nThe data at this memory location is owned by the Form Manager. Applications should not access the data directly. Instead, they should make the appropriate Form Manager calls.
+ENGLISH=%App just %op memory location %mem, which is in the ‚Äú%field‚Äù field of the form object list entry with index #%index, which belongs to the form starting at %form.\n\nThe data at this memory location is owned by the Form Manager. Applications should not access the data directly. Instead, they should make the appropriate Form Manager calls.
 
 ID=kStr_ErrFormObjectAccess
-ENGLISH=%App just %op memory location %mem, which is in the “%field” field of the %type starting at %object, which belongs to the form starting at %form.\n\nThe data at this memory location is owned by the Form Manager. Applications should not access the data directly. Instead, they should make the appropriate Form Manager calls.
+ENGLISH=%App just %op memory location %mem, which is in the ‚Äú%field‚Äù field of the %type starting at %object, which belongs to the form starting at %form.\n\nThe data at this memory location is owned by the Form Manager. Applications should not access the data directly. Instead, they should make the appropriate Form Manager calls.
 
 ID=kStr_ErrWindowAccess
-ENGLISH=%App just %op memory location %mem, which is in the “%field” field of the window starting at %window.\n\nThe data at this memory location is owned by the Window Manager. Applications should not access the data directly. Instead, they should make the appropriate Window Manager calls.
+ENGLISH=%App just %op memory location %mem, which is in the ‚Äú%field‚Äù field of the window starting at %window.\n\nThe data at this memory location is owned by the Window Manager. Applications should not access the data directly. Instead, they should make the appropriate Window Manager calls.
 
 ID=kStr_ErrBitmapAccess
-ENGLISH=%App just %op memory location %mem, which is in the “%field” field of the bitmap starting at %bitmap.\n\nThe data at this memory location is owned by the Palm OS. Applications should not access the data directly. Instead, they should make the appropriate Palm OS calls.
+ENGLISH=%App just %op memory location %mem, which is in the ‚Äú%field‚Äù field of the bitmap starting at %bitmap.\n\nThe data at this memory location is owned by the Palm OS. Applications should not access the data directly. Instead, they should make the appropriate Palm OS calls.
 
 ID=kStr_ErrProscribedFunction
-ENGLISH=%App just called Palm OS routine “%function_name”.\n\nApplications should not call this function because %reason.
+ENGLISH=%App just called Palm OS routine ‚Äú%function_name‚Äù.\n\nApplications should not call this function because %reason.
 
 ID=kStr_ErrStepSpy
 ENGLISH=%App just %op memory location %mem, changing it from %old_value to %new_value.
@@ -197,19 +197,19 @@ ENGLISH=Found %num_leaks memory leaks for %app. Information concerning the leaks
 // Palm OS-detected errors
 
 ID=kStr_ErrSysFatalAlert
-ENGLISH=%App called SysFatalAlert with the message: “%message”.
+ENGLISH=%App called SysFatalAlert with the message: ‚Äú%message‚Äù.
 
 ID=kStr_ErrDbgMessage
-ENGLISH=%App called DbgMessage with the message: “%message”.
+ENGLISH=%App called DbgMessage with the message: ‚Äú%message‚Äù.
 
 
 // Other errors
 
 ID=kStr_BadChecksum
-ENGLISH=The ROM you’ve chosen has an invalid checksum.\n
+ENGLISH=The ROM you‚Äôve chosen has an invalid checksum.\n
 	\n
-	The most common reason for an invalid checksum has been from the use of 
-	utility programs that modify the contents of the ROM without also updating 
+	The most common reason for an invalid checksum has been from the use of \
+	utility programs that modify the contents of the ROM without also updating \
 	its internal checksum.\n
 	\n
 	Palm, Inc. does not support the use of this ROM. Use it with caution.
@@ -217,8 +217,8 @@ ENGLISH=The ROM you’ve chosen has an invalid checksum.\n
 ID=kStr_UnknownDeviceWarning
 ENGLISH=Unable to determine an appropriate device to emulate for this ROM file.\n
 	\n
-	Palm, Inc. does not support the use of this ROM. Use it with caution, 
-	as the operation of a ROM with an incorrect device emulation will certainly 
+	Palm, Inc. does not support the use of this ROM. Use it with caution, \
+	as the operation of a ROM with an incorrect device emulation will certainly \
 	cause the ROM to crash, and may crash the Palm OS Emulator.
 
 ID=kStr_UnknownDeviceError
@@ -227,44 +227,44 @@ ENGLISH=This ROM is for a device not supported by this version of the emulator.\
 	Palm, Inc. does not support the use of this ROM.
 
 ID=kStr_MissingSkins
-ENGLISH=Palm OS Emulator needs “skin” files in order to correctly 
-	display the hardware devices it emulates. The Emulator looks 
-	for these skins in a directory called “Skins”. However, 
+ENGLISH=Palm OS Emulator needs ‚Äúskin‚Äù files in order to correctly \
+	display the hardware devices it emulates. The Emulator looks \
+	for these skins in a directory called ‚ÄúSkins‚Äù. However, \
 	that directory was not found.\n
 	\n
-	Previous versions of the Emulator would look for any directory 
-	starting with the word “Skins” and search that directory for 
-	skin files. With the current Emulator, the directory must be 
-	named exactly “Skins”.\n
+	Previous versions of the Emulator would look for any directory \
+	starting with the word ‚ÄúSkins‚Äù and search that directory for \
+	skin files. With the current Emulator, the directory must be \
+	named exactly ‚ÄúSkins‚Äù.\n
 	\n
-	If you don’t have any skin files at all, you can download them 
+	If you don‚Äôt have any skin files at all, you can download them \
 	from the Emulator download Web page:\n
 	\n
 	     <http://www.palmos.com/dev/tech/tools/emulator>\n
 	\n
-	Follow the instructions included with that archive for installing 
+	Follow the instructions included with that archive for installing \
 	the files.
 
 ID=kStr_InconsistentDatabaseDates
-ENGLISH=The creation date (%cr_date) in the database header inside “%database_name” is 
+ENGLISH=The creation date (%cr_date) in the database header inside ‚Äú%database_name‚Äù is \
 	more recent than the modification date (%mod_date).\n
 	\n
-	The Emulator does not consider this to be a problem, and neither does the Palm 
-	OS. However, some versions of HotSync will test for this condition and report 
-	an error, so you may wish to fix the database before trying to install it on a 
+	The Emulator does not consider this to be a problem, and neither does the Palm \
+	OS. However, some versions of HotSync will test for this condition and report \
+	an error, so you may wish to fix the database before trying to install it on a \
 	device.
 
 ID=kStr_NULLDatabaseDate
-ENGLISH=The creation date in the database header inside “%database_name” is zero.\n
+ENGLISH=The creation date in the database header inside ‚Äú%database_name‚Äù is zero.\n
 	\n
-	The Emulator does not consider this to be a problem, and neither does the Palm 
-	OS. However, some versions of HotSync will test for this condition and report 
-	an error, so you may wish to fix the database before trying to install it on a 
+	The Emulator does not consider this to be a problem, and neither does the Palm \
+	OS. However, some versions of HotSync will test for this condition and report \
+	an error, so you may wish to fix the database before trying to install it on a \
 	device.
 
 ID=kStr_NeedHostFS
-ENGLISH=In order to make use of the information specified in this dialog, 
-	you need to have installed HostFS.prc. You can download this file from 
+ENGLISH=In order to make use of the information specified in this dialog, \
+	you need to have installed HostFS.prc. You can download this file from \
 	the Palm OS Emulator download Web page:\n
 	\n
 	     <http://www.palmos.com/dev/tech/tools/emulator/>
@@ -279,7 +279,7 @@ ID=kStr_CannotParseCondition
 ENGLISH=Can't parse the condition "%s".
 
 ID=kStr_UserNameTooLong
-ENGLISH=The name entered into the HotSync User Name field is too long. It needs 
+ENGLISH=The name entered into the HotSync User Name field is too long. It needs \
 	to be 40 characters or less.
 
 
@@ -306,10 +306,10 @@ ID=kStr_ImportFile
 ENGLISH=Import file:
 
 ID=kStr_SaveBeforeClosing
-ENGLISH=Save changes to the %AppName document “%DocName” before closing?
+ENGLISH=Save changes to the %AppName document ‚Äú%DocName‚Äù before closing?
 
 ID=kStr_SaveBeforeQuitting
-ENGLISH=Save changes to the %AppName document “%DocName” before quitting?
+ENGLISH=Save changes to the %AppName document ‚Äú%DocName‚Äù before quitting?
 
 
 ID=kStr_GremlinNumber
@@ -371,19 +371,19 @@ ENGLISH============================================================\n
 	===========================================================\n\n
 
 ID=kStr_InternalErrorException
-ENGLISH=Hardware exception #%d occurred while the emulator was calling the Palm OS function “%s”.
+ENGLISH=Hardware exception #%d occurred while the emulator was calling the Palm OS function ‚Äú%s‚Äù.
 
 ID=kStr_InternalErrorMessage
-ENGLISH=%s\n\nThe error occurred while the emulator was calling the Palm OS function “%s”.
+ENGLISH=%s\n\nThe error occurred while the emulator was calling the Palm OS function ‚Äú%s‚Äù.
 
 ID=kStr_WillNowReset
 ENGLISH= The emulator is now in an unstable state and will reset.
 
 ID=kStr_CommPortError
-ENGLISH=The emulator could not open port %transport. Please make sure that it is not in use by another application, and that the emulated IR and Serial ports are not mapped to the same physical port, then reconfirm your port selection in Preferences….
+ENGLISH=The emulator could not open port %transport. Please make sure that it is not in use by another application, and that the emulated IR and Serial ports are not mapped to the same physical port, then reconfirm your port selection in Preferences‚Ä¶.
 
 ID=kStr_SocketsError
-ENGLISH=The emulator could not open a sockets connection to %transport. Please check your TCP settings, and then reconfirm your host selection in Preferences….
+ENGLISH=The emulator could not open a sockets connection to %transport. Please check your TCP settings, and then reconfirm your host selection in Preferences‚Ä¶.
 
 ID=kStr_MustTurnOnLogging
 ENGLISH=In order to utilize error handling options that don't display messages in a dialog box, the corresponding logging options must be turned on. Should those options be turned on now?
@@ -393,7 +393,7 @@ ENGLISH=In order to safely turn off logging options for errors and warnings, the
 
 
 ID=kStr_ROMTransferInstructions+0
-ENGLISH=1.  You should find a file named “ROM Transfer.prc” included\n
+ENGLISH=1.  You should find a file named ‚ÄúROM Transfer.prc‚Äù included\n
 	     with the Palm OS Emulator. This is a Palm OS application\n
 	     you should install on your Palm OS device before continuing.\n
 	\n
@@ -405,12 +405,12 @@ ENGLISH=2.  Choose an appropriate serial port and speed from the menus\n
 	\n
 
 ID=kStr_ROMTransferInstructions+2
-ENGLISH=3.  Place your Palm OS device in its cradle and run the “ROM\n
-	     Transfer” application.\n
+ENGLISH=3.  Place your Palm OS device in its cradle and run the ‚ÄúROM\n
+	     Transfer‚Äù application.\n
 	\n
 
 ID=kStr_ROMTransferInstructions+3
-ENGLISH=4.  Select the same speed from the menu in “ROM Transfer” as\n
+ENGLISH=4.  Select the same speed from the menu in ‚ÄúROM Transfer‚Äù as\n
 	     you chose below.\n
 	\n
 
@@ -420,12 +420,12 @@ ENGLISH=5.  Disable HotSync or any other application that may be using\n
 	\n
 
 ID=kStr_ROMTransferInstructions+5
-ENGLISH=6.  Tap the “Begin Transfer” button in the “ROM Transfer”\n
+ENGLISH=6.  Tap the ‚ÄúBegin Transfer‚Äù button in the ‚ÄúROM Transfer‚Äù\n
 	     application on the Palm device.\n
 	\n
 
 ID=kStr_ROMTransferInstructions+6
-ENGLISH=7.  Click the “Begin” button in this dialog. The Palm OS\n
+ENGLISH=7.  Click the ‚ÄúBegin‚Äù button in this dialog. The Palm OS\n
 	     Emulator will wait for your Palm device to respond.\n
 	\n
 
@@ -440,7 +440,7 @@ ENGLISH=8.  The transfer will take several minutes, so please be patient.\n
 ID=kStr_ROMTransferInstructions+8
 ENGLISH=9.  After the ROM has been transferred to your desktop computer,\n
 	     you will be asked to save it to a file. Save it with an\n
-	     appropriate name (for example, “Palm III.rom”). Then\n
+	     appropriate name (for example, ‚ÄúPalm III.rom‚Äù). Then\n
 	     create a a new emulator session using that ROM.
 
 
@@ -449,10 +449,10 @@ ENGLISH=9.  After the ROM has been transferred to your desktop computer,\n
 // --------------------------------------------------------------------------------
 
 ID=kStr_MenuSessionNew
-ENGLISH=&New…\tN
+ENGLISH=&New‚Ä¶\tN
 
 ID=kStr_MenuSessionOpenOther
-ENGLISH=&Other…\tO
+ENGLISH=&Other‚Ä¶\tO
 
 ID=kStr_MenuSessionClose
 ENGLISH=&Close\tW
@@ -461,31 +461,31 @@ ID=kStr_MenuSessionSave
 ENGLISH=&Save\tS
 
 ID=kStr_MenuSessionSaveAs
-ENGLISH=Save &As…
+ENGLISH=Save &As‚Ä¶
 
 ID=kStr_MenuSessionBound
-ENGLISH=Save &Bound Emulator…
+ENGLISH=Save &Bound Emulator‚Ä¶
 
 ID=kStr_MenuScreenSave
-ENGLISH=Sa&ve Screen…\tM
+ENGLISH=Sa&ve Screen‚Ä¶\tM
 
 ID=kStr_MenuSessionInfo
-ENGLISH=Session Info…
+ENGLISH=Session Info‚Ä¶
 
 ID=kStr_MenuImportOther
-ENGLISH=&Other…\tI
+ENGLISH=&Other‚Ä¶\tI
 
 ID=kStr_MenuExport
-ENGLISH=Export &Database…
+ENGLISH=Export &Database‚Ä¶
 
 ID=kStr_MenuHotSync
 ENGLISH=&HotSync\tH
 
 ID=kStr_MenuReset
-ENGLISH=&Reset…\tR
+ENGLISH=&Reset‚Ä¶\tR
 
 ID=kStr_MenuDownloadROM
-ENGLISH=&Transfer ROM…\tD
+ENGLISH=&Transfer ROM‚Ä¶\tD
 
 ID=kStr_MenuUndo
 ENGLISH=&Undo\tZ
@@ -505,38 +505,38 @@ ENGLISH=Clea&r
 #if PLATFORM_WINDOWS
 
 ID=kStr_MenuPreferences
-ENGLISH=&Properties…\t/
+ENGLISH=&Properties‚Ä¶\t/
 
 #else
 
 ID=kStr_MenuPreferences
-ENGLISH=&Preferences…\t/
+ENGLISH=&Preferences‚Ä¶\t/
 
 #endif
 
 ID=kStr_MenuLogging
-ENGLISH=&Logging…\tL
+ENGLISH=&Logging‚Ä¶\tL
 
 ID=kStr_MenuDebugging
-ENGLISH=&Debugging…\t\\
+ENGLISH=&Debugging‚Ä¶\t\\
 
 ID=kStr_MenuErrorHandling
-ENGLISH=&Error Handling…\tE
+ENGLISH=&Error Handling‚Ä¶\tE
 
 ID=kStr_MenuTracing
-ENGLISH=&Tracing…\tT
+ENGLISH=&Tracing‚Ä¶\tT
 
 ID=kStr_MenuSkins
-ENGLISH=&Skins…\tK
+ENGLISH=&Skins‚Ä¶\tK
 
 ID=kStr_MenuHostFS
-ENGLISH=&HostFS…
+ENGLISH=&HostFS‚Ä¶
 
 ID=kStr_MenuBreakpoints
-ENGLISH=&Breakpoints…\tB
+ENGLISH=&Breakpoints‚Ä¶\tB
 
 ID=kStr_MenuGremlinsNew
-ENGLISH=&New…\tG
+ENGLISH=&New‚Ä¶\tG
 
 ID=kStr_MenuGremlinsStep
 ENGLISH=&Step
@@ -548,10 +548,10 @@ ID=kStr_MenuGremlinsStop
 ENGLISH=Sto&p
 
 ID=kStr_MenuEventReplay
-ENGLISH=Repla&y…
+ENGLISH=Repla&y‚Ä¶
 
 ID=kStr_MenuEventMinimize
-ENGLISH=&Minimize…
+ENGLISH=&Minimize‚Ä¶
 
 #if HAS_PROFILING
 
@@ -567,7 +567,7 @@ ENGLISH=&Dump
 #endif
 
 ID=kStr_MenuAbout
-ENGLISH=About Palm OS® Emulator
+ENGLISH=About Palm OS¬Æ Emulator
 
 #if PLATFORM_WINDOWS
 
@@ -606,7 +606,7 @@ ID=kStr_MenuEmpty
 ENGLISH=(empty)
 
 ID=kStr_MenuBlank
-ENGLISH= 
+ENGLISH=\040
 
 
 // --------------------------------------------------------------------------------
@@ -614,7 +614,7 @@ ENGLISH=
 // --------------------------------------------------------------------------------
 
 ID=kStr_AppName
-ENGLISH=Palm OS® Emulator
+ENGLISH=Palm OS¬Æ Emulator
 
 ID=kStr_Untitled
 ENGLISH=untitled
@@ -673,7 +673,7 @@ ID=kStr_Debug
 ENGLISH=Debug
 
 ID=kStr_Reset
-ENGLISH=Reset…
+ENGLISH=Reset‚Ä¶
 
 
 ID=kStr_Browse
@@ -683,7 +683,7 @@ ID=kStr_EmptyMRU
 ENGLISH=(empty)
 
 ID=kStr_OtherMRU
-ENGLISH=Other…
+ENGLISH=Other‚Ä¶
 
 
 ID=kStr_ProfPartial
@@ -732,33 +732,33 @@ ID=kStr_ChunkTooLarge
 ENGLISH=The size of the chunk (%chunk_size) was larger than the currently accepted maximum (%chunk_max)
 
 ID=kStr_InvalidFlags
-ENGLISH=Some unused flags were set to “1”
+ENGLISH=Some unused flags were set to ‚Äú1‚Äù
 
 ID=kStr_HOffsetNotInMPT
-ENGLISH=The “hOffset” field of the chunk header did not reference a memory location within a master pointer block
+ENGLISH=The ‚ÄúhOffset‚Äù field of the chunk header did not reference a memory location within a master pointer block
 
 ID=kStr_HOffsetNotBackPointing
-ENGLISH=The master pointer referenced by the “hOffset” field in the chunk header didn’t point back to the chunk
+ENGLISH=The master pointer referenced by the ‚ÄúhOffset‚Äù field in the chunk header didn‚Äôt point back to the chunk
 
 ID=kStr_InvalidLockCount
 ENGLISH=The lock count for a fixed block was not 15
 
 
 ID=kStr_UnmappedAddress
-ENGLISH=it’s in neither ROM nor RAM
+ENGLISH=it‚Äôs in neither ROM nor RAM
 
 ID=kStr_NotInCodeSegment
-ENGLISH=it’s not in a valid memory chunk
+ENGLISH=it‚Äôs not in a valid memory chunk
 
 ID=kStr_OddAddress
-ENGLISH=it’s not even
+ENGLISH=it‚Äôs not even
 
 
 ID=kStr_Waiting
-ENGLISH=Waiting…
+ENGLISH=Waiting‚Ä¶
 
 ID=kStr_Transferring
-ENGLISH=Transferring…
+ENGLISH=Transferring‚Ä¶
 
 // Reasons for why the PC was changed
 
@@ -808,13 +808,13 @@ ID=kStr_CmdNew
 ENGLISH=create a new session
 
 ID=kStr_CmdOpen
-ENGLISH=open the file “%filename”
+ENGLISH=open the file ‚Äú%filename‚Äù
 
 ID=kStr_CmdClose
 ENGLISH=close the window
 
 ID=kStr_CmdSave
-ENGLISH=save the file “%filename”
+ENGLISH=save the file ‚Äú%filename‚Äù
 
 ID=kStr_CmdSaveBound
 ENGLISH=save a bound emulator
@@ -826,7 +826,7 @@ ID=kStr_CmdSessionInfo
 ENGLISH=display session info
 
 ID=kStr_CmdInstall
-ENGLISH=install the Palm OS file “%filename”
+ENGLISH=install the Palm OS file ‚Äú%filename‚Äù
 
 ID=kStr_CmdInstallMany
 ENGLISH=install the Palm OS files
@@ -971,7 +971,7 @@ ID=kStr_TooManyFilesOpen
 ENGLISH=too many files are open
 
 ID=kStr_FileNotFound
-ENGLISH=the file wasn’t found
+ENGLISH=the file wasn‚Äôt found
 
 ID=kStr_DiskWriteProtected
 ENGLISH=the disk is write protected
@@ -1030,7 +1030,7 @@ ID=kStr_OnlyOneROM
 ENGLISH=you can only drag one Palm ROM File onto the Emulator window at a time
 
 ID=kStr_UnknownType
-ENGLISH=the Emulator doesn’t support the file you just dragged onto its window
+ENGLISH=the Emulator doesn‚Äôt support the file you just dragged onto its window
 
 
 // PSF file errors
@@ -1043,13 +1043,13 @@ ENGLISH=the chosen ROM file cannot be used with the specified hardware device
 
 // ROM file errors
 ID=kStr_BadROM
-ENGLISH=it doesn’t appear to be a valid ROM file
+ENGLISH=it doesn‚Äôt appear to be a valid ROM file
 
 ID=kStr_UnsupportedROM
 ENGLISH=this Debug 2.0 ROM is not supported
 
 ID=kStr_InvalidDevice
-ENGLISH=this version of the Palm OS Emulator does not support the device required 
+ENGLISH=this version of the Palm OS Emulator does not support the device required \
 	by this session file
 
 ID=kStr_InvalidSession
@@ -1061,17 +1061,17 @@ ENGLISH=the given configuration information is not supported by this version of 
 
 // PRC, PDB, PQA file errors
 ID=kStr_NameNotNULLTerminated
-ENGLISH=the database name (“%database_name”) is too long
+ENGLISH=the database name (‚Äú%database_name‚Äù) is too long
 
 ID=kStr_NameNotPrintable
-ENGLISH=the database name (“%database_name”) contains invalid characters. Only 
-	standard printable ASCII characters (that is, characters with values in 
+ENGLISH=the database name (‚Äú%database_name‚Äù) contains invalid characters. Only \
+	standard printable ASCII characters (that is, characters with values in \
 	the range 0x20 - 0x7E) are allowed.\n
 	\n
-	If you need to display a name in the Launcher with additional characters, 
-	you can specify that name in the application’s 'tAIN' resource. You can set 
-	this in the “Application Icon Name” field in the “Project Settings” section 
-	of “Constructor for Palm OS”, or in the “APPLICATIONICONNAME” field of “pilrc”
+	If you need to display a name in the Launcher with additional characters, \
+	you can specify that name in the application‚Äôs 'tAIN' resource. You can set \
+	this in the ‚ÄúApplication Icon Name‚Äù field in the ‚ÄúProject Settings‚Äù section \
+	of ‚ÄúConstructor for Palm OS‚Äù, or in the ‚ÄúAPPLICATIONICONNAME‚Äù field of ‚Äúpilrc‚Äù
 
 ID=kStr_FileTooSmall
 ENGLISH=the file is too small to contain all the information it claims to have
@@ -1098,13 +1098,13 @@ ID=kStr_OverlappingRecord
 ENGLISH=record #%record_number overlaps another record
 
 ID=kStr_ResourceMemError
-ENGLISH=an out of memory error occurred while installing resource '%res_type'(%res_id). It’s possible that the reason for this error is because the size of this resource (%res_size) is larger than the currently allowed maximum of 65505
+ENGLISH=an out of memory error occurred while installing resource '%res_type'(%res_id). It‚Äôs possible that the reason for this error is because the size of this resource (%res_size) is larger than the currently allowed maximum of 65505
 
 ID=kStr_RecordMemError
-ENGLISH=an out of memory error occurred while installing record #%record_number. It’s possible that the reason for this error is because the size of this record (%res_size) is larger than the currently allowed maximum of 65505
+ENGLISH=an out of memory error occurred while installing record #%record_number. It‚Äôs possible that the reason for this error is because the size of this record (%res_size) is larger than the currently allowed maximum of 65505
 
 ID=kStr_AppInfoMemError
-ENGLISH=an out of memory error occurred while installing the app info block. It’s possible that the size of this record (%res_size) is larger than the currently allowed maximum of 65505
+ENGLISH=an out of memory error occurred while installing the app info block. It‚Äôs possible that the size of this record (%res_size) is larger than the currently allowed maximum of 65505
 
 ID=kStr_DuplicateResource
 ENGLISH=a duplicate '%res_type'(%res_id) resource was found
@@ -1136,7 +1136,7 @@ ENGLISH=Please give the application more memory
 
 
 ID=kStr_TransferAROM
-ENGLISH=To download the ROM from your Palm device, choose “Transfer ROM…” from the File menu
+ENGLISH=To download the ROM from your Palm device, choose ‚ÄúTransfer ROM‚Ä¶‚Äù from the File menu
 
 ID=kStr_DownloadAROM
 ENGLISH=Please download the latest from http://www.palm.com
@@ -1351,7 +1351,7 @@ ENGLISH=unassigned - 15
 		# Setup Variables
 		#######################################################################
 		set TrapNum 1
-		set Space '[ ∂t]+'
+		set Space '[ ‚àÇt]+'
 		
 		Set Src "Phantom:Palm:Projects:Palm:Viewer:dev:4.0:primary:Incs:Core:CoreTraps.h"
 		set Dest "{DesktopFolder}SystemTrapNames"
@@ -1367,23 +1367,23 @@ ENGLISH=unassigned - 15
 		#######################################################################
 		# Delete everything except the trap table enumerated type
 		#######################################################################
-		replace  •:/sysTrapBase≈/ ""
-		replace /∂#define[ ∂t]+sysTrapLastTrapNumber/:∞ ""
+		replace  ‚Ä¢:/sysTrapBase‚âà/ ""
+		replace /‚àÇ#define[ ‚àÇt]+sysTrapLastTrapNumber/:‚àû ""
 		
 		#######################################################################
 		# Get rid of Comments
 		#######################################################################
-		find •
-		replace -c ∞ /∂/∂/≈/ ""
+		find ‚Ä¢
+		replace -c ‚àû /‚àÇ/‚àÇ/‚âà/ ""
 		
 		#######################################################################
 		# Go through and replace each line with a debugger script command
 		#######################################################################
 		Set Exit 0
 		Set TrapNum 0
-		Find •
+		Find ‚Ä¢
 		Loop
-			replace /•#define[ ∂t]+sysTrap([a-zA-Z0-9]+)®1≈∞/  "ID=kStr_SysTrapBase+{TrapNum}∂nENGLISH=®1∂n"
+			replace /‚Ä¢#define[ ‚àÇt]+sysTrap([a-zA-Z0-9]+)¬Æ1‚âà‚àû/  "ID=kStr_SysTrapBase+{TrapNum}‚àÇnENGLISH=¬Æ1‚àÇn"
 			Break If {Status} != 0
 			Set TrapNum `Evaluate {TrapNum}+1`
 		End
@@ -1391,11 +1391,11 @@ ENGLISH=unassigned - 15
 		#######################################################################
 		# Strip trailing spaces.  Collapse multiple blank lines.
 		#######################################################################
-		Find •
-		Replace -c ∞ /[∂t∂f ]+∞/ ""
+		Find ‚Ä¢
+		Replace -c ‚àû /[‚àÇt‚àÇf ]+‚àû/ ""
 		
-		Find •
-		Replace -c ∞ /∂n[∂n]+/ "∂n∂n"
+		Find ‚Ä¢
+		Replace -c ‚àû /‚àÇn[‚àÇn]+/ "‚àÇn‚àÇn"
 		
 		Close -y "{Dest}"
 */
@@ -5560,31 +5560,31 @@ ENGLISH=WebLibRenderData
 //
 //		Set root "Phantom:Palm:Projects:Palm:Viewer:dev:4.0:primary:Incs:"
 //		for f in `files -f -s -r "{root}"`
-//			continue if ("{f}" =~ /≈CMServer≈/)		# duplicate cmp error codes with CMClient.h
-//			continue if ("{f}" =~ /≈DLClient≈/)		# duplicate dlk error codes with DLServer.h
-//			continue if ("{f}" =~ /≈PadServer≈/)	# duplicate pad error codes with PadWS.h
-//			continue if ("{f}" =~ /≈UDAMgr≈/)		# udaErrControl not formatted nicely
-//			search -q -ns /∂#define≈∂(≈ErrorClass≈∂|≈/ "{f}"
+//			continue if ("{f}" =~ /‚âàCMServer‚âà/)		# duplicate cmp error codes with CMClient.h
+//			continue if ("{f}" =~ /‚âàDLClient‚âà/)		# duplicate dlk error codes with DLServer.h
+//			continue if ("{f}" =~ /‚âàPadServer‚âà/)	# duplicate pad error codes with PadWS.h
+//			continue if ("{f}" =~ /‚âàUDAMgr‚âà/)		# udaErrControl not formatted nicely
+//			search -q -ns /‚àÇ#define‚âà‚àÇ(‚âàErrorClass‚âà‚àÇ|‚âà/ "{f}"
 //		end
 //
 //	Next, the output was selected and pasted into a new MPW window. Then
 //	the following lines were selected in the MPW Shell and executed:
 //
 //		# Put everthing into ID/ENGLISH format
-//		find •
-//		replace -c ∞ /•∂#define[ ∂t]+([¬ ∂t]+)®1≈∂(([a-z0-9]+)®2[ ∂t]*∂|[ ∂t]*([x0-9a-f]+)®3∂)(≈)®4/ "ID=kStr_PalmOSErrorBase+®2+®3∂nENGLISH=®1®4∂n"
+//		find ‚Ä¢
+//		replace -c ‚àû /‚Ä¢‚àÇ#define[ ‚àÇt]+([¬¨ ‚àÇt]+)¬Æ1‚âà‚àÇ(([a-z0-9]+)¬Æ2[ ‚àÇt]*‚àÇ|[ ‚àÇt]*([x0-9a-f]+)¬Æ3‚àÇ)(‚âà)¬Æ4/ "ID=kStr_PalmOSErrorBase+¬Æ2+¬Æ3‚àÇnENGLISH=¬Æ1¬Æ4‚àÇn"
 //
 //		# Convert any trailing comments (C++ version)
-//		find •
-//		replace -c ∞ /[ ∂t]*∂/∂/[ ∂t]*/ " -- "
+//		find ‚Ä¢
+//		replace -c ‚àû /[ ‚àÇt]*‚àÇ/‚àÇ/[ ‚àÇt]*/ " -- "
 //
 //		# Convert any trialing comments (C version)
-//		find •
-//		replace -c ∞ /[ ∂t]*∂/∂*[ ∂t](≈)®1[ ∂t]∂*∂// " -- ®1"
+//		find ‚Ä¢
+//		replace -c ‚àû /[ ‚àÇt]*‚àÇ/‚àÇ*[ ‚àÇt](‚âà)¬Æ1[ ‚àÇt]‚àÇ*‚àÇ// " -- ¬Æ1"
 //
 //		# Remove any trialing periods in comments
-//		find •
-//		replace -c ∞ /.∞/ ""
+//		find ‚Ä¢
+//		replace -c ‚àû /.‚àû/ ""
 
 ID=kStr_PalmOSErrorBase+hwrErrorClass+1
 ENGLISH=hwrErrHwrCustomNotImplemented

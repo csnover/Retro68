@@ -139,7 +139,7 @@ $output_vcpp = $output . "Strings.rc";
 #}
 -EOT-
 
-	print => sub { "\t{ $_[0], \"" . backslash_quotes(translate_high_ascii(1, $_[1])) . "\" }," }
+	print => sub { "\t{ $_[0], \"" . backslash_quotes($_[1]) . "\" }," }
 },
 
 {
@@ -156,7 +156,7 @@ $output_vcpp = $output . "Strings.rc";
 #END
 -EOT-
 
-	print => sub { "\t$_[0]\t\"" . double_quotes(translate_high_ascii(0, $_[1])) . "\"" }
+	print => sub { "\t$_[0]\t\"" . double_quotes($_[1]) . "\"" }
 }
 );
 
@@ -172,7 +172,9 @@ foreach $mode (@modes) {
 
 	while (<I>) {
 		if (/^\t(.+)/ and $text) {
-			$text .= $1;
+			my $next = $1;
+			$text =~ s/\\$//;
+			$text .= $next;
 			next;
 		}
 
@@ -201,7 +203,6 @@ foreach $mode (@modes) {
 	close (I);
 }
 
-
 sub backslash_quotes
 {
 	local($_)=@_;
@@ -215,36 +216,3 @@ sub double_quotes
 	s/\"/\"\"/g;		# Turn a " into ""
 	return $_;
 }
-
-sub translate_high_ascii
-{
-	local($unix, $_) = @_;
-	# Translate Macintosh High Ascii characters
-	# into the equivalents for Windows and Unix.
-
-	# (Note: I tried turning the curly quotes into
-	#  the equivalent on Windows, but they just looked
-	#  really bad in dialogs, so I now turn them into
-	#  straight quotes.)
-
-	s/Ó/\"/g;			# Turn Ó into "
-	s/Ò/\"/g;			# Turn Ò into "
-	s/Õ/\'/g;			# Turn Õ into '
-	s/Ô/\'/g;			# Turn Ô into '
-	s/É/\.\.\./g;		# Turn É into ...
-	s/ª/\(TM)/g;		# Turn ª into (TM)
-
-	if (!$unix)
-	{
-		s/¨/\®/g;			# Turn ¨ into ®
-	}
-	else
-	{
-		s/¨/(R)/g;			# Turn ¨ into (R)
-		s/©/(c)/g;			# Turn © into (c)
-	}
-	
-	return $_;
-}
-
-
