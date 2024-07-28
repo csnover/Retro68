@@ -111,7 +111,7 @@ class EmMenuItem
 								EmMenuItem		(const string&, EmCommandID);
 								~EmMenuItem		(void);
 
-		string					GetTitle		(void) const;
+		const string&			GetTitle		(void) const;
 		char					GetShortcut		(void) const;
 		EmCommandID				GetCommand		(void) const;
 		EmMenuItemList&			GetChildren		(void);

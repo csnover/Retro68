@@ -1092,7 +1092,7 @@ EmMenuItem::~EmMenuItem (void)
 //		¥ EmMenuItem::GetTitle
 // ---------------------------------------------------------------------------
 
-string EmMenuItem::GetTitle (void) const
+const string &EmMenuItem::GetTitle (void) const
 {
 	return fTitle;
 }
