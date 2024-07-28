@@ -1,8 +1,7 @@
 /* XPM */
 static const char * poser_xpm[] = {
-"38 39 12 1",
-" 	c None",
-".	c #C5C2C5",
+"38 39 11 1",
+".	c None",
 "+	c #525252",
 "@	c #212121",
 "#	c #000000",

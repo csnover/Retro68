@@ -15,6 +15,7 @@
 #define EmWindowFltk_h
 
 #include "EmWindow.h"			// EmWindow
+#include "EmPixMap.h"
 
 #include <FL/Fl_Window.H>		// Fl_Window
 #include <vector>
@@ -65,12 +66,17 @@ class EmWindowFltk : public Fl_Window, public EmWindow
 													 const EmRect& destRect,
 													 Bool scaled);
 
+		virtual void			HostSetDefaultIcon	(void);
 		virtual void			HostGetDefaultSkin	(EmPixMap&, int scale);
 		virtual EmPoint			HostGetCurrentMouse	(void);
 
 	private:
 		Fl_Box*					fMessage;
 		Fl_Image*				fCachedSkin;
+		string					fTitleStr;
+		string					fMessageStr;
+		EmPixMap				fIcon;
+		Fl_RGB_Image*			fCachedIcon;
 };
 
 extern EmWindowFltk* gHostWindow;

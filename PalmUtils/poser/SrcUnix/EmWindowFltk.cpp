@@ -13,6 +13,7 @@
 
 #include "EmCommon.h"
 #include "EmWindowFltk.h"
+#include "Strings.r.h"
 
 #include "EmApplication.h"		// gApplication
 #include "EmCommands.h"			// EmCommandID
@@ -34,16 +35,152 @@
 
 #include "DefaultSmall.xpm"
 #include "DefaultLarge.xpm"
+#include "poser.xpm"
 
 const int kDefaultWidth = 220;
 const int kDefaultHeight = 330;
 
-#if FL_MAJOR_VERSION == 1 && FL_MINOR_VERSION == 0
-// FLTK 1.0.x had no separate Fl_RGB_Image subclass of Fl_Image.
-#define Fl_RGB_Image Fl_Image
-#endif
-
 EmWindowFltk* gHostWindow;
+
+static void ParseXPixMap(EmPixMap &pixMap, const char **xpm)
+{
+	/*
+		An XPM file is an array of strings composed of four sections:
+
+				<Values>
+				<Colors>
+				<Pixels>
+				<Extensions>
+
+		Each string is composed of words separated by spaces.
+	*/
+
+	/*
+		<Values> is a string containing four or six integers in base
+		10 that correspond to width, height, number of colors, number
+		of characters per pixel, and (optionally) hotspot location.
+	*/
+
+	int w = 0;
+	int h = 0;
+	int num_colors = 0;
+	int cpp = 0;
+	int hot_x = 0;
+	int hot_y = 0;
+	int i = sscanf (xpm [0], "%d %d %d %d %d %d", &w, &h, &num_colors,
+					&cpp, &hot_x, &hot_y);
+	int bpp = 3;
+
+	EmAssert (i == 4);
+	EmAssert (w > 0);
+	EmAssert (h > 0);
+	EmAssert (num_colors > 0);
+	EmAssert (cpp == 1);
+	EmAssert (hot_x == 0);
+	EmAssert (hot_y == 0);
+
+	/*
+		<Colors> contains as many lines as there are colors.  Each string
+		contains the following words:
+
+			<color_code> {<key> <color>}+
+	*/
+
+	struct RGBAType {
+		uint8 fRed, fGreen, fBlue, fAlpha;
+		RGBAType() {}
+		RGBAType(uint8 r, uint8 g, uint8 b, uint8 a)
+			: fRed(r), fGreen(g), fBlue(b), fAlpha(a) {}
+	};
+
+	RGBAType colorMap[0x80];
+
+	for (int color_num = 0; color_num < num_colors; ++color_num)
+	{
+		const char*	this_line	= xpm [1 + color_num];
+		int			color_code	= this_line[0];
+		char		key[3]		= {0};
+		char		color[8]	= {0};
+
+		i = sscanf (this_line + 1 + 1, "%s %s", key, color);
+
+		EmAssert (i == 2);
+		EmAssert (strlen (key) == 1);
+		if (strcmp(color, "None") == 0)
+		{
+			bpp = 4;
+			colorMap [color_code] = RGBAType(0, 0, 0, 0);
+		}
+		else
+		{
+			EmAssert (strlen (color) == 7);
+			EmAssert (key[0] == 'c');
+			EmAssert (color[0] == '#');
+			EmAssert (isxdigit (color[1]));
+			EmAssert (isxdigit (color[2]));
+			EmAssert (isxdigit (color[3]));
+			EmAssert (isxdigit (color[4]));
+			EmAssert (isxdigit (color[5]));
+			EmAssert (isxdigit (color[6]));
+
+			int r, g, b;
+			i = sscanf (color, "#%2x%2x%2x", &r, &g, &b);
+
+			EmAssert (i == 3);
+			EmAssert (isprint (color_code));
+
+			colorMap [color_code] = RGBAType (r, g, b, 255);
+		}
+	}
+
+	/*
+		<Pixels> contains "h" lines, each containing cpp * "w"
+		characters in them.  Each set of cpp characters maps to
+		one of the colors in the <Colors> array.
+	*/
+
+	uint8* buffer = (uint8*) Platform::AllocateMemory (w * h * bpp);
+	uint8* dest = buffer;
+
+	for (int yy = 0; yy < h; ++yy)
+	{
+		const char* src = xpm [1 + num_colors + yy];
+
+		for (int xx = 0; xx < w; ++xx)
+		{
+			int color_code = *src++;
+			EmAssert (isprint (color_code));
+
+			const RGBAType& rgb = colorMap [color_code];
+
+			*dest++ = rgb.fRed;
+			*dest++ = rgb.fGreen;
+			*dest++ = rgb.fBlue;
+			if (bpp == 4)
+				*dest++ = rgb.fAlpha;
+		}
+	}
+
+	EmAssert ((dest - buffer) <= (w * h * bpp));
+
+	// We now have the data in RGB format.  Wrap it up in a temporary
+	// EmPixMap so that we can copy it into the result EmPixMap.
+
+	EmPixMap	wrapper;
+
+	wrapper.SetSize (EmPoint (w, h));
+	wrapper.SetFormat (bpp == 3 ? kPixMapFormat24RGB : kPixMapFormat32RGBA);
+	wrapper.SetRowBytes (w * bpp);
+	wrapper.SetBits (buffer);
+
+	// Copy the data to the destination.
+
+	pixMap = wrapper;
+
+	// Clean up.
+
+	Platform::DisposeMemory (buffer);
+}
 
 // ---------------------------------------------------------------------------
 //		¥ EmWindow::NewWindow
@@ -73,10 +210,18 @@ EmWindowFltk::EmWindowFltk (void) :
 	Fl_Window (kDefaultWidth, kDefaultHeight, "pose"),
 	EmWindow (),
 	fMessage (NULL),
-	fCachedSkin (NULL)
+	fCachedSkin (NULL),
+	fMessageStr (),
+	fIcon (),
+	fCachedIcon (NULL)
 {
 	EmAssert (gHostWindow == NULL);
 	gHostWindow = this;
+
+	fTitleStr = Platform::GetString(kStr_AppName);
+	label(fTitleStr.c_str());
+
+	HostSetDefaultIcon();
 
 	this->box (FL_FLAT_BOX);
 	this->color (fl_gray_ramp (FL_NUM_GRAY - 1));
@@ -92,8 +237,8 @@ EmWindowFltk::EmWindowFltk (void) :
 
 	// Create the message to display when there's no session running.
 
-	fMessage = new Fl_Box (0, 0, 200, 40,
-						   "Right click on this window to show a menu of commands.");
+	fMessageStr = Platform::GetString(kStr_MainWindowInstructions);
+	fMessage = new Fl_Box (0, 0, 200, 40, fMessageStr.c_str());
 	fMessage->box (FL_NO_BOX);
 	fMessage->align (FL_ALIGN_CENTER | FL_ALIGN_WRAP | FL_ALIGN_INSIDE);
 
@@ -129,6 +274,8 @@ EmWindowFltk::~EmWindowFltk (void)
 	// Get rid of the cached skin.
 
 	this->CacheFlush ();
+
+	delete fCachedIcon;
 
 	EmAssert (gHostWindow == this);
 	gHostWindow = NULL;
@@ -635,6 +782,20 @@ void EmWindowFltk::HostPaintLCD (const EmScreenUpdateInfo& info, const EmRect& s
 	Platform::DisposeMemory (buffer);
 }
 
+// ---------------------------------------------------------------------------
+//		¥ EmWindowFltk::HostSetDefaultIcon
+// ---------------------------------------------------------------------------
+// Sets the default (built-in) window icon.
+
+void EmWindowFltk::HostSetDefaultIcon (void)
+{
+	ParseXPixMap (fIcon, poser_xpm);
+	EmPoint size = fIcon.GetSize ();
+	delete fCachedIcon;
+	fCachedIcon = new Fl_RGB_Image ((uchar*) fIcon.GetBits (), size.fX, size.fY,
+		fIcon.GetDepth() / 8, fIcon.GetRowBytes ());
+	this->default_icon (fCachedIcon);
+}
 
 // ---------------------------------------------------------------------------
 //		¥ EmWindowFltk::HostGetDefaultSkin
@@ -644,125 +805,7 @@ void EmWindowFltk::HostPaintLCD (const EmScreenUpdateInfo& info, const EmRect& s
 void EmWindowFltk::HostGetDefaultSkin (EmPixMap& pixMap, int scale)
 {
 	const char** xpm = (scale == 2) ? DefaultLarge : DefaultSmall;
-
-	/*
-		An XPM file is an array of strings composed of four sections:
-
-				<Values>
-				<Colors>
-				<Pixels>
-				<Extensions>
-
-		Each string is composed of words separated by spaces.
-	*/
-
-	/*
-		<Values> is a string containing four or six integers in base
-		10 that correspond to width, height, number of colors, number
-		of characters per pixel, and (optionally) hotspot location.
-	*/
-
-	int w = 0;
-	int h = 0;
-	int num_colors = 0;
-	int cpp = 0;
-	int hot_x = 0;
-	int hot_y = 0;
-	int i = sscanf (xpm [0], "%d %d %d %d %d %d", &w, &h, &num_colors,
-					&cpp, &hot_x, &hot_y);
-
-	EmAssert (i == 4);
-	EmAssert (w > 0);
-	EmAssert (h > 0);
-	EmAssert (num_colors > 0);
-	EmAssert (cpp == 1);
-	EmAssert (hot_x == 0);
-	EmAssert (hot_y == 0);
-
-	/*
-		<Colors> contains as many lines as there are colors.  Each string
-		contains the following words:
-
-			<color_code> {<key> <color>}+
-	*/
-
-	RGBType colorMap[0x80];
-
-	for (int color_num = 0; color_num < num_colors; ++color_num)
-	{
-		const char*	this_line	= xpm [1 + color_num];
-		int			color_code	= this_line[0];
-		char		key[3]		= {0};
-		char		color[8]	= {0};
-
-		i = sscanf (this_line + 1 + 1, "%s %s", key, color);
-
-		EmAssert (i == 2);
-		EmAssert (strlen (key) == 1);
-		EmAssert (strlen (color) == 7);
-		EmAssert (key[0] == 'c');
-		EmAssert (color[0] == '#');
-		EmAssert (isxdigit (color[1]));
-		EmAssert (isxdigit (color[2]));
-		EmAssert (isxdigit (color[3]));
-		EmAssert (isxdigit (color[4]));
-		EmAssert (isxdigit (color[5]));
-		EmAssert (isxdigit (color[6]));
-
-		int r, g, b;
-		i = sscanf (color, "#%2x%2x%2x", &r, &g, &b);
-
-		EmAssert (i == 3);
-		EmAssert (isprint (color_code));
-
-		colorMap [color_code] = RGBType (r, g, b);
-	}
-
-	/*
-		<Pixels> contains "h" lines, each containing cpp * "w"
-		characters in them.  Each set of cpp characters maps to
-		one of the colors in the <Colors> array.
-	*/
-
-	uint8* buffer = (uint8*) Platform::AllocateMemory (w * h * 3);
-	uint8* dest = buffer;
-
-	for (int yy = 0; yy < h; ++yy)
-	{
-		const char* src = xpm [1 + num_colors + yy];
-
-		for (int xx = 0; xx < w; ++xx)
-		{
-			int color_code = *src++;
-			EmAssert (isprint (color_code));
-
-			const RGBType& rgb = colorMap [color_code];
-
-			*dest++ = rgb.fRed;
-			*dest++ = rgb.fGreen;
-			*dest++ = rgb.fBlue;
-		}
-	}
-
-	EmAssert ((dest - buffer) <= (w * h * 3));
-
-	// We now have the data in RGB format.  Wrap it up in a temporary
-	// EmPixMap so that we can copy it into the result EmPixMap.
-
-	EmPixMap	wrapper;
-
-	wrapper.SetSize (EmPoint (w, h));
-	wrapper.SetFormat (kPixMapFormat24RGB);
-	wrapper.SetRowBytes (w * 3);
-	wrapper.SetBits (buffer);
-
-	// Copy the data to the destination.
-
-	pixMap = wrapper;
-
-	// Clean up.
-
-	Platform::DisposeMemory (buffer);
+	ParseXPixMap (pixMap, xpm);
 }
 
 
