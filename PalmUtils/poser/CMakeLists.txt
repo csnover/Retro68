@@ -19,10 +19,10 @@ add_compile_options(
     -Wno-conversion
 )
 
-add_subdirectory(SrcShared/Gzip)
 add_subdirectory(SrcShared/jpeg)
 add_subdirectory(SrcUnix/espws-2.0)
 
+find_package(ZLIB REQUIRED)
 find_package(Threads REQUIRED)
 find_package(FLTK REQUIRED)
 find_package(Perl REQUIRED)
@@ -455,9 +455,9 @@ target_include_directories(pose PRIVATE
 )
 
 target_link_libraries(pose PRIVATE
+    ZLIB::ZLIB
     Threads::Threads
     poserespws
-    posergzip
     poserjpeg
     fltk
     fltk_images

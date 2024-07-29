@@ -36,79 +36,7 @@
 #include <locale.h> 			// localeconv, lconv
 #include <sstream>				// stringstream
 #include <time.h>				// time, localtime
-
-
-extern "C" {
-	// These are defined in machdep_maccess.h, too
-#undef get_byte
-#undef put_byte
-#undef put_long
-#include "gzip.h"
-#include "lzw.h"
-
-int (*write_buf_proc)(char *buf, unsigned size);
-
-DECLARE(uch, inbuf,  INBUFSIZ +INBUF_EXTRA);
-DECLARE(uch, outbuf, OUTBUFSIZ+OUTBUF_EXTRA);
-DECLARE(ush, d_buf,  DIST_BUFSIZE);
-DECLARE(uch, window, 2L*WSIZE);
-DECLARE(ush, tab_prefix, 1L<<BITS);
-
-int test = 0;		  /* test .gz file integrity */
-int level = 1;		  /* compression level */
-int exit_code = OK; 	 /* program exit code */
-int verbose = 2;		/* be verbose (-v) */
-int quiet = 0;			/* be quiet (-q) */
-
-const char ifname[] = "ifname";
-const char ofname[] = "ofname";
-const char* progname = "progname";
-
-long bytes_in;			   /* number of input bytes */
-long bytes_out; 		   /* number of output bytes */
-int  ifd;				   /* input file descriptor */
-int  ofd;				   /* output file descriptor */
-unsigned insize;		   /* valid bytes in inbuf */
-unsigned inptr; 		   /* index of next byte to be processed in inbuf */
-unsigned outcnt;		   /* bytes in output buffer */
-
-#include <setjmp.h>
-jmp_buf env;
-
-RETSIGTYPE abort_gzip()
-{
-	LogDump ();
-	abort ();
-//	longjmp (env, 1);
-}
-
-int my_fprintf (FILE*, const char* fmt, ...)
-{
-	int 	n;
-	va_list arg;
-
-	va_start (arg, fmt);
-	n = LogGetStdLog ()->VPrintf (fmt, arg);
-	va_end (arg);
-
-	return n;
-}
-
-}	// extern "C"
-
-
-extern "C"
-{
-	int PrvGzipReadProc 	(char* buf, unsigned size);
-	int PrvGzipWriteProc	(char* buf, unsigned size);
-}
-
-static void*	gSrcP;
-static void*	gDstP;
-static int32 	gSrcBytes;
-static int32 	gDstBytes;
-static int32 	gSrcOffset;
-static int32 	gDstOffset;
+#include <zlib.h>
 
 // ===========================================================================
 //	¥ StMemory Class
@@ -1726,41 +1654,26 @@ int32 RunLengthWorstSize (int32 srcBytes)
 
 void GzipEncode (void** srcPP, void** dstPP, int32 srcBytes, int32 dstBytes)
 {
-	gSrcP		= *srcPP;
-	gDstP		= *dstPP;
-	gSrcBytes	= srcBytes;
-	gDstBytes	= dstBytes;
-	gSrcOffset	= 0;
-	gDstOffset	= 0;
+	z_stream strm;
+	strm.zalloc = Z_NULL;
+	strm.zfree = Z_NULL;
+	strm.opaque = Z_NULL;
+	if (deflateInit(&strm, Z_DEFAULT_COMPRESSION) != Z_OK)
+	{
+		fprintf(stderr, "zlib error: %s\n", strm.msg);
+		return;
+	}
+	strm.next_in = static_cast<Bytef *>(*srcPP);
+	strm.avail_in = srcBytes;
+	strm.next_out = static_cast<Bytef *>(*dstPP);
+	strm.avail_out = dstBytes;
+	deflate(&strm, Z_FINISH);
 
-	bytes_in = srcBytes;	// (for gzip internal debugging)
+	*srcPP = static_cast<char *>(*srcPP) + strm.total_in;
+	*dstPP = static_cast<char *>(*dstPP) + strm.total_out;
 
-	ush 	attr = 0;		   /* ascii/binary flag */
-	ush 	deflate_flags = 0; /* pkzip -es, -en or -ex equivalent */
-	int 	method;
-
-	clear_bufs ();
-
-	read_buf		= &::PrvGzipReadProc;
-	write_buf_proc	= &::PrvGzipWriteProc;
-
-	bi_init (NO_FILE);
-	ct_init (&attr, &method);
-	lm_init (level, &deflate_flags);
-
-	deflate ();
-
-	// Perform a put_byte(0) to pad out the
-	// compressed buffer.  gzip apparently can skid off the
-	// end of the compressed data when inflating it, so we need
-	// an extra zero.
-
-	put_byte (0);
-
-	flush_outbuf ();
-
-	*srcPP = ((char*) gSrcP) + gSrcOffset;
-	*dstPP = ((char*) gDstP) + gDstOffset;
+	if (deflateEnd(&strm) != Z_OK)
+		fprintf(stderr, "zlib error: %s\n", strm.msg);
 }
 
 
@@ -1782,22 +1695,23 @@ void GzipEncode (void** srcPP, void** dstPP, int32 srcBytes, int32 dstBytes)
 
 void GzipDecode (void** srcPP, void** dstPP, int32 srcBytes, int32 dstBytes)
 {
-	gSrcP		= *srcPP;
-	gDstP		= *dstPP;
-	gSrcBytes	= srcBytes;
-	gDstBytes	= dstBytes;
-	gSrcOffset	= 0;
-	gDstOffset	= 0;
-
-	clear_bufs ();
-
-	read_buf		= &::PrvGzipReadProc;
-	write_buf_proc	= &::PrvGzipWriteProc;
-
-	inflate ();
-
-	*srcPP = ((char*) gSrcP) + gSrcOffset;
-	*dstPP = ((char*) gDstP) + gDstOffset;
+	z_stream strm;
+	strm.zalloc = Z_NULL;
+	strm.zfree = Z_NULL;
+	strm.opaque = Z_NULL;
+	strm.next_in = static_cast<Bytef *>(*srcPP);
+	strm.avail_in = srcBytes;
+	strm.next_out = static_cast<Bytef *>(*dstPP);
+	strm.avail_out = dstBytes;
+	if (inflateInit(&strm) != Z_OK)
+	{
+		fprintf(stderr, "zlib error: %s\n", strm.msg);
+		return;
+	}
+	*srcPP = static_cast<char *>(*srcPP) + strm.total_in;
+	*dstPP = static_cast<char *>(*dstPP) + strm.total_out;
+	if (inflateEnd(&strm) != Z_OK)
+		fprintf(stderr, "zlib error: %s\n", strm.msg);
 }
 
 
@@ -1815,71 +1729,23 @@ void GzipDecode (void** srcPP, void** dstPP, int32 srcBytes, int32 dstBytes)
 
 int32 GzipWorstSize (int32 srcBytes)
 {
-	int32	maxDestBytes = srcBytes * 2;
-
+	int32 maxDestBytes;
+	z_stream strm;
+	strm.zalloc = Z_NULL;
+	strm.zfree = Z_NULL;
+	strm.opaque = Z_NULL;
+	if (deflateInit(&strm, Z_DEFAULT_COMPRESSION) != Z_OK)
+	{
+		fprintf(stderr, "zlib error: %s\n", strm.msg);
+		maxDestBytes = srcBytes * 2;
+	}
+	else
+	{
+		maxDestBytes = deflateBound(&strm, srcBytes);
+		deflateEnd(&strm);
+	}
 	return maxDestBytes;
 }
-
-
-/***********************************************************************
- *
- * FUNCTION:	PrvGzipReadProc
- *
- * DESCRIPTION: .
- *
- * PARAMETERS:	.
- *
- * RETURNED:	.
- *
- ***********************************************************************/
-
-int PrvGzipReadProc (char* buf, unsigned size)
-{
-	if (gSrcOffset == gSrcBytes)
-		return EOF;
-
-	if (size > (unsigned) (gSrcBytes - gSrcOffset))
-		size = gSrcBytes - gSrcOffset;
-
-	if (size > 0)
-	{
-		memcpy (buf, ((char*) gSrcP) + gSrcOffset, size);
-		gSrcOffset += size;
-	}
-
-	return size;
-}
-
-
-/***********************************************************************
- *
- * FUNCTION:	PrvGzipWriteProc
- *
- * DESCRIPTION: .
- *
- * PARAMETERS:	.
- *
- * RETURNED:	.
- *
- ***********************************************************************/
-
-int PrvGzipWriteProc (char* buf, unsigned size)
-{
-	if (gDstOffset == gDstBytes)
-		return EOF;
-
-	if (size > (unsigned) (gDstBytes - gDstOffset))
-		size = gDstBytes - gDstOffset;
-
-	if (size > 0)
-	{
-		memcpy (((char*) gDstP) + gDstOffset, buf, size);
-		gDstOffset += size;
-	}
-
-	return size;
-}
-
 
 /***********************************************************************
  *
