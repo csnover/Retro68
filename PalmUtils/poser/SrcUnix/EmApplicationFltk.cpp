@@ -23,6 +23,7 @@
 #include <FL/Fl.H>				// Fl::wait
 #include <FL/x.H>				// fl_display
 #include <FL/Fl_Widget.H>
+#include <FL/Fl_File_Icon.H>
 #if HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -188,6 +189,8 @@ Bool EmApplicationFltk::Startup (int argc, char** argv)
 #endif
 
 	// Initialize the base system.
+
+	Fl_File_Icon::load_system_icons();
 
 	if (!EmApplication::Startup (argc, argv))
 		return false;

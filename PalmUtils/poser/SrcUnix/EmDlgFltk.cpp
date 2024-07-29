@@ -64,6 +64,7 @@
 #include <FL/Fl_Multi_Label.H>
 #include <FL/Fl_Multiline_Input.H>
 #include <FL/Fl_Multiline_Output.H>
+#include <FL/Fl_Native_File_Chooser.H>
 #include <FL/Fl_Nice_Slider.H>
 #include <FL/Fl_Object.H>
 #include <FL/Fl_Output.H>
@@ -100,14 +101,11 @@
 #include <FL/Fl_Window.H>
 #include <FL/fl_ask.H>
 #include <FL/fl_draw.H>
-#include <FL/fl_file_chooser.H>
 #include <FL/fl_message.H>
 #include <FL/fl_show_colormap.H>
 #include <FL/fl_show_input.H>
 
 #include "EmDlgFltkFactory.h"
-
-#include "espws-2.0/FileChooser.h"
 
 #include <algorithm>	// find
 #include <list>
@@ -715,23 +713,24 @@ EmDlgItemID EmDlg::HostRunGetFile (const void* parameters)
 
 	FilterList filter = ::PrvConvertTypeList (data.fFilterList);
 
-	FileChooser chooser (data.fDefaultPath.IsSpecified () ? data.fDefaultPath.GetFullPath ().c_str () : NULL,
-						 filter.c_str (), FileChooser::SINGLE, data.fPrompt.c_str ());
+	Fl_Native_File_Chooser chooser;
+	if (data.fDefaultPath.IsSpecified ())
+		chooser.directory(data.fDefaultPath.GetFullPath ().c_str ());
+	chooser.filter(filter.c_str ());
+	chooser.type(Fl_Native_File_Chooser::BROWSE_FILE);
+	chooser.title(data.fPrompt.c_str ());
 
-	chooser.show ();
-
-	while (chooser.shown ())
-		Fl::wait ();
-
-	int32 count = chooser.count ();
-	if (count == 0)
-		return kDlgItemCancel;
-
-	// Get a EmFileRef to the given file
-
-	data.fResult = EmFileRef (chooser.value(1));
-
-	return kDlgItemOK;
+	switch (chooser.show ())
+	{
+		case -1:
+			fl_alert("%s\n", chooser.errmsg ());
+			// fall through
+		case 1:
+			return kDlgItemCancel;
+		default:
+			data.fResult = EmFileRef (chooser.filename ());
+			return kDlgItemOK;
+	}
 }
 
 
@@ -758,21 +757,29 @@ EmDlgItemID EmDlg::HostRunGetFileList (const void* parameters)
 
 	FilterList filter = ::PrvConvertTypeList (data.fFilterList);
 
-	FileChooser chooser (data.fDefaultPath.IsSpecified () ? data.fDefaultPath.GetFullPath ().c_str () : NULL,
-						 filter.c_str (), FileChooser::MULTI, data.fPrompt.c_str ());
+	Fl_Native_File_Chooser chooser;
+	if (data.fDefaultPath.IsSpecified ())
+		chooser.directory(data.fDefaultPath.GetFullPath ().c_str ());
+	chooser.filter(filter.c_str ());
+	chooser.type(Fl_Native_File_Chooser::BROWSE_MULTI_FILE);
+	chooser.title(data.fPrompt.c_str ());
 
-	chooser.show ();
-
-	while (chooser.shown ())
-		Fl::wait ();
+	switch (chooser.show ())
+	{
+		case -1:
+			fl_alert("%s\n", chooser.errmsg ());
+			// fall through
+		case 1:
+			return kDlgItemCancel;
+	}
 
 	int32 count = chooser.count ();
 	if (count == 0)
 		return kDlgItemCancel;
 
-	for (int32 ii = 1; ii <= count; ++ii)
+	for (int32 ii = 0; ii < count; ++ii)
 	{
-		data.fResults.push_back (EmFileRef (chooser.value (ii)));
+		data.fResults.push_back (EmFileRef (chooser.filename (ii)));
 	}
 
 	return kDlgItemOK;
@@ -802,23 +809,24 @@ EmDlgItemID EmDlg::HostRunPutFile (const void* parameters)
 
 	FilterList filter = ::PrvConvertTypeList (data.fFilterList);
 
-	FileChooser chooser (data.fDefaultPath.IsSpecified () ? data.fDefaultPath.GetFullPath ().c_str () : NULL,
-						 filter.c_str (), FileChooser::CREATE, data.fPrompt.c_str ());
+	Fl_Native_File_Chooser chooser;
+	if (data.fDefaultPath.IsSpecified ())
+		chooser.directory(data.fDefaultPath.GetFullPath ().c_str ());
+	chooser.filter(filter.c_str ());
+	chooser.type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
+	chooser.title(data.fPrompt.c_str ());
 
-	chooser.show ();
-
-	while (chooser.shown ())
-		Fl::wait ();
-
-	int32 count = chooser.count ();
-	if (count == 0)
-		return kDlgItemCancel;
-
-	// Get a EmFileRef to the given file
-
-	data.fResult = EmFileRef (chooser.value (1));
-
-	return kDlgItemOK;
+	switch (chooser.show ())
+	{
+		case -1:
+			fl_alert("%s\n", chooser.errmsg ());
+			// fall through
+		case 1:
+			return kDlgItemCancel;
+		default:
+			data.fResult = EmFileRef (chooser.filename ());
+			return kDlgItemOK;
+	}
 }
 
 
@@ -843,23 +851,23 @@ EmDlgItemID EmDlg::HostRunGetDirectory (const void* parameters)
 	EmAssert (parameters);
 	DoGetDirectoryParameters&	data = *(DoGetDirectoryParameters*) parameters;
 
-	FileChooser chooser (data.fDefaultPath.IsSpecified () ? data.fDefaultPath.GetFullPath ().c_str () : NULL,
-						 "nEveRmAtCh*", FileChooser::DIRECTORY, data.fPrompt.c_str ());
+	Fl_Native_File_Chooser chooser;
+	if (data.fDefaultPath.IsSpecified ())
+		chooser.directory(data.fDefaultPath.GetFullPath ().c_str ());
+	chooser.type(Fl_Native_File_Chooser::BROWSE_DIRECTORY);
+	chooser.title(data.fPrompt.c_str ());
 
-	chooser.show ();
-
-	while (chooser.shown ())
-		Fl::wait ();
-
-	int32 count = chooser.count ();
-	if (count == 0)
-		return kDlgItemCancel;
-
-	// Get a EmFileRef to the given file
-
-	data.fResult = EmDirRef (chooser.value (1));
-
-	return kDlgItemOK;
+	switch (chooser.show ())
+	{
+		case -1:
+			fl_alert("%s\n", chooser.errmsg ());
+			// fall through
+		case 1:
+			return kDlgItemCancel;
+		default:
+			data.fResult = EmDirRef (chooser.filename ());
+			return kDlgItemOK;
+	}
 }
 
 
@@ -2020,8 +2028,6 @@ FilterList PrvConvertTypeList (const EmFileTypeList& typeList)
 {
 	FilterList	filter;
 
-	filter += "{";
-
 	EmFileTypeList::const_iterator	iter = typeList.begin ();
 
 	while (iter != typeList.end ())
@@ -2035,53 +2041,52 @@ FilterList PrvConvertTypeList (const EmFileTypeList& typeList)
 				break;
 
 			case kFileTypeROM:
-				::PrvAddFilter (filter, "*.[Rr][Oo][Mm]");
+				::PrvAddFilter (filter, "Poser ROM\t*.[Rr][Oo][Mm]");
 				break;
 
 			case kFileTypeSession:
-				::PrvAddFilter (filter, "*.[Pp][Ss][Ff]");
+				::PrvAddFilter (filter, "Poser session\t*.[Pp][Ss][Ff]");
 				break;
 
 			case kFileTypeEvents:
-				::PrvAddFilter (filter, "*.[Pp][Ee][Vv]");
+				::PrvAddFilter (filter, "Poser event\t*.[Pp][Ee][Vv]");
 				break;
 
 			case kFileTypePreference:
 				break;
 
 			case kFileTypePalmApp:
-				::PrvAddFilter (filter, "*.[Pp][Rr][Cc]");
+				::PrvAddFilter (filter, "Palm application\t*.[Pp][Rr][Cc]");
 				break;
 
 			case kFileTypePalmDB:
-				::PrvAddFilter (filter, "*.[Pp][Dd][Bb]");
+				::PrvAddFilter (filter, "Palm resource database\t*.[Pp][Dd][Bb]");
 				break;
 
 			case kFileTypePalmQA:
-				::PrvAddFilter (filter, "*.[Pp][Qq][Aa]");
+				::PrvAddFilter (filter, "Palm query application\t*.[Pp][Qq][Aa]");
 				break;
 
 			case kFileTypeText:
-				::PrvAddFilter (filter, "*.[Tt][Xx][Tt]");
+				::PrvAddFilter (filter, "Text file\t*.[Tt][Xx][Tt]");
 				break;
 
 			case kFileTypePicture:
-				::PrvAddFilter (filter, "*.[Pp][Pp][Mm]");
+				::PrvAddFilter (filter, "Picture\t*.[Pp][Pp][Mm]");
 				break;
 
 			case kFileTypeSkin:
-				::PrvAddFilter (filter, "*.[Ss][Kk][Ii][Nn]");
+				::PrvAddFilter (filter, "Poser skin\t*.[Ss][Kk][Ii][Nn]");
 				break;
 
 			case kFileTypeProfile:
 				break;
 
 			case kFileTypePalmAll:
-				::PrvAddFilter (filter, "*.[Pp][Rr][Cc]|*.[Pp][Dd][Bb]|*.[Pp][Qq][Aa]");
+				::PrvAddFilter (filter, "All Palm types\t*.[Pp][Rr][Cc]|*.[Pp][Dd][Bb]|*.[Pp][Qq][Aa]");
 				break;
 
 			case kFileTypeAll:
-				::PrvAddFilter (filter, "*");
 				break;
 
 			case kFileTypeLast:
@@ -2091,8 +2096,6 @@ FilterList PrvConvertTypeList (const EmFileTypeList& typeList)
 
 		++iter;
 	}
-
-	filter += "}";
 
 	return filter;
 }
@@ -2112,10 +2115,8 @@ FilterList PrvConvertTypeList (const EmFileTypeList& typeList)
 
 void PrvAddFilter (FilterList& filter, const char* pattern)
 {
-	if (filter.size() != 1)
-	{
-		filter += "|";
-	}
+	if (!filter.empty())
+		filter += "\n";
 
 	filter += pattern;
 }
