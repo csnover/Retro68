@@ -14,26 +14,11 @@
 #ifndef EmJPEG_h
 #define EmJPEG_h
 
-// jmorecfg.h tries to typedef uint32 to be a long.  BASETSD.H
-// already defines uint32 to be an int.  Fortunately, they amount
-// to the same thing, so we can turn off the jmorecfg.h attempt
-// by defining the following symbol.
-
-#define XMD_H 1
-
-// jmorecfg.h also tries to define FAR.  Undefine the one set up
-// by windef.h.  Yes, that gives us two different definitions of
-// FAR, but hopefully that won't lead to conflict.
-
-#undef FAR
-
-
-extern "C"
-{
-	#include "jinclude.h"
-	#include "jpeglib.h"
-	#include "jerror.h"
-}
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <jpeglib.h>
+#include <jerror.h>
 
 class EmPixMap;
 class EmStream;

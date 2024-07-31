@@ -19,10 +19,9 @@ add_compile_options(
     -Wno-conversion
 )
 
-add_subdirectory(SrcShared/jpeg)
-
 find_package(ZLIB REQUIRED)
 find_package(Threads REQUIRED)
+find_package(JPEG REQUIRED)
 find_package(FLTK REQUIRED)
 find_package(Perl REQUIRED)
 find_package(X11 REQUIRED)
@@ -91,7 +90,6 @@ add_executable(pose
     SrcUnix/EmWindowFltk.cpp
     SrcUnix/EmWindowFltk.h
     SrcUnix/Platform_Unix.cpp
-    SrcUnix/jconfig.h
     SrcUnix/poser.xpm
 
     SrcShared/Strings.r.h
@@ -456,7 +454,7 @@ target_include_directories(pose PRIVATE
 target_link_libraries(pose PRIVATE
     ZLIB::ZLIB
     Threads::Threads
-    poserjpeg
+    JPEG::JPEG
     fltk
     fltk_images
     X11::X11
