@@ -1883,16 +1883,10 @@ void EmPalmChunk::Validate (const EmPalmHeap& heap) const
 		{
 			char	buffer[20];
 
-			// !!! There's a problem here.  These variables are set before the
-			// variable that uses them.  Thus, replacements based on these variables
-			// are made before they're ready.  The result is that %chunk_size and
-			// %chunk_max still appear in the final message.  I'm not sure how, but
-			// this needs to be addressed and fixed...
-
-			sprintf (buffer, "%0x08X", (int) this->Size ());
+			sprintf (buffer, "0x%08X", this->Size ());
 			Errors::SetParameter ("%chunk_size", buffer);
 
-			sprintf (buffer, "%0x08X", (int) heap.Size ());
+			sprintf (buffer, "0x%08X", heap.Size ());
 			Errors::SetParameter ("%chunk_max", buffer);
 
 			throw (kError_CorruptedHeap_ChunkTooLarge);

@@ -1184,7 +1184,7 @@ void Errors::ReportErrCorruptedHeap (ErrCode corruptionType, emuptr chunkHdr)
 
 	// Set the %corruption_type message variable.
 
-	Errors::SetParameter ("%corruption_type", Platform::GetString (strID));
+	Errors::SetParameter ("%corruption_type", Errors::ReplaceParameters (strID, gUserParameters));
 
 	// Show the dialog.
 
@@ -2205,8 +2205,7 @@ void Errors::HandleDialog (StrCode messageID,
 	// the message because the template parameters are now gone.  So form
 	// the message here and hold onto it.
 
-	string	msgTemplate (Platform::GetString (messageID));
-	string	msg (Errors::ReplaceParameters (msgTemplate, gUserParameters));
+	string	msg (Errors::ReplaceParameters (messageID));
 
 	// If this error occurred while nested (that is, while Poser itself
 	// is calling into the ROM as a subroutine), then we can't really
@@ -2321,6 +2320,7 @@ EmDlgItemID Errors::DoDialog (const char* msg, EmCommonDialogFlags flags, StrCod
 {
 	string	msgStr (msg);
 	msgStr = Errors::ReplaceParameters (msgStr, gUserParameters);
+	Errors::ClearAllParameters();
 
 	// If this error occurred while nested (that is, while Poser itself
 	// is calling into the ROM as a subroutine), then we can't really
@@ -2419,7 +2419,9 @@ EmDlgItemID Errors::DoDialog (const char* msg, EmCommonDialogFlags flags, StrCod
 
 string Errors::ReplaceParameters (StrCode templateID)
 {
-	return Errors::ReplaceParameters (templateID, gUserParameters);
+	string message = Errors::ReplaceParameters (templateID, gUserParameters);
+	Errors::ClearAllParameters();
+	return message;
 }
 
 
@@ -2481,8 +2483,6 @@ string Errors::ReplaceParameters (const string& templ, ParamList& params)
 
 		result = ::ReplaceString (result, key, value);
 	}
-
-	Errors::ClearAllParameters ();
 
 	return result;
 }
