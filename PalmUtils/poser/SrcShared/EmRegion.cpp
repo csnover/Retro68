@@ -241,8 +241,9 @@ EmRegion::EmRegionImpl::CalcBounds (void)
 
 		while ((next = *s++) != 0)
 		{
+			bool last = (s[next] == 0);
 			r.fTop = *s++;
-			r.fBottom = s[next];
+			r.fBottom = last ? 0 : s[next];
 
 			while (next > 1)
 			{
@@ -1207,8 +1208,10 @@ EmRegionRectIterator::Next (EmRect& r)
 			return false;
 		}
 
+		bool last = (fBufPtr[fNext] == 0);
 		r.fTop = *fBufPtr++;
-		r.fBottom = fBufPtr[fNext];
+		if (!last)
+			r.fBottom = fBufPtr[fNext];
 	}
 
 	EmAssert (fBufPtr <= fRegion.GetBuf () + fRegion.Length ());
