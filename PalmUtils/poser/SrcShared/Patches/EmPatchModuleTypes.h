@@ -78,7 +78,7 @@ typedef vector<InstalledLibPatchEntry> PatchedLibIndex;
 
 
 // ===========================================================================
-//		¥ TailpatchType
+//		â€¢ TailpatchType
 // ===========================================================================
 // Structure used to hold tail-patch information.
 

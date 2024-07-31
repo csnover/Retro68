@@ -31,7 +31,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsASICSymbol1700::EmRegsASICSymbol1700
+//		â€¢ EmRegsASICSymbol1700::EmRegsASICSymbol1700
 // ---------------------------------------------------------------------------
 
 EmRegsASICSymbol1700::EmRegsASICSymbol1700 (void)
@@ -40,7 +40,7 @@ EmRegsASICSymbol1700::EmRegsASICSymbol1700 (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsASICSymbol1700::~EmRegsASICSymbol1700
+//		â€¢ EmRegsASICSymbol1700::~EmRegsASICSymbol1700
 // ---------------------------------------------------------------------------
 
 EmRegsASICSymbol1700::~EmRegsASICSymbol1700 (void)
@@ -49,7 +49,7 @@ EmRegsASICSymbol1700::~EmRegsASICSymbol1700 (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsASICSymbol1700::Initialize
+//		â€¢ EmRegsASICSymbol1700::Initialize
 // ---------------------------------------------------------------------------
 
 void EmRegsASICSymbol1700::Initialize (void)
@@ -59,7 +59,7 @@ void EmRegsASICSymbol1700::Initialize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsASICSymbol1700::Reset
+//		â€¢ EmRegsASICSymbol1700::Reset
 // ---------------------------------------------------------------------------
 
 void EmRegsASICSymbol1700::Reset (Bool hardwareReset)
@@ -71,7 +71,7 @@ void EmRegsASICSymbol1700::Reset (Bool hardwareReset)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsASICSymbol1700::Save
+//		â€¢ EmRegsASICSymbol1700::Save
 // ---------------------------------------------------------------------------
 
 void EmRegsASICSymbol1700::Save (SessionFile& f)
@@ -81,7 +81,7 @@ void EmRegsASICSymbol1700::Save (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsASICSymbol1700::Load
+//		â€¢ EmRegsASICSymbol1700::Load
 // ---------------------------------------------------------------------------
 
 void EmRegsASICSymbol1700::Load (SessionFile& f)
@@ -91,7 +91,7 @@ void EmRegsASICSymbol1700::Load (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsASICSymbol1700::Dispose
+//		â€¢ EmRegsASICSymbol1700::Dispose
 // ---------------------------------------------------------------------------
 
 void EmRegsASICSymbol1700::Dispose (void)
@@ -101,7 +101,7 @@ void EmRegsASICSymbol1700::Dispose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsASICSymbol1700::SetSubBankHandlers
+//		â€¢ EmRegsASICSymbol1700::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegsASICSymbol1700::SetSubBankHandlers (void)
@@ -139,7 +139,7 @@ void EmRegsASICSymbol1700::SetSubBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsASICSymbol1700::GetRealAddress
+//		â€¢ EmRegsASICSymbol1700::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmRegsASICSymbol1700::GetRealAddress (emuptr address)
@@ -149,7 +149,7 @@ uint8* EmRegsASICSymbol1700::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsASICSymbol1700::GetAddressStart
+//		â€¢ EmRegsASICSymbol1700::GetAddressStart
 // ---------------------------------------------------------------------------
 
 emuptr EmRegsASICSymbol1700::GetAddressStart (void)
@@ -159,7 +159,7 @@ emuptr EmRegsASICSymbol1700::GetAddressStart (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsASICSymbol1700::GetAddressRange
+//		â€¢ EmRegsASICSymbol1700::GetAddressRange
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsASICSymbol1700::GetAddressRange (void)

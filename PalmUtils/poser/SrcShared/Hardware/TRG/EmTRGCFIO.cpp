@@ -30,21 +30,21 @@
 //---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
-//		¥ EmCFIO::EmCFIO
+//		â€¢ EmCFIO::EmCFIO
 // ---------------------------------------------------------------------------
 EmCFIO::EmCFIO (void)
 {
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmCFIO::~EmCFIO
+//		â€¢ EmCFIO::~EmCFIO
 // ---------------------------------------------------------------------------
 EmCFIO::~EmCFIO (void)
 {
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmCFIO::~EmCFIO
+//		â€¢ EmCFIO::~EmCFIO
 // ---------------------------------------------------------------------------
 void EmCFIO::Reset(void)
 {
@@ -56,7 +56,7 @@ void EmCFIO::Reset(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmCFIO::Initialize
+//		â€¢ EmCFIO::Initialize
 // ---------------------------------------------------------------------------
 void EmCFIO::Initialize (EmDiskTypeID ID)
 {
@@ -66,7 +66,7 @@ void EmCFIO::Initialize (EmDiskTypeID ID)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmCFIO::Dispose
+//		â€¢ EmCFIO::Dispose
 // ---------------------------------------------------------------------------
 void EmCFIO::Dispose (void)
 {
@@ -75,7 +75,7 @@ void EmCFIO::Dispose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCFIO::ReadSector
+//		â€¢ EmCFIO::ReadSector
 // ---------------------------------------------------------------------------
 DiskIOStatus EmCFIO::ReadSector(void)
 {
@@ -86,7 +86,7 @@ DiskIOStatus EmCFIO::ReadSector(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmCFIO::WriteSector
+//		â€¢ EmCFIO::WriteSector
 // ---------------------------------------------------------------------------
 DiskIOStatus EmCFIO::WriteSector(void)
 {
@@ -97,7 +97,7 @@ DiskIOStatus EmCFIO::WriteSector(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmCFIO::ReadNextDataByte
+//		â€¢ EmCFIO::ReadNextDataByte
 // ---------------------------------------------------------------------------
 void EmCFIO::ReadNextDataByte(uint8 * val)
 {
@@ -123,7 +123,7 @@ void EmCFIO::ReadNextDataByte(uint8 * val)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmCFIO::WriteNextDataByte
+//		â€¢ EmCFIO::WriteNextDataByte
 // ---------------------------------------------------------------------------
 void EmCFIO::WriteNextDataByte(uint8 val)
 {
@@ -148,7 +148,7 @@ void EmCFIO::WriteNextDataByte(uint8 val)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmCFIO::GetSectorCount
+//		â€¢ EmCFIO::GetSectorCount
 // ---------------------------------------------------------------------------
 uint32 EmCFIO::GetSectorCount(void)
 {
@@ -156,7 +156,7 @@ uint32 EmCFIO::GetSectorCount(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmCFIO::StartDriveID
+//		â€¢ EmCFIO::StartDriveID
 // ---------------------------------------------------------------------------
 void EmCFIO::StartDriveID(void)
 {
@@ -170,7 +170,7 @@ void EmCFIO::StartDriveID(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmCFIO::StartRead
+//		â€¢ EmCFIO::StartRead
 // ---------------------------------------------------------------------------
 void EmCFIO::StartRead(DiskIOParams * params)
 {
@@ -183,7 +183,7 @@ void EmCFIO::StartRead(DiskIOParams * params)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmCFIO::StartWrite
+//		â€¢ EmCFIO::StartWrite
 // ---------------------------------------------------------------------------
 void EmCFIO::StartWrite(DiskIOParams * params)
 {
@@ -196,7 +196,7 @@ void EmCFIO::StartWrite(DiskIOParams * params)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmCFIO::GetStatus
+//		â€¢ EmCFIO::GetStatus
 // ---------------------------------------------------------------------------
 void EmCFIO::GetStatus(DiskIOStatus *   status,
                          DiskDataStatus * dataStatus)
@@ -209,7 +209,7 @@ void EmCFIO::GetStatus(DiskIOStatus *   status,
 }	
 
 // ---------------------------------------------------------------------------
-//		¥ EmCFIO::GetError
+//		â€¢ EmCFIO::GetError
 // ---------------------------------------------------------------------------
 DiskIOError EmCFIO::GetError(void)
 {

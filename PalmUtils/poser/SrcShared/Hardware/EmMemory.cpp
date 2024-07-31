@@ -325,12 +325,12 @@ int32	gMemoryAccess[kLastEnum];
 
 
 // ===========================================================================
-//		¥ Memory
+//		â€¢ Memory
 // ===========================================================================
 
 
 // ---------------------------------------------------------------------------
-//		¥ Memory::Initialize
+//		â€¢ Memory::Initialize
 // ---------------------------------------------------------------------------
 // Initializes the RAM, ROM, and special memory areas of the emulator. Takes
 // a stream handle to the ROM.
@@ -517,7 +517,7 @@ void Memory::Dispose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Memory::InitializeBanks
+//		â€¢ Memory::InitializeBanks
 // ---------------------------------------------------------------------------
 // Initializes the specified memory banks with the given data.
 
@@ -535,7 +535,7 @@ void Memory::InitializeBanks (	EmAddressBank&	iBankInitializer,
 
 
 // ---------------------------------------------------------------------------
-//		¥ Memory::ResetBankHandlers
+//		â€¢ Memory::ResetBankHandlers
 // ---------------------------------------------------------------------------
 // Reset the memory bank handlers in response to the chip selects changing.
 // Also called on Initialize, Reset, and Load, just to make sure everything's
@@ -567,7 +567,7 @@ void Memory::ResetBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Memory::MapPhysicalMemory
+//		â€¢ Memory::MapPhysicalMemory
 // ---------------------------------------------------------------------------
 // Maps a range of physical memory to appear at the same location of the
 // emulated Palm OS's virtual memory.
@@ -579,7 +579,7 @@ void Memory::MapPhysicalMemory (const void* addr, uint32 size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Memory::UnmapPhysicalMemory
+//		â€¢ Memory::UnmapPhysicalMemory
 // ---------------------------------------------------------------------------
 // Unmaps a range of physical memory from appearing at the same location of
 // the emulated Palm OS's virtual memory.
@@ -591,7 +591,7 @@ void Memory::UnmapPhysicalMemory (const void* addr)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Memory::GetMappingInfo
+//		â€¢ Memory::GetMappingInfo
 // ---------------------------------------------------------------------------
 
 void Memory::GetMappingInfo (emuptr addr, void** start, uint32* len)
@@ -601,7 +601,7 @@ void Memory::GetMappingInfo (emuptr addr, void** start, uint32* len)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Memory::CheckNewPC
+//		â€¢ Memory::CheckNewPC
 // ---------------------------------------------------------------------------
 
 void Memory::CheckNewPC (emuptr newPC)
@@ -614,14 +614,14 @@ void Memory::CheckNewPC (emuptr newPC)
 #pragma mark -
 
 // ===========================================================================
-//		¥ CEnableFullAccess
+//		â€¢ CEnableFullAccess
 // ===========================================================================
 
 int32	CEnableFullAccess::fgAccessCount = 0;
 
 
 // ---------------------------------------------------------------------------
-//		¥ CEnableFullAccess::CEnableFullAccess
+//		â€¢ CEnableFullAccess::CEnableFullAccess
 // ---------------------------------------------------------------------------
 
 CEnableFullAccess::CEnableFullAccess (void) :
@@ -641,7 +641,7 @@ CEnableFullAccess::CEnableFullAccess (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ CEnableFullAccess::~CEnableFullAccess
+//		â€¢ CEnableFullAccess::~CEnableFullAccess
 // ---------------------------------------------------------------------------
 
 CEnableFullAccess::~CEnableFullAccess (void)
@@ -657,7 +657,7 @@ CEnableFullAccess::~CEnableFullAccess (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ CEnableFullAccess::AccessOK
+//		â€¢ CEnableFullAccess::AccessOK
 // ---------------------------------------------------------------------------
 
 Bool CEnableFullAccess::AccessOK (void)

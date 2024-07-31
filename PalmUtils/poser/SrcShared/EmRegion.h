@@ -59,7 +59,7 @@
 		}
 	
 	This region class is based on the region class from ET++ 3.2.2, used by
-	permission from André Weinand:
+	permission from Andr√© Weinand:
 
 			Regions: yes sure, just use the code and send me the bugs!
 

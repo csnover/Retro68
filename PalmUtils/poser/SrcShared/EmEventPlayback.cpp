@@ -106,7 +106,7 @@ static inline Bool PrvIsPenDown (const EmRecordedEvent& event)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::Initialize
+//		â€¢ EmEventPlayback::Initialize
 // ---------------------------------------------------------------------------
 
 void EmEventPlayback::Initialize (void)
@@ -115,7 +115,7 @@ void EmEventPlayback::Initialize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::Reset
+//		â€¢ EmEventPlayback::Reset
 // ---------------------------------------------------------------------------
 
 void EmEventPlayback::Reset (void)
@@ -128,7 +128,7 @@ void EmEventPlayback::Reset (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::Save
+//		â€¢ EmEventPlayback::Save
 // ---------------------------------------------------------------------------
 // Save our state to the given file.  This method is called when a session
 // file is being saved to disk.  A session file can be saved under the
@@ -159,7 +159,7 @@ void EmEventPlayback::Save (SessionFile&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::Load
+//		â€¢ EmEventPlayback::Load
 // ---------------------------------------------------------------------------
 // Load our state from the given file.  This method is called when a session
 // file is being reloaded from disk.  A session file can be loaded under the
@@ -195,7 +195,7 @@ void EmEventPlayback::Load (SessionFile&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::Dispose
+//		â€¢ EmEventPlayback::Dispose
 // ---------------------------------------------------------------------------
 
 void EmEventPlayback::Dispose (void)
@@ -207,7 +207,7 @@ void EmEventPlayback::Dispose (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::SaveEvents
+//		â€¢ EmEventPlayback::SaveEvents
 // ---------------------------------------------------------------------------
 // Saves the given events to the given session file.  Saves all of the events
 // in their own chunk.
@@ -242,7 +242,7 @@ void EmEventPlayback::SaveEvents (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::LoadEvents
+//		â€¢ EmEventPlayback::LoadEvents
 // ---------------------------------------------------------------------------
 // Loads all of the events from a session file and returns them in the given
 // collection.
@@ -303,7 +303,7 @@ void EmEventPlayback::LoadEvents (SessionFile& f)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::RecordEvents
+//		â€¢ EmEventPlayback::RecordEvents
 // ---------------------------------------------------------------------------
 
 void EmEventPlayback::RecordEvents (Bool record)
@@ -313,7 +313,7 @@ void EmEventPlayback::RecordEvents (Bool record)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::RecordingEvents
+//		â€¢ EmEventPlayback::RecordingEvents
 // ---------------------------------------------------------------------------
 // Return whether or not we're recording events.
 
@@ -324,7 +324,7 @@ Bool EmEventPlayback::RecordingEvents (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::RecordCharEvent
+//		â€¢ EmEventPlayback::RecordCharEvent
 // ---------------------------------------------------------------------------
 // Record a character event, as passed to EvtEnqueueKey.
 
@@ -344,7 +344,7 @@ void EmEventPlayback::RecordKeyEvent (WChar		ascii,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::RecordPenEvent
+//		â€¢ EmEventPlayback::RecordPenEvent
 // ---------------------------------------------------------------------------
 // Record a pen event, as passed to EvtEnqueuePen.
 
@@ -362,7 +362,7 @@ void EmEventPlayback::RecordPenEvent (const PointType& coords)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::RecordSwitchEvent
+//		â€¢ EmEventPlayback::RecordSwitchEvent
 // ---------------------------------------------------------------------------
 // Record a psuedo-event indicating that Gremlins is trying to switch to
 // another application.
@@ -385,7 +385,7 @@ void EmEventPlayback::RecordSwitchEvent (uint16 cardNo,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::RecordNullEvent
+//		â€¢ EmEventPlayback::RecordNullEvent
 // ---------------------------------------------------------------------------
 // Record a NULL event.
 
@@ -399,7 +399,7 @@ void EmEventPlayback::RecordNullEvent (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::RecordErrorEvent
+//		â€¢ EmEventPlayback::RecordErrorEvent
 // ---------------------------------------------------------------------------
 // Record a psuedo-event indicating that an error occurred.
 
@@ -415,7 +415,7 @@ void EmEventPlayback::RecordErrorEvent (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::Clear
+//		â€¢ EmEventPlayback::Clear
 // ---------------------------------------------------------------------------
 // Clear all events that we've recorded so far.
 
@@ -431,7 +431,7 @@ void EmEventPlayback::Clear (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::CullEvents
+//		â€¢ EmEventPlayback::CullEvents
 // ---------------------------------------------------------------------------
 // Remove all filtered events.
 
@@ -464,7 +464,7 @@ void EmEventPlayback::CullEvents (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::CountEnabledEvents
+//		â€¢ EmEventPlayback::CountEnabledEvents
 // ---------------------------------------------------------------------------
 // If we were to play all events right now given the current enabled state,
 // return how many events that would be.
@@ -498,7 +498,7 @@ int32 EmEventPlayback::CountEnabledEvents (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::GetCurrentEvent
+//		â€¢ EmEventPlayback::GetCurrentEvent
 // ---------------------------------------------------------------------------
 // Return the event number we've played back.  This will be it's index plus
 // one.  That is, it's the index of the event following the one we most
@@ -511,7 +511,7 @@ int32 EmEventPlayback::GetCurrentEvent (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::GetNumEvents
+//		â€¢ EmEventPlayback::GetNumEvents
 // ---------------------------------------------------------------------------
 // Return how many events we've recorded.  If we're playing back, this count
 // may include events that have been masked out.
@@ -523,7 +523,7 @@ int32 EmEventPlayback::GetNumEvents (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::CountNumEvents
+//		â€¢ EmEventPlayback::CountNumEvents
 // ---------------------------------------------------------------------------
 // Return how many events we've recorded.
 
@@ -547,7 +547,7 @@ int32 EmEventPlayback::CountNumEvents (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::GetEvent
+//		â€¢ EmEventPlayback::GetEvent
 // ---------------------------------------------------------------------------
 // Return an event on our list of recorded events.
 
@@ -565,7 +565,7 @@ void EmEventPlayback::GetEvent (int32 index, EmRecordedEvent& event)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::EnableEvents
+//		â€¢ EmEventPlayback::EnableEvents
 // ---------------------------------------------------------------------------
 
 void EmEventPlayback::EnableEvents (int32 begin, int32 end)
@@ -584,7 +584,7 @@ void EmEventPlayback::EnableEvents (int32 begin, int32 end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::DisableEvents
+//		â€¢ EmEventPlayback::DisableEvents
 // ---------------------------------------------------------------------------
 
 void EmEventPlayback::DisableEvents (int32 begin, int32 end)
@@ -605,7 +605,7 @@ void EmEventPlayback::DisableEvents (int32 begin, int32 end)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::ReplayEvents
+//		â€¢ EmEventPlayback::ReplayEvents
 // ---------------------------------------------------------------------------
 
 void EmEventPlayback::ReplayEvents (Bool replay)
@@ -620,7 +620,7 @@ void EmEventPlayback::ReplayEvents (Bool replay)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::ReplayingEvents
+//		â€¢ EmEventPlayback::ReplayingEvents
 // ---------------------------------------------------------------------------
 
 Bool EmEventPlayback::ReplayingEvents (void)
@@ -630,7 +630,7 @@ Bool EmEventPlayback::ReplayingEvents (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::ReplayGetEvent
+//		â€¢ EmEventPlayback::ReplayGetEvent
 // ---------------------------------------------------------------------------
 
 Bool EmEventPlayback::ReplayGetEvent (void)
@@ -712,7 +712,7 @@ Bool EmEventPlayback::ReplayGetEvent (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::ReplayGetPen
+//		â€¢ EmEventPlayback::ReplayGetPen
 // ---------------------------------------------------------------------------
 
 Bool EmEventPlayback::ReplayGetPen (void)
@@ -777,7 +777,7 @@ Bool EmEventPlayback::ReplayGetPen (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::RecordEvent
+//		â€¢ EmEventPlayback::RecordEvent
 // ---------------------------------------------------------------------------
 // Add the given event to our list of events, as long as recording is on.
 
@@ -795,7 +795,7 @@ void EmEventPlayback::RecordEvent (const EmRecordedEvent& event)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::FindFirstError
+//		â€¢ EmEventPlayback::FindFirstError
 // ---------------------------------------------------------------------------
 // Return the index of the first error event record.  Return -1 if one could
 // not be found.
@@ -826,7 +826,7 @@ int32 EmEventPlayback::FindFirstError (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::LogEvents
+//		â€¢ EmEventPlayback::LogEvents
 // ---------------------------------------------------------------------------
 // Print debug information about the given event to the Log file.
 
@@ -849,7 +849,7 @@ void EmEventPlayback::LogEvents (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::LogEvent
+//		â€¢ EmEventPlayback::LogEvent
 // ---------------------------------------------------------------------------
 // Print debug information about the given event to the Log file.
 
@@ -928,7 +928,7 @@ void EmEventPlayback::LogEvent (const EmRecordedEvent& inEvent)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::ResetPlayback
+//		â€¢ EmEventPlayback::ResetPlayback
 // ---------------------------------------------------------------------------
 
 void EmEventPlayback::ResetPlayback (void)
@@ -943,7 +943,7 @@ void EmEventPlayback::ResetPlayback (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::GetNextReplayEvent
+//		â€¢ EmEventPlayback::GetNextReplayEvent
 // ---------------------------------------------------------------------------
 
 /*
@@ -1028,7 +1028,7 @@ Bool EmEventPlayback::GetNextReplayEvent (EmRecordedEvent& event)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::ReplayKeyEvent
+//		â€¢ EmEventPlayback::ReplayKeyEvent
 // ---------------------------------------------------------------------------
 
 Bool EmEventPlayback::ReplayKeyEvent (WChar		ascii,
@@ -1053,7 +1053,7 @@ Bool EmEventPlayback::ReplayKeyEvent (WChar		ascii,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::ReplayPenEvent
+//		â€¢ EmEventPlayback::ReplayPenEvent
 // ---------------------------------------------------------------------------
 
 Bool EmEventPlayback::ReplayPenEvent (const PointType& pt)
@@ -1072,7 +1072,7 @@ Bool EmEventPlayback::ReplayPenEvent (const PointType& pt)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::ReplaySwitchEvent
+//		â€¢ EmEventPlayback::ReplaySwitchEvent
 // ---------------------------------------------------------------------------
 
 Bool EmEventPlayback::ReplaySwitchEvent (uint16		cardNo,
@@ -1095,7 +1095,7 @@ Bool EmEventPlayback::ReplaySwitchEvent (uint16		cardNo,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::ReplayNullEvent
+//		â€¢ EmEventPlayback::ReplayNullEvent
 // ---------------------------------------------------------------------------
 
 Bool EmEventPlayback::ReplayNullEvent (void)
@@ -1111,7 +1111,7 @@ Bool EmEventPlayback::ReplayNullEvent (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmEventPlayback::ReplayErrorEvent
+//		â€¢ EmEventPlayback::ReplayErrorEvent
 // ---------------------------------------------------------------------------
 
 Bool EmEventPlayback::ReplayErrorEvent (void)
@@ -1129,7 +1129,7 @@ Bool EmEventPlayback::ReplayErrorEvent (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ operator <<
+//		â€¢ operator <<
 // ---------------------------------------------------------------------------
 // Flatten an EmRecordedEvent to the stream.  Some events can be compressed by
 // not writing out fields that are commonly zero/NULL, or by writing out only
@@ -1223,7 +1223,7 @@ EmStream& operator << (EmStream& inStream, const EmRecordedEvent& inEvent)
 
 
 // ---------------------------------------------------------------------------
-//		¥ operator >>
+//		â€¢ operator >>
 // ---------------------------------------------------------------------------
 // Resurrect an EmRecordedEvent from the stream.
 
@@ -1360,7 +1360,7 @@ EmStream& operator >> (EmStream& inStream, EmRecordedEvent& outEvent)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ operator <<
+//		â€¢ operator <<
 // ---------------------------------------------------------------------------
 // Flatten a Chunk to the stream.
 
@@ -1373,7 +1373,7 @@ EmStream&	operator << (EmStream& s, const Chunk& chunk)
 
 
 // ---------------------------------------------------------------------------
-//		¥ operator >>
+//		â€¢ operator >>
 // ---------------------------------------------------------------------------
 // Resurrect a Chunk from the stream.
 

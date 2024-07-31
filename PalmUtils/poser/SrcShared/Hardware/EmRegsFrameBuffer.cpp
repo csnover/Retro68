@@ -23,7 +23,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::EmRegsFrameBuffer
+//		â€¢ EmRegsFrameBuffer::EmRegsFrameBuffer
 // ---------------------------------------------------------------------------
 
 EmRegsFrameBuffer::EmRegsFrameBuffer (emuptr baseAddr, int32 size) :
@@ -35,7 +35,7 @@ EmRegsFrameBuffer::EmRegsFrameBuffer (emuptr baseAddr, int32 size) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::~EmRegsFrameBuffer
+//		â€¢ EmRegsFrameBuffer::~EmRegsFrameBuffer
 // ---------------------------------------------------------------------------
 
 EmRegsFrameBuffer::~EmRegsFrameBuffer (void)
@@ -44,7 +44,7 @@ EmRegsFrameBuffer::~EmRegsFrameBuffer (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::Initialize
+//		â€¢ EmRegsFrameBuffer::Initialize
 // ---------------------------------------------------------------------------
 
 void EmRegsFrameBuffer::Initialize (void)
@@ -61,7 +61,7 @@ void EmRegsFrameBuffer::Initialize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::Reset
+//		â€¢ EmRegsFrameBuffer::Reset
 // ---------------------------------------------------------------------------
 
 void EmRegsFrameBuffer::Reset (Bool hardwareReset)
@@ -71,7 +71,7 @@ void EmRegsFrameBuffer::Reset (Bool hardwareReset)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::Save
+//		â€¢ EmRegsFrameBuffer::Save
 // ---------------------------------------------------------------------------
 
 void EmRegsFrameBuffer::Save (SessionFile& f)
@@ -84,7 +84,7 @@ void EmRegsFrameBuffer::Save (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::Load
+//		â€¢ EmRegsFrameBuffer::Load
 // ---------------------------------------------------------------------------
 
 void EmRegsFrameBuffer::Load (SessionFile& f)
@@ -106,7 +106,7 @@ void EmRegsFrameBuffer::Load (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::Dispose
+//		â€¢ EmRegsFrameBuffer::Dispose
 // ---------------------------------------------------------------------------
 
 void EmRegsFrameBuffer::Dispose (void)
@@ -118,7 +118,7 @@ void EmRegsFrameBuffer::Dispose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::GetLong
+//		â€¢ EmRegsFrameBuffer::GetLong
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsFrameBuffer::GetLong (emuptr address)
@@ -129,7 +129,7 @@ uint32 EmRegsFrameBuffer::GetLong (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::GetWord
+//		â€¢ EmRegsFrameBuffer::GetWord
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsFrameBuffer::GetWord (emuptr address)
@@ -140,7 +140,7 @@ uint32 EmRegsFrameBuffer::GetWord (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::GetByte
+//		â€¢ EmRegsFrameBuffer::GetByte
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsFrameBuffer::GetByte (emuptr address)
@@ -151,7 +151,7 @@ uint32 EmRegsFrameBuffer::GetByte (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::SetLong
+//		â€¢ EmRegsFrameBuffer::SetLong
 // ---------------------------------------------------------------------------
 
 void EmRegsFrameBuffer::SetLong (emuptr address, uint32 value)
@@ -163,7 +163,7 @@ void EmRegsFrameBuffer::SetLong (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::SetWord
+//		â€¢ EmRegsFrameBuffer::SetWord
 // ---------------------------------------------------------------------------
 
 void EmRegsFrameBuffer::SetWord (emuptr address, uint32 value)
@@ -175,7 +175,7 @@ void EmRegsFrameBuffer::SetWord (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::SetByte
+//		â€¢ EmRegsFrameBuffer::SetByte
 // ---------------------------------------------------------------------------
 
 void EmRegsFrameBuffer::SetByte (emuptr address, uint32 value)
@@ -187,7 +187,7 @@ void EmRegsFrameBuffer::SetByte (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::ValidAddress
+//		â€¢ EmRegsFrameBuffer::ValidAddress
 // ---------------------------------------------------------------------------
 
 int EmRegsFrameBuffer::ValidAddress (emuptr address, uint32 size)
@@ -200,7 +200,7 @@ int EmRegsFrameBuffer::ValidAddress (emuptr address, uint32 size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::SetSubBankHandlers
+//		â€¢ EmRegsFrameBuffer::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegsFrameBuffer::SetSubBankHandlers (void)
@@ -211,7 +211,7 @@ void EmRegsFrameBuffer::SetSubBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::GetRealAddress
+//		â€¢ EmRegsFrameBuffer::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmRegsFrameBuffer::GetRealAddress (emuptr address)
@@ -222,7 +222,7 @@ uint8* EmRegsFrameBuffer::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::GetAddressStart
+//		â€¢ EmRegsFrameBuffer::GetAddressStart
 // ---------------------------------------------------------------------------
 
 emuptr EmRegsFrameBuffer::GetAddressStart (void)
@@ -232,7 +232,7 @@ emuptr EmRegsFrameBuffer::GetAddressStart (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsFrameBuffer::GetAddressRange
+//		â€¢ EmRegsFrameBuffer::GetAddressRange
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsFrameBuffer::GetAddressRange (void)

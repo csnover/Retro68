@@ -27,7 +27,7 @@
 EmDocumentUnix*	gHostDocument;
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::HostCreateDocument
+//		â€¢ EmDocument::HostCreateDocument
 // ---------------------------------------------------------------------------
 // Create our document instance.  This is the one and only function that
 // creates the document.  Being in a platform-specific file, it can create
@@ -86,7 +86,7 @@ EmDocumentUnix::~EmDocumentUnix (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocumentUnix::HostSaveScreen
+//		â€¢ EmDocumentUnix::HostSaveScreen
 // ---------------------------------------------------------------------------
 // Save the current contents of the LCD buffer to the given file.
 

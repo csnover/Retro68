@@ -32,7 +32,7 @@ enum {
 						sizeof (f68VZ328Regs.reg) )
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZAlphaSmart::EmRegsVZAlphaSmart
+//		â€¢ EmRegsVZAlphaSmart::EmRegsVZAlphaSmart
 // ---------------------------------------------------------------------------
 
 EmRegsVZAlphaSmart::EmRegsVZAlphaSmart (void) :
@@ -44,7 +44,7 @@ EmRegsVZAlphaSmart::EmRegsVZAlphaSmart (void) :
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZAlphaSmart::~EmRegsVZAlphaSmart
+//		â€¢ EmRegsVZAlphaSmart::~EmRegsVZAlphaSmart
 // ---------------------------------------------------------------------------
 
 EmRegsVZAlphaSmart::~EmRegsVZAlphaSmart (void)
@@ -55,7 +55,7 @@ EmRegsVZAlphaSmart::~EmRegsVZAlphaSmart (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZAlphaSmart::SetSubBankHandlers
+//		â€¢ EmRegsVZAlphaSmart::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegsVZAlphaSmart::SetSubBankHandlers (void)
@@ -67,7 +67,7 @@ void EmRegsVZAlphaSmart::SetSubBankHandlers (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZAlphaSmart::CycleSlowly
+//		â€¢ EmRegsVZAlphaSmart::CycleSlowly
 // ---------------------------------------------------------------------------
 // This is mostly copied from EmRegsVZ.
 
@@ -109,7 +109,7 @@ void EmRegsVZAlphaSmart::CycleSlowly (Bool sleeping)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZAlphaSmart::GetLCDScreenOn
+//		â€¢ EmRegsVZAlphaSmart::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZAlphaSmart::GetLCDScreenOn (void)
@@ -118,7 +118,7 @@ Bool EmRegsVZAlphaSmart::GetLCDScreenOn (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZAlphaSmart::GetLCDBacklightOn
+//		â€¢ EmRegsVZAlphaSmart::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZAlphaSmart::GetLCDBacklightOn (void)
@@ -127,7 +127,7 @@ Bool EmRegsVZAlphaSmart::GetLCDBacklightOn (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZAlphaSmart::GetPortInputValue
+//		â€¢ EmRegsVZAlphaSmart::GetPortInputValue
 // ---------------------------------------------------------------------------
 
 uint8 EmRegsVZAlphaSmart::GetPortInputValue (int port)
@@ -142,7 +142,7 @@ uint8 EmRegsVZAlphaSmart::GetPortInputValue (int port)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZAlphaSmart::GetPortInternalValue
+//		â€¢ EmRegsVZAlphaSmart::GetPortInternalValue
 // ---------------------------------------------------------------------------
 
 uint8 EmRegsVZAlphaSmart::GetPortInternalValue (int port)
@@ -170,7 +170,7 @@ void EmRegsVZAlphaSmart::GetKeyInfo (int* numRows, int* numCols, uint16* keyMap,
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZAlphaSmart::GetKeyBits
+//		â€¢ EmRegsVZAlphaSmart::GetKeyBits
 // ---------------------------------------------------------------------------
 
 uint8 EmRegsVZAlphaSmart::GetKeyBits (void)
@@ -179,7 +179,7 @@ uint8 EmRegsVZAlphaSmart::GetKeyBits (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZAlphaSmart::GetSPISlave
+//		â€¢ EmRegsVZAlphaSmart::GetSPISlave
 // ---------------------------------------------------------------------------
 
 EmSPISlave *EmRegsVZAlphaSmart::GetSPISlave (void)
@@ -264,7 +264,7 @@ Bool EmRegsVZAlphaSmart::Unknown (void)
 #endif
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZAlphaSmart::spiMasterControlWrite
+//		â€¢ EmRegsVZAlphaSmart::spiMasterControlWrite
 // ---------------------------------------------------------------------------
 // Most of this is a copy from EmRegsVZ.
 
@@ -326,7 +326,7 @@ void EmRegsVZAlphaSmart::spiMasterControlWrite (emuptr address, int size, uint32
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZAlphaSmart::portKDirWrite
+//		â€¢ EmRegsVZAlphaSmart::portKDirWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsVZAlphaSmart::portKDirWrite (emuptr address, int size, uint32 value)

@@ -22,7 +22,7 @@
 
 
 // ===========================================================================
-//		¥ Dummy Bank Accessors
+//		â€¢ Dummy Bank Accessors
 // ===========================================================================
 // Dummy banks are non-existent blocks of memory.  Dummy bank accessors do
 // not do anything.
@@ -169,7 +169,7 @@ void EmBankDummy::SetBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDummy::GetLong
+//		â€¢ EmBankDummy::GetLong
 // ---------------------------------------------------------------------------
 
 uint32 EmBankDummy::GetLong (emuptr address)
@@ -186,7 +186,7 @@ uint32 EmBankDummy::GetLong (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDummy::GetWord
+//		â€¢ EmBankDummy::GetWord
 // ---------------------------------------------------------------------------
 
 uint32 EmBankDummy::GetWord (emuptr address)
@@ -203,7 +203,7 @@ uint32 EmBankDummy::GetWord (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDummy::GetByte
+//		â€¢ EmBankDummy::GetByte
 // ---------------------------------------------------------------------------
 
 uint32 EmBankDummy::GetByte (emuptr address)
@@ -220,7 +220,7 @@ uint32 EmBankDummy::GetByte (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDummy::SetLong
+//		â€¢ EmBankDummy::SetLong
 // ---------------------------------------------------------------------------
 
 void EmBankDummy::SetLong (emuptr address, uint32)
@@ -236,7 +236,7 @@ void EmBankDummy::SetLong (emuptr address, uint32)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDummy::SetWord
+//		â€¢ EmBankDummy::SetWord
 // ---------------------------------------------------------------------------
 
 void EmBankDummy::SetWord (emuptr address, uint32)
@@ -252,7 +252,7 @@ void EmBankDummy::SetWord (emuptr address, uint32)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDummy::SetByte
+//		â€¢ EmBankDummy::SetByte
 // ---------------------------------------------------------------------------
 
 void EmBankDummy::SetByte (emuptr address, uint32)
@@ -268,7 +268,7 @@ void EmBankDummy::SetByte (emuptr address, uint32)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDummy::ValidAddress
+//		â€¢ EmBankDummy::ValidAddress
 // ---------------------------------------------------------------------------
 
 int EmBankDummy::ValidAddress (emuptr, uint32)
@@ -280,7 +280,7 @@ int EmBankDummy::ValidAddress (emuptr, uint32)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDummy::GetRealAddress
+//		â€¢ EmBankDummy::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmBankDummy::GetRealAddress (emuptr address)
@@ -290,7 +290,7 @@ uint8* EmBankDummy::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDummy::GetMetaAddress
+//		â€¢ EmBankDummy::GetMetaAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmBankDummy::GetMetaAddress (emuptr address)
@@ -304,7 +304,7 @@ uint8* EmBankDummy::GetMetaAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDummy::AddOpcodeCycles
+//		â€¢ EmBankDummy::AddOpcodeCycles
 // ---------------------------------------------------------------------------
 
 void EmBankDummy::AddOpcodeCycles (void)
@@ -313,7 +313,7 @@ void EmBankDummy::AddOpcodeCycles (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDummy::InvalidAccess
+//		â€¢ EmBankDummy::InvalidAccess
 // ---------------------------------------------------------------------------
 
 void EmBankDummy::InvalidAccess (emuptr address, int32 size, Bool forRead)

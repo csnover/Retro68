@@ -23,7 +23,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs328PalmPilot::GetLCDScreenOn
+//		â€¢ EmRegs328PalmPilot::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegs328PalmPilot::GetLCDScreenOn (void)
@@ -33,7 +33,7 @@ Bool EmRegs328PalmPilot::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs328PalmPilot::GetLCDBacklightOn
+//		â€¢ EmRegs328PalmPilot::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegs328PalmPilot::GetLCDBacklightOn (void)
@@ -43,7 +43,7 @@ Bool EmRegs328PalmPilot::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs328PalmPilot::GetLineDriverState
+//		â€¢ EmRegs328PalmPilot::GetLineDriverState
 // ---------------------------------------------------------------------------
 // Return whether or not the line drivers for the given object are open or
 // closed.
@@ -61,7 +61,7 @@ Bool EmRegs328PalmPilot::GetLineDriverState (EmUARTDeviceType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs328PalmPilot::GetPortInputValue
+//		â€¢ EmRegs328PalmPilot::GetPortInputValue
 // ---------------------------------------------------------------------------
 // Return the GPIO values for the pins on the port.  These values are used
 // if the select pins are high.

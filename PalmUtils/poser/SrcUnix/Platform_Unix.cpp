@@ -34,7 +34,7 @@
 
 
 // ===========================================================================
-//		¥ Globals
+//		â€¢ Globals
 // ===========================================================================
 
 ByteList		gClipboardDataPalm;
@@ -58,7 +58,7 @@ int64 PrvGetMicroseconds (void)
 
 
 // ===========================================================================
-//		¥ Platform
+//		â€¢ Platform
 // ===========================================================================
 
 #ifndef __QNXNTO__
@@ -82,7 +82,7 @@ char* _strdup( const char *s )
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::Initialize
+//		â€¢ Platform::Initialize
 // ---------------------------------------------------------------------------
 // Initializes platform-dependent stuff.
 
@@ -92,7 +92,7 @@ void Platform::Initialize( void )
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::Reset
+//		â€¢ Platform::Reset
 // ---------------------------------------------------------------------------
 
 void Platform::Reset( void )
@@ -101,7 +101,7 @@ void Platform::Reset( void )
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::Save
+//		â€¢ Platform::Save
 // ---------------------------------------------------------------------------
 
 void Platform::Save(SessionFile&)
@@ -110,7 +110,7 @@ void Platform::Save(SessionFile&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::Load
+//		â€¢ Platform::Load
 // ---------------------------------------------------------------------------
 
 void Platform::Load(SessionFile&)
@@ -119,7 +119,7 @@ void Platform::Load(SessionFile&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::Dispose
+//		â€¢ Platform::Dispose
 // ---------------------------------------------------------------------------
 
 void Platform::Dispose( void )
@@ -128,7 +128,7 @@ void Platform::Dispose( void )
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::GetString
+//		â€¢ Platform::GetString
 // ---------------------------------------------------------------------------
 
 string Platform::GetString( StrCode id )
@@ -144,7 +144,7 @@ string Platform::GetString( StrCode id )
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::GetIDForError
+//		â€¢ Platform::GetIDForError
 // ---------------------------------------------------------------------------
 
 int Platform::GetIDForError( ErrCode error )
@@ -294,7 +294,7 @@ int Platform::GetIDForError( ErrCode error )
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::GetIDForRecovery
+//		â€¢ Platform::GetIDForRecovery
 // ---------------------------------------------------------------------------
 
 int Platform::GetIDForRecovery( ErrCode error )
@@ -304,7 +304,7 @@ int Platform::GetIDForRecovery( ErrCode error )
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::GetShortVersionString
+//		â€¢ Platform::GetShortVersionString
 // ---------------------------------------------------------------------------
 // Returns a short version string.	The format of the string is:
 //
@@ -586,7 +586,7 @@ void Platform::WriteROMFileReference (ChunkFile& docFile, const EmFileRef& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::Delay
+//		â€¢ Platform::Delay
 // ---------------------------------------------------------------------------
 // Delay for a time period appropriate for a sleeping 68328.
 
@@ -603,7 +603,7 @@ void Platform::Delay (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::CycleSlowly
+//		â€¢ Platform::CycleSlowly
 // ---------------------------------------------------------------------------
 
 void Platform::CycleSlowly (void)
@@ -613,7 +613,7 @@ void Platform::CycleSlowly (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::RealAllocateMemory
+//		â€¢ Platform::RealAllocateMemory
 // ---------------------------------------------------------------------------
 
 void* Platform::RealAllocateMemory (size_t size, Bool clear, const char*, int)
@@ -632,7 +632,7 @@ void* Platform::RealAllocateMemory (size_t size, Bool clear, const char*, int)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::RealReallocMemory
+//		â€¢ Platform::RealReallocMemory
 // ---------------------------------------------------------------------------
 
 void* Platform::RealReallocMemory (void* p, size_t size, const char*, int)
@@ -646,7 +646,7 @@ void* Platform::RealReallocMemory (void* p, size_t size, const char*, int)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::RealDisposeMemory
+//		â€¢ Platform::RealDisposeMemory
 // ---------------------------------------------------------------------------
 
 void Platform::RealDisposeMemory (void* p)
@@ -682,7 +682,7 @@ Bool Platform::ForceStartupScreen (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::StopOnResetKeyDown
+//		â€¢ Platform::StopOnResetKeyDown
 // ---------------------------------------------------------------------------
 
 Bool Platform::StopOnResetKeyDown( void )
@@ -701,7 +701,7 @@ Bool Platform::StopOnResetKeyDown( void )
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::CollectOptions
+//		â€¢ Platform::CollectOptions
 // ---------------------------------------------------------------------------
 
 int Platform::CollectOptions (int argc, char** argv, int& errorArg, int (*cb)(int, char**, int&))
@@ -714,7 +714,7 @@ int Platform::CollectOptions (int argc, char** argv, int& errorArg, int (*cb)(in
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::PrintHelp
+//		â€¢ Platform::PrintHelp
 // ---------------------------------------------------------------------------
 
 void Platform::PrintHelp (void)
@@ -724,7 +724,7 @@ void Platform::PrintHelp (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::GetMilliseconds
+//		â€¢ Platform::GetMilliseconds
 // ---------------------------------------------------------------------------
 
 uint32 Platform::GetMilliseconds( void )
@@ -737,7 +737,7 @@ uint32 Platform::GetMilliseconds( void )
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::CreateDebuggerSocket
+//		â€¢ Platform::CreateDebuggerSocket
 // ---------------------------------------------------------------------------
 
 CSocket* Platform::CreateDebuggerSocket (void)
@@ -747,7 +747,7 @@ CSocket* Platform::CreateDebuggerSocket (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::ExitDebugger
+//		â€¢ Platform::ExitDebugger
 // ---------------------------------------------------------------------------
 //	Perform platform-specific operations when debug mode is exited.
 
@@ -757,7 +757,7 @@ void Platform::ExitDebugger( void )
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::ViewDrawLine
+//		â€¢ Platform::ViewDrawLine
 // ---------------------------------------------------------------------------
 
 void Platform::ViewDrawLine( int xStart, int yStart, int xEnd, int yEnd )
@@ -766,7 +766,7 @@ void Platform::ViewDrawLine( int xStart, int yStart, int xEnd, int yEnd )
 
 
 // ---------------------------------------------------------------------------
-//		¥ Platform::ViewDrawPixel
+//		â€¢ Platform::ViewDrawPixel
 // ---------------------------------------------------------------------------
 
 void Platform::ViewDrawPixel( int xPos, int yPos )

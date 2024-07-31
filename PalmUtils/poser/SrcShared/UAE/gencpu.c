@@ -683,7 +683,7 @@ static void genmovemel (uae_u16 opcode)
 	printf ("\tm68k_areg(regs, dstreg) = srca;\n");
 #if PALM_PERF
 	{extraCycles += 0; readCycles = 0xFF; writeCycles += 0; PERF_COMMENT("MOVEM M, R 12+4n(3+n/0) + eff addr\n");}
-	// ¥¥¥ DOLATER this doesnt quite generate the right number of reads, I dont know what the extra is for!
+	// â€¢â€¢â€¢ DOLATER this doesnt quite generate the right number of reads, I dont know what the extra is for!
 #endif	// PALM_PERF
 }
 
@@ -2039,8 +2039,8 @@ static void gen_opcode (uae_u32 opcode)
 	printf ("didnt_jump:;\n");
 	need_endlabel = 1;
 #if PALM_PERF
-	// ¥¥¥Êstill missing a read cycle sometimes.  Weird.  Don't know the address read from, so can't compute waits...
-	// ¥¥¥ readcycles should be 2, setting to 0xFF to disable breaking
+	// â€¢â€¢â€¢Â still missing a read cycle sometimes.  Weird.  Don't know the address read from, so can't compute waits...
+	// â€¢â€¢â€¢ readcycles should be 2, setting to 0xFF to disable breaking
 	if (curi->size == sz_byte)
 		{extraCycles += 2; readCycles = 0xFF; writeCycles += 0; PERF_COMMENT("Bcc.B 10(2/0) if taken, 8(1/0) if not\n");}
 	else
@@ -2114,7 +2114,7 @@ static void gen_opcode (uae_u32 opcode)
 	printf ("\t}\n");
 	need_endlabel = 1;
 #if PALM_PERF
-	// ¥¥¥Êstill missing a read cycle somewhere, when counter expires
+	// â€¢â€¢â€¢Â still missing a read cycle somewhere, when counter expires
 	{extraCycles += 2; readCycles += 1; writeCycles += 0; PERF_COMMENT("DBcc 12(2/0) if cc, 10(2/0) if not -1, 14(3/0) if -1\n");}
 #endif	// PALM_PERF
 	break;
@@ -2157,7 +2157,7 @@ static void gen_opcode (uae_u32 opcode)
 	insn_n_cycles += 68;
 	need_endlabel = 1;
 #if PALM_PERF
-	// ¥¥¥ DOLATER less than 10% diff between best/worst times, this is worst
+	// â€¢â€¢â€¢ DOLATER less than 10% diff between best/worst times, this is worst
 	{extraCycles += 136; readCycles += 1; writeCycles += 0; PERF_COMMENT("DIVU 140(1/0)+*\n");}
 #endif	// PALM_PERF
 	break;
@@ -2178,7 +2178,7 @@ static void gen_opcode (uae_u32 opcode)
 	insn_n_cycles += 72;
 	need_endlabel = 1;
 #if PALM_PERF
-	// ¥¥¥ DOLATER less than 10% diff between best/worst times, this is worst
+	// â€¢â€¢â€¢ DOLATER less than 10% diff between best/worst times, this is worst
 	{extraCycles += 154; readCycles += 1; writeCycles += 0; PERF_COMMENT("DIVS 158(1/0)+*\n");}
 #endif	// PALM_PERF
 	break;
@@ -2191,7 +2191,7 @@ static void gen_opcode (uae_u32 opcode)
 	genastore ("newv", curi->dmode, "dstreg", sz_long, "dst");
 	insn_n_cycles += 32;
 #if PALM_PERF
-	// ¥¥¥ DOLATER 38+2n extra cycles, where n = number of 1s in the <ea>
+	// â€¢â€¢â€¢ DOLATER 38+2n extra cycles, where n = number of 1s in the <ea>
 	{extraCycles += 66; readCycles += 1; writeCycles += 0; PERF_COMMENT("MULU 70(1/0)+*\n");}
 #endif	// PALM_PERF
 	break;
@@ -2204,7 +2204,7 @@ static void gen_opcode (uae_u32 opcode)
 	genastore ("newv", curi->dmode, "dstreg", sz_long, "dst");
 	insn_n_cycles += 32;
 #if PALM_PERF
-	// ¥¥¥ DOLATER 38+2n extra cycles, where n = number of 01 or 10 patterns in <ea>w/0 at end. $5555 is worst case
+	// â€¢â€¢â€¢ DOLATER 38+2n extra cycles, where n = number of 01 or 10 patterns in <ea>w/0 at end. $5555 is worst case
 	{extraCycles += 66; readCycles += 1; writeCycles += 0; PERF_COMMENT("MULS 70(1/0)+*\n");}
 #endif	// PALM_PERF
 	break;
@@ -2216,7 +2216,7 @@ static void gen_opcode (uae_u32 opcode)
 	printf ("\telse if (dst > src) { SET_NFLG (0); Exception(6,oldpc); goto %s; }\n", endlabelstr);
 	need_endlabel = 1;
 #if PALM_PERF
-	// ¥¥¥ DOLATER handle extra work if exception happens
+	// â€¢â€¢â€¢ DOLATER handle extra work if exception happens
 	{extraCycles += 6; readCycles += 1; writeCycles += 0; PERF_COMMENT("CHK 10(1/0)+ if no trap, 40(4/3)+ if trap\n");}
 #endif	// PALM_PERF
 	break;
@@ -2246,7 +2246,7 @@ static void gen_opcode (uae_u32 opcode)
 	printf ("\tif ((extra & 0x800) && GET_CFLG) { Exception(6,oldpc); goto %s; }\n}\n", endlabelstr);
 	need_endlabel = 1;
 #if PALM_PERF
-	// ¥¥¥ DOLATER handle extra work if exception happens
+	// â€¢â€¢â€¢ DOLATER handle extra work if exception happens
 	{extraCycles += 6; readCycles += 1; writeCycles += 0; PERF_COMMENT("CHK2 10(1/0)+ if no trap, 40(4/3)+ if trap\n");}
 #endif	// PALM_PERF
 	break;

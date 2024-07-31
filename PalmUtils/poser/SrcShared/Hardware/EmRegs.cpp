@@ -77,7 +77,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::EmRegs
+//		â€¢ EmRegs::EmRegs
 // ---------------------------------------------------------------------------
 
 EmRegs::EmRegs (void) :
@@ -88,7 +88,7 @@ EmRegs::EmRegs (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::~EmRegs
+//		â€¢ EmRegs::~EmRegs
 // ---------------------------------------------------------------------------
 
 EmRegs::~EmRegs (void)
@@ -97,7 +97,7 @@ EmRegs::~EmRegs (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::Initialize
+//		â€¢ EmRegs::Initialize
 // ---------------------------------------------------------------------------
 
 void EmRegs::Initialize (void)
@@ -106,7 +106,7 @@ void EmRegs::Initialize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::Reset
+//		â€¢ EmRegs::Reset
 // ---------------------------------------------------------------------------
 
 void EmRegs::Reset (Bool /*hardwareReset*/)
@@ -115,7 +115,7 @@ void EmRegs::Reset (Bool /*hardwareReset*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::Save
+//		â€¢ EmRegs::Save
 // ---------------------------------------------------------------------------
 
 void EmRegs::Save (SessionFile&)
@@ -124,7 +124,7 @@ void EmRegs::Save (SessionFile&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::Load
+//		â€¢ EmRegs::Load
 // ---------------------------------------------------------------------------
 
 void EmRegs::Load (SessionFile&)
@@ -133,7 +133,7 @@ void EmRegs::Load (SessionFile&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::Dispose
+//		â€¢ EmRegs::Dispose
 // ---------------------------------------------------------------------------
 
 void EmRegs::Dispose (void)
@@ -142,7 +142,7 @@ void EmRegs::Dispose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::SetBankHandlers
+//		â€¢ EmRegs::SetBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegs::SetBankHandlers (EmAddressBank& bank)
@@ -158,7 +158,7 @@ void EmRegs::SetBankHandlers (EmAddressBank& bank)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::SetSubBankHandlers
+//		â€¢ EmRegs::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegs::SetSubBankHandlers (void)
@@ -169,7 +169,7 @@ void EmRegs::SetSubBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::GetLong
+//		â€¢ EmRegs::GetLong
 // ---------------------------------------------------------------------------
 
 uint32 EmRegs::GetLong (emuptr address)
@@ -185,7 +185,7 @@ uint32 EmRegs::GetLong (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::GetWord
+//		â€¢ EmRegs::GetWord
 // ---------------------------------------------------------------------------
 
 uint32 EmRegs::GetWord (emuptr address)
@@ -201,7 +201,7 @@ uint32 EmRegs::GetWord (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::GetByte
+//		â€¢ EmRegs::GetByte
 // ---------------------------------------------------------------------------
 
 uint32 EmRegs::GetByte (emuptr address)
@@ -217,7 +217,7 @@ uint32 EmRegs::GetByte (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::SetLong
+//		â€¢ EmRegs::SetLong
 // ---------------------------------------------------------------------------
 
 void EmRegs::SetLong (emuptr address, uint32 value)
@@ -233,7 +233,7 @@ void EmRegs::SetLong (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::SetWord
+//		â€¢ EmRegs::SetWord
 // ---------------------------------------------------------------------------
 
 void EmRegs::SetWord (emuptr address, uint32 value)
@@ -249,7 +249,7 @@ void EmRegs::SetWord (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::SetByte
+//		â€¢ EmRegs::SetByte
 // ---------------------------------------------------------------------------
 
 void EmRegs::SetByte (emuptr address, uint32 value)
@@ -265,7 +265,7 @@ void EmRegs::SetByte (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::ValidAddress
+//		â€¢ EmRegs::ValidAddress
 // ---------------------------------------------------------------------------
 
 int EmRegs::ValidAddress (emuptr address, uint32 size)
@@ -286,7 +286,7 @@ int EmRegs::ValidAddress (emuptr address, uint32 size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::GetRealAddress
+//		â€¢ EmRegs::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmRegs::GetRealAddress (emuptr address)
@@ -300,7 +300,7 @@ uint8* EmRegs::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::SetHandler
+//		â€¢ EmRegs::SetHandler
 // ---------------------------------------------------------------------------
 
 void EmRegs::SetHandler (ReadFunction read, WriteFunction write,
@@ -328,7 +328,7 @@ void EmRegs::SetHandler (ReadFunction read, WriteFunction write,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::UnsupportedRead
+//		â€¢ EmRegs::UnsupportedRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegs::UnsupportedRead (emuptr address, int size)
@@ -343,7 +343,7 @@ uint32 EmRegs::UnsupportedRead (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::UnsupportedWrite
+//		â€¢ EmRegs::UnsupportedWrite
 // ---------------------------------------------------------------------------
 
 void EmRegs::UnsupportedWrite (emuptr address, int size, uint32 value)
@@ -358,7 +358,7 @@ void EmRegs::UnsupportedWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::StdReadBE
+//		â€¢ EmRegs::StdReadBE
 // ---------------------------------------------------------------------------
 // Read registers in a strict Big Endian fashion.
 
@@ -394,7 +394,7 @@ uint32 EmRegs::StdReadBE (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::StdWriteBE
+//		â€¢ EmRegs::StdWriteBE
 // ---------------------------------------------------------------------------
 // Write registers in a strict Big Endian fashion.
 
@@ -434,7 +434,7 @@ void EmRegs::StdWriteBE (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::StdRead
+//		â€¢ EmRegs::StdRead
 // ---------------------------------------------------------------------------
 // Read registers using the routines in maccess.h
 
@@ -453,7 +453,7 @@ uint32 EmRegs::StdRead (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::StdWrite
+//		â€¢ EmRegs::StdWrite
 // ---------------------------------------------------------------------------
 // Write registers using the routines in maccess.h
 
@@ -473,7 +473,7 @@ void EmRegs::StdWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::ZeroRead
+//		â€¢ EmRegs::ZeroRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegs::ZeroRead (emuptr address, int size)
@@ -486,7 +486,7 @@ uint32 EmRegs::ZeroRead (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs::NullWrite
+//		â€¢ EmRegs::NullWrite
 // ---------------------------------------------------------------------------
 
 void EmRegs::NullWrite (emuptr address, int size, uint32 value)

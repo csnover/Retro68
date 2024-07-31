@@ -15,7 +15,7 @@
 #include <EmROMReader.h>
 
 // ---------------------------------------------------------------------------
-//		¥ ChunkType::ChunkType
+//		â€¢ ChunkType::ChunkType
 // ---------------------------------------------------------------------------
 
 EmROMReader::ChunkType::ChunkType(void)
@@ -36,7 +36,7 @@ EmROMReader::ChunkType::ChunkType(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ ChunkType::ChunkType
+//		â€¢ ChunkType::ChunkType
 // ---------------------------------------------------------------------------
 
 EmROMReader::ChunkType::ChunkType(const EmAliasROMHeapChunkHdr2Type<A>& chunk, UInt32 addr)
@@ -71,7 +71,7 @@ EmROMReader::ChunkType::ChunkType(const EmAliasROMHeapChunkHdr2Type<A>& chunk, U
 
 
 // ---------------------------------------------------------------------------
-//		¥ ChunkType::ChunkType
+//		â€¢ ChunkType::ChunkType
 // ---------------------------------------------------------------------------
 
 EmROMReader::ChunkType::ChunkType(const EmAliasROMHeapChunkHdr1Type<A>& chunk, UInt32 addr)
@@ -108,7 +108,7 @@ EmROMReader::ChunkType::ChunkType(const EmAliasROMHeapChunkHdr1Type<A>& chunk, U
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ DatabaseItemType::DatabaseItemType
+//		â€¢ DatabaseItemType::DatabaseItemType
 // ---------------------------------------------------------------------------
 
 EmROMReader::DatabaseItemType::DatabaseItemType(void)
@@ -121,7 +121,7 @@ EmROMReader::DatabaseItemType::DatabaseItemType(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ DatabaseItemType::DatabaseItemType
+//		â€¢ DatabaseItemType::DatabaseItemType
 // ---------------------------------------------------------------------------
 
 EmROMReader::DatabaseItemType::DatabaseItemType(const EmAliasROMDBRecordHeader1Type<A> record, EmROMReader* rom)
@@ -151,7 +151,7 @@ EmROMReader::DatabaseItemType::DatabaseItemType(const EmAliasROMDBRecordHeader1T
 
 
 // ---------------------------------------------------------------------------
-//		¥ DatabaseItemType::DatabaseItemType
+//		â€¢ DatabaseItemType::DatabaseItemType
 // ---------------------------------------------------------------------------
 
 EmROMReader::DatabaseItemType::DatabaseItemType(const EmAliasROMDBResourceHeader1Type<A> resource, EmROMReader* rom)
@@ -177,7 +177,7 @@ EmROMReader::DatabaseItemType::DatabaseItemType(const EmAliasROMDBResourceHeader
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ DatabaseType::DatabaseType
+//		â€¢ DatabaseType::DatabaseType
 // ---------------------------------------------------------------------------
 
 EmROMReader::DatabaseType::DatabaseType(void)
@@ -187,7 +187,7 @@ EmROMReader::DatabaseType::DatabaseType(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ DatabaseType::DatabaseType
+//		â€¢ DatabaseType::DatabaseType
 // ---------------------------------------------------------------------------
 
 EmROMReader::DatabaseType::DatabaseType(ChunkType* hdr, EmROMReader* rom)
@@ -243,7 +243,7 @@ EmROMReader::DatabaseType::DatabaseType(ChunkType* hdr, EmROMReader* rom)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmROMReader::EmROMReader
+//		â€¢ EmROMReader::EmROMReader
 // ---------------------------------------------------------------------------
 
 EmROMReader::EmROMReader(ptr_type arenaPtr, size_t arenaSize) :
@@ -272,7 +272,7 @@ EmROMReader::EmROMReader(ptr_type arenaPtr, size_t arenaSize) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmROMReader::~EmROMReader
+//		â€¢ EmROMReader::~EmROMReader
 // ---------------------------------------------------------------------------
 
 EmROMReader::~EmROMReader(void)
@@ -281,7 +281,7 @@ EmROMReader::~EmROMReader(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmROMReader::AcquireCardHeader
+//		â€¢ EmROMReader::AcquireCardHeader
 // ---------------------------------------------------------------------------
 
 bool EmROMReader::AcquireCardHeader(void)
@@ -356,7 +356,7 @@ bool EmROMReader::AcquireCardHeader(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmROMReader::GuessCardAddress
+//		â€¢ EmROMReader::GuessCardAddress
 // ---------------------------------------------------------------------------
 
 UInt32 EmROMReader::GuessCardAddress(void)
@@ -368,7 +368,7 @@ UInt32 EmROMReader::GuessCardAddress(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmROMReader::SetCardAddress
+//		â€¢ EmROMReader::SetCardAddress
 // ---------------------------------------------------------------------------
 
 void EmROMReader::SetCardAddress(UInt32 address)
@@ -378,7 +378,7 @@ void EmROMReader::SetCardAddress(UInt32 address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmROMReader::AcquireROMHeap
+//		â€¢ EmROMReader::AcquireROMHeap
 // ---------------------------------------------------------------------------
 
 bool EmROMReader::AcquireROMHeap(void)
@@ -622,7 +622,7 @@ fail:
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmROMReader::AcquireDatabases
+//		â€¢ EmROMReader::AcquireDatabases
 // ---------------------------------------------------------------------------
 
 bool EmROMReader::AcquireDatabases(void)
@@ -695,7 +695,7 @@ bool EmROMReader::AcquireDatabases(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmROMReader::AcquireFeatures
+//		â€¢ EmROMReader::AcquireFeatures
 // ---------------------------------------------------------------------------
 
 bool EmROMReader::AcquireFeatures(void)
@@ -744,7 +744,7 @@ bool EmROMReader::AcquireFeatures(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmROMReader::AcquireSplashDB
+//		â€¢ EmROMReader::AcquireSplashDB
 // ---------------------------------------------------------------------------
 
 bool EmROMReader::AcquireSplashDB(void)
@@ -776,7 +776,7 @@ bool EmROMReader::AcquireSplashDB(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmROMReader::ContainsDB
+//		â€¢ EmROMReader::ContainsDB
 // ---------------------------------------------------------------------------
 
 bool EmROMReader::ContainsDB(string	dbName)	const
@@ -794,7 +794,7 @@ bool EmROMReader::ContainsDB(string	dbName)	const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmROMReader::Version
+//		â€¢ EmROMReader::Version
 // ---------------------------------------------------------------------------
 
 void EmROMReader::Version(	int& major,
@@ -823,7 +823,7 @@ void EmROMReader::Version(	int& major,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmROMReader::Version
+//		â€¢ EmROMReader::Version
 // ---------------------------------------------------------------------------
 
 uint32 EmROMReader::Version(void) const
@@ -836,7 +836,7 @@ uint32 EmROMReader::Version(void) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmROMReader::IsBitmapColor
+//		â€¢ EmROMReader::IsBitmapColor
 // ---------------------------------------------------------------------------
 
 int EmROMReader::IsBitmapColor (ChunkType& chunk, bool bootScreen)

@@ -28,7 +28,7 @@ EmHALHandler*		EmHAL::fgRootHandler;
 static void PrvHandlePortOpenErrors (ErrCode err, string errString);
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::AddHandler
+//		â€¢ EmHAL::AddHandler
 // ---------------------------------------------------------------------------
 
 void EmHAL::AddHandler (EmHALHandler* handler)
@@ -48,7 +48,7 @@ void EmHAL::AddHandler (EmHALHandler* handler)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::RemoveHandler
+//		â€¢ EmHAL::RemoveHandler
 // ---------------------------------------------------------------------------
 
 void EmHAL::RemoveHandler (EmHALHandler* handler)
@@ -77,7 +77,7 @@ void EmHAL::RemoveHandler (EmHALHandler* handler)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::RemoveHandler
+//		â€¢ EmHAL::RemoveHandler
 // ---------------------------------------------------------------------------
 
 void EmHAL::EnsureCoverage (void)
@@ -112,7 +112,7 @@ void EmHAL::EnsureCoverage (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::Cycle
+//		â€¢ EmHAL::Cycle
 // ---------------------------------------------------------------------------
 
 #if 0	// It's inline
@@ -125,7 +125,7 @@ void EmHAL::Cycle (Bool sleeping)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::CycleSlowly
+//		â€¢ EmHAL::CycleSlowly
 // ---------------------------------------------------------------------------
 
 void EmHAL::CycleSlowly (Bool sleeping)
@@ -136,7 +136,7 @@ void EmHAL::CycleSlowly (Bool sleeping)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::ButtonEvent
+//		â€¢ EmHAL::ButtonEvent
 // ---------------------------------------------------------------------------
 
 void EmHAL::ButtonEvent (SkinElementType button, Bool buttonIsDown)
@@ -147,7 +147,7 @@ void EmHAL::ButtonEvent (SkinElementType button, Bool buttonIsDown)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::TurnSoundOff
+//		â€¢ EmHAL::TurnSoundOff
 // ---------------------------------------------------------------------------
 
 void EmHAL::TurnSoundOff (void)
@@ -158,7 +158,7 @@ void EmHAL::TurnSoundOff (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::ResetTimer
+//		â€¢ EmHAL::ResetTimer
 // ---------------------------------------------------------------------------
 
 void EmHAL::ResetTimer (void)
@@ -169,7 +169,7 @@ void EmHAL::ResetTimer (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::ResetRTC
+//		â€¢ EmHAL::ResetRTC
 // ---------------------------------------------------------------------------
 
 void EmHAL::ResetRTC (void)
@@ -180,7 +180,7 @@ void EmHAL::ResetRTC (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetInterruptLevel
+//		â€¢ EmHAL::GetInterruptLevel
 // ---------------------------------------------------------------------------
 
 int32 EmHAL::GetInterruptLevel (void)
@@ -191,7 +191,7 @@ int32 EmHAL::GetInterruptLevel (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetInterruptBase
+//		â€¢ EmHAL::GetInterruptBase
 // ---------------------------------------------------------------------------
 
 int32 EmHAL::GetInterruptBase (void)
@@ -202,7 +202,7 @@ int32 EmHAL::GetInterruptBase (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetLCDScreenOn
+//		â€¢ EmHAL::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 // Called in various portXDataWrite methods to determine if Screen::InvalidateAll
 // needs to be called.  Typically implemented in the EmRegs<Product> or
@@ -216,7 +216,7 @@ Bool EmHAL::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetLCDBacklightOn
+//		â€¢ EmHAL::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 // Called in various portXDataWrite methods to determine if Screen::InvalidateAll
 // needs to be called.  Typically implemented in the EmRegs<Product> or
@@ -230,7 +230,7 @@ Bool EmHAL::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetLCDHasFrame
+//		â€¢ EmHAL::GetLCDHasFrame
 // ---------------------------------------------------------------------------
 // Called by host LCD code to know if it needs to draw a 2-pixel white frame.
 // Typically implemented in the EmRegs<Processor> or EmRegs<LCDDriver> subclass.
@@ -243,7 +243,7 @@ Bool EmHAL::GetLCDHasFrame (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetLCDBeginEnd
+//		â€¢ EmHAL::GetLCDBeginEnd
 // ---------------------------------------------------------------------------
 // Called by Screen class in order to mark the memory used for the framebuffer.
 // Typically implemented in the EmRegs<Processor> or EmRegs<LCDDriver> subclass.
@@ -256,7 +256,7 @@ void EmHAL::GetLCDBeginEnd (emuptr& begin, emuptr& end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetLCDScanlines
+//		â€¢ EmHAL::GetLCDScanlines
 // ---------------------------------------------------------------------------
 // Fill in the output fields of EmScreenUpdateInfo.  Typically implemented in
 // the EmRegs<Processor> or EmRegs<LCDDriver> subclass.
@@ -269,7 +269,7 @@ void EmHAL::GetLCDScanlines (EmScreenUpdateInfo& info)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetDynamicHeapSize
+//		â€¢ EmHAL::GetDynamicHeapSize
 // ---------------------------------------------------------------------------
 
 int32 EmHAL::GetDynamicHeapSize (void)
@@ -280,7 +280,7 @@ int32 EmHAL::GetDynamicHeapSize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetROMSize
+//		â€¢ EmHAL::GetROMSize
 // ---------------------------------------------------------------------------
 
 int32 EmHAL::GetROMSize (void)
@@ -291,7 +291,7 @@ int32 EmHAL::GetROMSize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetROMBaseAddress
+//		â€¢ EmHAL::GetROMBaseAddress
 // ---------------------------------------------------------------------------
 
 emuptr EmHAL::GetROMBaseAddress (void)
@@ -302,7 +302,7 @@ emuptr EmHAL::GetROMBaseAddress (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::ChipSelectsConfigured
+//		â€¢ EmHAL::ChipSelectsConfigured
 // ---------------------------------------------------------------------------
 
 Bool EmHAL::ChipSelectsConfigured (void)
@@ -313,7 +313,7 @@ Bool EmHAL::ChipSelectsConfigured (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetSystemClockFrequency
+//		â€¢ EmHAL::GetSystemClockFrequency
 // ---------------------------------------------------------------------------
 
 int32 EmHAL::GetSystemClockFrequency (void)
@@ -324,7 +324,7 @@ int32 EmHAL::GetSystemClockFrequency (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetCanStop
+//		â€¢ EmHAL::GetCanStop
 // ---------------------------------------------------------------------------
 
 Bool EmHAL::GetCanStop (void)
@@ -335,7 +335,7 @@ Bool EmHAL::GetCanStop (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetAsleep
+//		â€¢ EmHAL::GetAsleep
 // ---------------------------------------------------------------------------
 
 Bool EmHAL::GetAsleep (void)
@@ -346,7 +346,7 @@ Bool EmHAL::GetAsleep (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetPortInputValue
+//		â€¢ EmHAL::GetPortInputValue
 // ---------------------------------------------------------------------------
 
 uint8 EmHAL::GetPortInputValue (int port)
@@ -357,7 +357,7 @@ uint8 EmHAL::GetPortInputValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetPortInternalValue
+//		â€¢ EmHAL::GetPortInternalValue
 // ---------------------------------------------------------------------------
 
 uint8 EmHAL::GetPortInternalValue (int port)
@@ -368,7 +368,7 @@ uint8 EmHAL::GetPortInternalValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::PortDataChanged
+//		â€¢ EmHAL::PortDataChanged
 // ---------------------------------------------------------------------------
 
 void EmHAL::PortDataChanged (int port, uint8 oldVal, uint8 newVal)
@@ -379,7 +379,7 @@ void EmHAL::PortDataChanged (int port, uint8 oldVal, uint8 newVal)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetKeyInfo
+//		â€¢ EmHAL::GetKeyInfo
 // ---------------------------------------------------------------------------
 
 void EmHAL::GetKeyInfo (int* numRows, int* numCols,
@@ -391,7 +391,7 @@ void EmHAL::GetKeyInfo (int* numRows, int* numCols,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::LineDriverChanged
+//		â€¢ EmHAL::LineDriverChanged
 // ---------------------------------------------------------------------------
 // Open or close the transports in response to their line drivers being
 // enabled or disabled.
@@ -422,7 +422,7 @@ void EmHAL::LineDriverChanged (EmUARTDeviceType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetLineDriverState
+//		â€¢ EmHAL::GetLineDriverState
 // ---------------------------------------------------------------------------
 // Return whether or not the line drivers for the given object are open or
 // closed.
@@ -435,7 +435,7 @@ Bool EmHAL::GetLineDriverState (EmUARTDeviceType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetUARTDevice
+//		â€¢ EmHAL::GetUARTDevice
 // ---------------------------------------------------------------------------
 // Return what sort of device is hooked up to the given UART.
 
@@ -447,7 +447,7 @@ EmUARTDeviceType EmHAL::GetUARTDevice (int uartNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetLineDriverStates
+//		â€¢ EmHAL::GetLineDriverStates
 // ---------------------------------------------------------------------------
 // Collect all the states of all the driver types we know about.  Pass in to
 // this routine a variable of type Bool[kUARTEnd].
@@ -462,7 +462,7 @@ void EmHAL::GetLineDriverStates (Bool* states)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::CompareLineDriverStates
+//		â€¢ EmHAL::CompareLineDriverStates
 // ---------------------------------------------------------------------------
 // Collect the current state of all the line drivers, and compare them to
 // a previously-saved snapshot.  For any differences, call LineDriverChanged.
@@ -483,7 +483,7 @@ void EmHAL::CompareLineDriverStates (const Bool* oldStates)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetDTR
+//		â€¢ EmHAL::GetDTR
 // ---------------------------------------------------------------------------
 // DTR is "Data Terminal Ready".  In the same way that the RTS signal is
 // typically hooked up to the external device's CTS signal, our DTR pin is
@@ -498,7 +498,7 @@ Bool EmHAL::GetDTR (int uartNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::DTRChanged
+//		â€¢ EmHAL::DTRChanged
 // ---------------------------------------------------------------------------
 // Called when the Palm OS changes the setting of the DTR pin.  We respond
 // to this change by reflecting the setting in the host's DTR pin.
@@ -519,7 +519,7 @@ void EmHAL::DTRChanged (int uartNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetVibrateOn
+//		â€¢ EmHAL::GetVibrateOn
 // ---------------------------------------------------------------------------
 
 Bool EmHAL::GetVibrateOn (void)
@@ -530,7 +530,7 @@ Bool EmHAL::GetVibrateOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHAL::GetLEDState
+//		â€¢ EmHAL::GetLEDState
 // ---------------------------------------------------------------------------
 
 uint16 EmHAL::GetLEDState (void)
@@ -543,7 +543,7 @@ uint16 EmHAL::GetLEDState (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::EmHALHandler
+//		â€¢ EmHALHandler::EmHALHandler
 // ---------------------------------------------------------------------------
 
 EmHALHandler::EmHALHandler (void) :
@@ -555,7 +555,7 @@ EmHALHandler::EmHALHandler (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::~EmHALHandler
+//		â€¢ EmHALHandler::~EmHALHandler
 // ---------------------------------------------------------------------------
 
 EmHALHandler::~EmHALHandler (void)
@@ -565,7 +565,7 @@ EmHALHandler::~EmHALHandler (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::Cycle
+//		â€¢ EmHALHandler::Cycle
 // ---------------------------------------------------------------------------
 
 void EmHALHandler::Cycle (Bool sleeping)
@@ -576,7 +576,7 @@ void EmHALHandler::Cycle (Bool sleeping)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::CycleSlowly
+//		â€¢ EmHALHandler::CycleSlowly
 // ---------------------------------------------------------------------------
 
 void EmHALHandler::CycleSlowly (Bool sleeping)
@@ -587,7 +587,7 @@ void EmHALHandler::CycleSlowly (Bool sleeping)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::ButtonEvent
+//		â€¢ EmHALHandler::ButtonEvent
 // ---------------------------------------------------------------------------
 
 void EmHALHandler::ButtonEvent (SkinElementType button, Bool buttonIsDown)
@@ -598,7 +598,7 @@ void EmHALHandler::ButtonEvent (SkinElementType button, Bool buttonIsDown)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::TurnSoundOff
+//		â€¢ EmHALHandler::TurnSoundOff
 // ---------------------------------------------------------------------------
 
 void EmHALHandler::TurnSoundOff (void)
@@ -609,7 +609,7 @@ void EmHALHandler::TurnSoundOff (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::ResetTimer
+//		â€¢ EmHALHandler::ResetTimer
 // ---------------------------------------------------------------------------
 
 void EmHALHandler::ResetTimer (void)
@@ -620,7 +620,7 @@ void EmHALHandler::ResetTimer (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::ResetRTC
+//		â€¢ EmHALHandler::ResetRTC
 // ---------------------------------------------------------------------------
 
 void EmHALHandler::ResetRTC (void)
@@ -631,7 +631,7 @@ void EmHALHandler::ResetRTC (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetInterruptLevel
+//		â€¢ EmHALHandler::GetInterruptLevel
 // ---------------------------------------------------------------------------
 
 int32 EmHALHandler::GetInterruptLevel (void)
@@ -642,7 +642,7 @@ int32 EmHALHandler::GetInterruptLevel (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetInterruptBase
+//		â€¢ EmHALHandler::GetInterruptBase
 // ---------------------------------------------------------------------------
 
 int32 EmHALHandler::GetInterruptBase (void)
@@ -653,7 +653,7 @@ int32 EmHALHandler::GetInterruptBase (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetLCDScreenOn
+//		â€¢ EmHALHandler::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmHALHandler::GetLCDScreenOn (void)
@@ -664,7 +664,7 @@ Bool EmHALHandler::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetLCDBacklightOn
+//		â€¢ EmHALHandler::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmHALHandler::GetLCDBacklightOn (void)
@@ -675,7 +675,7 @@ Bool EmHALHandler::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetLCDHasFrame
+//		â€¢ EmHALHandler::GetLCDHasFrame
 // ---------------------------------------------------------------------------
 
 Bool EmHALHandler::GetLCDHasFrame (void)
@@ -686,7 +686,7 @@ Bool EmHALHandler::GetLCDHasFrame (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetLCDBeginEnd
+//		â€¢ EmHALHandler::GetLCDBeginEnd
 // ---------------------------------------------------------------------------
 
 void EmHALHandler::GetLCDBeginEnd (emuptr& begin, emuptr& end)
@@ -697,7 +697,7 @@ void EmHALHandler::GetLCDBeginEnd (emuptr& begin, emuptr& end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetLCDScanlines
+//		â€¢ EmHALHandler::GetLCDScanlines
 // ---------------------------------------------------------------------------
 
 void EmHALHandler::GetLCDScanlines (EmScreenUpdateInfo& info)
@@ -708,7 +708,7 @@ void EmHALHandler::GetLCDScanlines (EmScreenUpdateInfo& info)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetDynamicHeapSize
+//		â€¢ EmHALHandler::GetDynamicHeapSize
 // ---------------------------------------------------------------------------
 
 int32 EmHALHandler::GetDynamicHeapSize (void)
@@ -719,7 +719,7 @@ int32 EmHALHandler::GetDynamicHeapSize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetROMSize
+//		â€¢ EmHALHandler::GetROMSize
 // ---------------------------------------------------------------------------
 
 int32 EmHALHandler::GetROMSize (void)
@@ -730,7 +730,7 @@ int32 EmHALHandler::GetROMSize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetROMBaseAddress
+//		â€¢ EmHALHandler::GetROMBaseAddress
 // ---------------------------------------------------------------------------
 
 emuptr EmHALHandler::GetROMBaseAddress (void)
@@ -741,7 +741,7 @@ emuptr EmHALHandler::GetROMBaseAddress (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::ChipSelectsConfigured
+//		â€¢ EmHALHandler::ChipSelectsConfigured
 // ---------------------------------------------------------------------------
 
 Bool EmHALHandler::ChipSelectsConfigured (void)
@@ -752,7 +752,7 @@ Bool EmHALHandler::ChipSelectsConfigured (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetSystemClockFrequency
+//		â€¢ EmHALHandler::GetSystemClockFrequency
 // ---------------------------------------------------------------------------
 
 int32 EmHALHandler::GetSystemClockFrequency (void)
@@ -763,7 +763,7 @@ int32 EmHALHandler::GetSystemClockFrequency (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetCanStop
+//		â€¢ EmHALHandler::GetCanStop
 // ---------------------------------------------------------------------------
 
 Bool EmHALHandler::GetCanStop (void)
@@ -774,7 +774,7 @@ Bool EmHALHandler::GetCanStop (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetAsleep
+//		â€¢ EmHALHandler::GetAsleep
 // ---------------------------------------------------------------------------
 
 Bool EmHALHandler::GetAsleep (void)
@@ -785,7 +785,7 @@ Bool EmHALHandler::GetAsleep (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetPortInputValue
+//		â€¢ EmHALHandler::GetPortInputValue
 // ---------------------------------------------------------------------------
 
 uint8 EmHALHandler::GetPortInputValue (int port)
@@ -796,7 +796,7 @@ uint8 EmHALHandler::GetPortInputValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetPortInternalValue
+//		â€¢ EmHALHandler::GetPortInternalValue
 // ---------------------------------------------------------------------------
 
 uint8 EmHALHandler::GetPortInternalValue (int port)
@@ -807,7 +807,7 @@ uint8 EmHALHandler::GetPortInternalValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::PortDataChanged
+//		â€¢ EmHALHandler::PortDataChanged
 // ---------------------------------------------------------------------------
 
 void EmHALHandler::PortDataChanged (int port, uint8 oldVal, uint8 newVal)
@@ -818,7 +818,7 @@ void EmHALHandler::PortDataChanged (int port, uint8 oldVal, uint8 newVal)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetKeyInfo
+//		â€¢ EmHALHandler::GetKeyInfo
 // ---------------------------------------------------------------------------
 
 void EmHALHandler::GetKeyInfo (int* numRows, int* numCols,
@@ -830,7 +830,7 @@ void EmHALHandler::GetKeyInfo (int* numRows, int* numCols,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetLineDriverState
+//		â€¢ EmHALHandler::GetLineDriverState
 // ---------------------------------------------------------------------------
 // Return whether or not the line drivers for the given object are open or
 // closed.
@@ -847,7 +847,7 @@ Bool EmHALHandler::GetLineDriverState (EmUARTDeviceType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetUARTDevice
+//		â€¢ EmHALHandler::GetUARTDevice
 // ---------------------------------------------------------------------------
 // Return what sort of device is hooked up to the given UART.
 
@@ -863,7 +863,7 @@ EmUARTDeviceType EmHALHandler::GetUARTDevice (int uartNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetDTR
+//		â€¢ EmHALHandler::GetDTR
 // ---------------------------------------------------------------------------
 // DTR is "Data Terminal Ready".  In the same way that the RTS signal is
 // typically hooked up to the external device's CTS signal, our DTR pin is
@@ -882,7 +882,7 @@ Bool EmHALHandler::GetDTR (int uartNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetVibrateOn
+//		â€¢ EmHALHandler::GetVibrateOn
 // ---------------------------------------------------------------------------
 
 Bool EmHALHandler::GetVibrateOn (void)
@@ -896,7 +896,7 @@ Bool EmHALHandler::GetVibrateOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmHALHandler::GetLEDState
+//		â€¢ EmHALHandler::GetLEDState
 // ---------------------------------------------------------------------------
 
 uint16 EmHALHandler::GetLEDState (void)

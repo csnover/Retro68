@@ -30,7 +30,7 @@
 						fRegs.reg.GetSize ())
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBISP_1161::EmRegsUSBISP_1161
+//		â€¢ EmRegsUSBISP_1161::EmRegsUSBISP_1161
 // ---------------------------------------------------------------------------
 
 EmRegsUSBISP_1161::EmRegsUSBISP_1161 (emuptr baseAddr)
@@ -50,7 +50,7 @@ EmRegsUSBISP_1161::EmRegsUSBISP_1161 (emuptr baseAddr)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBISP_1161::~EmRegsUSBISP_1161
+//		â€¢ EmRegsUSBISP_1161::~EmRegsUSBISP_1161
 // ---------------------------------------------------------------------------
 
 EmRegsUSBISP_1161::~EmRegsUSBISP_1161 ()
@@ -58,7 +58,7 @@ EmRegsUSBISP_1161::~EmRegsUSBISP_1161 ()
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBISP_1161::Reset
+//		â€¢ EmRegsUSBISP_1161::Reset
 // ---------------------------------------------------------------------------
 
 void EmRegsUSBISP_1161::Reset (Bool hardwareReset)
@@ -70,7 +70,7 @@ void EmRegsUSBISP_1161::Reset (Bool hardwareReset)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBISP_1161::SetSubBankHandlers
+//		â€¢ EmRegsUSBISP_1161::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegsUSBISP_1161::SetSubBankHandlers ()
@@ -84,7 +84,7 @@ void EmRegsUSBISP_1161::SetSubBankHandlers ()
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBISP_1161::GetRealAddress
+//		â€¢ EmRegsUSBISP_1161::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmRegsUSBISP_1161::GetRealAddress (emuptr address)
@@ -93,7 +93,7 @@ uint8* EmRegsUSBISP_1161::GetRealAddress (emuptr address)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBISP_1161::GetAddressStart
+//		â€¢ EmRegsUSBISP_1161::GetAddressStart
 // ---------------------------------------------------------------------------
 
 emuptr EmRegsUSBISP_1161::GetAddressStart (void)
@@ -102,7 +102,7 @@ emuptr EmRegsUSBISP_1161::GetAddressStart (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBISP_1161::GetAddressRange
+//		â€¢ EmRegsUSBISP_1161::GetAddressRange
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsUSBISP_1161::GetAddressRange (void)
@@ -111,7 +111,7 @@ uint32 EmRegsUSBISP_1161::GetAddressRange (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBISP_1161::hostDataRead
+//		â€¢ EmRegsUSBISP_1161::hostDataRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsUSBISP_1161::hostDataRead (emuptr address, int size)
@@ -139,7 +139,7 @@ uint32 EmRegsUSBISP_1161::hostDataRead (emuptr address, int size)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBISP_1161::hostDataWrite
+//		â€¢ EmRegsUSBISP_1161::hostDataWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsUSBISP_1161::hostDataWrite (emuptr address, int size, uint32 value)
@@ -154,7 +154,7 @@ void EmRegsUSBISP_1161::hostDataWrite (emuptr address, int size, uint32 value)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBISP_1161::hostCommandWrite
+//		â€¢ EmRegsUSBISP_1161::hostCommandWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsUSBISP_1161::hostCommandWrite (emuptr address, int size, uint32 value)

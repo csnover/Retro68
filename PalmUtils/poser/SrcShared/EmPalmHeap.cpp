@@ -26,7 +26,7 @@
 
 
 // ===========================================================================
-//		¥ EmPalmHeap
+//		â€¢ EmPalmHeap
 // ===========================================================================
 
 EmPalmHeapList	EmPalmHeap::fgHeapList;
@@ -2099,7 +2099,7 @@ void EmPalmChunk::GetChunkInfo (const EmPalmHeap& heap, emuptr chunkHdr)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ operator << (EmStream&, EmPalmChunk&)
+//		â€¢ operator << (EmStream&, EmPalmChunk&)
 // ---------------------------------------------------------------------------
 
 EmStream& operator << (EmStream& s, const EmPalmChunk& chunk)
@@ -2128,7 +2128,7 @@ EmStream& operator << (EmStream& s, const EmPalmChunk& chunk)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ operator >> (EmStream&, EmPalmChunk&)
+//		â€¢ operator >> (EmStream&, EmPalmChunk&)
 // ---------------------------------------------------------------------------
 
 EmStream& operator >> (EmStream& s, EmPalmChunk& chunk)
@@ -2159,7 +2159,7 @@ EmStream& operator >> (EmStream& s, EmPalmChunk& chunk)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ operator << (EmStream&, EmPalmMPT&)
+//		â€¢ operator << (EmStream&, EmPalmMPT&)
 // ---------------------------------------------------------------------------
 
 EmStream& operator << (EmStream& s, const EmPalmMPT& mpt)
@@ -2181,7 +2181,7 @@ EmStream& operator << (EmStream& s, const EmPalmMPT& mpt)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ operator >> (EmStream&, EmPalmMPT&)
+//		â€¢ operator >> (EmStream&, EmPalmMPT&)
 // ---------------------------------------------------------------------------
 
 EmStream& operator >> (EmStream& s, EmPalmMPT& mpt)
@@ -2205,7 +2205,7 @@ EmStream& operator >> (EmStream& s, EmPalmMPT& mpt)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ operator << (EmStream&, EmPalmHeap&)
+//		â€¢ operator << (EmStream&, EmPalmHeap&)
 // ---------------------------------------------------------------------------
 
 EmStream& operator << (EmStream& s, const EmPalmHeap& heap)
@@ -2233,7 +2233,7 @@ EmStream& operator << (EmStream& s, const EmPalmHeap& heap)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ operator >> (EmStream&, EmPalmHeap&)
+//		â€¢ operator >> (EmStream&, EmPalmHeap&)
 // ---------------------------------------------------------------------------
 
 EmStream& operator >> (EmStream& s, EmPalmHeap& heap)

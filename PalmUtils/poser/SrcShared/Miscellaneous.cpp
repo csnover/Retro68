@@ -39,7 +39,7 @@
 #include <zlib.h>
 
 // ===========================================================================
-//	¥ StMemory Class
+//	â€¢ StMemory Class
 // ===========================================================================
 //	Constructor allocates the Ptr
 //	Destructor disposes of the Ptr
@@ -524,7 +524,7 @@ void CollectOKObjects (FormPtr frm, vector<UInt16>& okObjects)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PinRectInRect
+//		â€¢ PinRectInRect
 // ---------------------------------------------------------------------------
 
 Bool PinRectInRect (EmRect& inner, const EmRect& outer)

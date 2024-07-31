@@ -36,7 +36,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBVisor::EmRegsUSBVisor
+//		â€¢ EmRegsUSBVisor::EmRegsUSBVisor
 // ---------------------------------------------------------------------------
 
 EmRegsUSBVisor::EmRegsUSBVisor (void)
@@ -45,7 +45,7 @@ EmRegsUSBVisor::EmRegsUSBVisor (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBVisor::~EmRegsUSBVisor
+//		â€¢ EmRegsUSBVisor::~EmRegsUSBVisor
 // ---------------------------------------------------------------------------
 
 EmRegsUSBVisor::~EmRegsUSBVisor (void)
@@ -54,7 +54,7 @@ EmRegsUSBVisor::~EmRegsUSBVisor (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBVisor::Initialize
+//		â€¢ EmRegsUSBVisor::Initialize
 // ---------------------------------------------------------------------------
 
 void EmRegsUSBVisor::Initialize (void)
@@ -64,7 +64,7 @@ void EmRegsUSBVisor::Initialize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBVisor::Reset
+//		â€¢ EmRegsUSBVisor::Reset
 // ---------------------------------------------------------------------------
 
 void EmRegsUSBVisor::Reset (Bool hardwareReset)
@@ -79,7 +79,7 @@ void EmRegsUSBVisor::Reset (Bool hardwareReset)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBVisor::Save
+//		â€¢ EmRegsUSBVisor::Save
 // ---------------------------------------------------------------------------
 
 void EmRegsUSBVisor::Save (SessionFile& f)
@@ -89,7 +89,7 @@ void EmRegsUSBVisor::Save (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBVisor::Load
+//		â€¢ EmRegsUSBVisor::Load
 // ---------------------------------------------------------------------------
 
 void EmRegsUSBVisor::Load (SessionFile& f)
@@ -99,7 +99,7 @@ void EmRegsUSBVisor::Load (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBVisor::Dispose
+//		â€¢ EmRegsUSBVisor::Dispose
 // ---------------------------------------------------------------------------
 
 void EmRegsUSBVisor::Dispose (void)
@@ -109,7 +109,7 @@ void EmRegsUSBVisor::Dispose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBVisor::SetSubBankHandlers
+//		â€¢ EmRegsUSBVisor::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegsUSBVisor::SetSubBankHandlers (void)
@@ -126,7 +126,7 @@ void EmRegsUSBVisor::SetSubBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBVisor::GetRealAddress
+//		â€¢ EmRegsUSBVisor::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmRegsUSBVisor::GetRealAddress (emuptr address)
@@ -136,7 +136,7 @@ uint8* EmRegsUSBVisor::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBVisor::GetAddressStart
+//		â€¢ EmRegsUSBVisor::GetAddressStart
 // ---------------------------------------------------------------------------
 
 emuptr EmRegsUSBVisor::GetAddressStart (void)
@@ -155,7 +155,7 @@ emuptr EmRegsUSBVisor::GetAddressStart (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBVisor::GetAddressRange
+//		â€¢ EmRegsUSBVisor::GetAddressRange
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsUSBVisor::GetAddressRange (void)

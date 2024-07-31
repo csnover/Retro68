@@ -20,7 +20,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM505::EmRegsVZPalmM505
+//		â€¢ EmRegsVZPalmM505::EmRegsVZPalmM505
 // ---------------------------------------------------------------------------
 
 EmRegsVZPalmM505::EmRegsVZPalmM505 (void) :
@@ -30,7 +30,7 @@ EmRegsVZPalmM505::EmRegsVZPalmM505 (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM505::~EmRegsVZPalmM505
+//		â€¢ EmRegsVZPalmM505::~EmRegsVZPalmM505
 // ---------------------------------------------------------------------------
 
 EmRegsVZPalmM505::~EmRegsVZPalmM505 (void)
@@ -39,7 +39,7 @@ EmRegsVZPalmM505::~EmRegsVZPalmM505 (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM505::SetSubBankHandlers
+//		â€¢ EmRegsVZPalmM505::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegsVZPalmM505::SetSubBankHandlers (void)
@@ -57,7 +57,7 @@ void EmRegsVZPalmM505::SetSubBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::portFSelectWrite
+//		â€¢ EmRegsVZ::portFSelectWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsVZPalmM505::portFSelectWrite (emuptr address, int size, uint32 value)
@@ -89,7 +89,7 @@ void EmRegsVZPalmM505::portFSelectWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM505::GetLCDScreenOn
+//		â€¢ EmRegsVZPalmM505::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZPalmM505::GetLCDScreenOn (void)
@@ -101,7 +101,7 @@ Bool EmRegsVZPalmM505::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM505::GetLCDBacklightOn
+//		â€¢ EmRegsVZPalmM505::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZPalmM505::GetLCDBacklightOn (void)
@@ -113,7 +113,7 @@ Bool EmRegsVZPalmM505::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM505::GetLCDHasFrame
+//		â€¢ EmRegsVZPalmM505::GetLCDHasFrame
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZPalmM505::GetLCDHasFrame (void)
@@ -125,7 +125,7 @@ Bool EmRegsVZPalmM505::GetLCDHasFrame (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM505::GetLCDBeginEnd
+//		â€¢ EmRegsVZPalmM505::GetLCDBeginEnd
 // ---------------------------------------------------------------------------
 
 void EmRegsVZPalmM505::GetLCDBeginEnd (emuptr& begin, emuptr& end)
@@ -137,7 +137,7 @@ void EmRegsVZPalmM505::GetLCDBeginEnd (emuptr& begin, emuptr& end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM505::GetLCDScanlines
+//		â€¢ EmRegsVZPalmM505::GetLCDScanlines
 // ---------------------------------------------------------------------------
 
 void EmRegsVZPalmM505::GetLCDScanlines (EmScreenUpdateInfo& info)

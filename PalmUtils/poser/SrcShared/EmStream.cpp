@@ -1,6 +1,6 @@
 /* -*- mode: C++; tab-width: 4 -*- */
 // ===========================================================================
-//	EmStream.cpp			   ©1993-1998 Metrowerks Inc. All rights reserved.
+//	EmStream.cpp			   Â©1993-1998 Metrowerks Inc. All rights reserved.
 // ===========================================================================
 //
 //	Abstract class for reading/writing an ordered sequence of bytes
@@ -15,7 +15,7 @@
 #pragma mark --- Construction & Destruction ---
 
 // ---------------------------------------------------------------------------
-//	¥ EmStream
+//	â€¢ EmStream
 // ---------------------------------------------------------------------------
 //	Default Constructor
 
@@ -27,7 +27,7 @@ EmStream::EmStream (void) :
 
 
 // ---------------------------------------------------------------------------
-//	¥ ~EmStream
+//	â€¢ ~EmStream
 // ---------------------------------------------------------------------------
 //	Destructor
 
@@ -39,7 +39,7 @@ EmStream::~EmStream (void)
 #pragma mark --- Accessors ---
 
 // ---------------------------------------------------------------------------
-//	¥ SetMarker
+//	â€¢ SetMarker
 // ---------------------------------------------------------------------------
 //	Place the Read/Write Marker at an offset from a specified position
 //
@@ -81,7 +81,7 @@ EmStream::SetMarker (
 
 
 // ---------------------------------------------------------------------------
-//	¥ GetMarker
+//	â€¢ GetMarker
 // ---------------------------------------------------------------------------
 //	Return the Read/Write Marker position
 //
@@ -95,7 +95,7 @@ EmStream::GetMarker (void) const
 
 
 // ---------------------------------------------------------------------------
-//	¥ SetLength
+//	â€¢ SetLength
 // ---------------------------------------------------------------------------
 //	Set the length, in bytes, of the Stream
 
@@ -115,7 +115,7 @@ EmStream::SetLength(
 
 
 // ---------------------------------------------------------------------------
-//	¥ GetLength
+//	â€¢ GetLength
 // ---------------------------------------------------------------------------
 //	Return the length, in bytes, of the Stream
 
@@ -128,7 +128,7 @@ EmStream::GetLength (void) const
 #pragma mark --- Low-Level I/O ---
 
 // ---------------------------------------------------------------------------
-//	¥ PutBytes
+//	â€¢ PutBytes
 // ---------------------------------------------------------------------------
 //	Write bytes from a buffer to a Stream
 //
@@ -247,7 +247,7 @@ EmStream::operator <<		(bool inBool)
 
 		
 // ---------------------------------------------------------------------------
-//	¥ GetBytes
+//	â€¢ GetBytes
 // ---------------------------------------------------------------------------
 //	Read bytes from a Stream to a buffer
 //
@@ -271,7 +271,7 @@ EmStream::GetBytes (
 
 
 // ---------------------------------------------------------------------------
-//	¥ PeekData
+//	â€¢ PeekData
 // ---------------------------------------------------------------------------
 //	Read data from a Stream to a buffer, without moving the Marker
 //
@@ -391,7 +391,7 @@ EmStream::operator >>		(bool &outBool)
 #pragma mark --- High-Level I/O ---
 
 // ---------------------------------------------------------------------------
-//	¥ WriteCString
+//	â€¢ WriteCString
 // ---------------------------------------------------------------------------
 //	Write a C string to a Stream
 //
@@ -416,7 +416,7 @@ EmStream::WriteCString (
 
 
 // ---------------------------------------------------------------------------
-//	¥ ReadCString
+//	â€¢ ReadCString
 // ---------------------------------------------------------------------------
 //	Read a C string from a Stream
 //
@@ -442,7 +442,7 @@ EmStream::ReadCString (
 }
 
 // ---------------------------------------------------------------------------
-//	¥ WriteString
+//	â€¢ WriteString
 // ---------------------------------------------------------------------------
 //	Write a C string to a Stream
 //
@@ -457,7 +457,7 @@ EmStream::WriteString (
 
 
 // ---------------------------------------------------------------------------
-//	¥ ReadString
+//	â€¢ ReadString
 // ---------------------------------------------------------------------------
 //	Read a C string from a Stream
 //
@@ -485,14 +485,14 @@ EmStream::ReadString(
 
 
 // ===========================================================================
-//	EmStreamBlock.cpp			   ©1993-1998 Metrowerks Inc. All rights reserved.
+//	EmStreamBlock.cpp			   Â©1993-1998 Metrowerks Inc. All rights reserved.
 // ===========================================================================
 //
 //	A Stream whose bytes are in a Chunk
 
 
 // ---------------------------------------------------------------------------
-//	¥ EmStreamBlock(Handle)					Parameterized Constructor [public]
+//	â€¢ EmStreamBlock(Handle)					Parameterized Constructor [public]
 // ---------------------------------------------------------------------------
 //	Construct from an existing Chunk
 
@@ -505,7 +505,7 @@ EmStreamBlock::EmStreamBlock(void* data, int32 length) :
 
 
 // ---------------------------------------------------------------------------
-//	¥ ~EmStreamBlock						Destructor				  [public]
+//	â€¢ ~EmStreamBlock						Destructor				  [public]
 // ---------------------------------------------------------------------------
 
 EmStreamBlock::~EmStreamBlock()
@@ -514,7 +514,7 @@ EmStreamBlock::~EmStreamBlock()
 
 
 // ---------------------------------------------------------------------------
-//	¥ SetLength														  [public]
+//	â€¢ SetLength														  [public]
 // ---------------------------------------------------------------------------
 //	Set the length, in bytes, of the EmStreamBlock
 
@@ -527,7 +527,7 @@ EmStreamBlock::SetLength(
 
 
 // ---------------------------------------------------------------------------
-//	¥ PutBytes
+//	â€¢ PutBytes
 // ---------------------------------------------------------------------------
 //	Write bytes from a buffer to a EmStreamBlock
 //
@@ -560,7 +560,7 @@ EmStreamBlock::PutBytes(
 
 
 // ---------------------------------------------------------------------------
-//	¥ GetBytes
+//	â€¢ GetBytes
 // ---------------------------------------------------------------------------
 //	Read bytes from a EmStreamBlock to a buffer
 //

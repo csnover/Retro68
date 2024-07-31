@@ -60,7 +60,7 @@
 #define   SD_DATA_OK        0xE5
 
 // ---------------------------------------------------------------------------
-//		¥ EmTRGSD::EmTRGSD
+//		â€¢ EmTRGSD::EmTRGSD
 // ---------------------------------------------------------------------------
 EmTRGSD::EmTRGSD()
 {
@@ -70,7 +70,7 @@ EmTRGSD::EmTRGSD()
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTRGSD::~EmTRGSD
+//		â€¢ EmTRGSD::~EmTRGSD
 // ---------------------------------------------------------------------------
 EmTRGSD::~EmTRGSD()
 {
@@ -78,7 +78,7 @@ EmTRGSD::~EmTRGSD()
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTRGSD::Initialize
+//		â€¢ EmTRGSD::Initialize
 // ---------------------------------------------------------------------------
 void EmTRGSD::Initialize(void)
 {
@@ -86,7 +86,7 @@ void EmTRGSD::Initialize(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmTRGSD::Dispose
+//		â€¢ EmTRGSD::Dispose
 // ---------------------------------------------------------------------------
 void EmTRGSD::Dispose(void)
 {
@@ -95,7 +95,7 @@ void EmTRGSD::Dispose(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTRGSD::CompleteCommand
+//		â€¢ EmTRGSD::CompleteCommand
 // complete command processing now that we have the data for it too
 // ---------------------------------------------------------------------------
 void EmTRGSD::CompleteCommand(void)
@@ -125,7 +125,7 @@ void EmTRGSD::CompleteCommand(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmTRGSD::ProcessCommand
+//		â€¢ EmTRGSD::ProcessCommand
 // process the command we just received
 // ---------------------------------------------------------------------------
 void EmTRGSD::ProcessCommand(void)
@@ -215,7 +215,7 @@ void EmTRGSD::ProcessCommand(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTRGSD::ExchangeBits
+//		â€¢ EmTRGSD::ExchangeBits
 // ---------------------------------------------------------------------------
 void EmTRGSD::ExchangeBits(uint16 txData, uint16 *rxData, uint16 bits)
 {

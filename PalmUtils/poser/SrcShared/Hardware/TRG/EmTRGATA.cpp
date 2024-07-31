@@ -25,21 +25,21 @@
 // ------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::EmRegsCFAta
+//		â€¢ EmRegsCFAta::EmRegsCFAta
 // ---------------------------------------------------------------------------
 EmRegsCFAta::EmRegsCFAta(void)
 {
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::~EmRegsCFATA
+//		â€¢ EmRegsCFAta::~EmRegsCFATA
 // ---------------------------------------------------------------------------
 EmRegsCFAta::~EmRegsCFAta(void)
 {
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::Initialize
+//		â€¢ EmRegsCFAta::Initialize
 // ---------------------------------------------------------------------------
 void EmRegsCFAta::Initialize(EmDiskTypeID DiskTypeID)
 {
@@ -53,7 +53,7 @@ void EmRegsCFAta::Initialize(EmDiskTypeID DiskTypeID)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::Reset
+//		â€¢ EmRegsCFAta::Reset
 // ---------------------------------------------------------------------------
 void EmRegsCFAta::Reset(void)
 {
@@ -61,7 +61,7 @@ void EmRegsCFAta::Reset(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::Dispose
+//		â€¢ EmRegsCFAta::Dispose
 // ---------------------------------------------------------------------------
 void EmRegsCFAta::Dispose(void)
 {
@@ -134,7 +134,7 @@ uint8 EmRegsCFAta::RegReadStatus(Boolean /*is_alt_reg*/)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::GetDiskIOParams
+//		â€¢ EmRegsCFAta::GetDiskIOParams
 // ---------------------------------------------------------------------------
 void EmRegsCFAta::GetDiskIOParams(DiskIOParams * Params)
 {
@@ -152,7 +152,7 @@ void EmRegsCFAta::GetDiskIOParams(DiskIOParams * Params)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::CmdIdentifyDrive
+//		â€¢ EmRegsCFAta::CmdIdentifyDrive
 // ---------------------------------------------------------------------------
 void EmRegsCFAta::CmdIdentifyDrive(void)
 {
@@ -160,7 +160,7 @@ void EmRegsCFAta::CmdIdentifyDrive(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::CmdReadSectors
+//		â€¢ EmRegsCFAta::CmdReadSectors
 // ---------------------------------------------------------------------------
 void EmRegsCFAta::CmdReadSectors(void)
 {
@@ -171,7 +171,7 @@ void EmRegsCFAta::CmdReadSectors(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::CmdWriteSectors
+//		â€¢ EmRegsCFAta::CmdWriteSectors
 // ---------------------------------------------------------------------------
 void EmRegsCFAta::CmdWriteSectors(void)
 {
@@ -182,7 +182,7 @@ void EmRegsCFAta::CmdWriteSectors(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::CmdDriveDiagnostic
+//		â€¢ EmRegsCFAta::CmdDriveDiagnostic
 // ---------------------------------------------------------------------------
 void EmRegsCFAta::CmdDriveDiagnostic(void)
 {
@@ -213,7 +213,7 @@ uint8 EmRegsCFAta::Reg0ReadData(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::Reg0WriteData
+//		â€¢ EmRegsCFAta::Reg0WriteData
 // ---------------------------------------------------------------------------
 void EmRegsCFAta::Reg0WriteData(void)
 {
@@ -221,7 +221,7 @@ void EmRegsCFAta::Reg0WriteData(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::Reg8ReadDataEven
+//		â€¢ EmRegsCFAta::Reg8ReadDataEven
 // ---------------------------------------------------------------------------
 uint8 EmRegsCFAta::Reg8ReadDataEven(void)
 {
@@ -230,7 +230,7 @@ uint8 EmRegsCFAta::Reg8ReadDataEven(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::Reg8WriteDataEven
+//		â€¢ EmRegsCFAta::Reg8WriteDataEven
 // ---------------------------------------------------------------------------
 void EmRegsCFAta::Reg8WriteDataEven(void)
 {
@@ -238,7 +238,7 @@ void EmRegsCFAta::Reg8WriteDataEven(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::Reg9ReadDataOdd
+//		â€¢ EmRegsCFAta::Reg9ReadDataOdd
 // ---------------------------------------------------------------------------
 uint8 EmRegsCFAta::Reg9ReadDataOdd(void)
 {
@@ -247,7 +247,7 @@ uint8 EmRegsCFAta::Reg9ReadDataOdd(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::Reg9WriteDataOdd
+//		â€¢ EmRegsCFAta::Reg9WriteDataOdd
 // ---------------------------------------------------------------------------
 void EmRegsCFAta::Reg9WriteDataOdd(void)
 {
@@ -338,7 +338,7 @@ void EmRegsCFAta::RegEWriteDeviceControl(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::Reg7WriteCmd
+//		â€¢ EmRegsCFAta::Reg7WriteCmd
 // ---------------------------------------------------------------------------
 void EmRegsCFAta::Reg7WriteCmd(void)
 {
@@ -374,7 +374,7 @@ void EmRegsCFAta::Reg7WriteCmd(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::ReadByte
+//		â€¢ EmRegsCFAta::ReadByte
 // ---------------------------------------------------------------------------
 void EmRegsCFAta::ReadByte(uint32 offset,
                            uint8 * val)
@@ -416,7 +416,7 @@ void EmRegsCFAta::ReadByte(uint32 offset,
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::WriteByte
+//		â€¢ EmRegsCFAta::WriteByte
 // ---------------------------------------------------------------------------
 void EmRegsCFAta::WriteByte(uint32 offset, uint8 val)
 {
@@ -442,7 +442,7 @@ void EmRegsCFAta::WriteByte(uint32 offset, uint8 val)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::ReadWord
+//		â€¢ EmRegsCFAta::ReadWord
 // ---------------------------------------------------------------------------
 void EmRegsCFAta::ReadWord(uint32  offset,
                            _Word * val)
@@ -457,7 +457,7 @@ void EmRegsCFAta::ReadWord(uint32  offset,
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFAta::WriteWord
+//		â€¢ EmRegsCFAta::WriteWord
 // ---------------------------------------------------------------------------
 void EmRegsCFAta::WriteWord(uint32 offset, _Word val)
 {

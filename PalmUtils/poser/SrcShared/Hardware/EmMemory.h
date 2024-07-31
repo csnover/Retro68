@@ -36,7 +36,7 @@ extern "C" {
 #endif
 
 // ---------------------------------------------------------------------------
-//		¥ EmAddressBank
+//		â€¢ EmAddressBank
 // ---------------------------------------------------------------------------
 
 typedef uint32	(*EmMemGetFunc)				(emuptr);
@@ -81,7 +81,7 @@ typedef struct EmAddressBank
 
 
 // ---------------------------------------------------------------------------
-//		¥ Support macros
+//		â€¢ Support macros
 // ---------------------------------------------------------------------------
 
 #ifndef ECM_DYNAMIC_PATCH
@@ -105,7 +105,7 @@ typedef struct EmAddressBank
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMemGet32
+//		â€¢ EmMemGet32
 // ---------------------------------------------------------------------------
 
 STATIC_INLINE uint32 EmMemGet32(emuptr addr)
@@ -114,7 +114,7 @@ STATIC_INLINE uint32 EmMemGet32(emuptr addr)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmMemGet16
+//		â€¢ EmMemGet16
 // ---------------------------------------------------------------------------
 
 STATIC_INLINE uint32 EmMemGet16(emuptr addr)
@@ -123,7 +123,7 @@ STATIC_INLINE uint32 EmMemGet16(emuptr addr)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmMemGet8
+//		â€¢ EmMemGet8
 // ---------------------------------------------------------------------------
 
 STATIC_INLINE uint32 EmMemGet8(emuptr addr)
@@ -132,7 +132,7 @@ STATIC_INLINE uint32 EmMemGet8(emuptr addr)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmMemPut32
+//		â€¢ EmMemPut32
 // ---------------------------------------------------------------------------
 
 STATIC_INLINE void EmMemPut32(emuptr addr, uint32 l)
@@ -141,7 +141,7 @@ STATIC_INLINE void EmMemPut32(emuptr addr, uint32 l)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmMemPut16
+//		â€¢ EmMemPut16
 // ---------------------------------------------------------------------------
 
 STATIC_INLINE void EmMemPut16(emuptr addr, uint32 w)
@@ -150,7 +150,7 @@ STATIC_INLINE void EmMemPut16(emuptr addr, uint32 w)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmMemPut8
+//		â€¢ EmMemPut8
 // ---------------------------------------------------------------------------
 
 STATIC_INLINE void EmMemPut8(emuptr addr, uint32 b)
@@ -159,7 +159,7 @@ STATIC_INLINE void EmMemPut8(emuptr addr, uint32 b)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmMemGetRealAddress
+//		â€¢ EmMemGetRealAddress
 // ---------------------------------------------------------------------------
 
 STATIC_INLINE uint8* EmMemGetRealAddress(emuptr addr)
@@ -168,7 +168,7 @@ STATIC_INLINE uint8* EmMemGetRealAddress(emuptr addr)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmMemCheckAddress
+//		â€¢ EmMemCheckAddress
 // ---------------------------------------------------------------------------
 
 STATIC_INLINE int EmMemCheckAddress(emuptr addr, uint32 size)
@@ -177,7 +177,7 @@ STATIC_INLINE int EmMemCheckAddress(emuptr addr, uint32 size)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmMemAddOpcodeCycles
+//		â€¢ EmMemAddOpcodeCycles
 // ---------------------------------------------------------------------------
 
 STATIC_INLINE void EmMemAddOpcodeCycles(emuptr addr)
@@ -187,7 +187,7 @@ STATIC_INLINE void EmMemAddOpcodeCycles(emuptr addr)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmMemGetMetaAddress
+//		â€¢ EmMemGetMetaAddress
 // ---------------------------------------------------------------------------
 
 STATIC_INLINE uint8* EmMemGetMetaAddress(emuptr addr)
@@ -197,7 +197,7 @@ STATIC_INLINE uint8* EmMemGetMetaAddress(emuptr addr)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmMemDoGet32
+//		â€¢ EmMemDoGet32
 // ---------------------------------------------------------------------------
 
 STATIC_INLINE uint32 EmMemDoGet32 (void* a)
@@ -211,7 +211,7 @@ STATIC_INLINE uint32 EmMemDoGet32 (void* a)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmMemDoGet16
+//		â€¢ EmMemDoGet16
 // ---------------------------------------------------------------------------
 
 STATIC_INLINE uint16 EmMemDoGet16 (void* a)
@@ -220,7 +220,7 @@ STATIC_INLINE uint16 EmMemDoGet16 (void* a)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmMemDoGet8
+//		â€¢ EmMemDoGet8
 // ---------------------------------------------------------------------------
 
 STATIC_INLINE uint8 EmMemDoGet8 (void* a)
@@ -233,7 +233,7 @@ STATIC_INLINE uint8 EmMemDoGet8 (void* a)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmMemDoPut32
+//		â€¢ EmMemDoPut32
 // ---------------------------------------------------------------------------
 
 STATIC_INLINE void EmMemDoPut32 (void* a, uint32 v)
@@ -247,7 +247,7 @@ STATIC_INLINE void EmMemDoPut32 (void* a, uint32 v)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmMemDoPut16
+//		â€¢ EmMemDoPut16
 // ---------------------------------------------------------------------------
 
 STATIC_INLINE void EmMemDoPut16 (void* a, uint16 v)
@@ -256,7 +256,7 @@ STATIC_INLINE void EmMemDoPut16 (void* a, uint16 v)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmMemDoPut8
+//		â€¢ EmMemDoPut8
 // ---------------------------------------------------------------------------
 
 STATIC_INLINE void EmMemDoPut8 (void* a, uint8 v)

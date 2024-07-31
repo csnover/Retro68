@@ -35,7 +35,7 @@ const uint16	kButtonMap[kNumButtonRows][kNumButtonCols] =
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmIIIc::EmRegsEZPalmIIIc
+//		â€¢ EmRegsEZPalmIIIc::EmRegsEZPalmIIIc
 // ---------------------------------------------------------------------------
 
 EmRegsEZPalmIIIc::EmRegsEZPalmIIIc (void) :
@@ -46,7 +46,7 @@ EmRegsEZPalmIIIc::EmRegsEZPalmIIIc (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmIIIc::~EmRegsEZPalmIIIc
+//		â€¢ EmRegsEZPalmIIIc::~EmRegsEZPalmIIIc
 // ---------------------------------------------------------------------------
 
 EmRegsEZPalmIIIc::~EmRegsEZPalmIIIc (void)
@@ -56,7 +56,7 @@ EmRegsEZPalmIIIc::~EmRegsEZPalmIIIc (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmIIIc::GetLCDScreenOn
+//		â€¢ EmRegsEZPalmIIIc::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsEZPalmIIIc::GetLCDScreenOn (void)
@@ -68,7 +68,7 @@ Bool EmRegsEZPalmIIIc::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmIIIc::GetLCDBacklightOn
+//		â€¢ EmRegsEZPalmIIIc::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsEZPalmIIIc::GetLCDBacklightOn (void)
@@ -80,7 +80,7 @@ Bool EmRegsEZPalmIIIc::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmIIIc::GetLCDHasFrame
+//		â€¢ EmRegsEZPalmIIIc::GetLCDHasFrame
 // ---------------------------------------------------------------------------
 
 Bool EmRegsEZPalmIIIc::GetLCDHasFrame (void)
@@ -92,7 +92,7 @@ Bool EmRegsEZPalmIIIc::GetLCDHasFrame (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmIIIc::GetLCDBeginEnd
+//		â€¢ EmRegsEZPalmIIIc::GetLCDBeginEnd
 // ---------------------------------------------------------------------------
 
 void EmRegsEZPalmIIIc::GetLCDBeginEnd (emuptr& begin, emuptr& end)
@@ -104,7 +104,7 @@ void EmRegsEZPalmIIIc::GetLCDBeginEnd (emuptr& begin, emuptr& end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmIIIc::GetLCDScanlines
+//		â€¢ EmRegsEZPalmIIIc::GetLCDScanlines
 // ---------------------------------------------------------------------------
 
 void EmRegsEZPalmIIIc::GetLCDScanlines (EmScreenUpdateInfo& info)
@@ -116,7 +116,7 @@ void EmRegsEZPalmIIIc::GetLCDScanlines (EmScreenUpdateInfo& info)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmIIIc::GetLineDriverState
+//		â€¢ EmRegsEZPalmIIIc::GetLineDriverState
 // ---------------------------------------------------------------------------
 // Return whether or not the line drivers for the given object are open or
 // closed.
@@ -134,7 +134,7 @@ Bool EmRegsEZPalmIIIc::GetLineDriverState (EmUARTDeviceType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmIIIc::GetPortInputValue
+//		â€¢ EmRegsEZPalmIIIc::GetPortInputValue
 // ---------------------------------------------------------------------------
 // Return the GPIO values for the pins on the port.  These values are used
 // if the select pins are high.
@@ -158,7 +158,7 @@ uint8 EmRegsEZPalmIIIc::GetPortInputValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmIIIc::GetPortInternalValue
+//		â€¢ EmRegsEZPalmIIIc::GetPortInternalValue
 // ---------------------------------------------------------------------------
 // Return the dedicated values for the pins on the port.  These values are
 // used if the select pins are low.
@@ -185,7 +185,7 @@ uint8 EmRegsEZPalmIIIc::GetPortInternalValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmIIIc::GetKeyInfo
+//		â€¢ EmRegsEZPalmIIIc::GetKeyInfo
 // ---------------------------------------------------------------------------
 
 void EmRegsEZPalmIIIc::GetKeyInfo (int* numRows, int* numCols,
@@ -208,7 +208,7 @@ void EmRegsEZPalmIIIc::GetKeyInfo (int* numRows, int* numCols,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmIIIc::GetSPISlave
+//		â€¢ EmRegsEZPalmIIIc::GetSPISlave
 // ---------------------------------------------------------------------------
 
 EmSPISlave* EmRegsEZPalmIIIc::GetSPISlave (void)

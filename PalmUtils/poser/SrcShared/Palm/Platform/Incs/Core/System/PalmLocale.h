@@ -98,15 +98,15 @@ Thus, whenever you modify any constants, please do so in the !rez section,
 then execute the following MPW commands (from elsewhere with this file as the target)
 so that the Rez case will be automatically updated:
 
-Find ¥;Find /TAG SOURCE START/!1:/TAG SOURCE END/Á1
-Copy ¤
-Find ¥;Find /TAG DESTINATION START/!1:/TAG DESTINATION END/Á1
+Find â€¢;Find /TAG SOURCE START/!1:/TAG SOURCE END/Â¡1
+Copy Â§
+Find â€¢;Find /TAG DESTINATION START/!1:/TAG DESTINATION END/Â¡1
 Echo
-Paste ¤
-Find ¥;Find /TAG DESTINATION START/
-Replace -c ° /(#define[ ¶t]+l[a-z0-9_]+[ ¶t]+)¨1LANGUAGE_VALUE¶(([0-9]+)¨2¶)/ "¨1¨2"
-Replace -c ° /(#define[ ¶t]+c[a-z0-9_]+[ ¶t]+)¨1COUNTRY_VALUE¶(([0-9]+)¨2¶)/ "¨1¨2"
-Replace -c ° /(#define[ ¶t]+charEncoding[a-z0-9_]+[ ¶t]+)¨1CHAR_ENCODING_VALUE¶(([0-9]+)¨2¶)/ "¨1¨2"
+Paste Â§
+Find â€¢;Find /TAG DESTINATION START/
+Replace -c âˆž /(#define[ âˆ‚t]+l[a-z0-9_]+[ âˆ‚t]+)Â®1LANGUAGE_VALUEâˆ‚(([0-9]+)Â®2âˆ‚)/ "Â®1Â®2"
+Replace -c âˆž /(#define[ âˆ‚t]+c[a-z0-9_]+[ âˆ‚t]+)Â®1COUNTRY_VALUEâˆ‚(([0-9]+)Â®2âˆ‚)/ "Â®1Â®2"
+Replace -c âˆž /(#define[ âˆ‚t]+charEncoding[a-z0-9_]+[ âˆ‚t]+)Â®1CHAR_ENCODING_VALUEâˆ‚(([0-9]+)Â®2âˆ‚)/ "Â®1Â®2"
 */
 #if rez
 	#define PALM_LOCALE_HAS_TYPES 0

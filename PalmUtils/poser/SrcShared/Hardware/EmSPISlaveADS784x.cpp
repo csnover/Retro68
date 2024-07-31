@@ -57,7 +57,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlaveADS784x::EmSPISlaveADS784x
+//		â€¢ EmSPISlaveADS784x::EmSPISlaveADS784x
 // ---------------------------------------------------------------------------
 
 EmSPISlaveADS784x::EmSPISlaveADS784x (	EmADSChannelType ch0,
@@ -98,7 +98,7 @@ EmSPISlaveADS784x::EmSPISlaveADS784x (	EmADSChannelType ch0,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlaveADS784x::~EmSPISlaveADS784x
+//		â€¢ EmSPISlaveADS784x::~EmSPISlaveADS784x
 // ---------------------------------------------------------------------------
 
 EmSPISlaveADS784x::~EmSPISlaveADS784x (void)
@@ -107,7 +107,7 @@ EmSPISlaveADS784x::~EmSPISlaveADS784x (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlaveADS784x::DoExchange
+//		â€¢ EmSPISlaveADS784x::DoExchange
 // ---------------------------------------------------------------------------
 
 uint16 EmSPISlaveADS784x::DoExchange (uint16 control, uint16 data)
@@ -209,7 +209,7 @@ uint16 EmSPISlaveADS784x::DoExchange (uint16 control, uint16 data)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlaveADS784x::ProcessCommand
+//		â€¢ EmSPISlaveADS784x::ProcessCommand
 // ---------------------------------------------------------------------------
 
 void EmSPISlaveADS784x::ProcessCommand (uint8 command)
@@ -406,7 +406,7 @@ void EmSPISlaveADS784x::ProcessCommand (uint8 command)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlaveADS784x::LoadPendingConversion
+//		â€¢ EmSPISlaveADS784x::LoadPendingConversion
 // ---------------------------------------------------------------------------
 
 void EmSPISlaveADS784x::LoadPendingConversion (void)

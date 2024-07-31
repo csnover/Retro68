@@ -82,7 +82,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::EmRegsSED1376
+//		â€¢ EmRegsSED1376::EmRegsSED1376
 // ---------------------------------------------------------------------------
 
 EmRegsSED1376::EmRegsSED1376 (emuptr baseRegsAddr, emuptr baseVideoAddr) :
@@ -94,7 +94,7 @@ EmRegsSED1376::EmRegsSED1376 (emuptr baseRegsAddr, emuptr baseVideoAddr) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::~EmRegsSED1376
+//		â€¢ EmRegsSED1376::~EmRegsSED1376
 // ---------------------------------------------------------------------------
 
 EmRegsSED1376::~EmRegsSED1376 (void)
@@ -103,7 +103,7 @@ EmRegsSED1376::~EmRegsSED1376 (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::Initialize
+//		â€¢ EmRegsSED1376::Initialize
 // ---------------------------------------------------------------------------
 
 void EmRegsSED1376::Initialize (void)
@@ -113,7 +113,7 @@ void EmRegsSED1376::Initialize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::Reset
+//		â€¢ EmRegsSED1376::Reset
 // ---------------------------------------------------------------------------
 
 void EmRegsSED1376::Reset (Bool hardwareReset)
@@ -133,7 +133,7 @@ void EmRegsSED1376::Reset (Bool hardwareReset)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::Save
+//		â€¢ EmRegsSED1376::Save
 // ---------------------------------------------------------------------------
 
 void EmRegsSED1376::Save (SessionFile& f)
@@ -146,7 +146,7 @@ void EmRegsSED1376::Save (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::Load
+//		â€¢ EmRegsSED1376::Load
 // ---------------------------------------------------------------------------
 
 void EmRegsSED1376::Load (SessionFile& f)
@@ -170,7 +170,7 @@ void EmRegsSED1376::Load (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::Dispose
+//		â€¢ EmRegsSED1376::Dispose
 // ---------------------------------------------------------------------------
 
 void EmRegsSED1376::Dispose (void)
@@ -180,7 +180,7 @@ void EmRegsSED1376::Dispose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::SetSubBankHandlers
+//		â€¢ EmRegsSED1376::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegsSED1376::SetSubBankHandlers (void)
@@ -260,7 +260,7 @@ void EmRegsSED1376::SetSubBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::GetRealAddress
+//		â€¢ EmRegsSED1376::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmRegsSED1376::GetRealAddress (emuptr address)
@@ -270,7 +270,7 @@ uint8* EmRegsSED1376::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::GetAddressStart
+//		â€¢ EmRegsSED1376::GetAddressStart
 // ---------------------------------------------------------------------------
 
 emuptr EmRegsSED1376::GetAddressStart (void)
@@ -280,7 +280,7 @@ emuptr EmRegsSED1376::GetAddressStart (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::GetAddressRange
+//		â€¢ EmRegsSED1376::GetAddressRange
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsSED1376::GetAddressRange (void)
@@ -290,7 +290,7 @@ uint32 EmRegsSED1376::GetAddressRange (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::GetLCDScreenOn
+//		â€¢ EmRegsSED1376::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsSED1376::GetLCDScreenOn (void)
@@ -301,7 +301,7 @@ Bool EmRegsSED1376::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::GetLCDBacklightOn
+//		â€¢ EmRegsSED1376::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsSED1376::GetLCDBacklightOn (void)
@@ -311,7 +311,7 @@ Bool EmRegsSED1376::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::GetLCDHasFrame
+//		â€¢ EmRegsSED1376::GetLCDHasFrame
 // ---------------------------------------------------------------------------
 
 Bool EmRegsSED1376::GetLCDHasFrame (void)
@@ -321,7 +321,7 @@ Bool EmRegsSED1376::GetLCDHasFrame (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::invalidateWrite
+//		â€¢ EmRegsSED1376::invalidateWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsSED1376::invalidateWrite (emuptr address, int size, uint32 value)
@@ -332,7 +332,7 @@ void EmRegsSED1376::invalidateWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::powerSaveConfigurationRead
+//		â€¢ EmRegsSED1376::powerSaveConfigurationRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsSED1376::powerSaveConfigurationRead (emuptr address, int size)
@@ -349,7 +349,7 @@ uint32 EmRegsSED1376::powerSaveConfigurationRead (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::lutWriteAddressWrite
+//		â€¢ EmRegsSED1376::lutWriteAddressWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsSED1376::lutWriteAddressWrite (emuptr address, int size, uint32 value)
@@ -372,7 +372,7 @@ void EmRegsSED1376::lutWriteAddressWrite (emuptr address, int size, uint32 value
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::lutReadAddressWrite
+//		â€¢ EmRegsSED1376::lutReadAddressWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsSED1376::lutReadAddressWrite (emuptr address, int size, uint32 value)
@@ -391,7 +391,7 @@ void EmRegsSED1376::lutReadAddressWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376::PrvGetPalette
+//		â€¢ EmRegsSED1376::PrvGetPalette
 // ---------------------------------------------------------------------------
 
 void EmRegsSED1376::PrvGetPalette (RGBList& thePalette)
@@ -422,7 +422,7 @@ void EmRegsSED1376::PrvGetPalette (RGBList& thePalette)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376VisorPrism::EmRegsSED1376VisorPrism
+//		â€¢ EmRegsSED1376VisorPrism::EmRegsSED1376VisorPrism
 // ---------------------------------------------------------------------------
 
 EmRegsSED1376VisorPrism::EmRegsSED1376VisorPrism (emuptr baseRegsAddr,
@@ -433,7 +433,7 @@ EmRegsSED1376VisorPrism::EmRegsSED1376VisorPrism (emuptr baseRegsAddr,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376VisorPrism::~EmRegsSED1376VisorPrism
+//		â€¢ EmRegsSED1376VisorPrism::~EmRegsSED1376VisorPrism
 // ---------------------------------------------------------------------------
 
 EmRegsSED1376VisorPrism::~EmRegsSED1376VisorPrism (void)
@@ -442,7 +442,7 @@ EmRegsSED1376VisorPrism::~EmRegsSED1376VisorPrism (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376VisorPrism::SetSubBankHandlers
+//		â€¢ EmRegsSED1376VisorPrism::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegsSED1376VisorPrism::SetSubBankHandlers (void)
@@ -465,7 +465,7 @@ void EmRegsSED1376VisorPrism::SetSubBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376VisorPrism::GetLCDBeginEnd
+//		â€¢ EmRegsSED1376VisorPrism::GetLCDBeginEnd
 // ---------------------------------------------------------------------------
 
 void EmRegsSED1376VisorPrism::GetLCDBeginEnd (emuptr& begin, emuptr& end)
@@ -486,7 +486,7 @@ void EmRegsSED1376VisorPrism::GetLCDBeginEnd (emuptr& begin, emuptr& end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376VisorPrism::GetLCDScanlines
+//		â€¢ EmRegsSED1376VisorPrism::GetLCDScanlines
 // ---------------------------------------------------------------------------
 
 void EmRegsSED1376VisorPrism::GetLCDScanlines (EmScreenUpdateInfo& info)
@@ -616,7 +616,7 @@ void EmRegsSED1376VisorPrism::GetLCDScanlines (EmScreenUpdateInfo& info)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376VisorPrism::PrvGetLCDDepth
+//		â€¢ EmRegsSED1376VisorPrism::PrvGetLCDDepth
 // ---------------------------------------------------------------------------
 
 int32 EmRegsSED1376VisorPrism::PrvGetLCDDepth (void)
@@ -640,7 +640,7 @@ int32 EmRegsSED1376VisorPrism::PrvGetLCDDepth (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376VisorPrism::reservedWrite
+//		â€¢ EmRegsSED1376VisorPrism::reservedWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsSED1376VisorPrism::reservedWrite (emuptr address, int size, uint32 value)
@@ -654,7 +654,7 @@ void EmRegsSED1376VisorPrism::reservedWrite (emuptr address, int size, uint32 va
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376PalmGeneric::EmRegsSED1376PalmGeneric
+//		â€¢ EmRegsSED1376PalmGeneric::EmRegsSED1376PalmGeneric
 // ---------------------------------------------------------------------------
 
 EmRegsSED1376PalmGeneric::EmRegsSED1376PalmGeneric (emuptr baseRegsAddr,
@@ -665,7 +665,7 @@ EmRegsSED1376PalmGeneric::EmRegsSED1376PalmGeneric (emuptr baseRegsAddr,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376PalmGeneric::~EmRegsSED1376PalmGeneric
+//		â€¢ EmRegsSED1376PalmGeneric::~EmRegsSED1376PalmGeneric
 // ---------------------------------------------------------------------------
 
 EmRegsSED1376PalmGeneric::~EmRegsSED1376PalmGeneric (void)
@@ -674,7 +674,7 @@ EmRegsSED1376PalmGeneric::~EmRegsSED1376PalmGeneric (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376PalmGeneric::GetLCDBeginEnd
+//		â€¢ EmRegsSED1376PalmGeneric::GetLCDBeginEnd
 // ---------------------------------------------------------------------------
 
 void EmRegsSED1376PalmGeneric::GetLCDBeginEnd (emuptr& begin, emuptr& end)
@@ -712,7 +712,7 @@ void EmRegsSED1376PalmGeneric::GetLCDBeginEnd (emuptr& begin, emuptr& end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsSED1376PalmGeneric::GetLCDScanlines
+//		â€¢ EmRegsSED1376PalmGeneric::GetLCDScanlines
 // ---------------------------------------------------------------------------
 
 void EmRegsSED1376PalmGeneric::GetLCDScanlines (EmScreenUpdateInfo& info)

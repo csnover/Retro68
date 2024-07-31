@@ -183,7 +183,7 @@ static void ParseXPixMap(EmPixMap &pixMap, const char **xpm)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::NewWindow
+//		â€¢ EmWindow::NewWindow
 // ---------------------------------------------------------------------------
 
 EmWindow* EmWindow::NewWindow (void)
@@ -203,7 +203,7 @@ EmWindow* EmWindow::NewWindow (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::EmWindowFltk
+//		â€¢ EmWindowFltk::EmWindowFltk
 // ---------------------------------------------------------------------------
 
 EmWindowFltk::EmWindowFltk (void) :
@@ -262,7 +262,7 @@ EmWindowFltk::EmWindowFltk (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::~EmWindowFltk
+//		â€¢ EmWindowFltk::~EmWindowFltk
 // ---------------------------------------------------------------------------
 
 EmWindowFltk::~EmWindowFltk (void)
@@ -281,7 +281,7 @@ EmWindowFltk::~EmWindowFltk (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::CloseCallback
+//		â€¢ EmWindowFltk::CloseCallback
 // ---------------------------------------------------------------------------
 // When receiving the WM_CLOSE message on Windows or the WM_DELETE_WINDOW
 // message on X, FLTK calls Fl::handle with the FL_CLOSE message.  Fl::handle
@@ -299,7 +299,7 @@ void EmWindowFltk::CloseCallback (Fl_Widget*, void*)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::draw
+//		â€¢ EmWindowFltk::draw
 // ---------------------------------------------------------------------------
 
 void EmWindowFltk::draw (void)
@@ -322,7 +322,7 @@ void EmWindowFltk::draw (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::handle
+//		â€¢ EmWindowFltk::handle
 // ---------------------------------------------------------------------------
 
 int EmWindowFltk::handle (int event)
@@ -480,7 +480,7 @@ int EmWindowFltk::handle (int event)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::PopupMenu
+//		â€¢ EmWindowFltk::PopupMenu
 // ---------------------------------------------------------------------------
 
 void EmWindowFltk::PopupMenu (void)
@@ -499,7 +499,7 @@ void EmWindowFltk::PopupMenu (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::GetHostMenu
+//		â€¢ EmWindowFltk::GetHostMenu
 // ---------------------------------------------------------------------------
 
 void EmWindowFltk::GetHostMenu (Fl_Menu_Item_List& hostMenu)
@@ -514,7 +514,7 @@ void EmWindowFltk::GetHostMenu (Fl_Menu_Item_List& hostMenu)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::DoMenuCommand
+//		â€¢ EmWindowFltk::DoMenuCommand
 // ---------------------------------------------------------------------------
 
 void EmWindowFltk::DoMenuCommand (const Fl_Menu_Item& item)
@@ -534,7 +534,7 @@ void EmWindowFltk::DoMenuCommand (const Fl_Menu_Item& item)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::CacheFlush
+//		â€¢ EmWindowFltk::CacheFlush
 // ---------------------------------------------------------------------------
 
 void EmWindowFltk::CacheFlush (void)
@@ -545,7 +545,7 @@ void EmWindowFltk::CacheFlush (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::CacheFlush
+//		â€¢ EmWindowFltk::CacheFlush
 // ---------------------------------------------------------------------------
 
 Fl_Image* EmWindowFltk::GetSkin (void)
@@ -567,7 +567,7 @@ Fl_Image* EmWindowFltk::GetSkin (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::HostWindowReset
+//		â€¢ EmWindowFltk::HostWindowReset
 // ---------------------------------------------------------------------------
 // Update the window's appearance due to a skin change.
 
@@ -602,7 +602,7 @@ void EmWindowFltk::HostWindowReset (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::HostMouseCapture
+//		â€¢ EmWindowFltk::HostMouseCapture
 // ---------------------------------------------------------------------------
 // Capture the mouse so that all mouse events get sent to this window.
 
@@ -613,7 +613,7 @@ void EmWindowFltk::HostMouseCapture (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::HostMouseRelease
+//		â€¢ EmWindowFltk::HostMouseRelease
 // ---------------------------------------------------------------------------
 // Release the mouse so that mouse events get sent to the window the
 // cursor is over.
@@ -625,7 +625,7 @@ void EmWindowFltk::HostMouseRelease (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::HostDrawingBegin
+//		â€¢ EmWindowFltk::HostDrawingBegin
 // ---------------------------------------------------------------------------
 // Prepare the host window object for drawing outside of an update event.
 
@@ -636,7 +636,7 @@ void EmWindowFltk::HostDrawingBegin (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::HostWindowMoveBy
+//		â€¢ EmWindowFltk::HostWindowMoveBy
 // ---------------------------------------------------------------------------
 // Move the host window object by the given offset.
 
@@ -647,7 +647,7 @@ void EmWindowFltk::HostWindowMoveBy (const EmPoint& offset)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::HostWindowMoveTo
+//		â€¢ EmWindowFltk::HostWindowMoveTo
 // ---------------------------------------------------------------------------
 // Move the host window object to the given location.
 
@@ -658,7 +658,7 @@ void EmWindowFltk::HostWindowMoveTo (const EmPoint& loc)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::HostWindowBoundsGet
+//		â€¢ EmWindowFltk::HostWindowBoundsGet
 // ---------------------------------------------------------------------------
 // Get the global bounds of the host window object.
 
@@ -673,7 +673,7 @@ EmRect EmWindowFltk::HostWindowBoundsGet (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::HostWindowCenter
+//		â€¢ EmWindowFltk::HostWindowCenter
 // ---------------------------------------------------------------------------
 // Center the window to the main display.
 
@@ -683,7 +683,7 @@ void EmWindowFltk::HostWindowCenter (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::HostWindowShow
+//		â€¢ EmWindowFltk::HostWindowShow
 // ---------------------------------------------------------------------------
 // Make the host window object visible.
 
@@ -695,7 +695,7 @@ void EmWindowFltk::HostWindowShow (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::HostRectFrame
+//		â€¢ EmWindowFltk::HostRectFrame
 // ---------------------------------------------------------------------------
 // Draw a rectangle frame with the given width in the given color.
 
@@ -717,7 +717,7 @@ void EmWindowFltk::HostRectFrame (const EmRect& r, const EmPoint& pen, const RGB
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::HostOvalPaint
+//		â€¢ EmWindowFltk::HostOvalPaint
 // ---------------------------------------------------------------------------
 // Fill an oval with the given color.
 
@@ -729,7 +729,7 @@ void EmWindowFltk::HostOvalPaint (const EmRect& r, const RGBType& color)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::HostPaintCase
+//		â€¢ EmWindowFltk::HostPaintCase
 // ---------------------------------------------------------------------------
 // Draw the skin.
 
@@ -741,7 +741,7 @@ void EmWindowFltk::HostPaintCase (const EmScreenUpdateInfo&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::HostPaintLCD
+//		â€¢ EmWindowFltk::HostPaintLCD
 // ---------------------------------------------------------------------------
 // Draw the LCD area.  info contains the raw LCD data, including a partically
 // updated fImage, and fFirstList and fLastLine which indicate the valid
@@ -777,7 +777,7 @@ void EmWindowFltk::HostPaintLCD (const EmScreenUpdateInfo& info, const EmRect& s
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::HostSetDefaultIcon
+//		â€¢ EmWindowFltk::HostSetDefaultIcon
 // ---------------------------------------------------------------------------
 // Sets the default (built-in) window icon.
 
@@ -792,7 +792,7 @@ void EmWindowFltk::HostSetDefaultIcon (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::HostGetDefaultSkin
+//		â€¢ EmWindowFltk::HostGetDefaultSkin
 // ---------------------------------------------------------------------------
 // Get the default (built-in) skin image.
 
@@ -804,7 +804,7 @@ void EmWindowFltk::HostGetDefaultSkin (EmPixMap& pixMap, int scale)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindowFltk::HostGetCurrentMouse
+//		â€¢ EmWindowFltk::HostGetCurrentMouse
 // ---------------------------------------------------------------------------
 // Get the current mouse location.
 

@@ -89,7 +89,7 @@ void	PrvWakeUpCPU	(int32 strID);
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::EmSession
+//		â€¢ EmSession::EmSession
 // ---------------------------------------------------------------------------
 // EmSession constructor.  Initialize data members and point the global
 // "current EmSession" pointer to us.  This method does not explicitly
@@ -139,7 +139,7 @@ EmSession::EmSession (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::~EmSession
+//		â€¢ EmSession::~EmSession
 // ---------------------------------------------------------------------------
 // EmSession destructor.  Stop the CPU thread and release all resources.  
 // Clear the global "current EmSession" pointer.  This method really shouldn't
@@ -169,7 +169,7 @@ EmSession::~EmSession (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::CreateNew
+//		â€¢ EmSession::CreateNew
 // ---------------------------------------------------------------------------
 // Create a new session based on the given configuration.  This method can
 // throw an exception if the creation attemp fails (for instance, the
@@ -185,7 +185,7 @@ void EmSession::CreateNew (const Configuration& cfg)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::CreateOld
+//		â€¢ EmSession::CreateOld
 // ---------------------------------------------------------------------------
 // Create a new session based on information stored in the given disk file.
 // If possible, the entire previously-saved state is restored.  However, if
@@ -223,7 +223,7 @@ void EmSession::CreateOld (const EmFileRef& ref)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::CreateBound
+//		â€¢ EmSession::CreateBound
 // ---------------------------------------------------------------------------
 // Create a new session based on information stored in resources or other data
 // attached to the emulator executable.
@@ -272,7 +272,7 @@ void EmSession::CreateBound (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::Initialize
+//		â€¢ EmSession::Initialize
 // ---------------------------------------------------------------------------
 // Called by the various CreateFoo methods to initialize our state according
 // to the given configuration.
@@ -326,7 +326,7 @@ void EmSession::Initialize (const Configuration& cfg)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::Dispose
+//		â€¢ EmSession::Dispose
 // ---------------------------------------------------------------------------
 
 void EmSession::Dispose (void)
@@ -360,7 +360,7 @@ void EmSession::Dispose (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::Reset
+//		â€¢ EmSession::Reset
 // ---------------------------------------------------------------------------
 
 void EmSession::Reset (EmResetType resetType)
@@ -542,7 +542,7 @@ void EmSession::Reset (EmResetType resetType)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::Save
+//		â€¢ EmSession::Save
 // ---------------------------------------------------------------------------
 
 void EmSession::Save (SessionFile& f)
@@ -571,7 +571,7 @@ void EmSession::Save (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::Load
+//		â€¢ EmSession::Load
 // ---------------------------------------------------------------------------
 
 void EmSession::Load (SessionFile& f)
@@ -633,7 +633,7 @@ void EmSession::Load (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::Save
+//		â€¢ EmSession::Save
 // ---------------------------------------------------------------------------
 
 void EmSession::Save (const EmFileRef& ref, Bool updateFileRef)
@@ -653,7 +653,7 @@ void EmSession::Save (const EmFileRef& ref, Bool updateFileRef)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::Load
+//		â€¢ EmSession::Load
 // ---------------------------------------------------------------------------
 
 void EmSession::Load (const EmFileRef& ref)
@@ -669,7 +669,7 @@ void EmSession::Load (const EmFileRef& ref)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::CreateThread
+//		â€¢ EmSession::CreateThread
 // ---------------------------------------------------------------------------
 
 void EmSession::CreateThread (Bool suspended)
@@ -702,7 +702,7 @@ void EmSession::CreateThread (Bool suspended)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::DestroyThread
+//		â€¢ EmSession::DestroyThread
 // ---------------------------------------------------------------------------
 
 void EmSession::DestroyThread (void)
@@ -728,7 +728,7 @@ void EmSession::DestroyThread (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::SuspendThread
+//		â€¢ EmSession::SuspendThread
 // ---------------------------------------------------------------------------
 // Suspend the thread in the requested fashion.  Returns true if the attempt
 // succeeded and the thread needs to be resumed with a call to ResumeThread.
@@ -939,7 +939,7 @@ Bool EmSession::SuspendThread (EmStopMethod how)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::ResumeThread
+//		â€¢ EmSession::ResumeThread
 // ---------------------------------------------------------------------------
 
 void EmSession::ResumeThread (void)
@@ -981,7 +981,7 @@ void EmSession::ResumeThread (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::Sleep
+//		â€¢ EmSession::Sleep
 // ---------------------------------------------------------------------------
 
 #if HAS_OMNI_THREAD
@@ -1003,7 +1003,7 @@ void EmSession::Sleep (uint32 msecs)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::InCPUThread
+//		â€¢ EmSession::InCPUThread
 // ---------------------------------------------------------------------------
 
 #if HAS_OMNI_THREAD
@@ -1017,7 +1017,7 @@ Bool EmSession::InCPUThread (void) const
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::GetSessionState
+//		â€¢ EmSession::GetSessionState
 // ---------------------------------------------------------------------------
 
 EmSessionState EmSession::GetSessionState (void) const
@@ -1031,7 +1031,7 @@ EmSessionState EmSession::GetSessionState (void) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::GetSuspendState
+//		â€¢ EmSession::GetSuspendState
 // ---------------------------------------------------------------------------
 
 EmSuspendState EmSession::GetSuspendState (void) const
@@ -1050,7 +1050,7 @@ EmSuspendState EmSession::GetSuspendState (void) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::SetSuspendState
+//		â€¢ EmSession::SetSuspendState
 // ---------------------------------------------------------------------------
 
 void EmSession::SetSuspendState (const EmSuspendState& s)
@@ -1071,7 +1071,7 @@ void EmSession::SetSuspendState (const EmSuspendState& s)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::ExecuteIncremental
+//		â€¢ EmSession::ExecuteIncremental
 // ---------------------------------------------------------------------------
 
 void EmSession::ExecuteIncremental (void)
@@ -1149,7 +1149,7 @@ void EmSession::ExecuteIncremental (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::ExecuteSubroutine
+//		â€¢ EmSession::ExecuteSubroutine
 // ---------------------------------------------------------------------------
 
 void EmSession::ExecuteSubroutine (void)
@@ -1274,7 +1274,7 @@ void EmSession::ExecuteSubroutine (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::ExecuteSpecial
+//		â€¢ EmSession::ExecuteSpecial
 // ---------------------------------------------------------------------------
 
 Bool EmSession::ExecuteSpecial (Bool checkForResetOnly)
@@ -1435,7 +1435,7 @@ Bool EmSession::ExecuteSpecial (Bool checkForResetOnly)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::CheckForBreak
+//		â€¢ EmSession::CheckForBreak
 // ---------------------------------------------------------------------------
 // Check to see if the conditions tell us to break from the CPU Execute loop.
 
@@ -1474,7 +1474,7 @@ Bool EmSession::CheckForBreak (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::CallCPU
+//		â€¢ EmSession::CallCPU
 // ---------------------------------------------------------------------------
 // Wrapper for EmCPU::Execute.  Called by EmSession::ExecuteIncremental,
 // EmSession::ExecuteSubroutine, and EmSession::Run.  This wrapper ensures
@@ -1501,7 +1501,7 @@ void EmSession::CallCPU (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::BlockOnDialog
+//		â€¢ EmSession::BlockOnDialog
 // ---------------------------------------------------------------------------
 // Schedule an error dialog to be displayed.  If running on a multi-threaded
 // implementation, save the parameters and signal the UI thread to use them
@@ -1581,7 +1581,7 @@ EmDlgItemID EmSession::BlockOnDialog (EmDlgThreadFn fn, const void* parameters)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::UnblockDialog
+//		â€¢ EmSession::UnblockDialog
 // ---------------------------------------------------------------------------
 // Called by the UI thread after displaying a CPU thread-requested dialog,
 // reporting the button the user used to dismiss the dialog.
@@ -1598,10 +1598,10 @@ void EmSession::UnblockDialog (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::PostButtonEvent
-//		¥ EmSession::HasButtonEvent
-//		¥ EmSession::PeekButtonEvent
-//		¥ EmSession::GetButtonEvent
+//		â€¢ EmSession::PostButtonEvent
+//		â€¢ EmSession::HasButtonEvent
+//		â€¢ EmSession::PeekButtonEvent
+//		â€¢ EmSession::GetButtonEvent
 // ---------------------------------------------------------------------------
 
 void EmSession::PostButtonEvent (const EmButtonEvent& event, Bool postNow)
@@ -1652,10 +1652,10 @@ EmButtonEvent EmSession::GetButtonEvent (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::PostKeyEvent
-//		¥ EmSession::HasKeyEvent
-//		¥ EmSession::PeekKeyEvent
-//		¥ EmSession::GetKeyEvent
+//		â€¢ EmSession::PostKeyEvent
+//		â€¢ EmSession::HasKeyEvent
+//		â€¢ EmSession::PeekKeyEvent
+//		â€¢ EmSession::GetKeyEvent
 // ---------------------------------------------------------------------------
 
 void EmSession::PostKeyEvent (const EmKeyEvent& event)
@@ -1691,10 +1691,10 @@ EmKeyEvent EmSession::GetKeyEvent (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::PostPenEvent
-//		¥ EmSession::HasPenEvent
-//		¥ EmSession::PeekPenEvent
-//		¥ EmSession::GetPenEvent
+//		â€¢ EmSession::PostPenEvent
+//		â€¢ EmSession::HasPenEvent
+//		â€¢ EmSession::PeekPenEvent
+//		â€¢ EmSession::GetPenEvent
 // ---------------------------------------------------------------------------
 
 void EmSession::PostPenEvent (const EmPenEvent& event)
@@ -1744,7 +1744,7 @@ EmPenEvent EmSession::GetPenEvent (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::ReleaseBootKeys
+//		â€¢ EmSession::ReleaseBootKeys
 // ---------------------------------------------------------------------------
 
 void EmSession::ReleaseBootKeys (void)
@@ -1763,7 +1763,7 @@ void EmSession::ReleaseBootKeys (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvCanBotherCPU
+//		â€¢ PrvCanBotherCPU
 // ---------------------------------------------------------------------------
 
 Bool PrvCanBotherCPU (void)
@@ -1787,7 +1787,7 @@ Bool PrvCanBotherCPU (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvWakeUpCPU
+//		â€¢ PrvWakeUpCPU
 // ---------------------------------------------------------------------------
 
 void PrvWakeUpCPU (int32 strID)
@@ -1808,7 +1808,7 @@ void PrvWakeUpCPU (int32 strID)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::GetConfiguration
+//		â€¢ EmSession::GetConfiguration
 // ---------------------------------------------------------------------------
 
 Configuration EmSession::GetConfiguration (void)
@@ -1818,7 +1818,7 @@ Configuration EmSession::GetConfiguration (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::GetFile
+//		â€¢ EmSession::GetFile
 // ---------------------------------------------------------------------------
 
 EmFileRef EmSession::GetFile (void)
@@ -1828,7 +1828,7 @@ EmFileRef EmSession::GetFile (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::GetDevice
+//		â€¢ EmSession::GetDevice
 // ---------------------------------------------------------------------------
 
 EmDevice EmSession::GetDevice (void)
@@ -1838,7 +1838,7 @@ EmDevice EmSession::GetDevice (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::GetBreakOnSysCall
+//		â€¢ EmSession::GetBreakOnSysCall
 // ---------------------------------------------------------------------------
 
 Bool EmSession::GetBreakOnSysCall (void)
@@ -1852,7 +1852,7 @@ Bool EmSession::GetBreakOnSysCall (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::IsNested
+//		â€¢ EmSession::IsNested
 // ---------------------------------------------------------------------------
 
 #if 0	// Inlined
@@ -1864,7 +1864,7 @@ Bool EmSession::IsNested (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::GetNeedPostLoad
+//		â€¢ EmSession::GetNeedPostLoad
 // ---------------------------------------------------------------------------
 
 Bool EmSession::GetNeedPostLoad (void)
@@ -1874,7 +1874,7 @@ Bool EmSession::GetNeedPostLoad (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::SetNeedPostLoad
+//		â€¢ EmSession::SetNeedPostLoad
 // ---------------------------------------------------------------------------
 
 void EmSession::SetNeedPostLoad (Bool newValue)
@@ -1886,12 +1886,12 @@ void EmSession::SetNeedPostLoad (Bool newValue)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::ScheduleSuspendException
-//		¥ EmSession::ScheduleSuspendError
-//		¥ EmSession::ScheduleSuspendExternal
-//		¥ EmSession::ScheduleSuspendTimeout
-//		¥ EmSession::ScheduleSuspendSysCall
-//		¥ EmSession::ScheduleSuspendSubroutineReturn
+//		â€¢ EmSession::ScheduleSuspendException
+//		â€¢ EmSession::ScheduleSuspendError
+//		â€¢ EmSession::ScheduleSuspendExternal
+//		â€¢ EmSession::ScheduleSuspendTimeout
+//		â€¢ EmSession::ScheduleSuspendSysCall
+//		â€¢ EmSession::ScheduleSuspendSubroutineReturn
 // ---------------------------------------------------------------------------
 
 void EmSession::ScheduleSuspendException (void)
@@ -1992,14 +1992,14 @@ void EmSession::ScheduleResumeExternal (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::ScheduleReset
-//		¥ EmSession::ScheduleResetBanks
-//		¥ EmSession::ScheduleAutoSaveState
-//		¥ EmSession::ScheduleSaveRootState
-//		¥ EmSession::ScheduleSaveSuspendedState
-//		¥ EmSession::ScheduleLoadRootState
-//		¥ EmSession::ScheduleNextGremlinFromRootState
-//		¥ EmSession::ScheduleNextGremlinFromSuspendedState
+//		â€¢ EmSession::ScheduleReset
+//		â€¢ EmSession::ScheduleResetBanks
+//		â€¢ EmSession::ScheduleAutoSaveState
+//		â€¢ EmSession::ScheduleSaveRootState
+//		â€¢ EmSession::ScheduleSaveSuspendedState
+//		â€¢ EmSession::ScheduleLoadRootState
+//		â€¢ EmSession::ScheduleNextGremlinFromRootState
+//		â€¢ EmSession::ScheduleNextGremlinFromSuspendedState
 // ---------------------------------------------------------------------------
 
 void EmSession::ScheduleReset (EmResetType resetType)
@@ -2113,7 +2113,7 @@ void EmSession::ClearDeferredErrors (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::AddInstructionBreakHandlers
+//		â€¢ EmSession::AddInstructionBreakHandlers
 // ---------------------------------------------------------------------------
 
 void EmSession::AddInstructionBreakHandlers (	InstructionBreakInstaller f1,
@@ -2131,7 +2131,7 @@ void EmSession::AddInstructionBreakHandlers (	InstructionBreakInstaller f1,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::AddDataBreakHandlers
+//		â€¢ EmSession::AddDataBreakHandlers
 // ---------------------------------------------------------------------------
 
 void EmSession::AddDataBreakHandlers (	DataBreakInstaller f1,
@@ -2149,7 +2149,7 @@ void EmSession::AddDataBreakHandlers (	DataBreakInstaller f1,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::InstallInstructionBreaks
+//		â€¢ EmSession::InstallInstructionBreaks
 // ---------------------------------------------------------------------------
 
 void EmSession::InstallInstructionBreaks (void)
@@ -2166,7 +2166,7 @@ void EmSession::InstallInstructionBreaks (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::RemoveInstructionBreaks
+//		â€¢ EmSession::RemoveInstructionBreaks
 // ---------------------------------------------------------------------------
 
 void EmSession::RemoveInstructionBreaks (void)
@@ -2183,7 +2183,7 @@ void EmSession::RemoveInstructionBreaks (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::HandleInstructionBreak
+//		â€¢ EmSession::HandleInstructionBreak
 // ---------------------------------------------------------------------------
 
 void EmSession::HandleInstructionBreak (void)
@@ -2200,7 +2200,7 @@ void EmSession::HandleInstructionBreak (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::InstallDataBreaks
+//		â€¢ EmSession::InstallDataBreaks
 // ---------------------------------------------------------------------------
 
 void EmSession::InstallDataBreaks (void)
@@ -2217,7 +2217,7 @@ void EmSession::InstallDataBreaks (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::RemoveDataBreaks
+//		â€¢ EmSession::RemoveDataBreaks
 // ---------------------------------------------------------------------------
 
 void EmSession::RemoveDataBreaks (void)
@@ -2234,7 +2234,7 @@ void EmSession::RemoveDataBreaks (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::HandleDataBreak
+//		â€¢ EmSession::HandleDataBreak
 // ---------------------------------------------------------------------------
 
 void EmSession::HandleDataBreak (emuptr address, int size, Bool forRead)
@@ -2253,7 +2253,7 @@ void EmSession::HandleDataBreak (emuptr address, int size, Bool forRead)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::RunStatic
+//		â€¢ EmSession::RunStatic
 // ---------------------------------------------------------------------------
 
 #if HAS_OMNI_THREAD
@@ -2268,7 +2268,7 @@ void EmSession::RunStatic (void* arg)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSession::Run
+//		â€¢ EmSession::Run
 // ---------------------------------------------------------------------------
 
 #if HAS_OMNI_THREAD
@@ -2395,7 +2395,7 @@ void EmSession::Run ()
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSessionStopper::EmSessionStopper
+//		â€¢ EmSessionStopper::EmSessionStopper
 // ---------------------------------------------------------------------------
 
 EmSessionStopper::EmSessionStopper (EmSession* cpu, EmStopMethod how) :
@@ -2411,7 +2411,7 @@ EmSessionStopper::EmSessionStopper (EmSession* cpu, EmStopMethod how) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSessionStopper::~EmSessionStopper
+//		â€¢ EmSessionStopper::~EmSessionStopper
 // ---------------------------------------------------------------------------
 
 EmSessionStopper::~EmSessionStopper (void)
@@ -2424,7 +2424,7 @@ EmSessionStopper::~EmSessionStopper (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSessionStopper::Stopped
+//		â€¢ EmSessionStopper::Stopped
 // ---------------------------------------------------------------------------
 
 Bool EmSessionStopper::Stopped (void)
@@ -2434,7 +2434,7 @@ Bool EmSessionStopper::Stopped (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSessionStopper::CanCall
+//		â€¢ EmSessionStopper::CanCall
 // ---------------------------------------------------------------------------
 
 Bool EmSessionStopper::CanCall (void)

@@ -49,7 +49,7 @@ const uint16	kButtonMap[kNumButtonRows][kNumButtonCols] =
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmVIIx::EmRegsEZPalmVIIx
+//		â€¢ EmRegsEZPalmVIIx::EmRegsEZPalmVIIx
 // ---------------------------------------------------------------------------
 
 EmRegsEZPalmVIIx::EmRegsEZPalmVIIx (void) :
@@ -60,7 +60,7 @@ EmRegsEZPalmVIIx::EmRegsEZPalmVIIx (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmVIIx::~EmRegsEZPalmVIIx
+//		â€¢ EmRegsEZPalmVIIx::~EmRegsEZPalmVIIx
 // ---------------------------------------------------------------------------
 
 EmRegsEZPalmVIIx::~EmRegsEZPalmVIIx (void)
@@ -70,7 +70,7 @@ EmRegsEZPalmVIIx::~EmRegsEZPalmVIIx (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmVIIx::GetLCDScreenOn
+//		â€¢ EmRegsEZPalmVIIx::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsEZPalmVIIx::GetLCDScreenOn (void)
@@ -80,7 +80,7 @@ Bool EmRegsEZPalmVIIx::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmVIIx::GetLCDBacklightOn
+//		â€¢ EmRegsEZPalmVIIx::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsEZPalmVIIx::GetLCDBacklightOn (void)
@@ -90,7 +90,7 @@ Bool EmRegsEZPalmVIIx::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmVIIx::GetLineDriverState
+//		â€¢ EmRegsEZPalmVIIx::GetLineDriverState
 // ---------------------------------------------------------------------------
 // Return whether or not the line drivers for the given object are open or
 // closed.
@@ -109,7 +109,7 @@ Bool EmRegsEZPalmVIIx::GetLineDriverState (EmUARTDeviceType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmVIIx::GetPortInputValue
+//		â€¢ EmRegsEZPalmVIIx::GetPortInputValue
 // ---------------------------------------------------------------------------
 // Return the GPIO values for the pins on the port.  These values are used
 // if the select pins are high.
@@ -133,7 +133,7 @@ uint8 EmRegsEZPalmVIIx::GetPortInputValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmVIIx::GetPortInternalValue
+//		â€¢ EmRegsEZPalmVIIx::GetPortInternalValue
 // ---------------------------------------------------------------------------
 // Return the dedicated values for the pins on the port.  These values are
 // used if the select pins are low.
@@ -155,7 +155,7 @@ uint8 EmRegsEZPalmVIIx::GetPortInternalValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmVIIx::GetKeyInfo
+//		â€¢ EmRegsEZPalmVIIx::GetKeyInfo
 // ---------------------------------------------------------------------------
 
 void EmRegsEZPalmVIIx::GetKeyInfo (int* numRows, int* numCols,
@@ -178,7 +178,7 @@ void EmRegsEZPalmVIIx::GetKeyInfo (int* numRows, int* numCols,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmVIIx::GetSPISlave
+//		â€¢ EmRegsEZPalmVIIx::GetSPISlave
 // ---------------------------------------------------------------------------
 
 EmSPISlave* EmRegsEZPalmVIIx::GetSPISlave (void)

@@ -48,7 +48,7 @@ const uint16	kGenericMonoMap[kNumButtonRows][kNumButtonCols] =
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM500::EmRegsVZPalmM500
+//		â€¢ EmRegsVZPalmM500::EmRegsVZPalmM500
 // ---------------------------------------------------------------------------
 
 EmRegsVZPalmM500::EmRegsVZPalmM500 (void) :
@@ -59,7 +59,7 @@ EmRegsVZPalmM500::EmRegsVZPalmM500 (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM500::~EmRegsVZPalmM500
+//		â€¢ EmRegsVZPalmM500::~EmRegsVZPalmM500
 // ---------------------------------------------------------------------------
 
 EmRegsVZPalmM500::~EmRegsVZPalmM500 (void)
@@ -69,7 +69,7 @@ EmRegsVZPalmM500::~EmRegsVZPalmM500 (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM500::GetLCDScreenOn
+//		â€¢ EmRegsVZPalmM500::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZPalmM500::GetLCDScreenOn (void)
@@ -79,7 +79,7 @@ Bool EmRegsVZPalmM500::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM500::GetLCDBacklightOn
+//		â€¢ EmRegsVZPalmM500::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZPalmM500::GetLCDBacklightOn (void)
@@ -89,7 +89,7 @@ Bool EmRegsVZPalmM500::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM500::GetLineDriverState
+//		â€¢ EmRegsVZPalmM500::GetLineDriverState
 // ---------------------------------------------------------------------------
 // Return whether or not the line drivers for the given object are open or
 // closed.
@@ -110,7 +110,7 @@ Bool EmRegsVZPalmM500::GetLineDriverState (EmUARTDeviceType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM500::GetUARTDevice
+//		â€¢ EmRegsVZPalmM500::GetUARTDevice
 // ---------------------------------------------------------------------------
 // Return what sort of device is hooked up to the given UART.
 
@@ -147,7 +147,7 @@ EmUARTDeviceType EmRegsVZPalmM500::GetUARTDevice (int uartNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM500::GetVibrateOn
+//		â€¢ EmRegsVZPalmM500::GetVibrateOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZPalmM500::GetVibrateOn (void)
@@ -157,7 +157,7 @@ Bool EmRegsVZPalmM500::GetVibrateOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM500::GetLEDState
+//		â€¢ EmRegsVZPalmM500::GetLEDState
 // ---------------------------------------------------------------------------
 
 uint16 EmRegsVZPalmM500::GetLEDState (void)
@@ -173,7 +173,7 @@ uint16 EmRegsVZPalmM500::GetLEDState (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM500::GetPortInputValue
+//		â€¢ EmRegsVZPalmM500::GetPortInputValue
 // ---------------------------------------------------------------------------
 // Return the GPIO values for the pins on the port.  These values are used
 // if the select pins are high.
@@ -195,7 +195,7 @@ uint8 EmRegsVZPalmM500::GetPortInputValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM500::GetPortInternalValue
+//		â€¢ EmRegsVZPalmM500::GetPortInternalValue
 // ---------------------------------------------------------------------------
 // Return the dedicated values for the pins on the port.  These values are
 // used if the select pins are low.
@@ -220,7 +220,7 @@ uint8 EmRegsVZPalmM500::GetPortInternalValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM500::GetKeyInfo
+//		â€¢ EmRegsVZPalmM500::GetKeyInfo
 // ---------------------------------------------------------------------------
 
 void EmRegsVZPalmM500::GetKeyInfo (int* numRows, int* numCols,
@@ -243,7 +243,7 @@ void EmRegsVZPalmM500::GetKeyInfo (int* numRows, int* numCols,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM500::GetSPISlave
+//		â€¢ EmRegsVZPalmM500::GetSPISlave
 // ---------------------------------------------------------------------------
 
 EmSPISlave* EmRegsVZPalmM500::GetSPISlave (void)

@@ -121,7 +121,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorEdge::GetLCDScreenOn
+//		â€¢ EmRegsVZVisorEdge::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZVisorEdge::GetLCDScreenOn (void)
@@ -131,7 +131,7 @@ Bool EmRegsVZVisorEdge::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorEdge::GetLCDBacklightOn
+//		â€¢ EmRegsVZVisorEdge::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZVisorEdge::GetLCDBacklightOn (void)
@@ -141,7 +141,7 @@ Bool EmRegsVZVisorEdge::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorEdge::GetKeyInfo
+//		â€¢ EmRegsVZVisorEdge::GetKeyInfo
 // ---------------------------------------------------------------------------
 
 void EmRegsVZVisorEdge::GetKeyInfo (int* numRows, int* numCols,

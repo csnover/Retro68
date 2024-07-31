@@ -19,7 +19,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmActionComposite::EmActionComposite
+//		â€¢ EmActionComposite::EmActionComposite
 // ---------------------------------------------------------------------------
 
 EmActionComposite::EmActionComposite (void) :
@@ -29,7 +29,7 @@ EmActionComposite::EmActionComposite (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmActionComposite::~EmActionComposite
+//		â€¢ EmActionComposite::~EmActionComposite
 // ---------------------------------------------------------------------------
 
 EmActionComposite::~EmActionComposite (void)
@@ -38,7 +38,7 @@ EmActionComposite::~EmActionComposite (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmActionComposite::Do
+//		â€¢ EmActionComposite::Do
 // ---------------------------------------------------------------------------
 
 void EmActionComposite::Do (void)
@@ -54,7 +54,7 @@ void EmActionComposite::Do (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmActionComposite::AddAction
+//		â€¢ EmActionComposite::AddAction
 // ---------------------------------------------------------------------------
 
 void EmActionComposite::AddAction (EmAction* action)
@@ -66,7 +66,7 @@ void EmActionComposite::AddAction (EmAction* action)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmActionHandler::EmActionHandler
+//		â€¢ EmActionHandler::EmActionHandler
 // ---------------------------------------------------------------------------
 
 EmActionHandler::EmActionHandler (void) :
@@ -76,7 +76,7 @@ EmActionHandler::EmActionHandler (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmActionHandler::~EmActionHandler
+//		â€¢ EmActionHandler::~EmActionHandler
 // ---------------------------------------------------------------------------
 
 EmActionHandler::~EmActionHandler (void)
@@ -86,7 +86,7 @@ EmActionHandler::~EmActionHandler (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmActionHandler::PostAction
+//		â€¢ EmActionHandler::PostAction
 // ---------------------------------------------------------------------------
 
 void EmActionHandler::PostAction (EmAction* action)
@@ -98,7 +98,7 @@ void EmActionHandler::PostAction (EmAction* action)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmActionHandler::GetNextAction
+//		â€¢ EmActionHandler::GetNextAction
 // ---------------------------------------------------------------------------
 
 EmAction* EmActionHandler::GetNextAction (void)
@@ -118,7 +118,7 @@ EmAction* EmActionHandler::GetNextAction (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmActionHandler::GetNextAction
+//		â€¢ EmActionHandler::GetNextAction
 // ---------------------------------------------------------------------------
 //
 // This function is an EXCEPTION_CATCH_POINT.
@@ -147,7 +147,7 @@ void EmActionHandler::DoAll (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmActionHandler::DeleteAll
+//		â€¢ EmActionHandler::DeleteAll
 // ---------------------------------------------------------------------------
 
 void EmActionHandler::DeleteAll (void)

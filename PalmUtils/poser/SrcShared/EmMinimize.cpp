@@ -318,7 +318,7 @@ static inline Bool PrvIsPenDown (const PointType& pt)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::Initialize
+//		â€¢ EmMinimize::Initialize
 // ---------------------------------------------------------------------------
 
 void EmMinimize::Initialize (void)
@@ -327,7 +327,7 @@ void EmMinimize::Initialize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::Reset
+//		â€¢ EmMinimize::Reset
 // ---------------------------------------------------------------------------
 
 void EmMinimize::Reset (void)
@@ -338,7 +338,7 @@ void EmMinimize::Reset (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::Save
+//		â€¢ EmMinimize::Save
 // ---------------------------------------------------------------------------
 
 void EmMinimize::Save (SessionFile&)
@@ -347,7 +347,7 @@ void EmMinimize::Save (SessionFile&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::Load
+//		â€¢ EmMinimize::Load
 // ---------------------------------------------------------------------------
 
 void EmMinimize::Load (SessionFile&)
@@ -356,7 +356,7 @@ void EmMinimize::Load (SessionFile&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::Dispose
+//		â€¢ EmMinimize::Dispose
 // ---------------------------------------------------------------------------
 
 void EmMinimize::Dispose (void)
@@ -369,7 +369,7 @@ void EmMinimize::Dispose (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::Start
+//		â€¢ EmMinimize::Start
 // ---------------------------------------------------------------------------
 // Startup the entire minimization process.  Called after a document is loaded
 // with the intent of minimizaing the events stored with it.
@@ -425,7 +425,7 @@ void EmMinimize::Start (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::Stop
+//		â€¢ EmMinimize::Stop
 // ---------------------------------------------------------------------------
 // Stop the entire minimization process.  Called when the user presses the
 // "Stop" button in the Minimization Control dialog.
@@ -439,7 +439,7 @@ void EmMinimize::Stop (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::TurnOn
+//		â€¢ EmMinimize::TurnOn
 // ---------------------------------------------------------------------------
 
 void EmMinimize::TurnOn (Bool newState)
@@ -449,7 +449,7 @@ void EmMinimize::TurnOn (Bool newState)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::IsOn
+//		â€¢ EmMinimize::IsOn
 // ---------------------------------------------------------------------------
 
 Bool EmMinimize::IsOn (void)
@@ -461,7 +461,7 @@ Bool EmMinimize::IsOn (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::NoErrorOccurred
+//		â€¢ EmMinimize::NoErrorOccurred
 // ---------------------------------------------------------------------------
 // The current set of events were replayed with no error occurring.
 // Therefore, we need to turn the most recent set of events back on, split
@@ -504,7 +504,7 @@ void EmMinimize::NoErrorOccurred (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::ErrorOccurred
+//		â€¢ EmMinimize::ErrorOccurred
 // ---------------------------------------------------------------------------
 // The current set of events resulted in an error occurring.  Therefore, we
 // can keep the current set of events turned off, and try to find others to
@@ -608,7 +608,7 @@ uint32 EmMinimize::GetNumInitialEvents (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::MinimizationPassComplete
+//		â€¢ EmMinimize::MinimizationPassComplete
 // ---------------------------------------------------------------------------
 // We've finished splitting and replaying events.  Examine the results to see
 // if we're done, or if we need to make another Minimization passing using the
@@ -671,7 +671,7 @@ void EmMinimize::MinimizationPassComplete (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::MinimizationComplete
+//		â€¢ EmMinimize::MinimizationComplete
 // ---------------------------------------------------------------------------
 // Minimization is completely done.  Save the results, write out a text
 // version of the events, and tell the user.
@@ -717,7 +717,7 @@ void EmMinimize::MinimizationComplete (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::SaveMinimalEvents
+//		â€¢ EmMinimize::SaveMinimalEvents
 // ---------------------------------------------------------------------------
 
 void EmMinimize::SaveMinimalEvents (void)
@@ -785,7 +785,7 @@ void EmMinimize::SaveMinimalEvents (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::OutputEventsAsEnglish
+//		â€¢ EmMinimize::OutputEventsAsEnglish
 // ---------------------------------------------------------------------------
 
 void EmMinimize::OutputEventsAsEnglish (void)
@@ -869,7 +869,7 @@ void EmMinimize::OutputEventsAsEnglish (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::MakeAnotherPass
+//		â€¢ EmMinimize::MakeAnotherPass
 // ---------------------------------------------------------------------------
 // Return whether or not we feel that a significant amount of event culling
 // had occurred in the pass.  If so, we'll want to make another pass.
@@ -884,7 +884,7 @@ Bool EmMinimize::MakeAnotherPass (int32 oldNumEvents, int32 newNumEvents)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::CurrentRange
+//		â€¢ EmMinimize::CurrentRange
 // ---------------------------------------------------------------------------
 // Return the current event range that we are examining.
 
@@ -906,7 +906,7 @@ void EmMinimize::CurrentRange (int32& begin, int32& end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::InitialLevel
+//		â€¢ EmMinimize::InitialLevel
 // ---------------------------------------------------------------------------
 // Set up our "fLevels" member with the initial left/right event sub-ranges.
 
@@ -947,7 +947,7 @@ void EmMinimize::InitialLevel (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::SplitCurrentLevel
+//		â€¢ EmMinimize::SplitCurrentLevel
 // ---------------------------------------------------------------------------
 // Create a new level based on the given range.  The given range is split in
 // two, records are created holding those two sub-ranges, and the records are
@@ -1024,7 +1024,7 @@ Bool EmMinimize::SplitCurrentLevel (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::StartAgain
+//		â€¢ EmMinimize::StartAgain
 // ---------------------------------------------------------------------------
 // Queue things up to start again.  Start the playback mechanism, and reload
 // the initial state.
@@ -1041,7 +1041,7 @@ void EmMinimize::StartAgain (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::SplitAndStartAgain
+//		â€¢ EmMinimize::SplitAndStartAgain
 // ---------------------------------------------------------------------------
 // Queue things up to start again.  Start the playback mechanism, and reload
 // the initial state.
@@ -1098,7 +1098,7 @@ void EmMinimize::SplitAndStartAgain (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::DisableAndStartAgain
+//		â€¢ EmMinimize::DisableAndStartAgain
 // ---------------------------------------------------------------------------
 // Attempt to disable the current range and start again.  This may fail if we
 // try to do something like disable a solitary pen-up event, in which case
@@ -1142,7 +1142,7 @@ void EmMinimize::DisableAndStartAgain (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::NextSubRange
+//		â€¢ EmMinimize::NextSubRange
 // ---------------------------------------------------------------------------
 // Pop an event range off of the stack and start working with the previous
 // range that's now on the top of the stack.
@@ -1205,7 +1205,7 @@ void EmMinimize::NextSubRange (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::LoadInitialState
+//		â€¢ EmMinimize::LoadInitialState
 // ---------------------------------------------------------------------------
 // Reload the current file so that we can start pelting it with events again.
 
@@ -1218,7 +1218,7 @@ void EmMinimize::LoadInitialState (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::RealLoadInitialState
+//		â€¢ EmMinimize::RealLoadInitialState
 // ---------------------------------------------------------------------------
 // Reload the current file so that we can start pelting it with events again.
 
@@ -1245,7 +1245,7 @@ void EmMinimize::RealLoadInitialState (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::LoadEvents
+//		â€¢ EmMinimize::LoadEvents
 // ---------------------------------------------------------------------------
 
 void EmMinimize::LoadEvents (void)
@@ -1259,7 +1259,7 @@ void EmMinimize::LoadEvents (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMinimize::FindFirstError
+//		â€¢ EmMinimize::FindFirstError
 // ---------------------------------------------------------------------------
 // Return the index of the first error event record.  Return -1 if one could
 // not be found.

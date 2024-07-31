@@ -19,7 +19,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ StubEnqueuePt
+//		â€¢ StubEnqueuePt
 // ---------------------------------------------------------------------------
 // This is a stub routine that called the application object's method that
 // enqueues a point.
@@ -43,7 +43,7 @@ void	StubAppEnqueuePt(const PointType* pen)
 
 
 // ---------------------------------------------------------------------------
-//		¥ StubAppEnqueueKey
+//		â€¢ StubAppEnqueueKey
 // ---------------------------------------------------------------------------
 // This is a stub routine that called the Application object's method that
 // enqueues a key.
@@ -230,7 +230,7 @@ void StubAppEnqueueKey (UInt16 ascii, UInt16 keycode, UInt16 modifiers)
 
 
 // ---------------------------------------------------------------------------
-//		¥ StubAppGremlinsOn
+//		â€¢ StubAppGremlinsOn
 // ---------------------------------------------------------------------------
 // Stub routine that update the Gremlins menu an the global variable the
 // keeps track of the ????
@@ -242,7 +242,7 @@ void StubAppGremlinsOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ StubAppGremlinsOff
+//		â€¢ StubAppGremlinsOff
 // ---------------------------------------------------------------------------
 // Stub routine that update the Gremlins menu an the global variable the
 // keeps track of the ????
@@ -254,7 +254,7 @@ void StubAppGremlinsOff (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ StubViewDrawLine
+//		â€¢ StubViewDrawLine
 // ---------------------------------------------------------------------------
 // This is a stub routine that called the View object's method that draw
 // a line.
@@ -266,7 +266,7 @@ void StubViewDrawLine (int xStart, int yStart, int xEnd, int yEnd)
 
 
 // ---------------------------------------------------------------------------
-//		¥ StubViewDrawPixel
+//		â€¢ StubViewDrawPixel
 // ---------------------------------------------------------------------------
 // This is a stub routine that called the View object's method that draw
 // a pixel.

@@ -135,7 +135,7 @@ const uint16	kButtonMap[kNumButtonRows][kNumButtonCols] =
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPrism::GetLCDScreenOn
+//		â€¢ EmRegsVZVisorPrism::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZVisorPrism::GetLCDScreenOn (void)
@@ -147,7 +147,7 @@ Bool EmRegsVZVisorPrism::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPrism::GetLCDBacklightOn
+//		â€¢ EmRegsVZVisorPrism::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZVisorPrism::GetLCDBacklightOn (void)
@@ -159,7 +159,7 @@ Bool EmRegsVZVisorPrism::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPrism::GetLCDHasFrame
+//		â€¢ EmRegsVZVisorPrism::GetLCDHasFrame
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZVisorPrism::GetLCDHasFrame (void)
@@ -171,7 +171,7 @@ Bool EmRegsVZVisorPrism::GetLCDHasFrame (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPrism::GetLCDBeginEnd
+//		â€¢ EmRegsVZVisorPrism::GetLCDBeginEnd
 // ---------------------------------------------------------------------------
 
 void EmRegsVZVisorPrism::GetLCDBeginEnd (emuptr& begin, emuptr& end)
@@ -183,7 +183,7 @@ void EmRegsVZVisorPrism::GetLCDBeginEnd (emuptr& begin, emuptr& end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPrism::GetLCDScanlines
+//		â€¢ EmRegsVZVisorPrism::GetLCDScanlines
 // ---------------------------------------------------------------------------
 
 void EmRegsVZVisorPrism::GetLCDScanlines (EmScreenUpdateInfo& info)
@@ -195,7 +195,7 @@ void EmRegsVZVisorPrism::GetLCDScanlines (EmScreenUpdateInfo& info)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPrism::GetLineDriverState
+//		â€¢ EmRegsVZVisorPrism::GetLineDriverState
 // ---------------------------------------------------------------------------
 // Return whether or not the line drivers for the given object are open or
 // closed.
@@ -228,7 +228,7 @@ Bool EmRegsVZVisorPrism::GetLineDriverState (EmUARTDeviceType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPrism::GetUARTDevice
+//		â€¢ EmRegsVZVisorPrism::GetUARTDevice
 // ---------------------------------------------------------------------------
 // Return what sort of device is hooked up to the given UART.
 
@@ -258,7 +258,7 @@ EmUARTDeviceType EmRegsVZVisorPrism::GetUARTDevice (int /*uartNum*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPrism::GetPortInputValue
+//		â€¢ EmRegsVZVisorPrism::GetPortInputValue
 //
 //	Returns the GPIO value of the given port.
 // ---------------------------------------------------------------------------
@@ -322,7 +322,7 @@ uint8 EmRegsVZVisorPrism::GetPortInputValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPrism::GetPortInternalValue
+//		â€¢ EmRegsVZVisorPrism::GetPortInternalValue
 // 
 //	Returns the "dedicated" pin value of the given port.
 // ---------------------------------------------------------------------------
@@ -367,7 +367,7 @@ uint8 EmRegsVZVisorPrism::GetPortInternalValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPrism::GetKeyInfo
+//		â€¢ EmRegsVZVisorPrism::GetKeyInfo
 // ---------------------------------------------------------------------------
 
 void EmRegsVZVisorPrism::GetKeyInfo (int* numRows, int* numCols,

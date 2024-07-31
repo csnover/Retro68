@@ -6,7 +6,7 @@
  * File: DebugPrv.h
  *
  * Description:
- *		Privat«Debugging functions
+ *		PrivatÂ´Debugging functions
  *
  * History:
  *   	8/10/95 RM - Created by Ron Marianetti

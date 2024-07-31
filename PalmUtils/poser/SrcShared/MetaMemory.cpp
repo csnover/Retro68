@@ -71,7 +71,7 @@ static Bool PrvForEachUIObject (IterFn fn, void* data);
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::Initialize
+//		â€¢ MetaMemory::Initialize
 // ---------------------------------------------------------------------------
 
 void MetaMemory::Initialize (void)
@@ -80,7 +80,7 @@ void MetaMemory::Initialize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::Reset
+//		â€¢ MetaMemory::Reset
 // ---------------------------------------------------------------------------
 
 void MetaMemory::Reset (void)
@@ -94,7 +94,7 @@ void MetaMemory::Reset (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::Save
+//		â€¢ MetaMemory::Save
 // ---------------------------------------------------------------------------
 
 void MetaMemory::Save (SessionFile& f)
@@ -117,7 +117,7 @@ void MetaMemory::Save (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::Load
+//		â€¢ MetaMemory::Load
 // ---------------------------------------------------------------------------
 
 void MetaMemory::Load (SessionFile& f)
@@ -146,7 +146,7 @@ void MetaMemory::Load (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::Dispose
+//		â€¢ MetaMemory::Dispose
 // ---------------------------------------------------------------------------
 
 void MetaMemory::Dispose (void)
@@ -156,7 +156,7 @@ void MetaMemory::Dispose (void)
 
 #if FOR_LATER
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkUninitialized
+//		â€¢ MetaMemory::MarkUninitialized
 // ---------------------------------------------------------------------------
 
 void MetaMemory::MarkUninitialized (emuptr begin, emuptr end)
@@ -168,7 +168,7 @@ void MetaMemory::MarkUninitialized (emuptr begin, emuptr end)
 
 #if FOR_LATER
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MoveUninitialized
+//		â€¢ MetaMemory::MoveUninitialized
 // ---------------------------------------------------------------------------
 //	Transfer the initialized/uninitialized state of a range of bytes to a
 //	new location.  Called during MemMove, so that the state of the bytes
@@ -206,7 +206,7 @@ void MetaMemory::MoveUninitialized (emuptr source, emuptr dest, uint32 size)
 
 #if FOR_LATER
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkInitialized
+//		â€¢ MetaMemory::MarkInitialized
 // ---------------------------------------------------------------------------
 
 void MetaMemory::MarkInitialized (emuptr begin, emuptr end)
@@ -217,7 +217,7 @@ void MetaMemory::MarkInitialized (emuptr begin, emuptr end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::SyncHeap
+//		â€¢ MetaMemory::SyncHeap
 // ---------------------------------------------------------------------------
 //	Find chunk headers and mark them as memory manager structures.  Mark
 //	unlocked relocatable chunks as "unlocked" and "initialized" (as we don't
@@ -225,7 +225,7 @@ void MetaMemory::MarkInitialized (emuptr begin, emuptr end)
 //	Mark free blocks as "uninitialized".
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::SyncOneChunk
+//		â€¢ MetaMemory::SyncOneChunk
 // ---------------------------------------------------------------------------
 //	Mark the chunk header, free chunks, and unlocked chunks.
 
@@ -268,7 +268,7 @@ void MetaMemory::SyncOneChunk (const EmPalmChunk& chunk)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::Resync
+//		â€¢ MetaMemory::Resync
 // ---------------------------------------------------------------------------
 
 void MetaMemory::Resync (const EmPalmChunkList& delta)
@@ -323,7 +323,7 @@ void MetaMemory::Resync (const EmPalmChunkList& delta)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::GetWhatHappened
+//		â€¢ MetaMemory::GetWhatHappened
 // ---------------------------------------------------------------------------
 //	Some memory access violation was detected.  Nail down more closely what
 //	it was.  These checks can be expensive, as they only occur when we're
@@ -417,7 +417,7 @@ Errors::EAccessType MetaMemory::GetWhatHappened (emuptr address, int32 size, Boo
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::AllowForBugs
+//		â€¢ MetaMemory::AllowForBugs
 // ---------------------------------------------------------------------------
 
 Errors::EAccessType MetaMemory::AllowForBugs (emuptr address, int32 size, Bool forRead, Errors::EAccessType whatHappened)
@@ -575,7 +575,7 @@ Errors::EAccessType MetaMemory::AllowForBugs (emuptr address, int32 size, Bool f
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::GetLowMemoryBegin
+//		â€¢ MetaMemory::GetLowMemoryBegin
 // ---------------------------------------------------------------------------
 
 emuptr MetaMemory::GetLowMemoryBegin (void)
@@ -585,7 +585,7 @@ emuptr MetaMemory::GetLowMemoryBegin (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::GetLowMemoryEnd
+//		â€¢ MetaMemory::GetLowMemoryEnd
 // ---------------------------------------------------------------------------
 
 emuptr MetaMemory::GetLowMemoryEnd (void)
@@ -595,7 +595,7 @@ emuptr MetaMemory::GetLowMemoryEnd (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::GetSysGlobalsBegin
+//		â€¢ MetaMemory::GetSysGlobalsBegin
 // ---------------------------------------------------------------------------
 
 emuptr MetaMemory::GetSysGlobalsBegin (void)
@@ -605,7 +605,7 @@ emuptr MetaMemory::GetSysGlobalsBegin (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::GetSysGlobalsEnd
+//		â€¢ MetaMemory::GetSysGlobalsEnd
 // ---------------------------------------------------------------------------
 
 emuptr MetaMemory::GetSysGlobalsEnd (void)
@@ -616,7 +616,7 @@ emuptr MetaMemory::GetSysGlobalsEnd (void)
 			EmLowMem_GetGlobal (sysDispatchTableSize) * (sizeof (emuptr));
 }
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::GetHeapHdrBegin
+//		â€¢ MetaMemory::GetHeapHdrBegin
 // ---------------------------------------------------------------------------
 
 emuptr MetaMemory::GetHeapHdrBegin (UInt16 heapID)
@@ -630,7 +630,7 @@ emuptr MetaMemory::GetHeapHdrBegin (UInt16 heapID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::GetHeapHdrEnd
+//		â€¢ MetaMemory::GetHeapHdrEnd
 // ---------------------------------------------------------------------------
 
 emuptr MetaMemory::GetHeapHdrEnd (UInt16 heapID)
@@ -769,7 +769,7 @@ Bool MetaMemory::IsAllocatedChunk (emuptr testAddress, uint32 size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkRange
+//		â€¢ MetaMemory::MarkRange
 // ---------------------------------------------------------------------------
 
 void MetaMemory::MarkRange (emuptr start, emuptr end, uint8 v)
@@ -849,7 +849,7 @@ void MetaMemory::MarkRange (emuptr start, emuptr end, uint8 v)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::UnmarkRange
+//		â€¢ MetaMemory::UnmarkRange
 // ---------------------------------------------------------------------------
 
 void MetaMemory::UnmarkRange (emuptr start, emuptr end, uint8 v)
@@ -931,7 +931,7 @@ void MetaMemory::UnmarkRange (emuptr start, emuptr end, uint8 v)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkUnmarkRange
+//		â€¢ MetaMemory::MarkUnmarkRange
 // ---------------------------------------------------------------------------
 
 void MetaMemory::MarkUnmarkRange (emuptr start, emuptr end,
@@ -1036,7 +1036,7 @@ void MetaMemory::MarkUnmarkRange (emuptr start, emuptr end,
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::WhatHappenedCallback
+//		â€¢ MetaMemory::WhatHappenedCallback
 // ---------------------------------------------------------------------------
 //	Check to see if there was an access to memory manager data, an unlocked
 //	block, or a free block.
@@ -1093,7 +1093,7 @@ void MetaMemory::GWH_ExamineHeap (	const EmPalmHeap& heap,
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::GWH_ExamineChunk
+//		â€¢ MetaMemory::GWH_ExamineChunk
 // ---------------------------------------------------------------------------
 //	Check to see if there was an access to memory manager data, an unlocked
 //	block, or a free block.
@@ -1431,7 +1431,7 @@ HideBug:
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ CheckUIObjectAccess
+//		â€¢ CheckUIObjectAccess
 // ---------------------------------------------------------------------------
 
 #define WindowFlagsType_format			0x8000	// window format:  0=screen mode; 1=generic mode
@@ -1585,7 +1585,7 @@ HideBug:
 	WinGlueSetFrameType			winP->frameType.word		!AccessorGlueEmu68KAccAvail
 */
 // ---------------------------------------------------------------------------
-//		¥ PrvTrapsAvailable
+//		â€¢ PrvTrapsAvailable
 // ---------------------------------------------------------------------------
 
 static Bool PrvTrapsAvailable (void)
@@ -1599,7 +1599,7 @@ static Bool PrvTrapsAvailable (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAccessorTrapAvailable
+//		â€¢ PrvAccessorTrapAvailable
 // ---------------------------------------------------------------------------
 
 static Bool PrvAccessorTrapAvailable (void)
@@ -1619,7 +1619,7 @@ static Bool PrvAccessorTrapAvailable (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedFieldObjectAccess
+//		â€¢ PrvAllowedFieldObjectAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given form object is allowed
 // on the current platform.
@@ -1698,7 +1698,7 @@ static Bool PrvAllowedFieldObjectAccess (emuptr objectP, emuptr address, Bool fo
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedControlObjectAccess
+//		â€¢ PrvAllowedControlObjectAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given form object is allowed
 // on the current platform.
@@ -1819,7 +1819,7 @@ static Bool PrvAllowedControlObjectAccess (emuptr objectP, emuptr address, Bool 
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedListObjectAccess
+//		â€¢ PrvAllowedListObjectAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given form object is allowed
 // on the current platform.
@@ -1919,7 +1919,7 @@ static Bool PrvAllowedListObjectAccess (emuptr objectP, emuptr address, Bool for
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedTableObjectAccess
+//		â€¢ PrvAllowedTableObjectAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given form object is allowed
 // on the current platform.
@@ -2083,7 +2083,7 @@ static Bool PrvAllowedTableObjectAccess (emuptr objectP, emuptr address, Bool fo
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedFormBitmapObjectAccess
+//		â€¢ PrvAllowedFormBitmapObjectAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given form object is allowed
 // on the current platform.
@@ -2138,7 +2138,7 @@ static Bool PrvAllowedFormBitmapObjectAccess (emuptr objectP, emuptr address, Bo
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedFormLineObjectAccess
+//		â€¢ PrvAllowedFormLineObjectAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given form object is allowed
 // on the current platform.
@@ -2163,7 +2163,7 @@ static Bool PrvAllowedFormLineObjectAccess (emuptr objectP, emuptr address, Bool
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedFormFrameObjectAccess
+//		â€¢ PrvAllowedFormFrameObjectAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given form object is allowed
 // on the current platform.
@@ -2189,7 +2189,7 @@ static Bool PrvAllowedFormFrameObjectAccess (emuptr objectP, emuptr address, Boo
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedFormRectangleObjectAccess
+//		â€¢ PrvAllowedFormRectangleObjectAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given form object is allowed
 // on the current platform.
@@ -2213,7 +2213,7 @@ static Bool PrvAllowedFormRectangleObjectAccess (emuptr objectP, emuptr address,
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedFormLabelObjectAccess
+//		â€¢ PrvAllowedFormLabelObjectAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given form object is allowed
 // on the current platform.
@@ -2267,7 +2267,7 @@ static Bool PrvAllowedFormLabelObjectAccess (emuptr objectP, emuptr address, Boo
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedFormTitleObjectAccess
+//		â€¢ PrvAllowedFormTitleObjectAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given form object is allowed
 // on the current platform.
@@ -2291,7 +2291,7 @@ static Bool PrvAllowedFormTitleObjectAccess (emuptr objectP, emuptr address, Boo
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedFormPopupObjectAccess
+//		â€¢ PrvAllowedFormPopupObjectAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given form object is allowed
 // on the current platform.
@@ -2315,7 +2315,7 @@ static Bool PrvAllowedFormPopupObjectAccess (emuptr objectP, emuptr address, Boo
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedFormGraffitiStateObjectAccess
+//		â€¢ PrvAllowedFormGraffitiStateObjectAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given form object is allowed
 // on the current platform.
@@ -2338,7 +2338,7 @@ static Bool PrvAllowedFormGraffitiStateObjectAccess (emuptr objectP, emuptr addr
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedFormGadgetObjectAccess
+//		â€¢ PrvAllowedFormGadgetObjectAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given form object is allowed
 // on the current platform.
@@ -2410,7 +2410,7 @@ static Bool PrvAllowedFormGadgetObjectAccess (emuptr objectP, emuptr address, Bo
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedScrollBarObjectAccess
+//		â€¢ PrvAllowedScrollBarObjectAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given form object is allowed
 // on the current platform.
@@ -2475,7 +2475,7 @@ static Bool PrvAllowedScrollBarObjectAccess (emuptr objectP, emuptr address, Boo
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedFormObjectAccess
+//		â€¢ PrvAllowedFormObjectAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given form object is allowed
 // on the current platform.
@@ -2522,7 +2522,7 @@ static Bool PrvAllowedFormObjectAccess (EmAliasFormObjListType<PAS>& formObject,
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedWindowAccess
+//		â€¢ PrvAllowedWindowAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given window is allowed on
 // the current platform.
@@ -2588,7 +2588,7 @@ static Bool PrvAllowedWindowAccess (emuptr windowP, emuptr address, Bool forRead
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedFormAccess
+//		â€¢ PrvAllowedFormAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given form is allowed on the
 // current platform.
@@ -2671,7 +2671,7 @@ static Bool PrvAllowedFormAccess (emuptr formP, emuptr address, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAllowedBitmapAccess
+//		â€¢ PrvAllowedBitmapAccess
 // ---------------------------------------------------------------------------
 // Return whether or not the given access to the given bitmap is allowed
 // on the current platform.
@@ -2908,7 +2908,7 @@ static Bool PrvAllowedBitmapAccess (EmAliasBitmapTypeV3<PAS>&, emuptr, Bool)
 // to the next icon in the family.
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::RegisterBitmapHandle
+//		â€¢ MetaMemory::RegisterBitmapHandle
 // ---------------------------------------------------------------------------
 
 void MetaMemory::RegisterBitmapHandle (MemHandle /*h*/)
@@ -2925,7 +2925,7 @@ void MetaMemory::RegisterBitmapHandle (MemHandle /*h*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::RegisterBitmapPointer
+//		â€¢ MetaMemory::RegisterBitmapPointer
 // ---------------------------------------------------------------------------
 
 void MetaMemory::RegisterBitmapPointer (MemPtr /*p*/)
@@ -2942,7 +2942,7 @@ void MetaMemory::RegisterBitmapPointer (MemPtr /*p*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::IsBitmapHandle
+//		â€¢ MetaMemory::IsBitmapHandle
 // ---------------------------------------------------------------------------
 
 Bool MetaMemory::IsBitmapHandle (MemHandle h)
@@ -2954,7 +2954,7 @@ Bool MetaMemory::IsBitmapHandle (MemHandle h)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::IsBitmapPointer
+//		â€¢ MetaMemory::IsBitmapPointer
 // ---------------------------------------------------------------------------
 
 Bool MetaMemory::IsBitmapPointer (MemPtr p)
@@ -2966,7 +2966,7 @@ Bool MetaMemory::IsBitmapPointer (MemPtr p)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::UnregisterBitmapHandle
+//		â€¢ MetaMemory::UnregisterBitmapHandle
 // ---------------------------------------------------------------------------
 
 void MetaMemory::UnregisterBitmapHandle (MemHandle h)
@@ -2988,7 +2988,7 @@ void MetaMemory::UnregisterBitmapHandle (MemHandle h)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::UnregisterBitmapPointer
+//		â€¢ MetaMemory::UnregisterBitmapPointer
 // ---------------------------------------------------------------------------
 
 void MetaMemory::UnregisterBitmapPointer (MemPtr p)
@@ -3022,7 +3022,7 @@ struct EmCheckIterData
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvGetObjectSize
+//		â€¢ PrvGetObjectSize
 // ---------------------------------------------------------------------------
 // Get and return the size of the object.  A bitmap object's size is based on
 // the version number in the bitmap.  A window object's size is the size of
@@ -3075,7 +3075,7 @@ static int PrvGetObjectSize (emuptr object, int type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvGetNextBitmap
+//		â€¢ PrvGetNextBitmap
 // ---------------------------------------------------------------------------
 
 #if 0
@@ -3122,7 +3122,7 @@ static emuptr PrvGetNextBitmap (emuptr p)
 #endif
 
 // ---------------------------------------------------------------------------
-//		¥ PrvCheckFormObject
+//		â€¢ PrvCheckFormObject
 // ---------------------------------------------------------------------------
 
 static Bool PrvCheckFormObject (EmAliasFormType<PAS>& form,
@@ -3287,7 +3287,7 @@ static Bool PrvCheckFormObject (EmAliasFormType<PAS>& form,
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvCheckForm
+//		â€¢ PrvCheckForm
 // ---------------------------------------------------------------------------
 
 static Bool PrvCheckForm (EmAliasFormType<PAS>& form, EmCheckIterData* data)
@@ -3354,7 +3354,7 @@ static Bool PrvCheckForm (EmAliasFormType<PAS>& form, EmCheckIterData* data)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvCheckWindow
+//		â€¢ PrvCheckWindow
 // ---------------------------------------------------------------------------
 
 static Bool PrvCheckWindow (EmAliasWindowType<PAS>& window, EmCheckIterData* data)
@@ -3386,7 +3386,7 @@ static Bool PrvCheckWindow (EmAliasWindowType<PAS>& window, EmCheckIterData* dat
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvCheckBitmap
+//		â€¢ PrvCheckBitmap
 // ---------------------------------------------------------------------------
 
 static Bool PrvCheckBitmap (EmAliasBitmapTypeV2<PAS>& bitmapV2, EmCheckIterData* data)
@@ -3412,7 +3412,7 @@ static Bool PrvCheckBitmap (EmAliasBitmapTypeV2<PAS>& bitmapV2, EmCheckIterData*
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvCheckBitmap
+//		â€¢ PrvCheckBitmap
 // ---------------------------------------------------------------------------
 
 static Bool PrvCheckBitmap (EmAliasBitmapTypeV3<PAS>& bitmapV3, EmCheckIterData* data)
@@ -3438,7 +3438,7 @@ static Bool PrvCheckBitmap (EmAliasBitmapTypeV3<PAS>& bitmapV3, EmCheckIterData*
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvCheckUIObject
+//		â€¢ PrvCheckUIObject
 // ---------------------------------------------------------------------------
 // Check to see if the given access is in a proscribed area of memory.  Will
 // first check to see if:
@@ -3510,7 +3510,7 @@ Bool PrvCheckUIObject (emuptr objectP, void* d, int type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvMarkUIObject
+//		â€¢ PrvMarkUIObject
 // ---------------------------------------------------------------------------
 // Get the size of the UI object, use it to get the end of the object, and
 // mark the whole thing as off-limits.
@@ -3527,7 +3527,7 @@ Bool PrvMarkUIObject (emuptr object, void* /*data*/, int type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvUnmarkUIObject
+//		â€¢ PrvUnmarkUIObject
 // ---------------------------------------------------------------------------
 // Get the size of the UI object, use it to get the end of the object, and
 // mark the whole thing as accessible.
@@ -3544,7 +3544,7 @@ static Bool PrvUnmarkUIObject (emuptr object, void* /*data*/, int type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvForEachWindow
+//		â€¢ PrvForEachWindow
 // ---------------------------------------------------------------------------
 // Iterate over all window objects, calling a generic iteration function for
 // each one.  If the iteration function returns true, that means that the
@@ -3580,7 +3580,7 @@ Bool PrvForEachWindow (IterFn fn, void* data)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvForEachBitmap
+//		â€¢ PrvForEachBitmap
 // ---------------------------------------------------------------------------
 // Iterate over all bitmap objects, calling a generic iteration function for
 // each one.  If the iteration function returns true, that means that the
@@ -3616,7 +3616,7 @@ Bool PrvForEachBitmap (IterFn /*fn*/, void* /*data*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvForEachUIObject
+//		â€¢ PrvForEachUIObject
 // ---------------------------------------------------------------------------
 // Iterate over all UI objects, calling a generic iteration function for each
 // one.  If the iteration function returns true, that means that the iteration
@@ -3644,7 +3644,7 @@ Bool PrvForEachUIObject (IterFn fn, void* data)
 
 
 // ---------------------------------------------------------------------------
-//		¥ CheckUIObjectAccess
+//		â€¢ CheckUIObjectAccess
 // ---------------------------------------------------------------------------
 // Iterate over all UI objects, calling a function that will check to see
 // which -- if any -- object was accessed and if that access was OK.
@@ -3668,7 +3668,7 @@ void MetaMemory::CheckUIObjectAccess (emuptr address, size_t size, Bool forRead,
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkUIObjects
+//		â€¢ MetaMemory::MarkUIObjects
 // ---------------------------------------------------------------------------
 // Iterate over all UI objects, calling a function that will mark each one
 // as off limits to applications.
@@ -3680,7 +3680,7 @@ void MetaMemory::MarkUIObjects (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::UnmarkUIObjects
+//		â€¢ MetaMemory::UnmarkUIObjects
 // ---------------------------------------------------------------------------
 // Iterate over all UI objects, calling a function that will mark each one
 // as accessible to applications.
@@ -3694,7 +3694,7 @@ void MetaMemory::UnmarkUIObjects (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ PrvLocalIDToPtr
+//		â€¢ PrvLocalIDToPtr
 // ---------------------------------------------------------------------------
 // Local/native version of MemLocalIDToPtr.  Implemented natively instead
 // of calling emulated version for speed.
@@ -3715,7 +3715,7 @@ static emuptr PrvLocalIDToPtr (LocalID local)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvGetRAMDatabaseDirectory
+//		â€¢ PrvGetRAMDatabaseDirectory
 // ---------------------------------------------------------------------------
 // Return a pointer to the database directory for RAM-based databases.
 
@@ -3733,7 +3733,7 @@ static emuptr PrvGetRAMDatabaseDirectory(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvIsOKCharacter
+//		â€¢ PrvIsOKCharacter
 // ---------------------------------------------------------------------------
 
 static inline Bool PrvIsOKCharacter (char ch)
@@ -3743,7 +3743,7 @@ static inline Bool PrvIsOKCharacter (char ch)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvIsLowerCaseCreator
+//		â€¢ PrvIsLowerCaseCreator
 // ---------------------------------------------------------------------------
 // Return whether or not the given creator is composed of all lower-case
 // letters (as defined by the islower macro in ctypes.h).
@@ -3760,7 +3760,7 @@ static inline Bool PrvIsLowerCaseCreator (UInt32 creator)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvIsPalmCreator
+//		â€¢ PrvIsPalmCreator
 // ---------------------------------------------------------------------------
 
 static Bool PrvIsPalmCreator (UInt32 creator)
@@ -3804,7 +3804,7 @@ static Bool PrvIsPalmCreator (UInt32 creator)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvIsRegisteredPalmCreator
+//		â€¢ PrvIsRegisteredPalmCreator
 // ---------------------------------------------------------------------------
 
 static Bool PrvIsRegisteredPalmCreator (UInt32 creator)
@@ -3844,7 +3844,7 @@ static Bool PrvIsRegisteredPalmCreator (UInt32 creator)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAddTaggedChunk
+//		â€¢ PrvAddTaggedChunk
 // ---------------------------------------------------------------------------
 
 static void PrvAddTaggedChunk (const EmTaggedPalmChunk& chunk)
@@ -3854,7 +3854,7 @@ static void PrvAddTaggedChunk (const EmTaggedPalmChunk& chunk)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvLoadTaggedChunk
+//		â€¢ PrvLoadTaggedChunk
 // ---------------------------------------------------------------------------
 // Return whether or not the given memory address is in a chunk on our cache
 // of RAM-based system components.
@@ -3877,7 +3877,7 @@ static void PrvLoadTaggedChunk (emuptr pc)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::ChunkUnlocked
+//		â€¢ MetaMemory::ChunkUnlocked
 // ---------------------------------------------------------------------------
 // If a chunk is unlocked, see if that chunk is on our cache of RAM-based
 // system components.  If so, remove that chunk from our cache.
@@ -3907,7 +3907,7 @@ void MetaMemory::ChunkUnlocked (emuptr addr)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ PrvIsSystemDatabase
+//		â€¢ PrvIsSystemDatabase
 // ---------------------------------------------------------------------------
 // See if the database is one that we want to treat as a RAM-based system
 // component.
@@ -3961,7 +3961,7 @@ static Bool PrvIsSystemDatabase (UInt32 type, UInt32 creator)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvSearchForCodeChunk
+//		â€¢ PrvSearchForCodeChunk
 // ---------------------------------------------------------------------------
 
 static void PrvSearchForCodeChunk (emuptr pc)
@@ -4052,7 +4052,7 @@ static void PrvSearchForCodeChunk (emuptr pc)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::InRAMOSComponent
+//		â€¢ MetaMemory::InRAMOSComponent
 // ---------------------------------------------------------------------------
 // Determine if the given memory address is in a RAM-based system component.
 

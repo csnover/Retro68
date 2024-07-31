@@ -22,7 +22,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZVisor::EmRegsEZVisor
+//		â€¢ EmRegsEZVisor::EmRegsEZVisor
 // ---------------------------------------------------------------------------
 
 EmRegsVZVisorPlatinum::EmRegsVZVisorPlatinum (void) :
@@ -33,7 +33,7 @@ EmRegsVZVisorPlatinum::EmRegsVZVisorPlatinum (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZVisor::~EmRegsEZVisor
+//		â€¢ EmRegsEZVisor::~EmRegsEZVisor
 // ---------------------------------------------------------------------------
 
 EmRegsVZVisorPlatinum::~EmRegsVZVisorPlatinum (void)
@@ -43,7 +43,7 @@ EmRegsVZVisorPlatinum::~EmRegsVZVisorPlatinum (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPlatinum::GetLCDScreenOn
+//		â€¢ EmRegsVZVisorPlatinum::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZVisorPlatinum::GetLCDScreenOn (void)
@@ -53,7 +53,7 @@ Bool EmRegsVZVisorPlatinum::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPlatinum::GetLCDBacklightOn
+//		â€¢ EmRegsVZVisorPlatinum::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZVisorPlatinum::GetLCDBacklightOn (void)
@@ -63,7 +63,7 @@ Bool EmRegsVZVisorPlatinum::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPlatinum::GetLineDriverState
+//		â€¢ EmRegsVZVisorPlatinum::GetLineDriverState
 // ---------------------------------------------------------------------------
 // Return whether or not the line drivers for the given object are open or
 // closed.
@@ -93,7 +93,7 @@ Bool EmRegsVZVisorPlatinum::GetLineDriverState (EmUARTDeviceType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPlatinum::GetUARTDevice
+//		â€¢ EmRegsVZVisorPlatinum::GetUARTDevice
 // ---------------------------------------------------------------------------
 // Return what sort of device is hooked up to the given UART.
 
@@ -123,7 +123,7 @@ EmUARTDeviceType EmRegsVZVisorPlatinum::GetUARTDevice (int /*uartNum*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPlatinum::GetPortInputValue
+//		â€¢ EmRegsVZVisorPlatinum::GetPortInputValue
 // ---------------------------------------------------------------------------
 
 uint8 EmRegsVZVisorPlatinum::GetPortInputValue (int port)
@@ -177,7 +177,7 @@ uint8 EmRegsVZVisorPlatinum::GetPortInputValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPlatinum::GetPortInternalValue
+//		â€¢ EmRegsVZVisorPlatinum::GetPortInternalValue
 // ---------------------------------------------------------------------------
 
 uint8 EmRegsVZVisorPlatinum::GetPortInternalValue (int port)
@@ -220,7 +220,7 @@ uint8 EmRegsVZVisorPlatinum::GetPortInternalValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPlatinum::GetKeyInfo
+//		â€¢ EmRegsVZVisorPlatinum::GetKeyInfo
 // ---------------------------------------------------------------------------
 
 void EmRegsVZVisorPlatinum::GetKeyInfo (int* numRows, int* numCols,
@@ -246,7 +246,7 @@ void EmRegsVZVisorPlatinum::GetKeyInfo (int* numRows, int* numCols,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZVisorPlatinum::GetSPISlave
+//		â€¢ EmRegsVZVisorPlatinum::GetSPISlave
 // ---------------------------------------------------------------------------
 
 EmSPISlave* EmRegsVZVisorPlatinum::GetSPISlave (void)

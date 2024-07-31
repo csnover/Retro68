@@ -16,7 +16,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmThreadSafeQueue
+//		â€¢ EmThreadSafeQueue
 // ---------------------------------------------------------------------------
 
 template <class T>
@@ -32,7 +32,7 @@ EmThreadSafeQueue<T>::EmThreadSafeQueue (int maxSize) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmThreadSafeQueue
+//		â€¢ EmThreadSafeQueue
 // ---------------------------------------------------------------------------
 
 template <class T>
@@ -42,7 +42,7 @@ EmThreadSafeQueue<T>::~EmThreadSafeQueue (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmThreadSafeQueue::Put
+//		â€¢ EmThreadSafeQueue::Put
 // ---------------------------------------------------------------------------
 
 template <class T>
@@ -62,7 +62,7 @@ void EmThreadSafeQueue<T>::Put (const T& value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmThreadSafeQueue::Get
+//		â€¢ EmThreadSafeQueue::Get
 // ---------------------------------------------------------------------------
 
 template <class T>
@@ -83,7 +83,7 @@ T EmThreadSafeQueue<T>::Get (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmThreadSafeQueue::Peek
+//		â€¢ EmThreadSafeQueue::Peek
 // ---------------------------------------------------------------------------
 
 template <class T>
@@ -103,7 +103,7 @@ T EmThreadSafeQueue<T>::Peek (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmThreadSafeQueue::GetFree
+//		â€¢ EmThreadSafeQueue::GetFree
 // ---------------------------------------------------------------------------
 
 template <class T>
@@ -116,7 +116,7 @@ int EmThreadSafeQueue<T>::GetFree (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmThreadSafeQueue::GetUsed
+//		â€¢ EmThreadSafeQueue::GetUsed
 // ---------------------------------------------------------------------------
 
 template <class T>
@@ -129,7 +129,7 @@ int EmThreadSafeQueue<T>::GetUsed (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmThreadSafeQueue::WaitForDataAvailable
+//		â€¢ EmThreadSafeQueue::WaitForDataAvailable
 // ---------------------------------------------------------------------------
 
 template <class T>
@@ -154,7 +154,7 @@ Bool EmThreadSafeQueue<T>::WaitForDataAvailable (int32 timeoutms)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmThreadSafeQueue::Clear
+//		â€¢ EmThreadSafeQueue::Clear
 // ---------------------------------------------------------------------------
 
 template <class T>
@@ -167,7 +167,7 @@ void EmThreadSafeQueue<T>::Clear (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmThreadSafeQueue::GetMaxSize
+//		â€¢ EmThreadSafeQueue::GetMaxSize
 // ---------------------------------------------------------------------------
 
 template <class T>

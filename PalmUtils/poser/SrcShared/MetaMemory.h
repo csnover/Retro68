@@ -462,7 +462,7 @@ do {															\
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkTotalAccess
+//		â€¢ MetaMemory::MarkTotalAccess
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::MarkTotalAccess (emuptr begin, emuptr end)
@@ -472,7 +472,7 @@ inline void MetaMemory::MarkTotalAccess (emuptr begin, emuptr end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::SetAccess
+//		â€¢ MetaMemory::SetAccess
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::SetAccess (emuptr begin, emuptr end, uint8 bits)
@@ -482,7 +482,7 @@ inline void MetaMemory::SetAccess (emuptr begin, emuptr end, uint8 bits)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkLowMemory
+//		â€¢ MetaMemory::MarkLowMemory
 // ---------------------------------------------------------------------------
 //	Mark the "low memory" range of memory (the first 256 bytes of
 //	memory that hold exception vectors).
@@ -494,7 +494,7 @@ inline void MetaMemory::MarkLowMemory (emuptr begin, emuptr end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkSystemGlobals
+//		â€¢ MetaMemory::MarkSystemGlobals
 // ---------------------------------------------------------------------------
 //	Mark the "system globals" range of memory.  This range holds the
 //	global variables used by the Palm OS, as well as the jump table.
@@ -506,7 +506,7 @@ inline void MetaMemory::MarkSystemGlobals (emuptr begin, emuptr end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkHeapHeader
+//		â€¢ MetaMemory::MarkHeapHeader
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::MarkHeapHeader (emuptr begin, emuptr end)
@@ -516,7 +516,7 @@ inline void MetaMemory::MarkHeapHeader (emuptr begin, emuptr end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkMPT
+//		â€¢ MetaMemory::MarkMPT
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::MarkMPT (emuptr begin, emuptr end)
@@ -526,7 +526,7 @@ inline void MetaMemory::MarkMPT (emuptr begin, emuptr end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkChunkHeader
+//		â€¢ MetaMemory::MarkChunkHeader
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::MarkChunkHeader (emuptr begin, emuptr end)
@@ -536,7 +536,7 @@ inline void MetaMemory::MarkChunkHeader (emuptr begin, emuptr end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkChunkTrailer
+//		â€¢ MetaMemory::MarkChunkTrailer
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::MarkChunkTrailer (emuptr begin, emuptr end)
@@ -546,7 +546,7 @@ inline void MetaMemory::MarkChunkTrailer (emuptr begin, emuptr end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkLowStack
+//		â€¢ MetaMemory::MarkLowStack
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::MarkLowStack (emuptr begin, emuptr end)
@@ -556,7 +556,7 @@ inline void MetaMemory::MarkLowStack (emuptr begin, emuptr end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkUnlockedChunk
+//		â€¢ MetaMemory::MarkUnlockedChunk
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::MarkUnlockedChunk (emuptr begin, emuptr end)
@@ -566,7 +566,7 @@ inline void MetaMemory::MarkUnlockedChunk (emuptr begin, emuptr end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkFreeChunk
+//		â€¢ MetaMemory::MarkFreeChunk
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::MarkFreeChunk (emuptr begin, emuptr end)
@@ -576,7 +576,7 @@ inline void MetaMemory::MarkFreeChunk (emuptr begin, emuptr end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkScreen
+//		â€¢ MetaMemory::MarkScreen
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::MarkScreen (emuptr begin, emuptr end)
@@ -586,7 +586,7 @@ inline void MetaMemory::MarkScreen (emuptr begin, emuptr end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::UnmarkScreen
+//		â€¢ MetaMemory::UnmarkScreen
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::UnmarkScreen (emuptr begin, emuptr end)
@@ -597,7 +597,7 @@ inline void MetaMemory::UnmarkScreen (emuptr begin, emuptr end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkUIObject
+//		â€¢ MetaMemory::MarkUIObject
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::MarkUIObject (emuptr begin, emuptr end)
@@ -607,7 +607,7 @@ inline void MetaMemory::MarkUIObject (emuptr begin, emuptr end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::UnmarkUIObject
+//		â€¢ MetaMemory::UnmarkUIObject
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::UnmarkUIObject (emuptr begin, emuptr end)
@@ -618,7 +618,7 @@ inline void MetaMemory::UnmarkUIObject (emuptr begin, emuptr end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkInstructionBreak
+//		â€¢ MetaMemory::MarkInstructionBreak
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::MarkInstructionBreak (emuptr opcodeLocation)
@@ -632,7 +632,7 @@ inline void MetaMemory::MarkInstructionBreak (emuptr opcodeLocation)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::UnmarkInstructionBreak
+//		â€¢ MetaMemory::UnmarkInstructionBreak
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::UnmarkInstructionBreak (emuptr opcodeLocation)
@@ -646,7 +646,7 @@ inline void MetaMemory::UnmarkInstructionBreak (emuptr opcodeLocation)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::MarkDataBreak
+//		â€¢ MetaMemory::MarkDataBreak
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::MarkDataBreak (emuptr begin, emuptr end)
@@ -656,7 +656,7 @@ inline void MetaMemory::MarkDataBreak (emuptr begin, emuptr end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MetaMemory::UnmarkDataBreak
+//		â€¢ MetaMemory::UnmarkDataBreak
 // ---------------------------------------------------------------------------
 
 inline void MetaMemory::UnmarkDataBreak (emuptr begin, emuptr end)

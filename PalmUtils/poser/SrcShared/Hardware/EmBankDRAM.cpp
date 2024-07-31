@@ -172,7 +172,7 @@ static inline void PrvScreenCheck (uint8* metaAddress, emuptr address, size_t si
 #pragma mark -
 
 // ===========================================================================
-//		¥ DRAM Bank Accessors
+//		â€¢ DRAM Bank Accessors
 // ===========================================================================
 // These functions provide fetch and store access to the emulator's random
 // access memory.
@@ -306,7 +306,7 @@ void EmBankDRAM::SetBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDRAM::GetLong
+//		â€¢ EmBankDRAM::GetLong
 // ---------------------------------------------------------------------------
 
 uint32 EmBankDRAM::GetLong (emuptr address)
@@ -346,7 +346,7 @@ uint32 EmBankDRAM::GetLong (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDRAM::GetWord
+//		â€¢ EmBankDRAM::GetWord
 // ---------------------------------------------------------------------------
 
 uint32 EmBankDRAM::GetWord (emuptr address)
@@ -384,7 +384,7 @@ uint32 EmBankDRAM::GetWord (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDRAM::GetByte
+//		â€¢ EmBankDRAM::GetByte
 // ---------------------------------------------------------------------------
 
 uint32 EmBankDRAM::GetByte (emuptr address)
@@ -417,7 +417,7 @@ uint32 EmBankDRAM::GetByte (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDRAM::SetLong
+//		â€¢ EmBankDRAM::SetLong
 // ---------------------------------------------------------------------------
 
 void EmBankDRAM::SetLong (emuptr address, uint32 value)
@@ -473,7 +473,7 @@ void EmBankDRAM::SetLong (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDRAM::SetWord
+//		â€¢ EmBankDRAM::SetWord
 // ---------------------------------------------------------------------------
 
 void EmBankDRAM::SetWord (emuptr address, uint32 value)
@@ -527,7 +527,7 @@ void EmBankDRAM::SetWord (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDRAM::SetByte
+//		â€¢ EmBankDRAM::SetByte
 // ---------------------------------------------------------------------------
 
 void EmBankDRAM::SetByte (emuptr address, uint32 value)
@@ -576,7 +576,7 @@ void EmBankDRAM::SetByte (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDRAM::ValidAddress
+//		â€¢ EmBankDRAM::ValidAddress
 // ---------------------------------------------------------------------------
 
 int EmBankDRAM::ValidAddress (emuptr address, uint32 size)
@@ -588,7 +588,7 @@ int EmBankDRAM::ValidAddress (emuptr address, uint32 size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDRAM::GetRealAddress
+//		â€¢ EmBankDRAM::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmBankDRAM::GetRealAddress (emuptr address)
@@ -598,7 +598,7 @@ uint8* EmBankDRAM::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDRAM::GetMetaAddress
+//		â€¢ EmBankDRAM::GetMetaAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmBankDRAM::GetMetaAddress (emuptr address)
@@ -608,7 +608,7 @@ uint8* EmBankDRAM::GetMetaAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDRAM::AddOpcodeCycles
+//		â€¢ EmBankDRAM::AddOpcodeCycles
 // ---------------------------------------------------------------------------
 
 void EmBankDRAM::AddOpcodeCycles (void)
@@ -620,7 +620,7 @@ void EmBankDRAM::AddOpcodeCycles (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDRAM::AddressError
+//		â€¢ EmBankDRAM::AddressError
 // ---------------------------------------------------------------------------
 
 void EmBankDRAM::AddressError (emuptr address, int32 size, Bool forRead)
@@ -631,7 +631,7 @@ void EmBankDRAM::AddressError (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDRAM::InvalidAccess
+//		â€¢ EmBankDRAM::InvalidAccess
 // ---------------------------------------------------------------------------
 
 void EmBankDRAM::InvalidAccess (emuptr address, int32 size, Bool forRead)
@@ -642,7 +642,7 @@ void EmBankDRAM::InvalidAccess (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankDRAM::ProbableCause
+//		â€¢ EmBankDRAM::ProbableCause
 // ---------------------------------------------------------------------------
 
 void EmBankDRAM::ProbableCause (emuptr address, int32 size, Bool forRead)

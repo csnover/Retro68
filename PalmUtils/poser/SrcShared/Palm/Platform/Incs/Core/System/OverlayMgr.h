@@ -195,7 +195,7 @@ void OmGetSystemLocale(OmLocaleType *systemLocale)
 			OMDISPATCH_TRAP(omGetSystemLocale);
 
 //	Set the post-reset system locale to be <systemLocale>. Return omErrInvalidLocale if
-// the passed locale doesnÕt correspond to a valid System.prc overlay.
+// the passed locale doesnâ€™t correspond to a valid System.prc overlay.
 
 Err OmSetSystemLocale(const OmLocaleType *systemLocale)
 			OMDISPATCH_TRAP(omSetSystemLocale);

@@ -1400,7 +1400,7 @@ void GremlinsProcessPacket (void* bodyParamP)
 
 
 // ---------------------------------------------------------------------------
-//		¥ operator >> (EmStream&, DatabaseInfo&)
+//		â€¢ operator >> (EmStream&, DatabaseInfo&)
 // ---------------------------------------------------------------------------
 
 EmStream& operator >> (EmStream& inStream, DatabaseInfo& outInfo)
@@ -1422,7 +1422,7 @@ EmStream& operator >> (EmStream& inStream, DatabaseInfo& outInfo)
 
 
 // ---------------------------------------------------------------------------
-//		¥ operator << (EmStream&, const DatabaseInfo&)
+//		â€¢ operator << (EmStream&, const DatabaseInfo&)
 // ---------------------------------------------------------------------------
 
 EmStream& operator << (EmStream& inStream, const DatabaseInfo& inInfo)
@@ -1453,7 +1453,7 @@ EmStream& operator << (EmStream& inStream, const DatabaseInfo& inInfo)
 
 
 // ---------------------------------------------------------------------------
-//		¥ operator >> (EmStream&, AppPreferences::GremlinInfo&)
+//		â€¢ operator >> (EmStream&, AppPreferences::GremlinInfo&)
 // ---------------------------------------------------------------------------
 
 EmStream& operator >> (EmStream& inStream, GremlinInfo& outInfo)
@@ -1475,7 +1475,7 @@ EmStream& operator >> (EmStream& inStream, GremlinInfo& outInfo)
 
 
 // ---------------------------------------------------------------------------
-//		¥ operator << (EmStream&, const AppPreferences::GremlinInfo&)
+//		â€¢ operator << (EmStream&, const AppPreferences::GremlinInfo&)
 // ---------------------------------------------------------------------------
 
 EmStream& operator << (EmStream& inStream, const GremlinInfo& inInfo)

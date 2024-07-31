@@ -17,7 +17,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ ConvertPixMapToHost
+//		â€¢ ConvertPixMapToHost
 // ---------------------------------------------------------------------------
 
 void ConvertPixMapToHost (	const EmPixMap& src, void* dest,

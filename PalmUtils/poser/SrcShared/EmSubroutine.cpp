@@ -233,7 +233,7 @@ class EmSubroutineCPUARM : public EmSubroutineCPU
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine constructor
+//		â€¢ EmSubroutine constructor
 // ---------------------------------------------------------------------------
 
 EmSubroutine::EmSubroutine (void) :
@@ -246,7 +246,7 @@ EmSubroutine::EmSubroutine (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine destructor
+//		â€¢ EmSubroutine destructor
 // ---------------------------------------------------------------------------
 
 EmSubroutine::~EmSubroutine (void)
@@ -256,7 +256,7 @@ EmSubroutine::~EmSubroutine (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::DescribeDecl
+//		â€¢ EmSubroutine::DescribeDecl
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::DescribeDecl (EmParamDecl returnType, EmParamListDecl decl)
@@ -309,7 +309,7 @@ Err EmSubroutine::DescribeDecl (EmParamDecl returnType, EmParamListDecl decl)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::AddParam
+//		â€¢ EmSubroutine::AddParam
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::AddParam (EmParamDecl decl)
@@ -346,7 +346,7 @@ Err EmSubroutine::AddParam (EmParamDecl decl)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::PrepareStack
+//		â€¢ EmSubroutine::PrepareStack
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::PrepareStack (Bool forCalling, Bool forStdArg)
@@ -356,7 +356,7 @@ Err EmSubroutine::PrepareStack (Bool forCalling, Bool forStdArg)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::PrepareStack
+//		â€¢ EmSubroutine::PrepareStack
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::PrepareStack (emuptr stackAddr)
@@ -366,7 +366,7 @@ Err EmSubroutine::PrepareStack (emuptr stackAddr)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::Reset
+//		â€¢ EmSubroutine::Reset
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::Reset (void)
@@ -386,7 +386,7 @@ Err EmSubroutine::Reset (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetParamVal
+//		â€¢ EmSubroutine::GetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetParamVal (EmParamNameArg name, int8& result)
@@ -420,7 +420,7 @@ Err EmSubroutine::GetParamVal (EmParamNameArg name, int8& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetParamVal
+//		â€¢ EmSubroutine::GetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetParamVal (EmParamNameArg name, int16& result)
@@ -454,7 +454,7 @@ Err EmSubroutine::GetParamVal (EmParamNameArg name, int16& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetParamVal
+//		â€¢ EmSubroutine::GetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetParamVal (EmParamNameArg name, int32& result)
@@ -488,7 +488,7 @@ Err EmSubroutine::GetParamVal (EmParamNameArg name, int32& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetParamVal
+//		â€¢ EmSubroutine::GetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetParamVal (EmParamNameArg name, int64& result)
@@ -522,7 +522,7 @@ Err EmSubroutine::GetParamVal (EmParamNameArg name, int64& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetParamVal
+//		â€¢ EmSubroutine::GetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetParamVal (EmParamNameArg name, uint8& result)
@@ -556,7 +556,7 @@ Err EmSubroutine::GetParamVal (EmParamNameArg name, uint8& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetParamVal
+//		â€¢ EmSubroutine::GetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetParamVal (EmParamNameArg name, uint16& result)
@@ -590,7 +590,7 @@ Err EmSubroutine::GetParamVal (EmParamNameArg name, uint16& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetParamVal
+//		â€¢ EmSubroutine::GetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetParamVal (EmParamNameArg name, uint32& result)
@@ -624,7 +624,7 @@ Err EmSubroutine::GetParamVal (EmParamNameArg name, uint32& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetParamVal
+//		â€¢ EmSubroutine::GetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetParamVal (EmParamNameArg name, uint64& result)
@@ -658,7 +658,7 @@ Err EmSubroutine::GetParamVal (EmParamNameArg name, uint64& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetParamVal
+//		â€¢ EmSubroutine::GetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetParamVal (EmParamNameArg name, float& result)
@@ -692,7 +692,7 @@ Err EmSubroutine::GetParamVal (EmParamNameArg name, float& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetParamVal
+//		â€¢ EmSubroutine::GetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetParamVal (EmParamNameArg name, double& result)
@@ -726,7 +726,7 @@ Err EmSubroutine::GetParamVal (EmParamNameArg name, double& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetParamVal
+//		â€¢ EmSubroutine::GetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetParamVal (EmParamNameArg name, long double& result)
@@ -762,7 +762,7 @@ Err EmSubroutine::GetParamVal (EmParamNameArg name, long double& result)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetReturnVal
+//		â€¢ EmSubroutine::GetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetReturnVal (int8& result)
@@ -789,7 +789,7 @@ Err EmSubroutine::GetReturnVal (int8& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetReturnVal
+//		â€¢ EmSubroutine::GetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetReturnVal (int16& result)
@@ -816,7 +816,7 @@ Err EmSubroutine::GetReturnVal (int16& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetReturnVal
+//		â€¢ EmSubroutine::GetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetReturnVal (int32& result)
@@ -843,7 +843,7 @@ Err EmSubroutine::GetReturnVal (int32& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetReturnVal
+//		â€¢ EmSubroutine::GetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetReturnVal (int64& /*result*/)
@@ -869,7 +869,7 @@ Err EmSubroutine::GetReturnVal (int64& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetReturnVal
+//		â€¢ EmSubroutine::GetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetReturnVal (uint8& result)
@@ -896,7 +896,7 @@ Err EmSubroutine::GetReturnVal (uint8& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetReturnVal
+//		â€¢ EmSubroutine::GetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetReturnVal (uint16& result)
@@ -923,7 +923,7 @@ Err EmSubroutine::GetReturnVal (uint16& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetReturnVal
+//		â€¢ EmSubroutine::GetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetReturnVal (uint32& result)
@@ -956,7 +956,7 @@ Err EmSubroutine::GetReturnVal (uint32& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetReturnVal
+//		â€¢ EmSubroutine::GetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetReturnVal (uint64& /*result*/)
@@ -982,7 +982,7 @@ Err EmSubroutine::GetReturnVal (uint64& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetReturnVal
+//		â€¢ EmSubroutine::GetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetReturnVal (float& /*result*/)
@@ -1008,7 +1008,7 @@ Err EmSubroutine::GetReturnVal (float& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetReturnVal
+//		â€¢ EmSubroutine::GetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetReturnVal (double& /*result*/)
@@ -1034,7 +1034,7 @@ Err EmSubroutine::GetReturnVal (double& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetReturnVal
+//		â€¢ EmSubroutine::GetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::GetReturnVal (long double&)
@@ -1062,7 +1062,7 @@ Err EmSubroutine::GetReturnVal (long double&)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetParamVal
+//		â€¢ EmSubroutine::SetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetParamVal (EmParamNameArg name, int8 val)
@@ -1096,7 +1096,7 @@ Err EmSubroutine::SetParamVal (EmParamNameArg name, int8 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetParamVal
+//		â€¢ EmSubroutine::SetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetParamVal (EmParamNameArg name, int16 val)
@@ -1130,7 +1130,7 @@ Err EmSubroutine::SetParamVal (EmParamNameArg name, int16 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetParamVal
+//		â€¢ EmSubroutine::SetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetParamVal (EmParamNameArg name, int32 val)
@@ -1164,7 +1164,7 @@ Err EmSubroutine::SetParamVal (EmParamNameArg name, int32 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetParamVal
+//		â€¢ EmSubroutine::SetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetParamVal (EmParamNameArg name, int64 val)
@@ -1198,7 +1198,7 @@ Err EmSubroutine::SetParamVal (EmParamNameArg name, int64 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetParamVal
+//		â€¢ EmSubroutine::SetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetParamVal (EmParamNameArg name, uint8 val)
@@ -1232,7 +1232,7 @@ Err EmSubroutine::SetParamVal (EmParamNameArg name, uint8 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetParamVal
+//		â€¢ EmSubroutine::SetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetParamVal (EmParamNameArg name, uint16 val)
@@ -1266,7 +1266,7 @@ Err EmSubroutine::SetParamVal (EmParamNameArg name, uint16 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetParamVal
+//		â€¢ EmSubroutine::SetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetParamVal (EmParamNameArg name, uint32 val)
@@ -1300,7 +1300,7 @@ Err EmSubroutine::SetParamVal (EmParamNameArg name, uint32 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetParamVal
+//		â€¢ EmSubroutine::SetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetParamVal (EmParamNameArg name, uint64 val)
@@ -1334,7 +1334,7 @@ Err EmSubroutine::SetParamVal (EmParamNameArg name, uint64 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetParamVal
+//		â€¢ EmSubroutine::SetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetParamVal (EmParamNameArg name, float val)
@@ -1368,7 +1368,7 @@ Err EmSubroutine::SetParamVal (EmParamNameArg name, float val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetParamVal
+//		â€¢ EmSubroutine::SetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetParamVal (EmParamNameArg name, double val)
@@ -1402,7 +1402,7 @@ Err EmSubroutine::SetParamVal (EmParamNameArg name, double val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetParamVal
+//		â€¢ EmSubroutine::SetParamVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetParamVal (EmParamNameArg name, long double val)
@@ -1438,7 +1438,7 @@ Err EmSubroutine::SetParamVal (EmParamNameArg name, long double val)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetReturnVal
+//		â€¢ EmSubroutine::SetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetReturnVal (int8 val)
@@ -1464,7 +1464,7 @@ Err EmSubroutine::SetReturnVal (int8 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetReturnVal
+//		â€¢ EmSubroutine::SetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetReturnVal (int16 val)
@@ -1490,7 +1490,7 @@ Err EmSubroutine::SetReturnVal (int16 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetReturnVal
+//		â€¢ EmSubroutine::SetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetReturnVal (int32 val)
@@ -1516,7 +1516,7 @@ Err EmSubroutine::SetReturnVal (int32 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetReturnVal
+//		â€¢ EmSubroutine::SetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetReturnVal (int64)
@@ -1543,7 +1543,7 @@ Err EmSubroutine::SetReturnVal (int64)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetReturnVal
+//		â€¢ EmSubroutine::SetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetReturnVal (uint8 val)
@@ -1569,7 +1569,7 @@ Err EmSubroutine::SetReturnVal (uint8 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetReturnVal
+//		â€¢ EmSubroutine::SetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetReturnVal (uint16 val)
@@ -1595,7 +1595,7 @@ Err EmSubroutine::SetReturnVal (uint16 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetReturnVal
+//		â€¢ EmSubroutine::SetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetReturnVal (uint32 val)
@@ -1624,7 +1624,7 @@ Err EmSubroutine::SetReturnVal (uint32 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetReturnVal
+//		â€¢ EmSubroutine::SetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetReturnVal (uint64)
@@ -1651,7 +1651,7 @@ Err EmSubroutine::SetReturnVal (uint64)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetReturnVal
+//		â€¢ EmSubroutine::SetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetReturnVal (float)
@@ -1678,7 +1678,7 @@ Err EmSubroutine::SetReturnVal (float)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetReturnVal
+//		â€¢ EmSubroutine::SetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetReturnVal (double)
@@ -1705,7 +1705,7 @@ Err EmSubroutine::SetReturnVal (double)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetReturnVal
+//		â€¢ EmSubroutine::SetReturnVal
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::SetReturnVal (long double)
@@ -1734,7 +1734,7 @@ Err EmSubroutine::SetReturnVal (long double)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::Call
+//		â€¢ EmSubroutine::Call
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::Call (uint16 trapWord)
@@ -1744,7 +1744,7 @@ Err EmSubroutine::Call (uint16 trapWord)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::CallSelector
+//		â€¢ EmSubroutine::CallSelector
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::CallSelector (uint16 trapWord, uint16 selector)
@@ -1756,7 +1756,7 @@ Err EmSubroutine::CallSelector (uint16 trapWord, uint16 selector)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetReturnRegInteger
+//		â€¢ EmSubroutine::GetReturnRegInteger
 // ---------------------------------------------------------------------------
 
 uint32 EmSubroutine::GetReturnRegInteger (void)
@@ -1766,7 +1766,7 @@ uint32 EmSubroutine::GetReturnRegInteger (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetReturnRegPointer
+//		â€¢ EmSubroutine::GetReturnRegPointer
 // ---------------------------------------------------------------------------
 
 emuptr EmSubroutine::GetReturnRegPointer (void)
@@ -1776,7 +1776,7 @@ emuptr EmSubroutine::GetReturnRegPointer (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetReturnRegInteger
+//		â€¢ EmSubroutine::SetReturnRegInteger
 // ---------------------------------------------------------------------------
 
 void EmSubroutine::SetReturnRegInteger (uint32 val)
@@ -1786,7 +1786,7 @@ void EmSubroutine::SetReturnRegInteger (uint32 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::SetReturnRegPointer
+//		â€¢ EmSubroutine::SetReturnRegPointer
 // ---------------------------------------------------------------------------
 
 void EmSubroutine::SetReturnRegPointer (void* val)
@@ -1798,7 +1798,7 @@ void EmSubroutine::SetReturnRegPointer (void* val)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetCPU
+//		â€¢ EmSubroutine::GetCPU
 // ---------------------------------------------------------------------------
 
 EmSubroutineCPU* EmSubroutine::GetCPU (void)
@@ -1818,7 +1818,7 @@ EmSubroutineCPU* EmSubroutine::GetCPU (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::Is68K
+//		â€¢ EmSubroutine::Is68K
 // ---------------------------------------------------------------------------
 
 Bool EmSubroutine::Is68K (void)
@@ -1828,7 +1828,7 @@ Bool EmSubroutine::Is68K (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::IsARM
+//		â€¢ EmSubroutine::IsARM
 // ---------------------------------------------------------------------------
 
 Bool EmSubroutine::IsARM (void)
@@ -1838,7 +1838,7 @@ Bool EmSubroutine::IsARM (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::ParseParamDecl
+//		â€¢ EmSubroutine::ParseParamDecl
 // ---------------------------------------------------------------------------
 
 Err EmSubroutine::ParseParamDecl (EmParamDecl decl, EmParam& result)
@@ -1915,7 +1915,7 @@ Err EmSubroutine::ParseParamDecl (EmParamDecl decl, EmParam& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::GetToken
+//		â€¢ EmSubroutine::GetToken
 // ---------------------------------------------------------------------------
 
 string EmSubroutine::GetToken (EmParamDecl decl, string::size_type& offset)
@@ -1970,7 +1970,7 @@ string EmSubroutine::GetToken (EmParamDecl decl, string::size_type& offset)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutine::FindParam
+//		â€¢ EmSubroutine::FindParam
 // ---------------------------------------------------------------------------
 
 EmParamList::iterator EmSubroutine::FindParam (EmParamNameArg name)
@@ -1994,7 +1994,7 @@ EmParamList::iterator EmSubroutine::FindParam (EmParamNameArg name)
 #pragma mark ------------------------------
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::EmSubroutineCPU
+//		â€¢ EmSubroutineCPU::EmSubroutineCPU
 // ---------------------------------------------------------------------------
 
 EmSubroutineCPU::EmSubroutineCPU (void) :
@@ -2004,7 +2004,7 @@ EmSubroutineCPU::EmSubroutineCPU (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::~EmSubroutineCPU
+//		â€¢ EmSubroutineCPU::~EmSubroutineCPU
 // ---------------------------------------------------------------------------
 
 EmSubroutineCPU::~EmSubroutineCPU (void)
@@ -2015,7 +2015,7 @@ EmSubroutineCPU::~EmSubroutineCPU (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::GetParamVal
+//		â€¢ EmSubroutineCPU::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::GetParamVal (EmParam& param, int8& result)
@@ -2030,7 +2030,7 @@ void EmSubroutineCPU::GetParamVal (EmParam& param, int8& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::GetParamVal
+//		â€¢ EmSubroutineCPU::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::GetParamVal (EmParam& param, int16& result)
@@ -2045,7 +2045,7 @@ void EmSubroutineCPU::GetParamVal (EmParam& param, int16& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::GetParamVal
+//		â€¢ EmSubroutineCPU::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::GetParamVal (EmParam& param, int32& result)
@@ -2060,7 +2060,7 @@ void EmSubroutineCPU::GetParamVal (EmParam& param, int32& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::GetParamVal
+//		â€¢ EmSubroutineCPU::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::GetParamVal (EmParam& param, int64& /*result*/)
@@ -2075,7 +2075,7 @@ void EmSubroutineCPU::GetParamVal (EmParam& param, int64& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::GetParamVal
+//		â€¢ EmSubroutineCPU::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::GetParamVal (EmParam& param, uint8& result)
@@ -2090,7 +2090,7 @@ void EmSubroutineCPU::GetParamVal (EmParam& param, uint8& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::GetParamVal
+//		â€¢ EmSubroutineCPU::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::GetParamVal (EmParam& param, uint16& result)
@@ -2105,7 +2105,7 @@ void EmSubroutineCPU::GetParamVal (EmParam& param, uint16& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::GetParamVal
+//		â€¢ EmSubroutineCPU::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::GetParamVal (EmParam& param, uint32& result)
@@ -2120,7 +2120,7 @@ void EmSubroutineCPU::GetParamVal (EmParam& param, uint32& result)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::GetParamVal
+//		â€¢ EmSubroutineCPU::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::GetParamVal (EmParam& param, uint64& /*result*/)
@@ -2135,7 +2135,7 @@ void EmSubroutineCPU::GetParamVal (EmParam& param, uint64& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::GetParamVal
+//		â€¢ EmSubroutineCPU::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::GetParamVal (EmParam& param, float& /*result*/)
@@ -2150,7 +2150,7 @@ void EmSubroutineCPU::GetParamVal (EmParam& param, float& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::GetParamVal
+//		â€¢ EmSubroutineCPU::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::GetParamVal (EmParam& param, double& /*result*/)
@@ -2165,7 +2165,7 @@ void EmSubroutineCPU::GetParamVal (EmParam& param, double& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::GetParamVal
+//		â€¢ EmSubroutineCPU::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::GetParamVal (EmParam& param, long double& /*result*/)
@@ -2182,7 +2182,7 @@ void EmSubroutineCPU::GetParamVal (EmParam& param, long double& /*result*/)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::SetParamVal
+//		â€¢ EmSubroutineCPU::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::SetParamVal (EmParam& param, int8 val)
@@ -2197,7 +2197,7 @@ void EmSubroutineCPU::SetParamVal (EmParam& param, int8 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::SetParamVal
+//		â€¢ EmSubroutineCPU::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::SetParamVal (EmParam& param, int16 val)
@@ -2212,7 +2212,7 @@ void EmSubroutineCPU::SetParamVal (EmParam& param, int16 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::SetParamVal
+//		â€¢ EmSubroutineCPU::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::SetParamVal (EmParam& param, int32 val)
@@ -2227,7 +2227,7 @@ void EmSubroutineCPU::SetParamVal (EmParam& param, int32 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::SetParamVal
+//		â€¢ EmSubroutineCPU::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::SetParamVal (EmParam& param, int64 /*val*/)
@@ -2242,7 +2242,7 @@ void EmSubroutineCPU::SetParamVal (EmParam& param, int64 /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::SetParamVal
+//		â€¢ EmSubroutineCPU::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::SetParamVal (EmParam& param, uint8 val)
@@ -2257,7 +2257,7 @@ void EmSubroutineCPU::SetParamVal (EmParam& param, uint8 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::SetParamVal
+//		â€¢ EmSubroutineCPU::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::SetParamVal (EmParam& param, uint16 val)
@@ -2272,7 +2272,7 @@ void EmSubroutineCPU::SetParamVal (EmParam& param, uint16 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::SetParamVal
+//		â€¢ EmSubroutineCPU::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::SetParamVal (EmParam& param, uint32 val)
@@ -2287,7 +2287,7 @@ void EmSubroutineCPU::SetParamVal (EmParam& param, uint32 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::SetParamVal
+//		â€¢ EmSubroutineCPU::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::SetParamVal (EmParam& param, uint64 /*val*/)
@@ -2302,7 +2302,7 @@ void EmSubroutineCPU::SetParamVal (EmParam& param, uint64 /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::SetParamVal
+//		â€¢ EmSubroutineCPU::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::SetParamVal (EmParam& param, float /*val*/)
@@ -2317,7 +2317,7 @@ void EmSubroutineCPU::SetParamVal (EmParam& param, float /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::SetParamVal
+//		â€¢ EmSubroutineCPU::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::SetParamVal (EmParam& param, double /*val*/)
@@ -2332,7 +2332,7 @@ void EmSubroutineCPU::SetParamVal (EmParam& param, double /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU::SetParamVal
+//		â€¢ EmSubroutineCPU::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU::SetParamVal (EmParam& param, long double /*val*/)
@@ -2359,7 +2359,7 @@ const uint16	kOpcode_ROMCall		= m68kTrapInstr + sysDispatchTrapNum;
 const uint16	kOpcode_ATrapReturn	= m68kTrapInstr + kATrapReturnTrapNum;
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU68K::EmSubroutineCPU68K
+//		â€¢ EmSubroutineCPU68K::EmSubroutineCPU68K
 // ---------------------------------------------------------------------------
 
 EmSubroutineCPU68K::EmSubroutineCPU68K (void) :
@@ -2370,7 +2370,7 @@ EmSubroutineCPU68K::EmSubroutineCPU68K (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU68K::~EmSubroutineCPU68K
+//		â€¢ EmSubroutineCPU68K::~EmSubroutineCPU68K
 // ---------------------------------------------------------------------------
 
 EmSubroutineCPU68K::~EmSubroutineCPU68K (void)
@@ -2379,7 +2379,7 @@ EmSubroutineCPU68K::~EmSubroutineCPU68K (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU68K::FormatStack
+//		â€¢ EmSubroutineCPU68K::FormatStack
 // ---------------------------------------------------------------------------
 
 int32 EmSubroutineCPU68K::FormatStack (EmParamList& params)
@@ -2424,7 +2424,7 @@ int32 EmSubroutineCPU68K::FormatStack (EmParamList& params)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU68K::PrepareStack
+//		â€¢ EmSubroutineCPU68K::PrepareStack
 // ---------------------------------------------------------------------------
 
 Err EmSubroutineCPU68K::PrepareStack (Bool forCalling, Bool /*forStdArg*/, int32 stackSize)
@@ -2459,7 +2459,7 @@ Err EmSubroutineCPU68K::PrepareStack (Bool forCalling, Bool /*forStdArg*/, int32
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU68K::PrepareStack
+//		â€¢ EmSubroutineCPU68K::PrepareStack
 // ---------------------------------------------------------------------------
 
 Err EmSubroutineCPU68K::PrepareStack (emuptr stackAddr)
@@ -2478,7 +2478,7 @@ Err EmSubroutineCPU68K::PrepareStack (emuptr stackAddr)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU68K::Call
+//		â€¢ EmSubroutineCPU68K::Call
 // ---------------------------------------------------------------------------
 
 Err EmSubroutineCPU68K::Call (uint16 trapWord)
@@ -2554,7 +2554,7 @@ Err EmSubroutineCPU68K::Call (uint16 trapWord)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU68K::CallSelector
+//		â€¢ EmSubroutineCPU68K::CallSelector
 // ---------------------------------------------------------------------------
 
 Err EmSubroutineCPU68K::CallSelector (uint16 trapWord, uint16 selector)
@@ -2589,7 +2589,7 @@ Err EmSubroutineCPU68K::CallSelector (uint16 trapWord, uint16 selector)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU68K::GetReturnRegInteger
+//		â€¢ EmSubroutineCPU68K::GetReturnRegInteger
 // ---------------------------------------------------------------------------
 
 uint32 EmSubroutineCPU68K::GetReturnRegInteger (void)
@@ -2599,7 +2599,7 @@ uint32 EmSubroutineCPU68K::GetReturnRegInteger (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU68K::GetReturnRegPointer
+//		â€¢ EmSubroutineCPU68K::GetReturnRegPointer
 // ---------------------------------------------------------------------------
 
 emuptr EmSubroutineCPU68K::GetReturnRegPointer (void)
@@ -2609,7 +2609,7 @@ emuptr EmSubroutineCPU68K::GetReturnRegPointer (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU68K::SetReturnRegInteger
+//		â€¢ EmSubroutineCPU68K::SetReturnRegInteger
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU68K::SetReturnRegInteger (uint32 val)
@@ -2620,7 +2620,7 @@ void EmSubroutineCPU68K::SetReturnRegInteger (uint32 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU68K::SetReturnRegPointer
+//		â€¢ EmSubroutineCPU68K::SetReturnRegPointer
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPU68K::SetReturnRegPointer (void* val)
@@ -2634,7 +2634,7 @@ void EmSubroutineCPU68K::SetReturnRegPointer (void* val)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU68K::DoCall
+//		â€¢ EmSubroutineCPU68K::DoCall
 // ---------------------------------------------------------------------------
 
 Err EmSubroutineCPU68K::DoCall (uint16 trapWord)
@@ -2736,7 +2736,7 @@ Err EmSubroutineCPU68K::DoCall (uint16 trapWord)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU68K::HandleTrap12
+//		â€¢ EmSubroutineCPU68K::HandleTrap12
 // ---------------------------------------------------------------------------
 // This function really takes an ExceptionNumber as a parameter.  However,
 // we don't use/need it, and omitting it helps our forward declarations.
@@ -2751,7 +2751,7 @@ Bool EmSubroutineCPU68K::HandleTrap12 (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU68K::GetStackBase
+//		â€¢ EmSubroutineCPU68K::GetStackBase
 // ---------------------------------------------------------------------------
 
 char* EmSubroutineCPU68K::GetStackBase ()
@@ -2770,7 +2770,7 @@ char* EmSubroutineCPU68K::GetStackBase ()
 #pragma mark ------------------------------
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::EmSubroutineCPUARM
+//		â€¢ EmSubroutineCPUARM::EmSubroutineCPUARM
 // ---------------------------------------------------------------------------
 
 EmSubroutineCPUARM::EmSubroutineCPUARM (void)
@@ -2780,7 +2780,7 @@ EmSubroutineCPUARM::EmSubroutineCPUARM (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::~EmSubroutineCPUARM
+//		â€¢ EmSubroutineCPUARM::~EmSubroutineCPUARM
 // ---------------------------------------------------------------------------
 
 EmSubroutineCPUARM::~EmSubroutineCPUARM (void)
@@ -2792,7 +2792,7 @@ EmSubroutineCPUARM::~EmSubroutineCPUARM (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::FormatStack
+//		â€¢ EmSubroutineCPUARM::FormatStack
 // ---------------------------------------------------------------------------
 
 int32 EmSubroutineCPUARM::FormatStack (EmParamList& /*params*/)
@@ -2803,7 +2803,7 @@ int32 EmSubroutineCPUARM::FormatStack (EmParamList& /*params*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::PrepareStack
+//		â€¢ EmSubroutineCPUARM::PrepareStack
 // ---------------------------------------------------------------------------
 
 Err EmSubroutineCPUARM::PrepareStack (Bool /*forCalling*/, Bool /*forStdArg*/, int32 /*stackSize*/)
@@ -2815,7 +2815,7 @@ Err EmSubroutineCPUARM::PrepareStack (Bool /*forCalling*/, Bool /*forStdArg*/, i
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::PrepareStack
+//		â€¢ EmSubroutineCPUARM::PrepareStack
 // ---------------------------------------------------------------------------
 
 Err EmSubroutineCPUARM::PrepareStack (emuptr /*stackAddr*/)
@@ -2827,7 +2827,7 @@ Err EmSubroutineCPUARM::PrepareStack (emuptr /*stackAddr*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::Call
+//		â€¢ EmSubroutineCPUARM::Call
 // ---------------------------------------------------------------------------
 
 Err EmSubroutineCPUARM::Call (uint16 /*trapWord*/)
@@ -2839,7 +2839,7 @@ Err EmSubroutineCPUARM::Call (uint16 /*trapWord*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPU68K::CallSelector
+//		â€¢ EmSubroutineCPU68K::CallSelector
 // ---------------------------------------------------------------------------
 
 Err EmSubroutineCPUARM::CallSelector (uint16 /*trapWord*/, uint16 /*selector*/)
@@ -2853,7 +2853,7 @@ Err EmSubroutineCPUARM::CallSelector (uint16 /*trapWord*/, uint16 /*selector*/)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::GetParamVal
+//		â€¢ EmSubroutineCPUARM::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, int8& /*result*/)
@@ -2863,7 +2863,7 @@ void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, int8& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::GetParamVal
+//		â€¢ EmSubroutineCPUARM::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, int16& /*result*/)
@@ -2873,7 +2873,7 @@ void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, int16& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::GetParamVal
+//		â€¢ EmSubroutineCPUARM::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, int32& /*result*/)
@@ -2883,7 +2883,7 @@ void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, int32& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::GetParamVal
+//		â€¢ EmSubroutineCPUARM::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, int64& /*result*/)
@@ -2893,7 +2893,7 @@ void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, int64& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::GetParamVal
+//		â€¢ EmSubroutineCPUARM::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, uint8& /*result*/)
@@ -2903,7 +2903,7 @@ void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, uint8& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::GetParamVal
+//		â€¢ EmSubroutineCPUARM::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, uint16& /*result*/)
@@ -2913,7 +2913,7 @@ void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, uint16& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::GetParamVal
+//		â€¢ EmSubroutineCPUARM::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, uint32& /*result*/)
@@ -2923,7 +2923,7 @@ void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, uint32& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::GetParamVal
+//		â€¢ EmSubroutineCPUARM::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, uint64& /*result*/)
@@ -2933,7 +2933,7 @@ void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, uint64& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::GetParamVal
+//		â€¢ EmSubroutineCPUARM::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, float& /*result*/)
@@ -2943,7 +2943,7 @@ void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, float& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::GetParamVal
+//		â€¢ EmSubroutineCPUARM::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, double& /*result*/)
@@ -2953,7 +2953,7 @@ void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, double& /*result*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::GetParamVal
+//		â€¢ EmSubroutineCPUARM::GetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, long double& /*result*/)
@@ -2965,7 +2965,7 @@ void EmSubroutineCPUARM::GetParamVal (EmParam& /*param*/, long double& /*result*
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::SetParamVal
+//		â€¢ EmSubroutineCPUARM::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, int8 /*val*/)
@@ -2975,7 +2975,7 @@ void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, int8 /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::SetParamVal
+//		â€¢ EmSubroutineCPUARM::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, int16 /*val*/)
@@ -2985,7 +2985,7 @@ void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, int16 /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::SetParamVal
+//		â€¢ EmSubroutineCPUARM::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, int32 /*val*/)
@@ -2995,7 +2995,7 @@ void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, int32 /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::SetParamVal
+//		â€¢ EmSubroutineCPUARM::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, int64 /*val*/)
@@ -3005,7 +3005,7 @@ void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, int64 /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::SetParamVal
+//		â€¢ EmSubroutineCPUARM::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, uint8 /*val*/)
@@ -3015,7 +3015,7 @@ void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, uint8 /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::SetParamVal
+//		â€¢ EmSubroutineCPUARM::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, uint16 /*val*/)
@@ -3025,7 +3025,7 @@ void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, uint16 /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::SetParamVal
+//		â€¢ EmSubroutineCPUARM::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, uint32 /*val*/)
@@ -3035,7 +3035,7 @@ void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, uint32 /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::SetParamVal
+//		â€¢ EmSubroutineCPUARM::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, uint64 /*val*/)
@@ -3045,7 +3045,7 @@ void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, uint64 /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::SetParamVal
+//		â€¢ EmSubroutineCPUARM::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, float /*val*/)
@@ -3055,7 +3055,7 @@ void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, float /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::SetParamVal
+//		â€¢ EmSubroutineCPUARM::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, double /*val*/)
@@ -3065,7 +3065,7 @@ void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, double /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::SetParamVal
+//		â€¢ EmSubroutineCPUARM::SetParamVal
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, long double /*val*/)
@@ -3077,7 +3077,7 @@ void EmSubroutineCPUARM::SetParamVal (EmParam& /*param*/, long double /*val*/)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::GetReturnRegInteger
+//		â€¢ EmSubroutineCPUARM::GetReturnRegInteger
 // ---------------------------------------------------------------------------
 
 uint32 EmSubroutineCPUARM::GetReturnRegInteger (void)
@@ -3087,7 +3087,7 @@ uint32 EmSubroutineCPUARM::GetReturnRegInteger (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::GetReturnRegPointer
+//		â€¢ EmSubroutineCPUARM::GetReturnRegPointer
 // ---------------------------------------------------------------------------
 
 emuptr EmSubroutineCPUARM::GetReturnRegPointer (void)
@@ -3097,7 +3097,7 @@ emuptr EmSubroutineCPUARM::GetReturnRegPointer (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::SetReturnRegInteger
+//		â€¢ EmSubroutineCPUARM::SetReturnRegInteger
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::SetReturnRegInteger (uint32)
@@ -3106,7 +3106,7 @@ void EmSubroutineCPUARM::SetReturnRegInteger (uint32)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSubroutineCPUARM::SetReturnRegPointer
+//		â€¢ EmSubroutineCPUARM::SetReturnRegPointer
 // ---------------------------------------------------------------------------
 
 void EmSubroutineCPUARM::SetReturnRegPointer (void*)

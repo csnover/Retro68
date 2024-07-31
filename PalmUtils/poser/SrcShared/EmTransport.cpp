@@ -244,7 +244,7 @@ void EmTransport::CloseAllTransports (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportNull::EmTransportNull
+//		â€¢ EmTransportNull::EmTransportNull
 // ---------------------------------------------------------------------------
 
 EmTransportNull::EmTransportNull (void)
@@ -359,7 +359,7 @@ void EmTransportNull::GetDescriptorList (EmTransportDescriptorList& descList)
 // describes the creation parameters.
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportDescriptor::EmTransportDescriptor
+//		â€¢ EmTransportDescriptor::EmTransportDescriptor
 // ---------------------------------------------------------------------------
 
 EmTransportDescriptor::EmTransportDescriptor (void) :
@@ -369,7 +369,7 @@ EmTransportDescriptor::EmTransportDescriptor (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportDescriptor::EmTransportDescriptor
+//		â€¢ EmTransportDescriptor::EmTransportDescriptor
 // ---------------------------------------------------------------------------
 
 EmTransportDescriptor::EmTransportDescriptor (EmTransportType type) :
@@ -379,7 +379,7 @@ EmTransportDescriptor::EmTransportDescriptor (EmTransportType type) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportDescriptor::EmTransportDescriptor
+//		â€¢ EmTransportDescriptor::EmTransportDescriptor
 // ---------------------------------------------------------------------------
 
 EmTransportDescriptor::EmTransportDescriptor (EmTransportType type, const string& s) :
@@ -389,7 +389,7 @@ EmTransportDescriptor::EmTransportDescriptor (EmTransportType type, const string
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportDescriptor::EmTransportDescriptor
+//		â€¢ EmTransportDescriptor::EmTransportDescriptor
 // ---------------------------------------------------------------------------
 
 EmTransportDescriptor::EmTransportDescriptor (const string& s) :
@@ -427,7 +427,7 @@ EmTransportDescriptor::EmTransportDescriptor (const string& s) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportDescriptor::EmTransportDescriptor
+//		â€¢ EmTransportDescriptor::EmTransportDescriptor
 // ---------------------------------------------------------------------------
 
 EmTransportDescriptor::EmTransportDescriptor (const EmTransportDescriptor& other) :
@@ -437,7 +437,7 @@ EmTransportDescriptor::EmTransportDescriptor (const EmTransportDescriptor& other
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportDescriptor::~EmTransportDescriptor
+//		â€¢ EmTransportDescriptor::~EmTransportDescriptor
 // ---------------------------------------------------------------------------
 
 EmTransportDescriptor::~EmTransportDescriptor (void)
@@ -446,7 +446,7 @@ EmTransportDescriptor::~EmTransportDescriptor (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportDescriptor::operator=
+//		â€¢ EmTransportDescriptor::operator=
 // ---------------------------------------------------------------------------
 
 EmTransportDescriptor& EmTransportDescriptor::operator= (const EmTransportDescriptor& other)
@@ -458,7 +458,7 @@ EmTransportDescriptor& EmTransportDescriptor::operator= (const EmTransportDescri
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportDescriptor::operator==
+//		â€¢ EmTransportDescriptor::operator==
 // ---------------------------------------------------------------------------
 
 bool EmTransportDescriptor::operator== (const EmTransportDescriptor& other) const
@@ -468,7 +468,7 @@ bool EmTransportDescriptor::operator== (const EmTransportDescriptor& other) cons
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportDescriptor::CreateTransport
+//		â€¢ EmTransportDescriptor::CreateTransport
 // ---------------------------------------------------------------------------
 
 EmTransport* EmTransportDescriptor::CreateTransport (void) const
@@ -505,7 +505,7 @@ EmTransport* EmTransportDescriptor::CreateTransport (void) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportDescriptor::GetMenuName
+//		â€¢ EmTransportDescriptor::GetMenuName
 // ---------------------------------------------------------------------------
 
 string EmTransportDescriptor::GetMenuName (void) const
@@ -556,7 +556,7 @@ string EmTransportDescriptor::GetMenuName (void) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportDescriptor::GetDescriptor
+//		â€¢ EmTransportDescriptor::GetDescriptor
 // ---------------------------------------------------------------------------
 
 string EmTransportDescriptor::GetDescriptor (void) const
@@ -568,7 +568,7 @@ string EmTransportDescriptor::GetDescriptor (void) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportDescriptor::GetScheme
+//		â€¢ EmTransportDescriptor::GetScheme
 // ---------------------------------------------------------------------------
 
 string EmTransportDescriptor::GetScheme (void) const
@@ -580,7 +580,7 @@ string EmTransportDescriptor::GetScheme (void) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportDescriptor::GetSchemeSpecific
+//		â€¢ EmTransportDescriptor::GetSchemeSpecific
 // ---------------------------------------------------------------------------
 
 string EmTransportDescriptor::GetSchemeSpecific (void) const
@@ -592,7 +592,7 @@ string EmTransportDescriptor::GetSchemeSpecific (void) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportDescriptor::GetType
+//		â€¢ EmTransportDescriptor::GetType
 // ---------------------------------------------------------------------------
 
 EmTransportType EmTransportDescriptor::GetType (void) const
@@ -614,7 +614,7 @@ EmTransportType EmTransportDescriptor::GetType (void) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportDescriptor::GetSchemePrefix
+//		â€¢ EmTransportDescriptor::GetSchemePrefix
 // ---------------------------------------------------------------------------
 // Return the descriptor prefix for the given scheme.  The separating ":" is
 // NOT included.
@@ -652,7 +652,7 @@ string EmTransportDescriptor::GetSchemePrefix (EmTransportType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmTransportDescriptor::PrvTestType
+//		â€¢ EmTransportDescriptor::PrvTestType
 // ---------------------------------------------------------------------------
 // Return whether or not the controlled descriptor is part of the given scheme.
 

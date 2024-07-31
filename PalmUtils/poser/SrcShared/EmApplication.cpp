@@ -146,7 +146,7 @@ class EmActionQuit : public EmAction
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::EmApplication
+//		â€¢ EmApplication::EmApplication
 // ---------------------------------------------------------------------------
 // Constructor.  Sets the document reference to NULL, sets the quit flag to
 // false, and sets the global gApplication variable to point to us.
@@ -161,7 +161,7 @@ EmApplication::EmApplication (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::~EmApplication
+//		â€¢ EmApplication::~EmApplication
 // ---------------------------------------------------------------------------
 // Destructor.  Makes sure the document has been closed, removes the reference
 // to us in gApplication, and performs some necessary final cleanup.
@@ -180,7 +180,7 @@ EmApplication::~EmApplication (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::Startup
+//		â€¢ EmApplication::Startup
 // ---------------------------------------------------------------------------
 // Performs one-time startup initialization.
 
@@ -233,7 +233,7 @@ Bool EmApplication::Startup (int argc, char** argv)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::Shutdown
+//		â€¢ EmApplication::Shutdown
 // ---------------------------------------------------------------------------
 // Performs one-time shutdown operations.
 
@@ -260,7 +260,7 @@ void EmApplication::Shutdown (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::HandleStartupActions
+//		â€¢ EmApplication::HandleStartupActions
 // ---------------------------------------------------------------------------
 // Kick off any actions required when Poser starts up.  The rules for what
 // needs to be done are defined by the Startup class, based on command line
@@ -309,7 +309,7 @@ void EmApplication::HandleStartupActions (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::HandleCommand
+//		â€¢ EmApplication::HandleCommand
 // ---------------------------------------------------------------------------
 // Handle a user command.  Normally the command is generated when the user
 // makes a menu selection, but the command could really come from anywhere
@@ -363,7 +363,7 @@ Bool EmApplication::HandleCommand (EmCommandID commandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::HandleIdle
+//		â€¢ EmApplication::HandleIdle
 // ---------------------------------------------------------------------------
 // Perform any application-level idle time operations.
 
@@ -404,7 +404,7 @@ void EmApplication::HandleIdle (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::HandleNewFromUser
+//		â€¢ EmApplication::HandleNewFromUser
 // ---------------------------------------------------------------------------
 // Create a new session asking the user for configuration information.
 // Starting configuration information can be passed in.  If it is not,
@@ -442,7 +442,7 @@ EmDocument* EmApplication::HandleNewFromUser (const Configuration* inCfg)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::HandleNew
+//		â€¢ EmApplication::HandleNew
 // ---------------------------------------------------------------------------
 // Create a new session from the current configuration information in the
 // preferences.
@@ -463,7 +463,7 @@ EmDocument* EmApplication::HandleNewFromPrefs (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::HandleNewFromROM
+//		â€¢ EmApplication::HandleNewFromROM
 // ---------------------------------------------------------------------------
 // Create a new session from the given ROM.
 
@@ -487,7 +487,7 @@ EmDocument* EmApplication::HandleNewFromROM (const EmFileRef& romRef)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::HandleNewFromConfig
+//		â€¢ EmApplication::HandleNewFromConfig
 // ---------------------------------------------------------------------------
 // Create a new session from the given configuration, closing any previous
 // session first.  An exception is thrown if the configuration is invalid.
@@ -523,7 +523,7 @@ EmDocument* EmApplication::HandleNewFromConfig (const Configuration& cfg)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::HandleNewBound
+//		â€¢ EmApplication::HandleNewBound
 // ---------------------------------------------------------------------------
 
 EmDocument* EmApplication::HandleNewBound (void)
@@ -546,7 +546,7 @@ EmDocument* EmApplication::HandleNewBound (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::HandleOpenFromUser
+//		â€¢ EmApplication::HandleOpenFromUser
 // ---------------------------------------------------------------------------
 // Open a previous session, asking the user to find it.
 
@@ -566,7 +566,7 @@ EmDocument* EmApplication::HandleOpenFromUser (EmFileType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::HandleOpenFromPrefs
+//		â€¢ EmApplication::HandleOpenFromPrefs
 // ---------------------------------------------------------------------------
 // Open a previous session, using information from the preferences.
 
@@ -582,7 +582,7 @@ EmDocument* EmApplication::HandleOpenFromPrefs (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::HandleOpenFromFile
+//		â€¢ EmApplication::HandleOpenFromFile
 // ---------------------------------------------------------------------------
 // Open the given saved session, closing any previous session first.
 //
@@ -610,7 +610,7 @@ EmDocument* EmApplication::HandleOpenFromFile (const EmFileRef& file)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::HandleOpenBound
+//		â€¢ EmApplication::HandleOpenBound
 // ---------------------------------------------------------------------------
 
 EmDocument* EmApplication::HandleOpenBound (void)
@@ -633,7 +633,7 @@ EmDocument* EmApplication::HandleOpenBound (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::HandleFileList
+//		â€¢ EmApplication::HandleFileList
 // ---------------------------------------------------------------------------
 // Grovel over the given list of files and determine what to do with them. The
 // list can be any set of files that the emulator recognizes: session files,
@@ -755,7 +755,7 @@ void EmApplication::HandleFileList (const EmFileRefList& fileList)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::HandleMinimize
+//		â€¢ EmApplication::HandleMinimize
 // ---------------------------------------------------------------------------
 // Open a session/event file and start the minimization process on it.  Called
 // in response to Startup::ScheduleMinimize.
@@ -770,7 +770,7 @@ void EmApplication::HandleMinimize (const EmFileRef& ref)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::HandleSessionClose
+//		â€¢ EmApplication::HandleSessionClose
 // ---------------------------------------------------------------------------
 // Close a session, writing it out to the given file.  If the file is not
 // specified, just close the file without saving it.  Called in response to
@@ -793,7 +793,7 @@ void EmApplication::HandleSessionClose (const EmFileRef& ref)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::HandleQuit
+//		â€¢ EmApplication::HandleQuit
 // ---------------------------------------------------------------------------
 // Quit the emulator, closing any session without saving it.  Called in
 // response to ScheduleQuit.
@@ -814,7 +814,7 @@ void EmApplication::HandleQuit (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::ScheduleSessionClose
+//		â€¢ EmApplication::ScheduleSessionClose
 // ---------------------------------------------------------------------------
 // Schedule the emulator to close the session to the given file at some safe
 // point in the future.
@@ -826,7 +826,7 @@ void EmApplication::ScheduleSessionClose (const EmFileRef& ref)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::ScheduleQuit
+//		â€¢ EmApplication::ScheduleQuit
 // ---------------------------------------------------------------------------
 // Schedule the emulator to quit at some safe point in the future.
 
@@ -839,7 +839,7 @@ void EmApplication::ScheduleQuit (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoAbout
+//		â€¢ EmApplication::DoAbout
 // ---------------------------------------------------------------------------
 // Show the All Important About Box.
 
@@ -850,7 +850,7 @@ void EmApplication::DoAbout (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoNew
+//		â€¢ EmApplication::DoNew
 // ---------------------------------------------------------------------------
 // Create a new document, asking the user for configuration information.
 
@@ -870,7 +870,7 @@ void EmApplication::DoNew (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoOpen
+//		â€¢ EmApplication::DoOpen
 // ---------------------------------------------------------------------------
 // Open a previously saved document.  Either ask the user for a document, or
 // fetch a document from the MRU list.
@@ -897,7 +897,7 @@ void EmApplication::DoOpen (EmCommandID commandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoClose
+//		â€¢ EmApplication::DoClose
 // ---------------------------------------------------------------------------
 // Attempt to close the current document.
 
@@ -908,7 +908,7 @@ void EmApplication::DoClose (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoQuit
+//		â€¢ EmApplication::DoQuit
 // ---------------------------------------------------------------------------
 // Attempt to close the current document and quit the application.
 
@@ -922,7 +922,7 @@ void EmApplication::DoQuit (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoDownload
+//		â€¢ EmApplication::DoDownload
 // ---------------------------------------------------------------------------
 // Display the ROM Transfer dialog, and download the actual ROM if the user
 // doesn't cancel the operation.
@@ -934,7 +934,7 @@ void EmApplication::DoDownload (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoPreferences
+//		â€¢ EmApplication::DoPreferences
 // ---------------------------------------------------------------------------
 // Display the General Preferences dialog.
 
@@ -945,7 +945,7 @@ void EmApplication::DoPreferences (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoLogging
+//		â€¢ EmApplication::DoLogging
 // ---------------------------------------------------------------------------
 // Display the Logging Preferences dialog.
 
@@ -956,7 +956,7 @@ void EmApplication::DoLogging (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoDebugging
+//		â€¢ EmApplication::DoDebugging
 // ---------------------------------------------------------------------------
 // Display the Debugging Preferences dialog.
 
@@ -967,7 +967,7 @@ void EmApplication::DoDebugging (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoErrorHandling
+//		â€¢ EmApplication::DoErrorHandling
 // ---------------------------------------------------------------------------
 // Display the Error Handling Preferences dialog.
 
@@ -978,7 +978,7 @@ void EmApplication::DoErrorHandling (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoTracing
+//		â€¢ EmApplication::DoTracing
 // ---------------------------------------------------------------------------
 // Display the Tracing Preferences dialog.
 
@@ -991,7 +991,7 @@ void EmApplication::DoTracing (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoSkins
+//		â€¢ EmApplication::DoSkins
 // ---------------------------------------------------------------------------
 // Display the Skins Preferences dialog.
 
@@ -1002,7 +1002,7 @@ void EmApplication::DoSkins (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoHostFS
+//		â€¢ EmApplication::DoHostFS
 // ---------------------------------------------------------------------------
 // Display the HostFS Preferences dialog.
 
@@ -1013,7 +1013,7 @@ void EmApplication::DoHostFS (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoBreakpoints
+//		â€¢ EmApplication::DoBreakpoints
 // ---------------------------------------------------------------------------
 // Display the Breakpoints Preferences dialog.
 
@@ -1024,7 +1024,7 @@ void EmApplication::DoBreakpoints (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoReplay
+//		â€¢ EmApplication::DoReplay
 // ---------------------------------------------------------------------------
 // Open a document specified by the user and start the Playback process.
 
@@ -1040,7 +1040,7 @@ void EmApplication::DoReplay (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoMinimize
+//		â€¢ EmApplication::DoMinimize
 // ---------------------------------------------------------------------------
 // Open a document specified by the user and start the Minimization process.
 
@@ -1054,7 +1054,7 @@ void EmApplication::DoMinimize (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::DoNothing
+//		â€¢ EmApplication::DoNothing
 // ---------------------------------------------------------------------------
 // Null operation.  Used for menu items that can be selected but that don't
 // actually do anything.
@@ -1067,7 +1067,7 @@ void EmApplication::DoNothing (EmCommandID)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::CloseDocument
+//		â€¢ EmApplication::CloseDocument
 // ---------------------------------------------------------------------------
 // Handles the request to close a document.  This request can be denied: if
 // the user is asked if they want to save the document, they can cancel the
@@ -1090,7 +1090,7 @@ Bool EmApplication::CloseDocument (Bool quitting)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::IsBound
+//		â€¢ EmApplication::IsBound
 // ---------------------------------------------------------------------------
 //	Returns whether or not this application is bound in any sort of fashion.
 //	We cache the result in case this function is called from time-critical
@@ -1110,7 +1110,7 @@ Bool EmApplication::IsBound (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::IsBoundPartially
+//		â€¢ EmApplication::IsBoundPartially
 // ---------------------------------------------------------------------------
 //	Returns whether or not this application is partially bound.  Returns false
 //	if fully bound or not bound.
@@ -1131,7 +1131,7 @@ Bool EmApplication::IsBoundPartially (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmApplication::IsBoundFully
+//		â€¢ EmApplication::IsBoundFully
 // ---------------------------------------------------------------------------
 //	Returns whether or not this application is fully bound.  Return false if
 //	partially bound or not bound.

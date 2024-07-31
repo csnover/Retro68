@@ -332,7 +332,7 @@
 // inlude SysResTypes.rh to get these definitions.
 //
 #ifndef PUBLIC_STUFF_STRIPPED
-// DOLATER ¥¥¥ leaving this here for now just in case.
+// DOLATER â€¢â€¢â€¢ leaving this here for now just in case.
 #endif // PUBLIC_STUFF_STRIPPED
 //-----------------------------------------------------------
 

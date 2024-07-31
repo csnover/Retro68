@@ -23,7 +23,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZPalmVII::GetLineDriverState
+//		â€¢ EmRegsEZPalmVII::GetLineDriverState
 // ---------------------------------------------------------------------------
 // Return whether or not the line drivers for the given object are open or
 // closed.

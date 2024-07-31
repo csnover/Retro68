@@ -719,7 +719,7 @@ void Chunk::SetLength (int32 inLength)
 
 
 // ---------------------------------------------------------------------------
-//	¥ EmStreamChunk(Handle)					Parameterized Constructor [public]
+//	â€¢ EmStreamChunk(Handle)					Parameterized Constructor [public]
 // ---------------------------------------------------------------------------
 //	Construct from an existing Chunk
 
@@ -742,7 +742,7 @@ EmStreamChunk::EmStreamChunk(Chunk& chunk) :
 
 
 // ---------------------------------------------------------------------------
-//	¥ ~EmStreamChunk						Destructor				  [public]
+//	â€¢ ~EmStreamChunk						Destructor				  [public]
 // ---------------------------------------------------------------------------
 
 EmStreamChunk::~EmStreamChunk()
@@ -752,7 +752,7 @@ EmStreamChunk::~EmStreamChunk()
 
 
 // ---------------------------------------------------------------------------
-//	¥ SetLength														  [public]
+//	â€¢ SetLength														  [public]
 // ---------------------------------------------------------------------------
 //	Set the length, in bytes, of the EmStreamChunk
 
@@ -766,7 +766,7 @@ EmStreamChunk::SetLength(
 
 
 // ---------------------------------------------------------------------------
-//	¥ PutBytes
+//	â€¢ PutBytes
 // ---------------------------------------------------------------------------
 //	Write bytes from a buffer to a EmStreamChunk
 //
@@ -799,7 +799,7 @@ EmStreamChunk::PutBytes(
 
 
 // ---------------------------------------------------------------------------
-//	¥ GetBytes
+//	â€¢ GetBytes
 // ---------------------------------------------------------------------------
 //	Read bytes from a EmStreamChunk to a buffer
 //

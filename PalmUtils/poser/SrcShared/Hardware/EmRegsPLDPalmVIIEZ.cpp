@@ -37,7 +37,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmVIIEZ::EmRegsPLDPalmVIIEZ
+//		â€¢ EmRegsPLDPalmVIIEZ::EmRegsPLDPalmVIIEZ
 // ---------------------------------------------------------------------------
 
 EmRegsPLDPalmVIIEZ::EmRegsPLDPalmVIIEZ (void)
@@ -46,7 +46,7 @@ EmRegsPLDPalmVIIEZ::EmRegsPLDPalmVIIEZ (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmVIIEZ::~EmRegsPLDPalmVIIEZ
+//		â€¢ EmRegsPLDPalmVIIEZ::~EmRegsPLDPalmVIIEZ
 // ---------------------------------------------------------------------------
 
 EmRegsPLDPalmVIIEZ::~EmRegsPLDPalmVIIEZ (void)
@@ -55,7 +55,7 @@ EmRegsPLDPalmVIIEZ::~EmRegsPLDPalmVIIEZ (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmVIIEZ::Initialize
+//		â€¢ EmRegsPLDPalmVIIEZ::Initialize
 // ---------------------------------------------------------------------------
 
 void EmRegsPLDPalmVIIEZ::Initialize (void)
@@ -65,7 +65,7 @@ void EmRegsPLDPalmVIIEZ::Initialize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmVIIEZ::Reset
+//		â€¢ EmRegsPLDPalmVIIEZ::Reset
 // ---------------------------------------------------------------------------
 
 void EmRegsPLDPalmVIIEZ::Reset (Bool hardwareReset)
@@ -80,7 +80,7 @@ void EmRegsPLDPalmVIIEZ::Reset (Bool hardwareReset)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmVIIEZ::Save
+//		â€¢ EmRegsPLDPalmVIIEZ::Save
 // ---------------------------------------------------------------------------
 
 void EmRegsPLDPalmVIIEZ::Save (SessionFile& f)
@@ -90,7 +90,7 @@ void EmRegsPLDPalmVIIEZ::Save (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmVIIEZ::Load
+//		â€¢ EmRegsPLDPalmVIIEZ::Load
 // ---------------------------------------------------------------------------
 
 void EmRegsPLDPalmVIIEZ::Load (SessionFile& f)
@@ -100,7 +100,7 @@ void EmRegsPLDPalmVIIEZ::Load (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmVIIEZ::Dispose
+//		â€¢ EmRegsPLDPalmVIIEZ::Dispose
 // ---------------------------------------------------------------------------
 
 void EmRegsPLDPalmVIIEZ::Dispose (void)
@@ -110,7 +110,7 @@ void EmRegsPLDPalmVIIEZ::Dispose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmVIIEZ::GetSerialPortOn
+//		â€¢ EmRegsPLDPalmVIIEZ::GetSerialPortOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsPLDPalmVIIEZ::GetSerialPortOn (int /*uartNum*/)
@@ -120,7 +120,7 @@ Bool EmRegsPLDPalmVIIEZ::GetSerialPortOn (int /*uartNum*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmVIIEZ::SetSubBankHandlers
+//		â€¢ EmRegsPLDPalmVIIEZ::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegsPLDPalmVIIEZ::SetSubBankHandlers (void)
@@ -145,7 +145,7 @@ void EmRegsPLDPalmVIIEZ::SetSubBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmVIIEZ::GetRealAddress
+//		â€¢ EmRegsPLDPalmVIIEZ::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmRegsPLDPalmVIIEZ::GetRealAddress (emuptr address)
@@ -155,7 +155,7 @@ uint8* EmRegsPLDPalmVIIEZ::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmVIIEZ::GetAddressStart
+//		â€¢ EmRegsPLDPalmVIIEZ::GetAddressStart
 // ---------------------------------------------------------------------------
 
 emuptr EmRegsPLDPalmVIIEZ::GetAddressStart (void)
@@ -165,7 +165,7 @@ emuptr EmRegsPLDPalmVIIEZ::GetAddressStart (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmVIIEZ::GetAddressRange
+//		â€¢ EmRegsPLDPalmVIIEZ::GetAddressRange
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsPLDPalmVIIEZ::GetAddressRange (void)
@@ -175,7 +175,7 @@ uint32 EmRegsPLDPalmVIIEZ::GetAddressRange (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmVIIEZ::rs232ShdnWrite
+//		â€¢ EmRegsPLDPalmVIIEZ::rs232ShdnWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsPLDPalmVIIEZ::rs232ShdnWrite (emuptr address, int size, uint32 value)
@@ -194,7 +194,7 @@ void EmRegsPLDPalmVIIEZ::rs232ShdnWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmVIIEZ::iXtrnl2Read
+//		â€¢ EmRegsPLDPalmVIIEZ::iXtrnl2Read
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsPLDPalmVIIEZ::iXtrnl2Read (emuptr address, int size)

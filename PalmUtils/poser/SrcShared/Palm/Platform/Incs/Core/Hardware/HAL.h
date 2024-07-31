@@ -15,7 +15,7 @@
  *****************************************************************************/
 
 #ifndef PUBLIC_STUFF_STRIPPED
-// DOLATER ¥¥¥ Turned this off, because HAL calls *are* portable, right Steve?
+// DOLATER â€¢â€¢â€¢ Turned this off, because HAL calls *are* portable, right Steve?
 #endif // PUBLIC_STUFF_STRIPPED
 
 // #ifdef	NON_PORTABLE	   // So app's don't mistakenly include this

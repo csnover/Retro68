@@ -18,7 +18,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ TracerBase::TracerBase
+//		â€¢ TracerBase::TracerBase
 // ---------------------------------------------------------------------------
 
 TracerBase::TracerBase(void)
@@ -27,7 +27,7 @@ TracerBase::TracerBase(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ TracerBase::~TracerBase
+//		â€¢ TracerBase::~TracerBase
 // ---------------------------------------------------------------------------
 
 TracerBase::~TracerBase(void)
@@ -36,7 +36,7 @@ TracerBase::~TracerBase(void)
 	
 
 // ---------------------------------------------------------------------------
-//		¥ TracerBase::GetTracerTypeCount
+//		â€¢ TracerBase::GetTracerTypeCount
 // ---------------------------------------------------------------------------
 
 unsigned short TracerBase::GetTracerTypeCount (void)
@@ -46,7 +46,7 @@ unsigned short TracerBase::GetTracerTypeCount (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ TracerBase::GetTracerTypeInfo
+//		â€¢ TracerBase::GetTracerTypeInfo
 // ---------------------------------------------------------------------------
 
 TracerTypeInfo* TracerBase::GetTracerTypeInfo (unsigned short index)
@@ -60,7 +60,7 @@ TracerTypeInfo* TracerBase::GetTracerTypeInfo (unsigned short index)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ TracerBase::GetCurrentTracerTypeInfo
+//		â€¢ TracerBase::GetCurrentTracerTypeInfo
 // ---------------------------------------------------------------------------
 
 TracerTypeInfo* TracerBase::GetCurrentTracerTypeInfo (void)
@@ -70,7 +70,7 @@ TracerTypeInfo* TracerBase::GetCurrentTracerTypeInfo (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ TracerBase::GetCurrentTracerTypeIndex
+//		â€¢ TracerBase::GetCurrentTracerTypeIndex
 // ---------------------------------------------------------------------------
 
 unsigned short TracerBase::GetCurrentTracerTypeIndex (void)
@@ -80,7 +80,7 @@ unsigned short TracerBase::GetCurrentTracerTypeIndex (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ TracerBase::GetCapsToken
+//		â€¢ TracerBase::GetCapsToken
 // ---------------------------------------------------------------------------
 
 void TracerBase::GetCapsToken (char* src, char* tag, char* dst, size_t dstSize)
@@ -107,7 +107,7 @@ void TracerBase::GetCapsToken (char* src, char* tag, char* dst, size_t dstSize)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ TracerBase::LoadTracerTypeList
+//		â€¢ TracerBase::LoadTracerTypeList
 // ---------------------------------------------------------------------------
 
 void TracerBase::LoadTracerTypeList (void)
@@ -175,7 +175,7 @@ void TracerBase::LoadTracerTypeList (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ TracerBase::LoadTracesPrefs
+//		â€¢ TracerBase::LoadTracesPrefs
 // ---------------------------------------------------------------------------
 
 unsigned short TracerBase::LoadTracerPrefs (void)
@@ -254,7 +254,7 @@ unsigned short TracerBase::LoadTracerPrefs (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ TracerBase::SaveTracerPrefs
+//		â€¢ TracerBase::SaveTracerPrefs
 // ---------------------------------------------------------------------------
 
 void TracerBase::SaveTracerPrefs (void)
@@ -295,7 +295,7 @@ void TracerBase::SaveTracerPrefs (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ TracerBase::DisposeTracerTypeList
+//		â€¢ TracerBase::DisposeTracerTypeList
 // ---------------------------------------------------------------------------
 
 void TracerBase::DisposeTracerTypeList (void)

@@ -1,6 +1,6 @@
 /* -*- mode: C++; tab-width: 4 -*- */
 // ===========================================================================
-//	EmStream.h				   ©1993-1998 Metrowerks Inc. All rights reserved.
+//	EmStream.h				   Â©1993-1998 Metrowerks Inc. All rights reserved.
 // ===========================================================================
 //
 //	Abstract class for reading/writing an ordered sequence of bytes

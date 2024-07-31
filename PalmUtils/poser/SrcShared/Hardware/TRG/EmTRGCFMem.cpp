@@ -215,7 +215,7 @@ static uint8 CFRegMem[] = {
 };
    
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFConfig::InRange
+//		â€¢ EmRegsCFConfig::InRange
 // ---------------------------------------------------------------------------
 Boolean EmRegsCFConfig::InRange(uint32 offset)
 {
@@ -226,14 +226,14 @@ Boolean EmRegsCFConfig::InRange(uint32 offset)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFConfig::Initialize
+//		â€¢ EmRegsCFConfig::Initialize
 // ---------------------------------------------------------------------------
 void EmRegsCFConfig::Initialize(EmDiskTypeID /*ID*/)
 {
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFConfig::ReadByte
+//		â€¢ EmRegsCFConfig::ReadByte
 // ---------------------------------------------------------------------------
 void EmRegsCFConfig::ReadByte(uint32 offset, uint8 * val)
 {
@@ -244,14 +244,14 @@ void EmRegsCFConfig::ReadByte(uint32 offset, uint8 * val)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFConfig::WriteByte
+//		â€¢ EmRegsCFConfig::WriteByte
 // ---------------------------------------------------------------------------
 void EmRegsCFConfig::WriteByte(uint32 /*offset*/, uint8 /*val*/)
 {
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFConfig::ReadWord
+//		â€¢ EmRegsCFConfig::ReadWord
 // ---------------------------------------------------------------------------
 void EmRegsCFConfig::ReadWord(uint32 offset, _Word * val)
 {
@@ -260,7 +260,7 @@ void EmRegsCFConfig::ReadWord(uint32 offset, _Word * val)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFConfig::WriteWord
+//		â€¢ EmRegsCFConfig::WriteWord
 // ---------------------------------------------------------------------------
 void EmRegsCFConfig::WriteWord(uint32 /*offset*/, _Word /*val*/)
 {
@@ -268,14 +268,14 @@ void EmRegsCFConfig::WriteWord(uint32 /*offset*/, _Word /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFReset::Initialize
+//		â€¢ EmRegsCFReset::Initialize
 // ---------------------------------------------------------------------------
 void EmRegsCFReset::Initialize(EmDiskTypeID /*ID*/)
 {
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFReset::ReadByte
+//		â€¢ EmRegsCFReset::ReadByte
 // ---------------------------------------------------------------------------
 void EmRegsCFReset::ReadByte(uint32 /*offset*/, uint8 * val)
 {
@@ -283,14 +283,14 @@ void EmRegsCFReset::ReadByte(uint32 /*offset*/, uint8 * val)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFReset::WriteByte
+//		â€¢ EmRegsCFReset::WriteByte
 // ---------------------------------------------------------------------------
 void EmRegsCFReset::WriteByte(uint32 /*offset*/, uint8 /*val*/)
 {
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFReset::ReadWord
+//		â€¢ EmRegsCFReset::ReadWord
 // ---------------------------------------------------------------------------
 void EmRegsCFReset::ReadWord(uint32 /*offset*/, _Word * val)
 {
@@ -298,7 +298,7 @@ void EmRegsCFReset::ReadWord(uint32 /*offset*/, _Word * val)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFReset::WriteWord
+//		â€¢ EmRegsCFReset::WriteWord
 // ---------------------------------------------------------------------------
 void EmRegsCFReset::WriteWord(uint32 /*offset*/, _Word /*val*/)
 {
@@ -306,7 +306,7 @@ void EmRegsCFReset::WriteWord(uint32 /*offset*/, _Word /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFTuple::Initialize
+//		â€¢ EmRegsCFTuple::Initialize
 // ---------------------------------------------------------------------------
 void EmRegsCFTuple::Initialize(EmDiskTypeID DiskTypeID)
 {
@@ -315,7 +315,7 @@ void EmRegsCFTuple::Initialize(EmDiskTypeID DiskTypeID)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFTuple::ReadByte
+//		â€¢ EmRegsCFTuple::ReadByte
 // ---------------------------------------------------------------------------
 void EmRegsCFTuple::ReadByte(uint32 offset, uint8 * val)
 {
@@ -326,14 +326,14 @@ void EmRegsCFTuple::ReadByte(uint32 offset, uint8 * val)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFTuple::WriteByte
+//		â€¢ EmRegsCFTuple::WriteByte
 // ---------------------------------------------------------------------------
 void EmRegsCFTuple::WriteByte(uint32 /*offset*/, uint8 /*val*/)
 {
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFTuple::ReadWord
+//		â€¢ EmRegsCFTuple::ReadWord
 // ---------------------------------------------------------------------------
 void EmRegsCFTuple::ReadWord(uint32 offset, _Word * val)
 {
@@ -342,7 +342,7 @@ void EmRegsCFTuple::ReadWord(uint32 offset, _Word * val)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFTuple::WriteWord
+//		â€¢ EmRegsCFTuple::WriteWord
 // ---------------------------------------------------------------------------
 void EmRegsCFTuple::WriteWord(uint32 /*offset*/, _Word /*val*/)
 {

@@ -27,7 +27,7 @@
 EmWindow*	gWindow;
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::EmWindow
+//		â€¢ EmWindow::EmWindow
 // ---------------------------------------------------------------------------
 // Constructor.  Perform simple data member initialization.  The heavy stuff
 // occurs in WindowCreate.
@@ -55,7 +55,7 @@ EmWindow::EmWindow (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::~EmWindow
+//		â€¢ EmWindow::~EmWindow
 // ---------------------------------------------------------------------------
 // Dispose of the window and all its data.  Unregister for notification, save
 // the window location, and destroy the host window object.
@@ -68,7 +68,7 @@ EmWindow::~EmWindow (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::PreDestroy
+//		â€¢ EmWindow::PreDestroy
 // ---------------------------------------------------------------------------
 // Carry out actions to be performed just before the window is closed.  These
 // actions would normally be performed in EmWindow's destructor, except that
@@ -93,7 +93,7 @@ void EmWindow::PreDestroy (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::WindowInit
+//		â€¢ EmWindow::WindowInit
 // ---------------------------------------------------------------------------
 // Create the LCD window, along with any host data and host window objects.
 // Set the window's skin, register for any notification regarding the window's
@@ -156,7 +156,7 @@ void EmWindow::WindowInit (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::WindowReset
+//		â€¢ EmWindow::WindowReset
 // ---------------------------------------------------------------------------
 
 void EmWindow::WindowReset (void)
@@ -214,7 +214,7 @@ void EmWindow::WindowReset (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HandlePenEvent
+//		â€¢ EmWindow::HandlePenEvent
 // ---------------------------------------------------------------------------
 
 void EmWindow::HandlePenEvent (const EmPoint& where, Bool down)
@@ -297,7 +297,7 @@ void EmWindow::HandlePenEvent (const EmPoint& where, Bool down)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HandleUpdate
+//		â€¢ EmWindow::HandleUpdate
 // ---------------------------------------------------------------------------
 // Called to handle update events.
 
@@ -312,7 +312,7 @@ void EmWindow::HandleUpdate (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HandlePalette
+//		â€¢ EmWindow::HandlePalette
 // ---------------------------------------------------------------------------
 // Called when we need to tell the OS what our preferred palette is.  Usually
 // called when window orders change.
@@ -324,7 +324,7 @@ void EmWindow::HandlePalette (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HandleDisplayChange
+//		â€¢ EmWindow::HandleDisplayChange
 // ---------------------------------------------------------------------------
 // Called when the display depth changes.
 
@@ -335,7 +335,7 @@ void EmWindow::HandleDisplayChange (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HandleActivate
+//		â€¢ EmWindow::HandleActivate
 // ---------------------------------------------------------------------------
 // Called when the display depth changes.
 
@@ -352,7 +352,7 @@ void EmWindow::HandleActivate (Bool active)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HandleDebugMode
+//		â€¢ EmWindow::HandleDebugMode
 // ---------------------------------------------------------------------------
 // Called when the display depth changes.
 
@@ -369,7 +369,7 @@ void EmWindow::HandleDebugMode (Bool debugMode)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HandleGremlinMode
+//		â€¢ EmWindow::HandleGremlinMode
 // ---------------------------------------------------------------------------
 // Called when the display depth changes.
 
@@ -386,7 +386,7 @@ void EmWindow::HandleGremlinMode (Bool gremlinMode)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HandleIdle
+//		â€¢ EmWindow::HandleIdle
 // ---------------------------------------------------------------------------
 // Called several times a second to perform idle time events such as
 // refreshing the LCD area and vibrating the window.
@@ -464,7 +464,7 @@ void EmWindow::HandleIdle (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::GetLCDContents
+//		â€¢ EmWindow::GetLCDContents
 // ---------------------------------------------------------------------------
 // Return the full contents of the LCD area.  Used for screenshots.
 
@@ -482,7 +482,7 @@ void EmWindow::GetLCDContents (EmScreenUpdateInfo& info)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::PaintScreen
+//		â€¢ EmWindow::PaintScreen
 // ---------------------------------------------------------------------------
 // Paint the entire window.  Could be called in response to an update event
 // or as part of our regular idle time handling.
@@ -632,7 +632,7 @@ void EmWindow::PaintScreen (Bool drawCase, Bool wholeLCD)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::PaintCase
+//		â€¢ EmWindow::PaintCase
 // ---------------------------------------------------------------------------
 // Draw the skin.
 
@@ -643,7 +643,7 @@ void EmWindow::PaintCase (const EmScreenUpdateInfo& info)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::PaintLCDFrame
+//		â€¢ EmWindow::PaintLCDFrame
 // ---------------------------------------------------------------------------
 // Draw any frame around the LCD area required in order to faithfully
 // emulate the appearance of the real LCD.
@@ -663,7 +663,7 @@ void EmWindow::PaintLCDFrame (const EmScreenUpdateInfo&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::PaintLCD
+//		â€¢ EmWindow::PaintLCD
 // ---------------------------------------------------------------------------
 // Draw the LCD portion of the window.
 
@@ -699,7 +699,7 @@ void EmWindow::PaintLCD (const EmScreenUpdateInfo& info)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::PaintLED
+//		â€¢ EmWindow::PaintLED
 // ---------------------------------------------------------------------------
 
 void EmWindow::PaintLED (uint16 ledState)
@@ -728,7 +728,7 @@ void EmWindow::PaintLED (uint16 ledState)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::PaintButtonFrames
+//		â€¢ EmWindow::PaintButtonFrames
 // ---------------------------------------------------------------------------
 // Draw frames around the buttons.	This is handy when determining their
 // locations initially.
@@ -752,7 +752,7 @@ void EmWindow::PaintButtonFrames (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::PrefsChangedCB
+//		â€¢ EmWindow::PrefsChangedCB
 // ---------------------------------------------------------------------------
 // Respond to a preference change.  This version of the function retrieves
 // the EmWindow object pointer and calls a non-static member function of the
@@ -768,7 +768,7 @@ void EmWindow::PrefsChangedCB (PrefKeyType key, void* data)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::PrefsChanged
+//		â€¢ EmWindow::PrefsChanged
 // ---------------------------------------------------------------------------
 // Respond to a preference change.  If the sking or display size has changed,
 // we need to rebuild our skin image.  If the background color preference
@@ -796,7 +796,7 @@ void EmWindow::PrefsChanged (PrefKeyType key)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::GetLCDBounds
+//		â€¢ EmWindow::GetLCDBounds
 // ---------------------------------------------------------------------------
 // Get the bounds for the LCD.
 
@@ -821,7 +821,7 @@ EmRect EmWindow::GetLCDBounds (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::GetLEDBounds
+//		â€¢ EmWindow::GetLEDBounds
 // ---------------------------------------------------------------------------
 // Get the bounds for the LED.  Put it in the power button.
 
@@ -875,7 +875,7 @@ EmRect EmWindow::GetLEDBounds (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::GetSkin
+//		â€¢ EmWindow::GetSkin
 // ---------------------------------------------------------------------------
 // Get the currently selected skin as a PixMap.
 
@@ -900,7 +900,7 @@ Bool EmWindow::GetSkin (EmPixMap& pixMap)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::GetDefaultSkin
+//		â€¢ EmWindow::GetDefaultSkin
 // ---------------------------------------------------------------------------
 // Get the default, built-in skin as a PixMap.
 
@@ -917,7 +917,7 @@ void EmWindow::GetDefaultSkin (EmPixMap& pixMap)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::PrevLCDColorsChanged
+//		â€¢ EmWindow::PrevLCDColorsChanged
 // ---------------------------------------------------------------------------
 
 Bool EmWindow::PrevLCDColorsChanged (const RGBList& newLCDColors)
@@ -953,7 +953,7 @@ Bool EmWindow::PrevLCDColorsChanged (const RGBList& newLCDColors)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::SaveLCDColors
+//		â€¢ EmWindow::SaveLCDColors
 // ---------------------------------------------------------------------------
 
 void EmWindow::SaveLCDColors (const RGBList& newLCDColors)
@@ -963,7 +963,7 @@ void EmWindow::SaveLCDColors (const RGBList& newLCDColors)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::GetSystemColors
+//		â€¢ EmWindow::GetSystemColors
 // ---------------------------------------------------------------------------
 
 void EmWindow::GetSystemColors (const EmScreenUpdateInfo& info, RGBList& colors)
@@ -1036,7 +1036,7 @@ void EmWindow::GetSystemColors (const EmScreenUpdateInfo& info, RGBList& colors)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::QuantizeSkinColors
+//		â€¢ EmWindow::QuantizeSkinColors
 // ---------------------------------------------------------------------------
 
 void EmWindow::QuantizeSkinColors (const EmPixMap& skin, RGBList& colors, Bool polite)
@@ -1057,7 +1057,7 @@ void EmWindow::QuantizeSkinColors (const EmPixMap& skin, RGBList& colors, Bool p
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::GetCurrentSkin
+//		â€¢ EmWindow::GetCurrentSkin
 // ---------------------------------------------------------------------------
 
 const EmPixMap& EmWindow::GetCurrentSkin (void)
@@ -1085,7 +1085,7 @@ const EmPixMap& EmWindow::GetCurrentSkin (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::GetCurrentSkinColors
+//		â€¢ EmWindow::GetCurrentSkinColors
 // ---------------------------------------------------------------------------
 
 const RGBList& EmWindow::GetCurrentSkinColors (Bool polite)
@@ -1118,7 +1118,7 @@ const RGBList& EmWindow::GetCurrentSkinColors (Bool polite)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::GetCurrentSkinRegion
+//		â€¢ EmWindow::GetCurrentSkinRegion
 // ---------------------------------------------------------------------------
 
 const EmRegion& EmWindow::GetCurrentSkinRegion (void)
@@ -1130,7 +1130,7 @@ const EmRegion& EmWindow::GetCurrentSkinRegion (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostWindowReset
+//		â€¢ EmWindow::HostWindowReset
 // ---------------------------------------------------------------------------
 // Update the window's appearance due to a skin change.
 
@@ -1141,7 +1141,7 @@ void EmWindow::HostWindowReset (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostMouseCapture
+//		â€¢ EmWindow::HostMouseCapture
 // ---------------------------------------------------------------------------
 // Capture the mouse so that all mouse events get sent to this window.
 
@@ -1151,7 +1151,7 @@ void EmWindow::HostMouseCapture (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostMouseRelease
+//		â€¢ EmWindow::HostMouseRelease
 // ---------------------------------------------------------------------------
 // Release the mouse so that mouse events get sent to the window the
 // cursor is over.
@@ -1162,7 +1162,7 @@ void EmWindow::HostMouseRelease (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostUpdateBegin
+//		â€¢ EmWindow::HostUpdateBegin
 // ---------------------------------------------------------------------------
 // Prepare the host window object for updating.
 
@@ -1172,7 +1172,7 @@ void EmWindow::HostUpdateBegin (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostUpdateEnd
+//		â€¢ EmWindow::HostUpdateEnd
 // ---------------------------------------------------------------------------
 // Finalize the host window object after it's been updated.
 
@@ -1182,7 +1182,7 @@ void EmWindow::HostUpdateEnd (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostDrawingBegin
+//		â€¢ EmWindow::HostDrawingBegin
 // ---------------------------------------------------------------------------
 // Prepare the host window object for drawing outside of an update event.
 
@@ -1192,7 +1192,7 @@ void EmWindow::HostDrawingBegin (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostDrawingEnd
+//		â€¢ EmWindow::HostDrawingEnd
 // ---------------------------------------------------------------------------
 // Finalize the host window object after drawing outside of an update event.
 
@@ -1202,7 +1202,7 @@ void EmWindow::HostDrawingEnd (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostPaletteSet
+//		â€¢ EmWindow::HostPaletteSet
 // ---------------------------------------------------------------------------
 // Establish the palette to be used for drawing.
 
@@ -1212,7 +1212,7 @@ void EmWindow::HostPaletteSet (const EmScreenUpdateInfo&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostPaletteRestore
+//		â€¢ EmWindow::HostPaletteRestore
 // ---------------------------------------------------------------------------
 // Clean up after HostPaletteSet.
 
@@ -1222,7 +1222,7 @@ void EmWindow::HostPaletteRestore (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostWindowMoveBy
+//		â€¢ EmWindow::HostWindowMoveBy
 // ---------------------------------------------------------------------------
 // Move the host window object by the given offset.
 
@@ -1233,7 +1233,7 @@ void EmWindow::HostWindowMoveBy (const EmPoint&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostWindowMoveTo
+//		â€¢ EmWindow::HostWindowMoveTo
 // ---------------------------------------------------------------------------
 // Move the host window object to the given location.
 
@@ -1244,7 +1244,7 @@ void EmWindow::HostWindowMoveTo (const EmPoint&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostWindowBoundsGet
+//		â€¢ EmWindow::HostWindowBoundsGet
 // ---------------------------------------------------------------------------
 // Get the global bounds of the host window object.
 
@@ -1256,7 +1256,7 @@ EmRect EmWindow::HostWindowBoundsGet (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostWindowCenter
+//		â€¢ EmWindow::HostWindowCenter
 // ---------------------------------------------------------------------------
 // Center the window to the main display.
 
@@ -1267,7 +1267,7 @@ void EmWindow::HostWindowCenter (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostWindowShow
+//		â€¢ EmWindow::HostWindowShow
 // ---------------------------------------------------------------------------
 // Make the host window object visible.
 
@@ -1278,7 +1278,7 @@ void EmWindow::HostWindowShow (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostWindowStayOnTop
+//		â€¢ EmWindow::HostWindowStayOnTop
 // ---------------------------------------------------------------------------
 // Make the host window stay on top.
 
@@ -1288,7 +1288,7 @@ void EmWindow::HostWindowStayOnTop (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostWindowDrag
+//		â€¢ EmWindow::HostWindowDrag
 // ---------------------------------------------------------------------------
 // The user has clicked in a region of the host window object that causes
 // the window to be dragged.  Drag the window around.
@@ -1299,7 +1299,7 @@ void EmWindow::HostWindowDrag (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostRectFrame
+//		â€¢ EmWindow::HostRectFrame
 // ---------------------------------------------------------------------------
 // Draw a rectangle frame with the given width in the given color.
 
@@ -1310,7 +1310,7 @@ void EmWindow::HostRectFrame (const EmRect&, const EmPoint&, const RGBType&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostOvalPaint
+//		â€¢ EmWindow::HostOvalPaint
 // ---------------------------------------------------------------------------
 // Fill an oval with the given color.
 
@@ -1321,7 +1321,7 @@ void EmWindow::HostOvalPaint (const EmRect&, const RGBType&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostPaintCase
+//		â€¢ EmWindow::HostPaintCase
 // ---------------------------------------------------------------------------
 // Draw the skin.
 
@@ -1332,7 +1332,7 @@ void EmWindow::HostPaintCase (const EmScreenUpdateInfo&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostPaintLCD
+//		â€¢ EmWindow::HostPaintLCD
 // ---------------------------------------------------------------------------
 // Draw the LCD area.
 
@@ -1344,7 +1344,7 @@ void EmWindow::HostPaintLCD (const EmScreenUpdateInfo&, const EmRect&,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostPalette
+//		â€¢ EmWindow::HostPalette
 // ---------------------------------------------------------------------------
 // Tell the system about the palette we want to use.  Called when Windows
 // is updating its system palette.
@@ -1355,7 +1355,7 @@ void EmWindow::HostPalette (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostDisplayChange
+//		â€¢ EmWindow::HostDisplayChange
 // ---------------------------------------------------------------------------
 // Respond to the display's bit depth changing.  All we do here is flush our
 // caches of the skin information.  It will get regenerated when it's needed.
@@ -1366,7 +1366,7 @@ void EmWindow::HostDisplayChange (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostGetDefaultSkin
+//		â€¢ EmWindow::HostGetDefaultSkin
 // ---------------------------------------------------------------------------
 // Get the default (built-in) skin image.
 
@@ -1377,7 +1377,7 @@ void EmWindow::HostGetDefaultSkin (EmPixMap&, int)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmWindow::HostGetCurrentMouse
+//		â€¢ EmWindow::HostGetCurrentMouse
 // ---------------------------------------------------------------------------
 // Get the current mouse location.
 

@@ -339,7 +339,7 @@ static const HwrM68VZ328Type	kInitial68VZ328RegisterValues =
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::EmRegsVZ
+//		â€¢ EmRegsVZ::EmRegsVZ
 // ---------------------------------------------------------------------------
 
 EmRegsVZ::EmRegsVZ (void) :
@@ -363,7 +363,7 @@ EmRegsVZ::EmRegsVZ (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::~EmRegsVZ
+//		â€¢ EmRegsVZ::~EmRegsVZ
 // ---------------------------------------------------------------------------
 
 EmRegsVZ::~EmRegsVZ (void)
@@ -372,7 +372,7 @@ EmRegsVZ::~EmRegsVZ (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::Initialize
+//		â€¢ EmRegsVZ::Initialize
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::Initialize (void)
@@ -385,7 +385,7 @@ void EmRegsVZ::Initialize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::Reset
+//		â€¢ EmRegsVZ::Reset
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::Reset (Bool hardwareReset)
@@ -417,7 +417,7 @@ void EmRegsVZ::Reset (Bool hardwareReset)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::Save
+//		â€¢ EmRegsVZ::Save
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::Save (SessionFile& f)
@@ -459,7 +459,7 @@ void EmRegsVZ::Save (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::Load
+//		â€¢ EmRegsVZ::Load
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::Load (SessionFile& f)
@@ -539,7 +539,7 @@ void EmRegsVZ::Load (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::Dispose
+//		â€¢ EmRegsVZ::Dispose
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::Dispose (void)
@@ -552,7 +552,7 @@ void EmRegsVZ::Dispose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::SetSubBankHandlers
+//		â€¢ EmRegsVZ::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::SetSubBankHandlers (void)
@@ -752,7 +752,7 @@ void EmRegsVZ::SetSubBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetRealAddress
+//		â€¢ EmRegsVZ::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmRegsVZ::GetRealAddress (emuptr address)
@@ -764,7 +764,7 @@ uint8* EmRegsVZ::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetAddressStart
+//		â€¢ EmRegsVZ::GetAddressStart
 // ---------------------------------------------------------------------------
 
 emuptr EmRegsVZ::GetAddressStart (void)
@@ -774,7 +774,7 @@ emuptr EmRegsVZ::GetAddressStart (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetAddressRange
+//		â€¢ EmRegsVZ::GetAddressRange
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsVZ::GetAddressRange (void)
@@ -784,7 +784,7 @@ uint32 EmRegsVZ::GetAddressRange (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::Cycle
+//		â€¢ EmRegsVZ::Cycle
 // ---------------------------------------------------------------------------
 // Handles periodic events that need to occur when the processor cycles (like
 // updating timer registers).  This function is called in two places from
@@ -913,7 +913,7 @@ void EmRegsVZ::Cycle (Bool sleeping)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::CycleSlowly
+//		â€¢ EmRegsVZ::CycleSlowly
 // ---------------------------------------------------------------------------
 // Handles periodic events that need to occur when the processor cycles (like
 // updating timer registers).  This function is called in two places from
@@ -975,7 +975,7 @@ void EmRegsVZ::CycleSlowly (Bool sleeping)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::TurnSoundOff
+//		â€¢ EmRegsVZ::TurnSoundOff
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::TurnSoundOff (void)
@@ -986,7 +986,7 @@ void EmRegsVZ::TurnSoundOff (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::ResetTimer
+//		â€¢ EmRegsVZ::ResetTimer
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::ResetTimer (void)
@@ -997,7 +997,7 @@ void EmRegsVZ::ResetTimer (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::ResetRTC
+//		â€¢ EmRegsVZ::ResetRTC
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::ResetRTC (void)
@@ -1011,7 +1011,7 @@ void EmRegsVZ::ResetRTC (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetInterruptLevel
+//		â€¢ EmRegsVZ::GetInterruptLevel
 // ---------------------------------------------------------------------------
 
 int32 EmRegsVZ::GetInterruptLevel (void)
@@ -1139,7 +1139,7 @@ int32 EmRegsVZ::GetInterruptLevel (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetInterruptBase
+//		â€¢ EmRegsVZ::GetInterruptBase
 // ---------------------------------------------------------------------------
 
 int32 EmRegsVZ::GetInterruptBase (void)
@@ -1149,7 +1149,7 @@ int32 EmRegsVZ::GetInterruptBase (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetLCDHasFrame
+//		â€¢ EmRegsVZ::GetLCDHasFrame
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZ::GetLCDHasFrame (void)
@@ -1159,7 +1159,7 @@ Bool EmRegsVZ::GetLCDHasFrame (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetLCDBeginEnd
+//		â€¢ EmRegsVZ::GetLCDBeginEnd
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::GetLCDBeginEnd (emuptr& begin, emuptr& end)
@@ -1174,7 +1174,7 @@ void EmRegsVZ::GetLCDBeginEnd (emuptr& begin, emuptr& end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetLCDScanlines
+//		â€¢ EmRegsVZ::GetLCDScanlines
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::GetLCDScanlines (EmScreenUpdateInfo& info)
@@ -1220,7 +1220,7 @@ void EmRegsVZ::GetLCDScanlines (EmScreenUpdateInfo& info)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetDynamicHeapSize
+//		â€¢ EmRegsVZ::GetDynamicHeapSize
 // ---------------------------------------------------------------------------
 
 int32 EmRegsVZ::GetDynamicHeapSize (void)
@@ -1267,7 +1267,7 @@ int32 EmRegsVZ::GetDynamicHeapSize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetROMSize
+//		â€¢ EmRegsVZ::GetROMSize
 // ---------------------------------------------------------------------------
 
 int32 EmRegsVZ::GetROMSize (void)
@@ -1302,7 +1302,7 @@ int32 EmRegsVZ::GetROMSize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetROMBaseAddress
+//		â€¢ EmRegsVZ::GetROMBaseAddress
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsVZ::GetROMBaseAddress (void)
@@ -1334,7 +1334,7 @@ uint32 EmRegsVZ::GetROMBaseAddress (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::ChipSelectsConfigured
+//		â€¢ EmRegsVZ::ChipSelectsConfigured
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZ::ChipSelectsConfigured (void)
@@ -1344,7 +1344,7 @@ Bool EmRegsVZ::ChipSelectsConfigured (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetSystemClockFrequency
+//		â€¢ EmRegsVZ::GetSystemClockFrequency
 // ---------------------------------------------------------------------------
 
 int32 EmRegsVZ::GetSystemClockFrequency (void)
@@ -1399,7 +1399,7 @@ int32 EmRegsVZ::GetSystemClockFrequency (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetCanStop
+//		â€¢ EmRegsVZ::GetCanStop
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZ::GetCanStop (void)
@@ -1420,7 +1420,7 @@ Bool EmRegsVZ::GetCanStop (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetAsleep
+//		â€¢ EmRegsVZ::GetAsleep
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZ::GetAsleep (void)
@@ -1430,7 +1430,7 @@ Bool EmRegsVZ::GetAsleep (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetPortInputValue
+//		â€¢ EmRegsVZ::GetPortInputValue
 // ---------------------------------------------------------------------------
 // Return the GPIO values for the pins on the port.  These values are used
 // if the select pins are high.
@@ -1449,7 +1449,7 @@ uint8 EmRegsVZ::GetPortInputValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetPortInternalValue
+//		â€¢ EmRegsVZ::GetPortInternalValue
 // ---------------------------------------------------------------------------
 // Return the dedicated values for the pins on the port.  These values are
 // used if the select pins are low.
@@ -1470,7 +1470,7 @@ uint8 EmRegsVZ::GetPortInternalValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::PortDataChanged
+//		â€¢ EmRegsVZ::PortDataChanged
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::PortDataChanged (int port, uint8, uint8 newValue)
@@ -1498,7 +1498,7 @@ void EmRegsVZ::PortDataChanged (int port, uint8, uint8 newValue)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::pllFreqSelRead
+//		â€¢ EmRegsVZ::pllFreqSelRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsVZ::pllFreqSelRead (emuptr address, int size)
@@ -1517,7 +1517,7 @@ uint32 EmRegsVZ::pllFreqSelRead (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::portXDataRead
+//		â€¢ EmRegsVZ::portXDataRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsVZ::portXDataRead (emuptr address, int)
@@ -1596,7 +1596,7 @@ uint32 EmRegsVZ::portXDataRead (emuptr address, int)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::tmr1StatusRead
+//		â€¢ EmRegsVZ::tmr1StatusRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsVZ::tmr1StatusRead (emuptr address, int size)
@@ -1637,7 +1637,7 @@ uint32 EmRegsVZ::tmr1StatusRead (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::tmr2StatusRead
+//		â€¢ EmRegsVZ::tmr2StatusRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsVZ::tmr2StatusRead (emuptr address, int size)
@@ -1678,7 +1678,7 @@ uint32 EmRegsVZ::tmr2StatusRead (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::uart1Read
+//		â€¢ EmRegsVZ::uart1Read
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsVZ::uart1Read (emuptr address, int size)
@@ -1698,7 +1698,7 @@ uint32 EmRegsVZ::uart1Read (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::uart2Read
+//		â€¢ EmRegsVZ::uart2Read
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsVZ::uart2Read (emuptr address, int size)
@@ -1718,7 +1718,7 @@ uint32 EmRegsVZ::uart2Read (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::rtcHourMinSecRead
+//		â€¢ EmRegsVZ::rtcHourMinSecRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsVZ::rtcHourMinSecRead (emuptr address, int size)
@@ -1751,7 +1751,7 @@ uint32 EmRegsVZ::rtcHourMinSecRead (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::csControl1Write
+//		â€¢ EmRegsVZ::csControl1Write
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::csControl1Write (emuptr address, int size, uint32 value)
@@ -1778,7 +1778,7 @@ void EmRegsVZ::csControl1Write (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::csASelectWrite
+//		â€¢ EmRegsVZ::csASelectWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::csASelectWrite (emuptr address, int size, uint32 value)
@@ -1803,7 +1803,7 @@ void EmRegsVZ::csASelectWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::csDSelectWrite
+//		â€¢ EmRegsVZ::csDSelectWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::csDSelectWrite (emuptr address, int size, uint32 value)
@@ -1832,7 +1832,7 @@ void EmRegsVZ::csDSelectWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::intMaskHiWrite
+//		â€¢ EmRegsVZ::intMaskHiWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::intMaskHiWrite (emuptr address, int size, uint32 value)
@@ -1848,7 +1848,7 @@ void EmRegsVZ::intMaskHiWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::intMaskLoWrite
+//		â€¢ EmRegsVZ::intMaskLoWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::intMaskLoWrite (emuptr address, int size, uint32 value)
@@ -1864,7 +1864,7 @@ void EmRegsVZ::intMaskLoWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::intStatusHiWrite
+//		â€¢ EmRegsVZ::intStatusHiWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::intStatusHiWrite (emuptr address, int size, uint32 value)
@@ -1944,7 +1944,7 @@ void EmRegsVZ::intStatusHiWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::portXDataWrite
+//		â€¢ EmRegsVZ::portXDataWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::portXDataWrite (emuptr address, int size, uint32 value)
@@ -1988,7 +1988,7 @@ void EmRegsVZ::portXDataWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::portDIntReqEnWrite
+//		â€¢ EmRegsVZ::portDIntReqEnWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::portDIntReqEnWrite (emuptr address, int size, uint32 value)
@@ -2004,7 +2004,7 @@ void EmRegsVZ::portDIntReqEnWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::tmr1StatusWrite
+//		â€¢ EmRegsVZ::tmr1StatusWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::tmr1StatusWrite (emuptr address, int size, uint32 value)
@@ -2041,7 +2041,7 @@ void EmRegsVZ::tmr1StatusWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::tmr2StatusWrite
+//		â€¢ EmRegsVZ::tmr2StatusWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::tmr2StatusWrite (emuptr address, int size, uint32 value)
@@ -2078,7 +2078,7 @@ void EmRegsVZ::tmr2StatusWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::spiCont1Write
+//		â€¢ EmRegsVZ::spiCont1Write
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::spiCont1Write (emuptr address, int size, uint32 value)
@@ -2106,7 +2106,7 @@ void EmRegsVZ::spiCont1Write (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::spiMasterControlWrite
+//		â€¢ EmRegsVZ::spiMasterControlWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::spiMasterControlWrite (emuptr address, int size, uint32 value)
@@ -2168,7 +2168,7 @@ void EmRegsVZ::spiMasterControlWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::uart1Write
+//		â€¢ EmRegsVZ::uart1Write
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::uart1Write(emuptr address, int size, uint32 value)
@@ -2191,7 +2191,7 @@ void EmRegsVZ::uart1Write(emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::uart2Write
+//		â€¢ EmRegsVZ::uart2Write
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::uart2Write(emuptr address, int size, uint32 value)
@@ -2214,7 +2214,7 @@ void EmRegsVZ::uart2Write(emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::lcdRegisterWrite
+//		â€¢ EmRegsVZ::lcdRegisterWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::lcdRegisterWrite (emuptr address, int size, uint32 value)
@@ -2269,7 +2269,7 @@ void EmRegsVZ::lcdRegisterWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::rtcControlWrite
+//		â€¢ EmRegsVZ::rtcControlWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::rtcControlWrite (emuptr address, int size, uint32 value)
@@ -2285,7 +2285,7 @@ void EmRegsVZ::rtcControlWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::rtcIntStatusWrite
+//		â€¢ EmRegsVZ::rtcIntStatusWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::rtcIntStatusWrite (emuptr address, int size, uint32 value)
@@ -2319,7 +2319,7 @@ void EmRegsVZ::rtcIntStatusWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::rtcIntEnableWrite
+//		â€¢ EmRegsVZ::rtcIntEnableWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::rtcIntEnableWrite (emuptr address, int size, uint32 value)
@@ -2335,7 +2335,7 @@ void EmRegsVZ::rtcIntEnableWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::ButtonEvent
+//		â€¢ EmRegsVZ::ButtonEvent
 // ---------------------------------------------------------------------------
 // Handles a Palm device button event by updating the appropriate registers.
 
@@ -2381,7 +2381,7 @@ void EmRegsVZ::ButtonEvent (SkinElementType button, Bool buttonIsDown)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::HotSyncEvent
+//		â€¢ EmRegsVZ::HotSyncEvent
 // ---------------------------------------------------------------------------
 // Handles a HotSync button event by updating the appropriate registers.
 
@@ -2409,7 +2409,7 @@ void EmRegsVZ::HotSyncEvent (Bool buttonIsDown)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetKeyBits
+//		â€¢ EmRegsVZ::GetKeyBits
 // ---------------------------------------------------------------------------
 
 uint8 EmRegsVZ::GetKeyBits (void)
@@ -2459,7 +2459,7 @@ uint8 EmRegsVZ::GetKeyBits (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::ButtonToBits
+//		â€¢ EmRegsVZ::ButtonToBits
 // ---------------------------------------------------------------------------
 
 uint16 EmRegsVZ::ButtonToBits (SkinElementType button)
@@ -2488,7 +2488,7 @@ uint16 EmRegsVZ::ButtonToBits (SkinElementType button)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetSPISlave
+//		â€¢ EmRegsVZ::GetSPISlave
 // ---------------------------------------------------------------------------
 
 EmSPISlave* EmRegsVZ::GetSPISlave (void)
@@ -2498,7 +2498,7 @@ EmSPISlave* EmRegsVZ::GetSPISlave (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::UpdateInterrupts
+//		â€¢ EmRegsVZ::UpdateInterrupts
 // ---------------------------------------------------------------------------
 // Determines whether an interrupt has occurred by copying the Interrupt
 // Pending Register to the Interrupt Status Register.
@@ -2533,7 +2533,7 @@ void EmRegsVZ::UpdateInterrupts (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::UpdatePortDInterrupts
+//		â€¢ EmRegsVZ::UpdatePortDInterrupts
 // ---------------------------------------------------------------------------
 // Determine what interrupts need to be generated based on the current
 // settings in portDData and fPortDEdge.
@@ -2637,7 +2637,7 @@ void EmRegsVZ::UpdatePortDInterrupts (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::UpdateRTCInterrupts
+//		â€¢ EmRegsVZ::UpdateRTCInterrupts
 // ---------------------------------------------------------------------------
 // Determine whether to set or clear the RTC bit in the interrupt pending
 // register based on the current RTC register values.
@@ -2688,7 +2688,7 @@ void EmRegsVZ::UpdateRTCInterrupts (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::UARTStateChanged
+//		â€¢ EmRegsVZ::UARTStateChanged
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::UARTStateChanged (Bool sendTxData, int uartNum)
@@ -2706,7 +2706,7 @@ void EmRegsVZ::UARTStateChanged (Bool sendTxData, int uartNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::UpdateUARTState
+//		â€¢ EmRegsVZ::UpdateUARTState
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::UpdateUARTState (Bool refreshRxData, int uartNum)
@@ -2724,7 +2724,7 @@ void EmRegsVZ::UpdateUARTState (Bool refreshRxData, int uartNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::UpdateUARTInterrupts
+//		â€¢ EmRegsVZ::UpdateUARTInterrupts
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::UpdateUARTInterrupts (const EmUARTDragonball::State& state, int uartNum)
@@ -2814,7 +2814,7 @@ void EmRegsVZ::UpdateUARTInterrupts (const EmUARTDragonball::State& state, int u
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::MarshalUARTState
+//		â€¢ EmRegsVZ::MarshalUARTState
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::MarshalUARTState (EmUARTDragonball::State& state, int uartNum)
@@ -2926,7 +2926,7 @@ void EmRegsVZ::MarshalUARTState (EmUARTDragonball::State& state, int uartNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::UnmarshalUARTState
+//		â€¢ EmRegsVZ::UnmarshalUARTState
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::UnmarshalUARTState (const EmUARTDragonball::State& state, int uartNum)
@@ -3040,7 +3040,7 @@ void EmRegsVZ::UnmarshalUARTState (const EmUARTDragonball::State& state, int uar
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::GetPort
+//		â€¢ EmRegsVZ::GetPort
 // ---------------------------------------------------------------------------
 // Given an address, return a value indicating what port it is associated with.
 
@@ -3068,7 +3068,7 @@ int EmRegsVZ::GetPort (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZ::PrvGetPalette
+//		â€¢ EmRegsVZ::PrvGetPalette
 // ---------------------------------------------------------------------------
 
 void EmRegsVZ::PrvGetPalette (RGBList& thePalette)

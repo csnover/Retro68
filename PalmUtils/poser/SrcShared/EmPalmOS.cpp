@@ -928,7 +928,7 @@ void EmPalmOS::GenerateStackCrawl (EmStackFrameList& frameList)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmPalmOS::PrefsChanged
+//		â€¢ EmPalmOS::PrefsChanged
 // ---------------------------------------------------------------------------
 // Respond to a preference change.
 

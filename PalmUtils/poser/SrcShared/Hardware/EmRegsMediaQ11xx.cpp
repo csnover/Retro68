@@ -951,7 +951,7 @@ inline Bool EmRegsMediaQ11xx::PrvGetYDoubling (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::EmRegsMediaQ11xx
+//		â€¢ EmRegsMediaQ11xx::EmRegsMediaQ11xx
 // ---------------------------------------------------------------------------
 
 EmRegsMediaQ11xx::EmRegsMediaQ11xx (emuptr baseRegsAddr, emuptr baseVideoAddr) :
@@ -994,7 +994,7 @@ EmRegsMediaQ11xx::EmRegsMediaQ11xx (emuptr baseRegsAddr, emuptr baseVideoAddr) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::~EmRegsMediaQ11xx
+//		â€¢ EmRegsMediaQ11xx::~EmRegsMediaQ11xx
 // ---------------------------------------------------------------------------
 
 EmRegsMediaQ11xx::~EmRegsMediaQ11xx (void)
@@ -1003,7 +1003,7 @@ EmRegsMediaQ11xx::~EmRegsMediaQ11xx (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::Initialize
+//		â€¢ EmRegsMediaQ11xx::Initialize
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::Initialize (void)
@@ -1013,7 +1013,7 @@ void EmRegsMediaQ11xx::Initialize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::Reset
+//		â€¢ EmRegsMediaQ11xx::Reset
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::Reset (Bool hardwareReset)
@@ -1177,7 +1177,7 @@ void EmRegsMediaQ11xx::Reset (Bool hardwareReset)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::Save
+//		â€¢ EmRegsMediaQ11xx::Save
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::Save (SessionFile& f)
@@ -1198,7 +1198,7 @@ void EmRegsMediaQ11xx::Save (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::Load
+//		â€¢ EmRegsMediaQ11xx::Load
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::Load (SessionFile& f)
@@ -1239,7 +1239,7 @@ void EmRegsMediaQ11xx::Load (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::Dispose
+//		â€¢ EmRegsMediaQ11xx::Dispose
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::Dispose (void)
@@ -1249,7 +1249,7 @@ void EmRegsMediaQ11xx::Dispose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::SetSubBankHandlers
+//		â€¢ EmRegsMediaQ11xx::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::SetSubBankHandlers (void)
@@ -1485,7 +1485,7 @@ void EmRegsMediaQ11xx::SetSubBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::GetRealAddress
+//		â€¢ EmRegsMediaQ11xx::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmRegsMediaQ11xx::GetRealAddress (emuptr address)
@@ -1495,7 +1495,7 @@ uint8* EmRegsMediaQ11xx::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::GetAddressStart
+//		â€¢ EmRegsMediaQ11xx::GetAddressStart
 // ---------------------------------------------------------------------------
 
 emuptr EmRegsMediaQ11xx::GetAddressStart (void)
@@ -1505,7 +1505,7 @@ emuptr EmRegsMediaQ11xx::GetAddressStart (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::GetAddressRange
+//		â€¢ EmRegsMediaQ11xx::GetAddressRange
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsMediaQ11xx::GetAddressRange (void)
@@ -1515,7 +1515,7 @@ uint32 EmRegsMediaQ11xx::GetAddressRange (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::GetLCDScreenOn
+//		â€¢ EmRegsMediaQ11xx::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsMediaQ11xx::GetLCDScreenOn (void)
@@ -1525,7 +1525,7 @@ Bool EmRegsMediaQ11xx::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::GetLCDBacklightOn
+//		â€¢ EmRegsMediaQ11xx::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsMediaQ11xx::GetLCDBacklightOn (void)
@@ -1535,7 +1535,7 @@ Bool EmRegsMediaQ11xx::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::GetLCDHasFrame
+//		â€¢ EmRegsMediaQ11xx::GetLCDHasFrame
 // ---------------------------------------------------------------------------
 
 Bool EmRegsMediaQ11xx::GetLCDHasFrame (void)
@@ -1545,7 +1545,7 @@ Bool EmRegsMediaQ11xx::GetLCDHasFrame (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::GetLCDBeginEnd
+//		â€¢ EmRegsMediaQ11xx::GetLCDBeginEnd
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::GetLCDBeginEnd (emuptr& begin, emuptr& end)
@@ -1560,7 +1560,7 @@ void EmRegsMediaQ11xx::GetLCDBeginEnd (emuptr& begin, emuptr& end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::GetLCDScanlines
+//		â€¢ EmRegsMediaQ11xx::GetLCDScanlines
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::GetLCDScanlines (EmScreenUpdateInfo& info)
@@ -1687,7 +1687,7 @@ void EmRegsMediaQ11xx::GetLCDScanlines (EmScreenUpdateInfo& info)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::MQRead
+//		â€¢ EmRegsMediaQ11xx::MQRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsMediaQ11xx::MQRead (emuptr address, int size)
@@ -1780,7 +1780,7 @@ uint32 EmRegsMediaQ11xx::MQRead (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::MQWrite
+//		â€¢ EmRegsMediaQ11xx::MQWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::MQWrite (emuptr address, int size, uint32 value)
@@ -1874,7 +1874,7 @@ void EmRegsMediaQ11xx::MQWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::CC01Read
+//		â€¢ EmRegsMediaQ11xx::CC01Read
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsMediaQ11xx::CC01Read (emuptr address, int size)
@@ -1900,7 +1900,7 @@ uint32 EmRegsMediaQ11xx::CC01Read (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::DC00Write
+//		â€¢ EmRegsMediaQ11xx::DC00Write
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::DC00Write (emuptr address, int size, uint32 value)
@@ -1914,7 +1914,7 @@ void EmRegsMediaQ11xx::DC00Write (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::GE00Write
+//		â€¢ EmRegsMediaQ11xx::GE00Write
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::GE00Write (emuptr address, int size, uint32 value)
@@ -1945,7 +1945,7 @@ void EmRegsMediaQ11xx::GE00Write (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::GE02Write
+//		â€¢ EmRegsMediaQ11xx::GE02Write
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::GE02Write (emuptr address, int size, uint32 value)
@@ -1976,7 +1976,7 @@ void EmRegsMediaQ11xx::GE02Write (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::SourceFifoWrite
+//		â€¢ EmRegsMediaQ11xx::SourceFifoWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::SourceFifoWrite (emuptr address, int size, uint32 value)
@@ -2007,7 +2007,7 @@ void EmRegsMediaQ11xx::SourceFifoWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::invalidateWrite
+//		â€¢ EmRegsMediaQ11xx::invalidateWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::invalidateWrite (emuptr address, int size, uint32 value)
@@ -2024,7 +2024,7 @@ void EmRegsMediaQ11xx::invalidateWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::AddressError
+//		â€¢ EmRegsMediaQ11xx::AddressError
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::AddressError (emuptr address, int32 size, Bool forRead)
@@ -2036,7 +2036,7 @@ void EmRegsMediaQ11xx::AddressError (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvGetPalette
+//		â€¢ EmRegsMediaQ11xx::PrvGetPalette
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvGetPalette (RGBList& thePalette)
@@ -2058,7 +2058,7 @@ void EmRegsMediaQ11xx::PrvGetPalette (RGBList& thePalette)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvUpdateByteLanes
+//		â€¢ EmRegsMediaQ11xx::PrvUpdateByteLanes
 // ---------------------------------------------------------------------------
 /*
 	Figuring out byteswapping:
@@ -2214,7 +2214,7 @@ void EmRegsMediaQ11xx::PrvUpdateByteLanes (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvGetGEState
+//		â€¢ EmRegsMediaQ11xx::PrvGetGEState
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvGetGEState (int regNum)
@@ -2448,7 +2448,7 @@ void EmRegsMediaQ11xx::PrvGetGEState (int regNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvLogGEState
+//		â€¢ EmRegsMediaQ11xx::PrvLogGEState
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvLogGEState (void)
@@ -2678,7 +2678,7 @@ void EmRegsMediaQ11xx::PrvLogGEState (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvDoCommand
+//		â€¢ EmRegsMediaQ11xx::PrvDoCommand
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvDoCommand (void)
@@ -2705,7 +2705,7 @@ void EmRegsMediaQ11xx::PrvDoCommand (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvDoBitBLT
+//		â€¢ EmRegsMediaQ11xx::PrvDoBitBLT
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvDoBitBLT (void)
@@ -2716,7 +2716,7 @@ void EmRegsMediaQ11xx::PrvDoBitBLT (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvDoLine
+//		â€¢ EmRegsMediaQ11xx::PrvDoLine
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvDoLine (void)
@@ -2888,7 +2888,7 @@ void EmRegsMediaQ11xx::PrvDoLine (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvIllegalCommand
+//		â€¢ EmRegsMediaQ11xx::PrvIllegalCommand
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvIllegalCommand (void)
@@ -2897,7 +2897,7 @@ void EmRegsMediaQ11xx::PrvIllegalCommand (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvSrcFifoFilledSlots
+//		â€¢ EmRegsMediaQ11xx::PrvSrcFifoFilledSlots
 // ---------------------------------------------------------------------------
 
 int EmRegsMediaQ11xx::PrvSrcFifoFilledSlots (void)
@@ -2907,7 +2907,7 @@ int EmRegsMediaQ11xx::PrvSrcFifoFilledSlots (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvGetSrcFifoSlot
+//		â€¢ EmRegsMediaQ11xx::PrvGetSrcFifoSlot
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvGetSrcFifoSlot (uint32& a, uint32& b)
@@ -2925,7 +2925,7 @@ void EmRegsMediaQ11xx::PrvGetSrcFifoSlot (uint32& a, uint32& b)
 // ---------------------------------------------------------------------------
  
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvAdjustPixel
+//		â€¢ EmRegsMediaQ11xx::PrvAdjustPixel
 // ---------------------------------------------------------------------------
 
 uint16 EmRegsMediaQ11xx::PrvAdjustPixel (uint16 pen, uint16 dest, uint8 rOpCode)
@@ -3094,7 +3094,7 @@ uint16 EmRegsMediaQ11xx::PrvAdjustPixel (uint16 pen, uint16 dest, uint8 rOpCode)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvAdjustPixel
+//		â€¢ EmRegsMediaQ11xx::PrvAdjustPixel
 // ---------------------------------------------------------------------------
 
 uint16 EmRegsMediaQ11xx::PrvAdjustPixel (uint16 pattern, uint16 src, uint16 dest, uint8 rOpCode)
@@ -3181,319 +3181,319 @@ uint16 EmRegsMediaQ11xx::PrvAdjustPixel (uint16 pattern, uint16 src, uint16 dest
 			result = 0;
 			break;
 
-	//	case 0x01:	// 00010289 DPSoon –
-	//	case 0x02:	// 00020C89 DPSona –
-	//	case 0x03:	// 000300AA PSon –
-	//	case 0x04:	// 00040C88 SDPona –
-	//	case 0x05:	// 000500A9 DPon –
-	//	case 0x06:	// 00060865 PDSxnon –
-	//	case 0x07:	// 000702C5 PDSaon –
-	//	case 0x08:	// 00080F08 SDPnaa –
-	//	case 0x09:	// 00090245 PDSxon –
-		case 0x0A:	// 000A0329 DPna –
+	//	case 0x01:	// 00010289 DPSoon â€“
+	//	case 0x02:	// 00020C89 DPSona â€“
+	//	case 0x03:	// 000300AA PSon â€“
+	//	case 0x04:	// 00040C88 SDPona â€“
+	//	case 0x05:	// 000500A9 DPon â€“
+	//	case 0x06:	// 00060865 PDSxnon â€“
+	//	case 0x07:	// 000702C5 PDSaon â€“
+	//	case 0x08:	// 00080F08 SDPnaa â€“
+	//	case 0x09:	// 00090245 PDSxon â€“
+		case 0x0A:	// 000A0329 DPna â€“
 			result = dest & ~pattern;
 			break;
 
-	//	case 0x0B:	// 000B0B2A PSDnaon –
-	//	case 0x0C:	// 000C0324 SPna –
-	//	case 0x0D:	// 000D0B25 PDSnaon –
-	//	case 0x0E:	// 000E08A5 PDSonon –
-		case 0x0F:	// 000F0001 Pn –
+	//	case 0x0B:	// 000B0B2A PSDnaon â€“
+	//	case 0x0C:	// 000C0324 SPna â€“
+	//	case 0x0D:	// 000D0B25 PDSnaon â€“
+	//	case 0x0E:	// 000E08A5 PDSonon â€“
+		case 0x0F:	// 000F0001 Pn â€“
 			result = ~pattern;
 			break;
 
-	//	case 0x10:	// 00100C85 PDSona –
+	//	case 0x10:	// 00100C85 PDSona â€“
 		case 0x11:	// 001100A6 DSon NOTSRCERASE
 			result = ~(dest | src);
 			break;
 
-	//	case 0x12:	// 00120868 SDPxnon –
-	//	case 0x13:	// 001302C8 SDPaon –
-	//	case 0x14:	// 00140869 DPSxnon –
-	//	case 0x15:	// 001502C9 DPSaon –
-	//	case 0x16:	// 00165CCA PSDPSanaxx –
-	//	case 0x17:	// 00171D54 SSPxDSxaxn –
-	//	case 0x18:	// 00180D59 SPxPDxa –
-	//	case 0x19:	// 00191CC8 SDPSanaxn –
-	//	case 0x1A:	// 001A06C5 PDSPaox –
-	//	case 0x1B:	// 001B0768 SDPSxaxn –
-	//	case 0x1C:	// 001C06CA PSDPaox –
-	//	case 0x1D:	// 001D0766 DSPDxaxn –
-	//	case 0x1E:	// 001E01A5 PDSox –
-	//	case 0x1F:	// 001F0385 PDSoan –
-	//	case 0x20:	// 00200F09 DPSnaa –
-	//	case 0x21:	// 00210248 SDPxon –
-		case 0x22:	// 00220326 DSna –
+	//	case 0x12:	// 00120868 SDPxnon â€“
+	//	case 0x13:	// 001302C8 SDPaon â€“
+	//	case 0x14:	// 00140869 DPSxnon â€“
+	//	case 0x15:	// 001502C9 DPSaon â€“
+	//	case 0x16:	// 00165CCA PSDPSanaxx â€“
+	//	case 0x17:	// 00171D54 SSPxDSxaxn â€“
+	//	case 0x18:	// 00180D59 SPxPDxa â€“
+	//	case 0x19:	// 00191CC8 SDPSanaxn â€“
+	//	case 0x1A:	// 001A06C5 PDSPaox â€“
+	//	case 0x1B:	// 001B0768 SDPSxaxn â€“
+	//	case 0x1C:	// 001C06CA PSDPaox â€“
+	//	case 0x1D:	// 001D0766 DSPDxaxn â€“
+	//	case 0x1E:	// 001E01A5 PDSox â€“
+	//	case 0x1F:	// 001F0385 PDSoan â€“
+	//	case 0x20:	// 00200F09 DPSnaa â€“
+	//	case 0x21:	// 00210248 SDPxon â€“
+		case 0x22:	// 00220326 DSna â€“
 			result = dest & ~src;
 			break;
 
-	//	case 0x23:	// 00230B24 SPDnaon –
-	//	case 0x24:	// 00240D55 SPxDSxa –
-	//	case 0x25:	// 00251CC5 PDSPanaxn –
-	//	case 0x26:	// 002606C8 SDPSaox –
-	//	case 0x27:	// 00271868 SDPSxnox –
-	//	case 0x28:	// 00280369 DPSxa –
-	//	case 0x29:	// 002916CA PSDPSaoxxn –
-	//	case 0x2A:	// 002A0CC9 DPSana –
-	//	case 0x2B:	// 002B1D58 SSPxPDxaxn –
-	//	case 0x2C:	// 002C0784 SPDSoax –
-	//	case 0x2D:	// 002D060A PSDnox –
-	//	case 0x2E:	// 002E064A PSDPxox –
-	//	case 0x2F:	// 002F0E2A PSDnoan –
-	//	case 0x30:	// 0030032A PSna –
-	//	case 0x31:	// 00310B28 SDPnaon –
-	//	case 0x32:	// 00320688 SDPSoox –
+	//	case 0x23:	// 00230B24 SPDnaon â€“
+	//	case 0x24:	// 00240D55 SPxDSxa â€“
+	//	case 0x25:	// 00251CC5 PDSPanaxn â€“
+	//	case 0x26:	// 002606C8 SDPSaox â€“
+	//	case 0x27:	// 00271868 SDPSxnox â€“
+	//	case 0x28:	// 00280369 DPSxa â€“
+	//	case 0x29:	// 002916CA PSDPSaoxxn â€“
+	//	case 0x2A:	// 002A0CC9 DPSana â€“
+	//	case 0x2B:	// 002B1D58 SSPxPDxaxn â€“
+	//	case 0x2C:	// 002C0784 SPDSoax â€“
+	//	case 0x2D:	// 002D060A PSDnox â€“
+	//	case 0x2E:	// 002E064A PSDPxox â€“
+	//	case 0x2F:	// 002F0E2A PSDnoan â€“
+	//	case 0x30:	// 0030032A PSna â€“
+	//	case 0x31:	// 00310B28 SDPnaon â€“
+	//	case 0x32:	// 00320688 SDPSoox â€“
 		case 0x33:	// 00330008 Sn NOTSRCCOPY
 			result = ~src;
 			break;
 
-	//	case 0x34:	// 003406C4 SPDSaox –
-	//	case 0x35:	// 00351864 SPDSxnox –
-	//	case 0x36:	// 003601A8 SDPox –
-	//	case 0x37:	// 00370388 SDPoan –
-	//	case 0x38:	// 0038078A PSDPoax –
-	//	case 0x39:	// 00390604 SPDnox –
-	//	case 0x3A:	// 003A0644 SPDSxox –
-	//	case 0x3B:	// 003B0E24 SPDnoan –
-	//	case 0x3C:	// 003C004A PSx –
-	//	case 0x3D:	// 003D18A4 SPDSonox –
-	//	case 0x3E:	// 003E1B24 SPDSnaox –
-	//	case 0x3F:	// 003F00EA PSan –
-	//	case 0x40:	// 00400F0A PSDnaa –
-	//	case 0x41:	// 00410249 DPSxon –
-	//	case 0x42:	// 00420D5D SDxPDxa –
-	//	case 0x43:	// 00431CC4 SPDSanaxn –
+	//	case 0x34:	// 003406C4 SPDSaox â€“
+	//	case 0x35:	// 00351864 SPDSxnox â€“
+	//	case 0x36:	// 003601A8 SDPox â€“
+	//	case 0x37:	// 00370388 SDPoan â€“
+	//	case 0x38:	// 0038078A PSDPoax â€“
+	//	case 0x39:	// 00390604 SPDnox â€“
+	//	case 0x3A:	// 003A0644 SPDSxox â€“
+	//	case 0x3B:	// 003B0E24 SPDnoan â€“
+	//	case 0x3C:	// 003C004A PSx â€“
+	//	case 0x3D:	// 003D18A4 SPDSonox â€“
+	//	case 0x3E:	// 003E1B24 SPDSnaox â€“
+	//	case 0x3F:	// 003F00EA PSan â€“
+	//	case 0x40:	// 00400F0A PSDnaa â€“
+	//	case 0x41:	// 00410249 DPSxon â€“
+	//	case 0x42:	// 00420D5D SDxPDxa â€“
+	//	case 0x43:	// 00431CC4 SPDSanaxn â€“
 		case 0x44:	// 00440328 SDna SRCERASE
 			result = src & ~dest;
 			break;
 
-	//	case 0x45:	// 00450B29 DPSnaon –
-	//	case 0x46:	// 004606C6 DSPDaox –
-	//	case 0x47:	// 0047076A PSDPxaxn –
-	//	case 0x48:	// 00480368 SDPxa –
-	//	case 0x49:	// 004916C5 PDSPDaoxxn –
-	//	case 0x4A:	// 004A0789 DPSDoax –
-	//	case 0x4B:	// 004B0605 PDSnox –
-	//	case 0x4C:	// 004C0CC8 SDPana –
-	//	case 0x4D:	// 004D1954 SSPxDSxoxn –
-	//	case 0x4E:	// 004E0645 PDSPxox –
-	//	case 0x4F:	// 004F0E25 PDSnoan –
-	//	case 0x50:	// 00500325 PDna –
-	//	case 0x51:	// 00510B26 DSPnaon –
-	//	case 0x52:	// 005206C9 DPSDaox –
-	//	case 0x53:	// 00530764 SPDSxaxn –
-	//	case 0x54:	// 005408A9 DPSonon –
+	//	case 0x45:	// 00450B29 DPSnaon â€“
+	//	case 0x46:	// 004606C6 DSPDaox â€“
+	//	case 0x47:	// 0047076A PSDPxaxn â€“
+	//	case 0x48:	// 00480368 SDPxa â€“
+	//	case 0x49:	// 004916C5 PDSPDaoxxn â€“
+	//	case 0x4A:	// 004A0789 DPSDoax â€“
+	//	case 0x4B:	// 004B0605 PDSnox â€“
+	//	case 0x4C:	// 004C0CC8 SDPana â€“
+	//	case 0x4D:	// 004D1954 SSPxDSxoxn â€“
+	//	case 0x4E:	// 004E0645 PDSPxox â€“
+	//	case 0x4F:	// 004F0E25 PDSnoan â€“
+	//	case 0x50:	// 00500325 PDna â€“
+	//	case 0x51:	// 00510B26 DSPnaon â€“
+	//	case 0x52:	// 005206C9 DPSDaox â€“
+	//	case 0x53:	// 00530764 SPDSxaxn â€“
+	//	case 0x54:	// 005408A9 DPSonon â€“
 		case 0x55:	// 00550009 Dn DSTINVERT
 			result = ~dest;
 			break;
 
-	//	case 0x56:	// 005601A9 DPSox –
-	//	case 0x57:	// 00570389 DPSoan –
-	//	case 0x58:	// 00580785 PDSPoax –
-	//	case 0x59:	// 00590609 DPSnox –
+	//	case 0x56:	// 005601A9 DPSox â€“
+	//	case 0x57:	// 00570389 DPSoan â€“
+	//	case 0x58:	// 00580785 PDSPoax â€“
+	//	case 0x59:	// 00590609 DPSnox â€“
 		case 0x5A:	// 005A0049 DPx PATINVERT
 			result = dest ^ pattern;
 			break;
 
-	//	case 0x5B:	// 005B18A9 DPSDonox –
-	//	case 0x5C:	// 005C0649 DPSDxox –
-	//	case 0x5D:	// 005D0E29 DPSnoan –
-	//	case 0x5E:	// 005E1B29 DPSDnaox –
-		case 0x5F:	// 005F00E9 DPan –
+	//	case 0x5B:	// 005B18A9 DPSDonox â€“
+	//	case 0x5C:	// 005C0649 DPSDxox â€“
+	//	case 0x5D:	// 005D0E29 DPSnoan â€“
+	//	case 0x5E:	// 005E1B29 DPSDnaox â€“
+		case 0x5F:	// 005F00E9 DPan â€“
 			result = ~(dest & pattern);
 			break;
 
-	//	case 0x60:	// 00600365 PDSxa –
-	//	case 0x61:	// 006116C6 DSPDSaoxxn –
-	//	case 0x62:	// 00620786 DSPDoax –
-	//	case 0x63:	// 00630608 SDPnox –
-	//	case 0x64:	// 00640788 SDPSoax –
-	//	case 0x65:	// 00650606 DSPnox –
+	//	case 0x60:	// 00600365 PDSxa â€“
+	//	case 0x61:	// 006116C6 DSPDSaoxxn â€“
+	//	case 0x62:	// 00620786 DSPDoax â€“
+	//	case 0x63:	// 00630608 SDPnox â€“
+	//	case 0x64:	// 00640788 SDPSoax â€“
+	//	case 0x65:	// 00650606 DSPnox â€“
 		case 0x66:	// 00660046 DSx SRCINVERT
 			result = dest ^ src;
 			break;
 
-	//	case 0x67:	// 006718A8 SDPSonox –
-	//	case 0x68:	// 006858A6 DSPDSonoxxn –
-	//	case 0x69:	// 00690145 PDSxxn –
-	//	case 0x6A:	// 006A01E9 DPSax –
-	//	case 0x6B:	// 006B178A PSDPSoaxxn –
-	//	case 0x6C:	// 006C01E8 SDPax –
-	//	case 0x6D:	// 006D1785 PDSPDoaxxn –
-	//	case 0x6E:	// 006E1E28 SDPSnoax –
-	//	case 0x6F:	// 006F0C65 PDSxnan –
-	//	case 0x70:	// 00700CC5 PDSana –
-	//	case 0x71:	// 00711D5C SSDxPDxaxn –
-	//	case 0x72:	// 00720648 SDPSxox –
-	//	case 0x73:	// 00730E28 SDPnoan –
-	//	case 0x74:	// 00740646 DSPDxox –
-	//	case 0x75:	// 00750E26 DSPnoan –
-	//	case 0x76:	// 00761B28 SDPSnaox –
-		case 0x77:	// 007700E6 DSan –
+	//	case 0x67:	// 006718A8 SDPSonox â€“
+	//	case 0x68:	// 006858A6 DSPDSonoxxn â€“
+	//	case 0x69:	// 00690145 PDSxxn â€“
+	//	case 0x6A:	// 006A01E9 DPSax â€“
+	//	case 0x6B:	// 006B178A PSDPSoaxxn â€“
+	//	case 0x6C:	// 006C01E8 SDPax â€“
+	//	case 0x6D:	// 006D1785 PDSPDoaxxn â€“
+	//	case 0x6E:	// 006E1E28 SDPSnoax â€“
+	//	case 0x6F:	// 006F0C65 PDSxnan â€“
+	//	case 0x70:	// 00700CC5 PDSana â€“
+	//	case 0x71:	// 00711D5C SSDxPDxaxn â€“
+	//	case 0x72:	// 00720648 SDPSxox â€“
+	//	case 0x73:	// 00730E28 SDPnoan â€“
+	//	case 0x74:	// 00740646 DSPDxox â€“
+	//	case 0x75:	// 00750E26 DSPnoan â€“
+	//	case 0x76:	// 00761B28 SDPSnaox â€“
+		case 0x77:	// 007700E6 DSan â€“
 			result = ~(dest & src);
 			break;
 
-	//	case 0x78:	// 007801E5 PDSax –
-	//	case 0x79:	// 00791786 DSPDSoaxxn –
-	//	case 0x7A:	// 007A1E29 DPSDnoax –
-	//	case 0x7B:	// 007B0C68 SDPxnan –
-	//	case 0x7C:	// 007C1E24 SPDSnoax –
-	//	case 0x7D:	// 007D0C69 DPSxnan –
-	//	case 0x7E:	// 007E0955 SPxDSxo –
-	//	case 0x7F:	// 007F03C9 DPSaan –
-	//	case 0x80:	// 008003E9 DPSaa –
-	//	case 0x81:	// 00810975 SPxDSxon –
-	//	case 0x82:	// 00820C49 DPSxna –
-	//	case 0x83:	// 00831E04 SPDSnoaxn –
-	//	case 0x84:	// 00840C48 SDPxna –
-	//	case 0x85:	// 00851E05 PDSPnoaxn –
-	//	case 0x86:	// 008617A6 DSPDSoaxx –
-	//	case 0x87:	// 008701C5 PDSaxn –
+	//	case 0x78:	// 007801E5 PDSax â€“
+	//	case 0x79:	// 00791786 DSPDSoaxxn â€“
+	//	case 0x7A:	// 007A1E29 DPSDnoax â€“
+	//	case 0x7B:	// 007B0C68 SDPxnan â€“
+	//	case 0x7C:	// 007C1E24 SPDSnoax â€“
+	//	case 0x7D:	// 007D0C69 DPSxnan â€“
+	//	case 0x7E:	// 007E0955 SPxDSxo â€“
+	//	case 0x7F:	// 007F03C9 DPSaan â€“
+	//	case 0x80:	// 008003E9 DPSaa â€“
+	//	case 0x81:	// 00810975 SPxDSxon â€“
+	//	case 0x82:	// 00820C49 DPSxna â€“
+	//	case 0x83:	// 00831E04 SPDSnoaxn â€“
+	//	case 0x84:	// 00840C48 SDPxna â€“
+	//	case 0x85:	// 00851E05 PDSPnoaxn â€“
+	//	case 0x86:	// 008617A6 DSPDSoaxx â€“
+	//	case 0x87:	// 008701C5 PDSaxn â€“
 		case 0x88:	// 008800C6 DSa SRCAND
 			result = dest & src;
 			break;
 
-	//	case 0x89:	// 00891B08 SDPSnaoxn –
-	//	case 0x8A:	// 008A0E06 DSPnoa –
-	//	case 0x8B:	// 008B0666 DSPDxoxn –
-	//	case 0x8C:	// 008C0E08 SDPnoa –
-	//	case 0x8D:	// 008D0668 SDPSxoxn –
-	//	case 0x8E:	// 008E1D7C SSDxPDxax –
-	//	case 0x8F:	// 008F0CE5 PDSanan –
-	//	case 0x90:	// 00900C45 PDSxna –
-	//	case 0x91:	// 00911E08 SDPSnoaxn –
-	//	case 0x92:	// 009217A9 DPSDPoaxx –
-	//	case 0x93:	// 009301C4 SPDaxn –
-	//	case 0x94:	// 009417AA PSDPSoaxx –
-	//	case 0x95:	// 009501C9 DPSaxn –
-	//	case 0x96:	// 00960169 DPSxx –
-	//	case 0x97:	// 0097588A PSDPSonoxx –
-	//	case 0x98:	// 00981888 SDPSonoxn –
-		case 0x99:	// 00990066 DSxn –
+	//	case 0x89:	// 00891B08 SDPSnaoxn â€“
+	//	case 0x8A:	// 008A0E06 DSPnoa â€“
+	//	case 0x8B:	// 008B0666 DSPDxoxn â€“
+	//	case 0x8C:	// 008C0E08 SDPnoa â€“
+	//	case 0x8D:	// 008D0668 SDPSxoxn â€“
+	//	case 0x8E:	// 008E1D7C SSDxPDxax â€“
+	//	case 0x8F:	// 008F0CE5 PDSanan â€“
+	//	case 0x90:	// 00900C45 PDSxna â€“
+	//	case 0x91:	// 00911E08 SDPSnoaxn â€“
+	//	case 0x92:	// 009217A9 DPSDPoaxx â€“
+	//	case 0x93:	// 009301C4 SPDaxn â€“
+	//	case 0x94:	// 009417AA PSDPSoaxx â€“
+	//	case 0x95:	// 009501C9 DPSaxn â€“
+	//	case 0x96:	// 00960169 DPSxx â€“
+	//	case 0x97:	// 0097588A PSDPSonoxx â€“
+	//	case 0x98:	// 00981888 SDPSonoxn â€“
+		case 0x99:	// 00990066 DSxn â€“
 			result = ~(dest ^ src);
 			break;
 
-	//	case 0x9A:	// 009A0709 DPSnax –
-	//	case 0x9B:	// 009B07A8 SDPSoaxn –
-	//	case 0x9C:	// 009C0704 SPDnax –
-	//	case 0x9D:	// 009D07A6 DSPDoaxn –
-	//	case 0x9E:	// 009E16E6 DSPDSaoxx –
-	//	case 0x9F:	// 009F0345 PDSxan –
-		case 0xA0:	// 00A000C9 DPa –
+	//	case 0x9A:	// 009A0709 DPSnax â€“
+	//	case 0x9B:	// 009B07A8 SDPSoaxn â€“
+	//	case 0x9C:	// 009C0704 SPDnax â€“
+	//	case 0x9D:	// 009D07A6 DSPDoaxn â€“
+	//	case 0x9E:	// 009E16E6 DSPDSaoxx â€“
+	//	case 0x9F:	// 009F0345 PDSxan â€“
+		case 0xA0:	// 00A000C9 DPa â€“
 			result = dest & pattern;
 			break;
 
-	//	case 0xA1:	// 00A11B05 PDSPnaoxn –
-	//	case 0xA2:	// 00A20E09 DPSnoa –
-	//	case 0xA3:	// 00A30669 DPSDxoxn –
-	//	case 0xA4:	// 00A41885 PDSPonoxn –
-		case 0xA5:	// 00A50065 PDxn –
+	//	case 0xA1:	// 00A11B05 PDSPnaoxn â€“
+	//	case 0xA2:	// 00A20E09 DPSnoa â€“
+	//	case 0xA3:	// 00A30669 DPSDxoxn â€“
+	//	case 0xA4:	// 00A41885 PDSPonoxn â€“
+		case 0xA5:	// 00A50065 PDxn â€“
 			result = ~(pattern ^ dest);
 			break;
 
-	//	case 0xA6:	// 00A60706 DSPnax –
-	//	case 0xA7:	// 00A707A5 PDSPoaxn –
-	//	case 0xA8:	// 00A803A9 DPSoa –
-	//	case 0xA9:	// 00A90189 DPSoxn –
-	//	case 0xAA:	// 00AA0029 D –
-	//	case 0xAB:	// 00AB0889 DPSono –
-	//	case 0xAC:	// 00AC0744 SPDSxax –
-	//	case 0xAD:	// 00AD06E9 DPSDaoxn –
-	//	case 0xAE:	// 00AE0B06 DSPnao –
-		case 0xAF:	// 00AF0229 DPno –
+	//	case 0xA6:	// 00A60706 DSPnax â€“
+	//	case 0xA7:	// 00A707A5 PDSPoaxn â€“
+	//	case 0xA8:	// 00A803A9 DPSoa â€“
+	//	case 0xA9:	// 00A90189 DPSoxn â€“
+	//	case 0xAA:	// 00AA0029 D â€“
+	//	case 0xAB:	// 00AB0889 DPSono â€“
+	//	case 0xAC:	// 00AC0744 SPDSxax â€“
+	//	case 0xAD:	// 00AD06E9 DPSDaoxn â€“
+	//	case 0xAE:	// 00AE0B06 DSPnao â€“
+		case 0xAF:	// 00AF0229 DPno â€“
 			result = dest | ~pattern;
 			break;
 
-	//	case 0xB0:	// 00B00E05 PDSnoa –
-	//	case 0xB1:	// 00B10665 PDSPxoxn –
-	//	case 0xB2:	// 00B21974 SSPxDSxox –
-	//	case 0xB3:	// 00B30CE8 SDPanan –
-	//	case 0xB4:	// 00B4070A PSDnax –
-	//	case 0xB5:	// 00B507A9 DPSDoaxn –
-	//	case 0xB6:	// 00B616E9 DPSDPaoxx –
-	//	case 0xB7:	// 00B70348 SDPxan –
-	//	case 0xB8:	// 00B8074A PSDPxax –
-	//	case 0xB9:	// 00B906E6 DSPDaoxn –
-	//	case 0xBA:	// 00BA0B09 DPSnao –
+	//	case 0xB0:	// 00B00E05 PDSnoa â€“
+	//	case 0xB1:	// 00B10665 PDSPxoxn â€“
+	//	case 0xB2:	// 00B21974 SSPxDSxox â€“
+	//	case 0xB3:	// 00B30CE8 SDPanan â€“
+	//	case 0xB4:	// 00B4070A PSDnax â€“
+	//	case 0xB5:	// 00B507A9 DPSDoaxn â€“
+	//	case 0xB6:	// 00B616E9 DPSDPaoxx â€“
+	//	case 0xB7:	// 00B70348 SDPxan â€“
+	//	case 0xB8:	// 00B8074A PSDPxax â€“
+	//	case 0xB9:	// 00B906E6 DSPDaoxn â€“
+	//	case 0xBA:	// 00BA0B09 DPSnao â€“
 		case 0xBB:	// 00BB0226 DSno MERGEPAINT
 			result = dest | ~src;
 			break;
 
-	//	case 0xBC:	// 00BC1CE4 SPDSanax –
-	//	case 0xBD:	// 00BD0D7D SDxPDxan –
-	//	case 0xBE:	// 00BE0269 DPSxo –
-	//	case 0xBF:	// 00BF08C9 DPSano –
+	//	case 0xBC:	// 00BC1CE4 SPDSanax â€“
+	//	case 0xBD:	// 00BD0D7D SDxPDxan â€“
+	//	case 0xBE:	// 00BE0269 DPSxo â€“
+	//	case 0xBF:	// 00BF08C9 DPSano â€“
 		case 0xC0:	// 00C000CA PSa MERGECOPY
 			result = pattern & src;
 			break;
 
-	//	case 0xC1:	// 00C11B04 SPDSnaoxn –
-	//	case 0xC2:	// 00C21884 SPDSonoxn –
-	//	case 0xC3:	// 00C3006A PSxn –
-	//	case 0xC4:	// 00C40E04 SPDnoa –
-	//	case 0xC5:	// 00C50664 SPDSxoxn –
-	//	case 0xC6:	// 00C60708 SDPnax –
-	//	case 0xC7:	// 00C707AA PSDPoaxn –
-	//	case 0xC8:	// 00C803A8 SDPoa –
-	//	case 0xC9:	// 00C90184 SPDoxn –
-	//	case 0xCA:	// 00CA0749 DPSDxax –
-	//	case 0xCB:	// 00CB06E4 SPDSaoxn –
+	//	case 0xC1:	// 00C11B04 SPDSnaoxn â€“
+	//	case 0xC2:	// 00C21884 SPDSonoxn â€“
+	//	case 0xC3:	// 00C3006A PSxn â€“
+	//	case 0xC4:	// 00C40E04 SPDnoa â€“
+	//	case 0xC5:	// 00C50664 SPDSxoxn â€“
+	//	case 0xC6:	// 00C60708 SDPnax â€“
+	//	case 0xC7:	// 00C707AA PSDPoaxn â€“
+	//	case 0xC8:	// 00C803A8 SDPoa â€“
+	//	case 0xC9:	// 00C90184 SPDoxn â€“
+	//	case 0xCA:	// 00CA0749 DPSDxax â€“
+	//	case 0xCB:	// 00CB06E4 SPDSaoxn â€“
 		case 0xCC:	// 00CC0020 S SRCCOPY
 			result = src;
 			break;
 
-	//	case 0xCD:	// 00CD0888 SDPono –
-	//	case 0xCE:	// 00CE0B08 SDPnao –
-	//	case 0xCF:	// 00CF0224 SPno –
-	//	case 0xD0:	// 00D00E0A PSDnoa –
-	//	case 0xD1:	// 00D1066A PSDPxoxn –
-	//	case 0xD2:	// 00D20705 PDSnax –
-	//	case 0xD3:	// 00D307A4 SPDSoaxn –
-	//	case 0xD4:	// 00D41D78 SSPxPDxax –
-	//	case 0xD5:	// 00D50CE9 DPSanan –
-	//	case 0xD6:	// 00D616EA PSDPSaoxx –
-	//	case 0xD7:	// 00D70349 DPSxan –
-	//	case 0xD8:	// 00D80745 PDSPxax –
-	//	case 0xD9:	// 00D906E8 SDPSaoxn –
-	//	case 0xDA:	// 00DA1CE9 DPSDanax –
-	//	case 0xDB:	// 00DB0D75 SPxDSxan –
-	//	case 0xDC:	// 00DC0B04 SPDnao –
-	//	case 0xDD:	// 00DD0228 SDno –
-	//	case 0xDE:	// 00DE0268 SDPxo –
-	//	case 0xDF:	// 00DF08C8 SDPano –
-	//	case 0xE0:	// 00E003A5 PDSoa –
-	//	case 0xE1:	// 00E10185 PDSoxn –
-	//	case 0xE2:	// 00E20746 DSPDxax –
-	//	case 0xE3:	// 00E306EA PSDPaoxn –
-	//	case 0xE4:	// 00E40748 SDPSxax –
-	//	case 0xE5:	// 00E506E5 PDSPaoxn –
-	//	case 0xE6:	// 00E61CE8 SDPSanax –
-	//	case 0xE7:	// 00E70D79 SPxPDxan –
-	//	case 0xE8:	// 00E81D74 SSPxDSxax –
-	//	case 0xE9:	// 00E95CE6 DSPDSanaxxn –
-	//	case 0xEA:	// 00EA02E9 DPSao –
-	//	case 0xEB:	// 00EB0849 DPSxno –
-	//	case 0xEC:	// 00EC02E8 SDPao –
-	//	case 0xED:	// 00ED0848 SDPxno –
+	//	case 0xCD:	// 00CD0888 SDPono â€“
+	//	case 0xCE:	// 00CE0B08 SDPnao â€“
+	//	case 0xCF:	// 00CF0224 SPno â€“
+	//	case 0xD0:	// 00D00E0A PSDnoa â€“
+	//	case 0xD1:	// 00D1066A PSDPxoxn â€“
+	//	case 0xD2:	// 00D20705 PDSnax â€“
+	//	case 0xD3:	// 00D307A4 SPDSoaxn â€“
+	//	case 0xD4:	// 00D41D78 SSPxPDxax â€“
+	//	case 0xD5:	// 00D50CE9 DPSanan â€“
+	//	case 0xD6:	// 00D616EA PSDPSaoxx â€“
+	//	case 0xD7:	// 00D70349 DPSxan â€“
+	//	case 0xD8:	// 00D80745 PDSPxax â€“
+	//	case 0xD9:	// 00D906E8 SDPSaoxn â€“
+	//	case 0xDA:	// 00DA1CE9 DPSDanax â€“
+	//	case 0xDB:	// 00DB0D75 SPxDSxan â€“
+	//	case 0xDC:	// 00DC0B04 SPDnao â€“
+	//	case 0xDD:	// 00DD0228 SDno â€“
+	//	case 0xDE:	// 00DE0268 SDPxo â€“
+	//	case 0xDF:	// 00DF08C8 SDPano â€“
+	//	case 0xE0:	// 00E003A5 PDSoa â€“
+	//	case 0xE1:	// 00E10185 PDSoxn â€“
+	//	case 0xE2:	// 00E20746 DSPDxax â€“
+	//	case 0xE3:	// 00E306EA PSDPaoxn â€“
+	//	case 0xE4:	// 00E40748 SDPSxax â€“
+	//	case 0xE5:	// 00E506E5 PDSPaoxn â€“
+	//	case 0xE6:	// 00E61CE8 SDPSanax â€“
+	//	case 0xE7:	// 00E70D79 SPxPDxan â€“
+	//	case 0xE8:	// 00E81D74 SSPxDSxax â€“
+	//	case 0xE9:	// 00E95CE6 DSPDSanaxxn â€“
+	//	case 0xEA:	// 00EA02E9 DPSao â€“
+	//	case 0xEB:	// 00EB0849 DPSxno â€“
+	//	case 0xEC:	// 00EC02E8 SDPao â€“
+	//	case 0xED:	// 00ED0848 SDPxno â€“
 		case 0xEE:	// 00EE0086 DSo SRCPAINT
 			result = dest | src;
 			break;
 
-	//	case 0xEF:	// 00EF0A08 SDPnoo –
+	//	case 0xEF:	// 00EF0A08 SDPnoo â€“
 		case 0xF0:	// 00F00021 P PATCOPY
 			result = pattern;
 			break;
 
-	//	case 0xF1:	// 00F10885 PDSono –
-	//	case 0xF2:	// 00F20B05 PDSnao –
-	//	case 0xF3:	// 00F3022A PSno –
-	//	case 0xF4:	// 00F40B0A PSDnao –
-	//	case 0xF5:	// 00F50225 PDno –
-	//	case 0xF6:	// 00F60265 PDSxo –
-	//	case 0xF7:	// 00F708C5 PDSano –
-	//	case 0xF8:	// 00F802E5 PDSao –
-	//	case 0xF9:	// 00F90845 PDSxno –
-		case 0xFA:	// 00FA0089 DPo –
+	//	case 0xF1:	// 00F10885 PDSono â€“
+	//	case 0xF2:	// 00F20B05 PDSnao â€“
+	//	case 0xF3:	// 00F3022A PSno â€“
+	//	case 0xF4:	// 00F40B0A PSDnao â€“
+	//	case 0xF5:	// 00F50225 PDno â€“
+	//	case 0xF6:	// 00F60265 PDSxo â€“
+	//	case 0xF7:	// 00F708C5 PDSano â€“
+	//	case 0xF8:	// 00F802E5 PDSao â€“
+	//	case 0xF9:	// 00F90845 PDSxno â€“
+		case 0xFA:	// 00FA0089 DPo â€“
 			result = dest | pattern;
 			break;
 
@@ -3501,9 +3501,9 @@ uint16 EmRegsMediaQ11xx::PrvAdjustPixel (uint16 pattern, uint16 src, uint16 dest
 			result = dest | (pattern | ~src);
 			break;
 
-	//	case 0xFC:	// 00FC008A PSo –
-	//	case 0xFD:	// 00FD0A0A PSDnoo –
-	//	case 0xFE:	// 00FE02A9 DPSoo –
+	//	case 0xFC:	// 00FC008A PSo â€“
+	//	case 0xFD:	// 00FD0A0A PSDnoo â€“
+	//	case 0xFE:	// 00FE02A9 DPSoo â€“
 		case 0xFF:	// 00FF0062 1 WHITENESS
 			result = ~0;
 			break;
@@ -3552,7 +3552,7 @@ uint16 EmRegsMediaQ11xx::PrvAdjustPixel (uint16 pattern, uint16 src, uint16 dest
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvSetPixel
+//		â€¢ EmRegsMediaQ11xx::PrvSetPixel
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvSetPixel (uint16 pixel, uint16 x, uint16 y)
@@ -3577,7 +3577,7 @@ void EmRegsMediaQ11xx::PrvSetPixel (uint16 pixel, uint16 x, uint16 y)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvGetPixel
+//		â€¢ EmRegsMediaQ11xx::PrvGetPixel
 // ---------------------------------------------------------------------------
 
 uint16 EmRegsMediaQ11xx::PrvGetPixel (uint16 x, uint16 y)
@@ -3606,7 +3606,7 @@ uint16 EmRegsMediaQ11xx::PrvGetPixel (uint16 x, uint16 y)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvGetPixelLocation
+//		â€¢ EmRegsMediaQ11xx::PrvGetPixelLocation
 // ---------------------------------------------------------------------------
 
 emuptr EmRegsMediaQ11xx::PrvGetPixelLocation (uint16 x, uint16 y)
@@ -3672,7 +3672,7 @@ emuptr EmRegsMediaQ11xx::PrvGetPixelLocation (uint16 x, uint16 y)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvIncBlitterInit
+//		â€¢ EmRegsMediaQ11xx::PrvIncBlitterInit
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvIncBlitterInit (void)
@@ -3748,7 +3748,7 @@ void EmRegsMediaQ11xx::PrvIncBlitterInit (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvIncBlitterRun
+//		â€¢ EmRegsMediaQ11xx::PrvIncBlitterRun
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvIncBlitterRun (void)
@@ -3823,7 +3823,7 @@ void EmRegsMediaQ11xx::PrvIncBlitterRun (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvPatternPipeInit
+//		â€¢ EmRegsMediaQ11xx::PrvPatternPipeInit
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvPatternPipeInit (void)
@@ -3923,7 +3923,7 @@ void EmRegsMediaQ11xx::PrvPatternPipeInit (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvPatternPipeNextPixel
+//		â€¢ EmRegsMediaQ11xx::PrvPatternPipeNextPixel
 // ---------------------------------------------------------------------------
 
 uint16 EmRegsMediaQ11xx::PrvPatternPipeNextPixel (void)
@@ -3939,7 +3939,7 @@ uint16 EmRegsMediaQ11xx::PrvPatternPipeNextPixel (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvPatternPipeNextX
+//		â€¢ EmRegsMediaQ11xx::PrvPatternPipeNextX
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvPatternPipeNextX (void)
@@ -3954,7 +3954,7 @@ void EmRegsMediaQ11xx::PrvPatternPipeNextX (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvPatternPipeNextY
+//		â€¢ EmRegsMediaQ11xx::PrvPatternPipeNextY
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvPatternPipeNextY (void)
@@ -3972,7 +3972,7 @@ void EmRegsMediaQ11xx::PrvPatternPipeNextY (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvSrcPipeInit
+//		â€¢ EmRegsMediaQ11xx::PrvSrcPipeInit
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvSrcPipeInit (void)
@@ -4015,7 +4015,7 @@ void EmRegsMediaQ11xx::PrvSrcPipeInit (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvSrcPipeNextPixel
+//		â€¢ EmRegsMediaQ11xx::PrvSrcPipeNextPixel
 // ---------------------------------------------------------------------------
 
 uint16 EmRegsMediaQ11xx::PrvSrcPipeNextPixel (Bool& stalled)
@@ -4095,7 +4095,7 @@ uint16 EmRegsMediaQ11xx::PrvSrcPipeNextPixel (Bool& stalled)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvSrcPipeNextX
+//		â€¢ EmRegsMediaQ11xx::PrvSrcPipeNextX
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvSrcPipeNextX (void)
@@ -4105,7 +4105,7 @@ void EmRegsMediaQ11xx::PrvSrcPipeNextX (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvSrcPipeNextY
+//		â€¢ EmRegsMediaQ11xx::PrvSrcPipeNextY
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvSrcPipeNextY (void)
@@ -4128,7 +4128,7 @@ void EmRegsMediaQ11xx::PrvSrcPipeNextY (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvSrcPipeFill
+//		â€¢ EmRegsMediaQ11xx::PrvSrcPipeFill
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvSrcPipeFill (Bool& stalled)
@@ -4228,7 +4228,7 @@ void EmRegsMediaQ11xx::PrvSrcPipeFill (Bool& stalled)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvDestPipeInit
+//		â€¢ EmRegsMediaQ11xx::PrvDestPipeInit
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvDestPipeInit (void)
@@ -4251,7 +4251,7 @@ void EmRegsMediaQ11xx::PrvDestPipeInit (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvDestPipeNextPixel
+//		â€¢ EmRegsMediaQ11xx::PrvDestPipeNextPixel
 // ---------------------------------------------------------------------------
 
 uint16 EmRegsMediaQ11xx::PrvDestPipeNextPixel (void)
@@ -4267,7 +4267,7 @@ uint16 EmRegsMediaQ11xx::PrvDestPipeNextPixel (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvDestPipeNextX
+//		â€¢ EmRegsMediaQ11xx::PrvDestPipeNextX
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvDestPipeNextX (void)
@@ -4277,7 +4277,7 @@ void EmRegsMediaQ11xx::PrvDestPipeNextX (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvDestPipeNextY
+//		â€¢ EmRegsMediaQ11xx::PrvDestPipeNextY
 // ---------------------------------------------------------------------------
 
 void EmRegsMediaQ11xx::PrvDestPipeNextY (void)
@@ -4296,7 +4296,7 @@ void EmRegsMediaQ11xx::PrvDestPipeNextY (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvNextXY
+//		â€¢ EmRegsMediaQ11xx::PrvNextXY
 // ---------------------------------------------------------------------------
 // Increment our X and Y counters.  If we we're done, return false.  If we've
 // moved to the next line, inform the various pipes that we've done that.  If
@@ -4333,7 +4333,7 @@ Bool EmRegsMediaQ11xx::PrvNextXY (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvTransparent
+//		â€¢ EmRegsMediaQ11xx::PrvTransparent
 // ---------------------------------------------------------------------------
 
 Bool EmRegsMediaQ11xx::PrvTransparent (uint16 source, uint16 dest, uint16 pattern)
@@ -4454,7 +4454,7 @@ Bool EmRegsMediaQ11xx::PrvTransparent (uint16 source, uint16 dest, uint16 patter
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvClipped
+//		â€¢ EmRegsMediaQ11xx::PrvClipped
 // ---------------------------------------------------------------------------
 
 Bool EmRegsMediaQ11xx::PrvClipped (void)
@@ -4475,7 +4475,7 @@ Bool EmRegsMediaQ11xx::PrvClipped (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvLeadingPixels
+//		â€¢ EmRegsMediaQ11xx::PrvLeadingPixels
 // ---------------------------------------------------------------------------
 
 uint16 EmRegsMediaQ11xx::PrvLeadingPixels (void)
@@ -4536,7 +4536,7 @@ uint16 EmRegsMediaQ11xx::PrvLeadingPixels (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvTrailingPixels
+//		â€¢ EmRegsMediaQ11xx::PrvTrailingPixels
 // ---------------------------------------------------------------------------
 
 uint16 EmRegsMediaQ11xx::PrvTrailingPixels (void)
@@ -4612,7 +4612,7 @@ uint16 EmRegsMediaQ11xx::PrvTrailingPixels (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvUsesPattern
+//		â€¢ EmRegsMediaQ11xx::PrvUsesPattern
 // ---------------------------------------------------------------------------
 // Return whether or not the specified rasterOperation will require the use
 // of a "pattern" value (that is, a pixel value from the pattern registers).
@@ -4675,7 +4675,7 @@ Bool EmRegsMediaQ11xx::PrvUsesPattern (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvUsesSource
+//		â€¢ EmRegsMediaQ11xx::PrvUsesSource
 // ---------------------------------------------------------------------------
 // Return whether or not the specified rasterOperation will require the use
 // of a "source" value (that is, a pixel value from a source buffer).
@@ -4738,7 +4738,7 @@ Bool EmRegsMediaQ11xx::PrvUsesSource (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvExpandMono8
+//		â€¢ EmRegsMediaQ11xx::PrvExpandMono8
 // ---------------------------------------------------------------------------
 // Take a bit pattern, and expand it into an array of color values, where
 // elements of the array are set to the foreground color if the bit in the
@@ -4779,7 +4779,7 @@ void EmRegsMediaQ11xx::PrvExpandMono8 (uint8 bits, uint16* results,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsMediaQ11xx::PrvExpandMono32
+//		â€¢ EmRegsMediaQ11xx::PrvExpandMono32
 // ---------------------------------------------------------------------------
 // Wrapper to perform the expansion of 4 8-bit bitfields in a DWORD.
 

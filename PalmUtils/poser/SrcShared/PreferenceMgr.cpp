@@ -1987,7 +1987,7 @@ EmTransport* EmulatorPreferences::GetTransportForDevice (EmUARTDeviceType type)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Errors::LogMessage
+//		â€¢ Errors::LogMessage
 // ---------------------------------------------------------------------------
 // Return whether or not the message should be logged.
 
@@ -2014,7 +2014,7 @@ Bool EmulatorPreferences::LogMessage (Bool isFatal)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvGetPrefKey
+//		â€¢ PrvGetPrefKey
 // ---------------------------------------------------------------------------
 // Return the key for the preference that tells us to handle the error or
 // warning in this situation.
@@ -2037,7 +2037,7 @@ static PrefKeyType PrvGetPrefKey (Bool isFatal)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmulatorPreferences::ShouldQuit
+//		â€¢ EmulatorPreferences::ShouldQuit
 // ---------------------------------------------------------------------------
 // Return whether or not this error should cause us to quit.
 
@@ -2072,7 +2072,7 @@ Bool EmulatorPreferences::ShouldQuit (Bool isFatal)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmulatorPreferences::ShouldContinue
+//		â€¢ EmulatorPreferences::ShouldContinue
 // ---------------------------------------------------------------------------
 // Return whether or not this error should be logged but not displayed.
 
@@ -2107,7 +2107,7 @@ Bool EmulatorPreferences::ShouldContinue (Bool isFatal)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmulatorPreferences::ShouldNextGremlin
+//		â€¢ EmulatorPreferences::ShouldNextGremlin
 // ---------------------------------------------------------------------------
 // Return whether or not this error should cause us to switch to the next
 // Gremlin in a Horde.

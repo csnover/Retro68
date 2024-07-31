@@ -48,7 +48,7 @@ const char* kSerialErrors[] =
 
 
 // ---------------------------------------------------------------------------
-//		¥ PilotMain
+//		â€¢ PilotMain
 // ---------------------------------------------------------------------------
 // The main entry point for ROM Transfer.
 
@@ -84,7 +84,7 @@ UInt32 PilotMain (	UInt16		iCommand,
 
 
 // ---------------------------------------------------------------------------
-//		¥ InitializeApplication
+//		â€¢ InitializeApplication
 // ---------------------------------------------------------------------------
 // Initializes the application globals and prepares to execute the event loop.
 
@@ -218,7 +218,7 @@ void InitializeApplication (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ DisposeApplication
+//		â€¢ DisposeApplication
 // ---------------------------------------------------------------------------
 // Disposes the application globals and prepares to exit.
 
@@ -229,7 +229,7 @@ void DisposeApplication (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ ExecuteApplication
+//		â€¢ ExecuteApplication
 // ---------------------------------------------------------------------------
 // Executes an event loop until the application quits.
 
@@ -263,7 +263,7 @@ void ExecuteApplication (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ ProcessEvent
+//		â€¢ ProcessEvent
 // ---------------------------------------------------------------------------
 // Attempts to process the specified event.
 
@@ -290,7 +290,7 @@ Boolean ProcessEvent (EventPtr iEvent)
 
 
 // ---------------------------------------------------------------------------
-//		¥ TransferROM
+//		â€¢ TransferROM
 // ---------------------------------------------------------------------------
 // Downloads the ROM via the serial connection.
 
@@ -389,7 +389,7 @@ void TransferROM (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvSendChar
+//		â€¢ PrvSendChar
 // ---------------------------------------------------------------------------
 
 static void PrvSendChar (UInt8 ch)
@@ -402,7 +402,7 @@ static void PrvSendChar (UInt8 ch)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvReceiveChar
+//		â€¢ PrvReceiveChar
 // ---------------------------------------------------------------------------
 
 static void PrvReceiveChar (UInt8* ch)
@@ -415,7 +415,7 @@ static void PrvReceiveChar (UInt8* ch)
 
 
 // ---------------------------------------------------------------------------
-//		¥ SendXModem
+//		â€¢ SendXModem
 // ---------------------------------------------------------------------------
 
 void SendXModem (FormType* form, UInt8* romStart, Int32 romSize)
@@ -582,7 +582,7 @@ void SendXModem (FormType* form, UInt8* romStart, Int32 romSize)
 
 
 // ---------------------------------------------------------------------------
-//		¥ SendRaw
+//		â€¢ SendRaw
 // ---------------------------------------------------------------------------
 
 void SendRaw (FormType* form, UInt8* romStart, Int32 romSize)
@@ -614,7 +614,7 @@ void SendRaw (FormType* form, UInt8* romStart, Int32 romSize)
 
 
 // ---------------------------------------------------------------------------
-//		¥ UpdatePercentComplete
+//		â€¢ UpdatePercentComplete
 // ---------------------------------------------------------------------------
 
 void UpdatePercentComplete (FormType* form, Int32 offset, Int32 romSize)
@@ -629,7 +629,7 @@ void UpdatePercentComplete (FormType* form, Int32 offset, Int32 romSize)
 
 
 // ---------------------------------------------------------------------------
-//		¥ GetROMStartSize
+//		â€¢ GetROMStartSize
 // ---------------------------------------------------------------------------
 
 void *			MemHeapPtr(UInt16 heapID)
@@ -693,7 +693,7 @@ void GetROMStartSize (UInt8** romStartP, Int32* romSizeP)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvUpdateStatus
+//		â€¢ PrvUpdateStatus
 // ---------------------------------------------------------------------------
 
 void PrvUpdateStatus (FormType* form, const char* txt)
@@ -707,7 +707,7 @@ void PrvUpdateStatus (FormType* form, const char* txt)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvStrPrintF
+//		â€¢ PrvStrPrintF
 // ---------------------------------------------------------------------------
 // Roll our own StrPrintF, since it doesn't exist in 1.0.
 
@@ -750,7 +750,7 @@ void PrvStrPrintF (char* dest, const char* fmt, Int32 num)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvStrIToX
+//		â€¢ PrvStrIToX
 // ---------------------------------------------------------------------------
 
 void PrvStrIToX (char* dest, UInt32 val)

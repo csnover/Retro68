@@ -35,7 +35,7 @@
 #include <Window.h>
 
 #ifndef PUBLIC_STUFF_STRIPPED
-// DOLATER ¥¥¥ Don't use an enum for this, as convenient as it is, there's namespace
+// DOLATER â€¢â€¢â€¢ Don't use an enum for this, as convenient as it is, there's namespace
 // pollution, size issues, no way to manage componentization, blah blah blah.
 #endif // PUBLIC_STUFF_STRIPPED
 

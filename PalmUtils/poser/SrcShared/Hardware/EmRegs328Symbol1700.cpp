@@ -53,7 +53,7 @@ const uint16	kButtonMap[kNumButtonRows][kNumButtonCols] =
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs328Symbol1700::GetKeyBits
+//		â€¢ EmRegs328Symbol1700::GetKeyBits
 // ---------------------------------------------------------------------------
 
 uint8 EmRegs328Symbol1700::GetKeyBits (void)
@@ -96,7 +96,7 @@ uint8 EmRegs328Symbol1700::GetKeyBits (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs328Symbol1700::ButtonToBits
+//		â€¢ EmRegs328Symbol1700::ButtonToBits
 // ---------------------------------------------------------------------------
 
 uint16 EmRegs328Symbol1700::ButtonToBits (SkinElementType button)

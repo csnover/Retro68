@@ -44,7 +44,7 @@ typedef enum {
 } BitmapCompressionType;
 
 #ifndef PUBLIC_STUFF_STRIPPED
-// DOLATER ¥¥¥Ê-- need to add #defines for each bit for endian portableness
+// DOLATER â€¢â€¢â€¢Â -- need to add #defines for each bit for endian portableness
 #endif // PUBLIC_STUFF_STRIPPED
 typedef struct BitmapFlagsType {
 	UInt16 compressed:1;  			// Data format:  0=raw; 1=compressed

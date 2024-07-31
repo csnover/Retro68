@@ -24,7 +24,7 @@
  ****************************************************************************/
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlave330Current::EmSPISlave330Current
+//		â€¢ EmSPISlave330Current::EmSPISlave330Current
 // ---------------------------------------------------------------------------
 
 EmSPISlave330Current::EmSPISlave330Current () :
@@ -41,7 +41,7 @@ EmSPISlave330Current::EmSPISlave330Current () :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlave330Current::~EmSPISlave330Current
+//		â€¢ EmSPISlave330Current::~EmSPISlave330Current
 // ---------------------------------------------------------------------------
 
 EmSPISlave330Current::~EmSPISlave330Current (void)
@@ -49,7 +49,7 @@ EmSPISlave330Current::~EmSPISlave330Current (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlave330Current::DoExchange
+//		â€¢ EmSPISlave330Current::DoExchange
 // ---------------------------------------------------------------------------
 
 uint16 EmSPISlave330Current::DoExchange (uint16 control, uint16 data)
@@ -151,7 +151,7 @@ uint16 EmSPISlave330Current::DoExchange (uint16 control, uint16 data)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlave330Current::ProcessCommand
+//		â€¢ EmSPISlave330Current::ProcessCommand
 // ---------------------------------------------------------------------------
 
 void EmSPISlave330Current::ProcessCommand (uint8 command)
@@ -172,7 +172,7 @@ void EmSPISlave330Current::ProcessCommand (uint8 command)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlave330Current::LoadPendingConversion
+//		â€¢ EmSPISlave330Current::LoadPendingConversion
 // ---------------------------------------------------------------------------
 
 void EmSPISlave330Current::LoadPendingConversion (void)

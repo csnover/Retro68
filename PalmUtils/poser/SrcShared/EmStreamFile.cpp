@@ -21,7 +21,7 @@
 
 
 // ===========================================================================
-//		¥ EmStreamFile
+//		â€¢ EmStreamFile
 //
 //		A EmStreamFile is a lightweight reference to an open file.  The class's
 //		constructor attempts to open (or create) the file based on the input

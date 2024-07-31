@@ -330,7 +330,7 @@ void EmPatchState::SetTimeToQuit (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmPatchState::MemMgrLeaksPrefsChanged
+//		â€¢ EmPatchState::MemMgrLeaksPrefsChanged
 // ---------------------------------------------------------------------------
 // Respond to a preference change.
 
@@ -985,7 +985,7 @@ EmuAppInfo EmPatchState::GetRootAppInfo (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ operator >> (EmStream&, EmStackFrame&)
+//		â€¢ operator >> (EmStream&, EmStackFrame&)
 // ---------------------------------------------------------------------------
 
 EmStream& operator >> (EmStream& inStream, EmStackFrame& outInfo)
@@ -998,7 +998,7 @@ EmStream& operator >> (EmStream& inStream, EmStackFrame& outInfo)
 
 
 // ---------------------------------------------------------------------------
-//		¥ operator << (EmStream&, const EmStackFrame&)
+//		â€¢ operator << (EmStream&, const EmStackFrame&)
 // ---------------------------------------------------------------------------
 
 EmStream& operator << (EmStream& inStream, const EmStackFrame& inInfo)
@@ -1011,7 +1011,7 @@ EmStream& operator << (EmStream& inStream, const EmStackFrame& inInfo)
 
 
 // ---------------------------------------------------------------------------
-//		¥ operator >> (EmStream&, EmTrackedChunk&)
+//		â€¢ operator >> (EmStream&, EmTrackedChunk&)
 // ---------------------------------------------------------------------------
 
 EmStream& operator >> (EmStream& inStream, EmTrackedChunk& outInfo)
@@ -1025,7 +1025,7 @@ EmStream& operator >> (EmStream& inStream, EmTrackedChunk& outInfo)
 
 
 // ---------------------------------------------------------------------------
-//		¥ operator << (EmStream&, const EmTrackedChunk&)
+//		â€¢ operator << (EmStream&, const EmTrackedChunk&)
 // ---------------------------------------------------------------------------
 
 EmStream& operator << (EmStream& inStream, const EmTrackedChunk& inInfo)

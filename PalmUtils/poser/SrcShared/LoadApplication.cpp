@@ -371,7 +371,7 @@ static void PrvMyShlExportAsPilotFile(EmStreamFile& fh, UInt16 cardNo, const cha
 
 
 // ---------------------------------------------------------------------------
-//		¥ SavePalmFile
+//		â€¢ SavePalmFile
 // ---------------------------------------------------------------------------
 // Saves a Palm OS program or database file to a file.
 

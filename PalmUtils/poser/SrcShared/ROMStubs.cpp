@@ -23,7 +23,7 @@
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Clipboard Manager functions
+//		â€¢ Clipboard Manager functions
 // ---------------------------------------------------------------------------
 
 // --------------------
@@ -78,11 +78,11 @@ MemHandle ClipboardGetItem (const ClipboardFormatType format, UInt16* length)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Control Manager functions
+//		â€¢ Control Manager functions
 // ---------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
-//		¥ CtlGetLabel, used in Minimization
+//		â€¢ CtlGetLabel, used in Minimization
 // ---------------------------------------------------------------------------
 
 const Char* CtlGetLabel (const ControlType *controlP)
@@ -105,7 +105,7 @@ const Char* CtlGetLabel (const ControlType *controlP)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Desktop Link Server functions
+//		â€¢ Desktop Link Server functions
 // ---------------------------------------------------------------------------
 
 // --------------------
@@ -176,7 +176,7 @@ Err DlkGetSyncInfo (UInt32* succSyncDateP, UInt32* lastSyncDateP,
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Data Manager functions
+//		â€¢ Data Manager functions
 // ---------------------------------------------------------------------------
 
 // --------------------
@@ -1039,7 +1039,7 @@ Err DmWrite (MemPtr recordP, UInt32 offset, const void * const srcP, UInt32 byte
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Event Manager functions
+//		â€¢ Event Manager functions
 // ---------------------------------------------------------------------------
 
 // --------------------
@@ -1193,7 +1193,7 @@ Err EvtWakeup (void)
 
 #if 0
 // ---------------------------------------------------------------------------
-//		¥ Exchange Manager functions
+//		â€¢ Exchange Manager functions
 // ---------------------------------------------------------------------------
 
 #pragma mark -
@@ -1240,7 +1240,7 @@ Err 	ExgLibControl(UInt16 libRefNum, UInt16 op, void *valueP, UInt16 *valueLenP)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Field Manager functions
+//		â€¢ Field Manager functions
 // ---------------------------------------------------------------------------
 
 // --------------------
@@ -1365,7 +1365,7 @@ Char* FldGetTextPtr (FieldType* fldP)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Font Manager functions
+//		â€¢ Font Manager functions
 // ---------------------------------------------------------------------------
 
 // --------------------
@@ -1417,7 +1417,7 @@ UInt8 FntSetFont (UInt8 fontId)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Form Manager functions
+//		â€¢ Form Manager functions
 // ---------------------------------------------------------------------------
 
 // --------------------
@@ -1702,7 +1702,7 @@ WinHandle FrmGetWindowHandle (const FormType* frm)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ File System functions
+//		â€¢ File System functions
 // ---------------------------------------------------------------------------
 
 typedef enum {
@@ -1771,7 +1771,7 @@ Err FSCustomControl (UInt16 fsLibRefNum, UInt32 apiCreator, UInt16 apiSelector,
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Feature Manager functions
+//		â€¢ Feature Manager functions
 // ---------------------------------------------------------------------------
 
 // --------------------
@@ -1868,7 +1868,7 @@ Err	FtrUnregister (UInt32 creator, UInt16 featureNum)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ International Manager functions
+//		â€¢ International Manager functions
 // ---------------------------------------------------------------------------
 
 // --------------------
@@ -1895,7 +1895,7 @@ Boolean IntlSetStrictChecks (Boolean iStrictChecks)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ List Manager functions
+//		â€¢ List Manager functions
 // ---------------------------------------------------------------------------
 
 #pragma mark -
@@ -1976,7 +1976,7 @@ Char * LstGetSelectionText (const ListType *lst, Int16 itemNum)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Memory Manager functions
+//		â€¢ Memory Manager functions
 // ---------------------------------------------------------------------------
 
 // --------------------
@@ -2404,7 +2404,7 @@ Err MemPtrUnlock (MemPtr p)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Net Library functions
+//		â€¢ Net Library functions
 // ---------------------------------------------------------------------------
 
 // --------------------
@@ -2436,7 +2436,7 @@ Err NetLibConfigMakeActive (UInt16 refNum, UInt16 configIndex)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Pen Manager functions
+//		â€¢ Pen Manager functions
 // ---------------------------------------------------------------------------
 
 // --------------------
@@ -2524,7 +2524,7 @@ Err PenScreenToRaw (PointType* penP)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Peferences Manager functions
+//		â€¢ Peferences Manager functions
 // ---------------------------------------------------------------------------
 
 // --------------------
@@ -2603,7 +2603,7 @@ void PrefSetPreference (SystemPreferencesChoice choice, UInt32 value)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ System Manager functions
+//		â€¢ System Manager functions
 // ---------------------------------------------------------------------------
 
 // --------------------
@@ -2793,7 +2793,7 @@ Err SysUIAppSwitch (UInt16 cardNo, LocalID dbID, UInt16 cmd, MemPtr cmdPBP)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Table Manager functions
+//		â€¢ Table Manager functions
 // ---------------------------------------------------------------------------
 
 // --------------------
@@ -2923,7 +2923,7 @@ Boolean TblGetSelection (const TableType* tableP, Int16* rowP, Int16* columnP)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Text Manager functions
+//		â€¢ Text Manager functions
 // ---------------------------------------------------------------------------
 
 // --------------------
@@ -3009,7 +3009,7 @@ UInt16 TxtGetNextChar (const Char* inText, UInt32 inOffset, WChar* outChar)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Window Manager functions
+//		â€¢ Window Manager functions
 // ---------------------------------------------------------------------------
 
 // --------------------

@@ -33,7 +33,7 @@ EmAliasLowMemHdrType<PAS>	EmLowMem::fgLowMem (EmMemNULL);
 #pragma mark -
 
 // ===========================================================================
-//		¥ EmLowMem
+//		â€¢ EmLowMem
 // ===========================================================================
 
 static uint16		gSysDispatchTableSize;

@@ -48,7 +48,7 @@ class Card
 emuptr	  EmBankROM::gROMMemoryStart	  = kDefaultROMMemoryStart;
 
 // ===========================================================================
-//		¥ ROM Bank Accessors
+//		â€¢ ROM Bank Accessors
 // ===========================================================================
 // These functions provide fetch and store access to the emulator's read only
 // memory.
@@ -237,7 +237,7 @@ void EmBankROM::SetBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankROM::GetLong
+//		â€¢ EmBankROM::GetLong
 // ---------------------------------------------------------------------------
 
 uint32 EmBankROM::GetLong (emuptr address)
@@ -290,7 +290,7 @@ uint32 EmBankROM::GetLong (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankROM::GetWord
+//		â€¢ EmBankROM::GetWord
 // ---------------------------------------------------------------------------
 
 uint32 EmBankROM::GetWord (emuptr address)
@@ -341,7 +341,7 @@ uint32 EmBankROM::GetWord (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankROM::GetByte
+//		â€¢ EmBankROM::GetByte
 // ---------------------------------------------------------------------------
 
 uint32 EmBankROM::GetByte (emuptr address)
@@ -385,7 +385,7 @@ uint32 EmBankROM::GetByte (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankROM::SetLong
+//		â€¢ EmBankROM::SetLong
 // ---------------------------------------------------------------------------
 
 void EmBankROM::SetLong (emuptr address, uint32 value)
@@ -436,7 +436,7 @@ void EmBankROM::SetLong (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankROM::SetWord
+//		â€¢ EmBankROM::SetWord
 // ---------------------------------------------------------------------------
 
 void EmBankROM::SetWord (emuptr address, uint32 value)
@@ -485,7 +485,7 @@ void EmBankROM::SetWord (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankROM::SetByte
+//		â€¢ EmBankROM::SetByte
 // ---------------------------------------------------------------------------
 
 void EmBankROM::SetByte (emuptr address, uint32 value)
@@ -527,7 +527,7 @@ void EmBankROM::SetByte (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankROM::ValidAddress
+//		â€¢ EmBankROM::ValidAddress
 // ---------------------------------------------------------------------------
 
 int EmBankROM::ValidAddress (emuptr address, uint32 size)
@@ -540,7 +540,7 @@ int EmBankROM::ValidAddress (emuptr address, uint32 size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankROM::GetRealAddress
+//		â€¢ EmBankROM::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmBankROM::GetRealAddress (emuptr address)
@@ -554,7 +554,7 @@ uint8* EmBankROM::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankROM::GetMetaAddress
+//		â€¢ EmBankROM::GetMetaAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmBankROM::GetMetaAddress (emuptr address)
@@ -568,7 +568,7 @@ uint8* EmBankROM::GetMetaAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankROM::AddOpcodeCycles
+//		â€¢ EmBankROM::AddOpcodeCycles
 // ---------------------------------------------------------------------------
 
 void EmBankROM::AddOpcodeCycles (void)
@@ -580,7 +580,7 @@ void EmBankROM::AddOpcodeCycles (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankROM::AddressError
+//		â€¢ EmBankROM::AddressError
 // ---------------------------------------------------------------------------
 
 void EmBankROM::AddressError (emuptr address, int32 size, Bool forRead)
@@ -591,7 +591,7 @@ void EmBankROM::AddressError (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankROM::InvalidAccess
+//		â€¢ EmBankROM::InvalidAccess
 // ---------------------------------------------------------------------------
 
 void EmBankROM::InvalidAccess (emuptr address, int32 size, Bool forRead)
@@ -807,7 +807,7 @@ void EmBankROM::LoadROM (EmStream& hROM)
 #pragma mark -
 
 // ===========================================================================
-//		¥ Flash Bank Accessors
+//		â€¢ Flash Bank Accessors
 // ===========================================================================
 // These functions provide fetch and store access to the emulator's read only
 // memory.
@@ -1093,7 +1093,7 @@ void EmBankFlash::SetBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankFlash::GetLong
+//		â€¢ EmBankFlash::GetLong
 // ---------------------------------------------------------------------------
 
 uint32 EmBankFlash::GetLong (emuptr address)
@@ -1103,7 +1103,7 @@ uint32 EmBankFlash::GetLong (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankFlash::GetWord
+//		â€¢ EmBankFlash::GetWord
 // ---------------------------------------------------------------------------
 
 uint32 EmBankFlash::GetWord (emuptr address)
@@ -1189,7 +1189,7 @@ uint32 EmBankFlash::GetWord (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankFlash::GetByte
+//		â€¢ EmBankFlash::GetByte
 // ---------------------------------------------------------------------------
 
 uint32 EmBankFlash::GetByte (emuptr address)
@@ -1199,7 +1199,7 @@ uint32 EmBankFlash::GetByte (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankFlash::SetLong
+//		â€¢ EmBankFlash::SetLong
 // ---------------------------------------------------------------------------
 
 void EmBankFlash::SetLong (emuptr address, uint32 value)
@@ -1209,7 +1209,7 @@ void EmBankFlash::SetLong (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankFlash::SetWord
+//		â€¢ EmBankFlash::SetWord
 // ---------------------------------------------------------------------------
 
 void EmBankFlash::SetWord (emuptr address, uint32 value)
@@ -1394,7 +1394,7 @@ void EmBankFlash::SetWord (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankFlash::SetByte
+//		â€¢ EmBankFlash::SetByte
 // ---------------------------------------------------------------------------
 
 void EmBankFlash::SetByte (emuptr address, uint32 value)
@@ -1404,7 +1404,7 @@ void EmBankFlash::SetByte (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankFlash::ValidAddress
+//		â€¢ EmBankFlash::ValidAddress
 // ---------------------------------------------------------------------------
 
 int EmBankFlash::ValidAddress (emuptr address, uint32 size)
@@ -1414,7 +1414,7 @@ int EmBankFlash::ValidAddress (emuptr address, uint32 size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankFlash::GetRealAddress
+//		â€¢ EmBankFlash::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmBankFlash::GetRealAddress (emuptr address)
@@ -1428,7 +1428,7 @@ uint8* EmBankFlash::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankFlash::GetMetaAddress
+//		â€¢ EmBankFlash::GetMetaAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmBankFlash::GetMetaAddress (emuptr address)
@@ -1442,7 +1442,7 @@ uint8* EmBankFlash::GetMetaAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankFlash::AddOpcodeCycles
+//		â€¢ EmBankFlash::AddOpcodeCycles
 // ---------------------------------------------------------------------------
 
 void EmBankFlash::AddOpcodeCycles (void)
@@ -1456,11 +1456,11 @@ void EmBankFlash::AddOpcodeCycles (void)
 #pragma mark -
 
 // ===========================================================================
-//		¥ Card
+//		â€¢ Card
 // ===========================================================================
 
 // ---------------------------------------------------------------------------
-//		¥ Card::CheckCardHeader
+//		â€¢ Card::CheckCardHeader
 // ---------------------------------------------------------------------------
 // Determines if the memory pointed to looks like a card header.
 
@@ -1491,7 +1491,7 @@ Bool Card::CheckCardHeader (const EmProxyCardHeaderType& cardHdr)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Card::CheckChecksum
+//		â€¢ Card::CheckChecksum
 // ---------------------------------------------------------------------------
 // Determines if the memory pointed to looks like a card header.
 
@@ -1548,7 +1548,7 @@ Bool Card::CheckChecksum (const void* p, uint32 fileLength)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Card::Supports328
+//		â€¢ Card::Supports328
 // ---------------------------------------------------------------------------
 
 Bool Card::Supports328 (const EmAliasCardHeaderType<LAS>& cardHdr)
@@ -1565,7 +1565,7 @@ Bool Card::Supports328 (const EmAliasCardHeaderType<LAS>& cardHdr)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Card::SupportsEZ
+//		â€¢ Card::SupportsEZ
 // ---------------------------------------------------------------------------
 
 Bool Card::SupportsEZ (const EmAliasCardHeaderType<LAS>& cardHdr)
@@ -1582,7 +1582,7 @@ Bool Card::SupportsEZ (const EmAliasCardHeaderType<LAS>& cardHdr)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Card::SupportsVZ
+//		â€¢ Card::SupportsVZ
 // ---------------------------------------------------------------------------
 #define	memCardHeaderFlagVZ			0x0040	// ROM Supports 68VZ328 processor
 
@@ -1600,7 +1600,7 @@ Bool Card::SupportsVZ (const EmAliasCardHeaderType<LAS>& cardHdr)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Card::SupportsSZ
+//		â€¢ Card::SupportsSZ
 // ---------------------------------------------------------------------------
 #define	memCardHeaderFlagSZ			0x0080	// ROM Supports 68SZ328 processor
 

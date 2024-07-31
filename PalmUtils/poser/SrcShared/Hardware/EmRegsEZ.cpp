@@ -247,7 +247,7 @@ static const HwrM68EZ328Type	kInitial68EZ328RegisterValues =
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::EmRegsEZ
+//		â€¢ EmRegsEZ::EmRegsEZ
 // ---------------------------------------------------------------------------
 
 EmRegsEZ::EmRegsEZ (void) :
@@ -269,7 +269,7 @@ EmRegsEZ::EmRegsEZ (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::~EmRegsEZ
+//		â€¢ EmRegsEZ::~EmRegsEZ
 // ---------------------------------------------------------------------------
 
 EmRegsEZ::~EmRegsEZ (void)
@@ -278,7 +278,7 @@ EmRegsEZ::~EmRegsEZ (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::Initialize
+//		â€¢ EmRegsEZ::Initialize
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::Initialize (void)
@@ -290,7 +290,7 @@ void EmRegsEZ::Initialize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::Reset
+//		â€¢ EmRegsEZ::Reset
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::Reset (Bool hardwareReset)
@@ -320,7 +320,7 @@ void EmRegsEZ::Reset (Bool hardwareReset)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::Save
+//		â€¢ EmRegsEZ::Save
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::Save (SessionFile& f)
@@ -362,7 +362,7 @@ void EmRegsEZ::Save (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::Load
+//		â€¢ EmRegsEZ::Load
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::Load (SessionFile& f)
@@ -440,7 +440,7 @@ void EmRegsEZ::Load (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::Dispose
+//		â€¢ EmRegsEZ::Dispose
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::Dispose (void)
@@ -453,7 +453,7 @@ void EmRegsEZ::Dispose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::SetSubBankHandlers
+//		â€¢ EmRegsEZ::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::SetSubBankHandlers (void)
@@ -599,7 +599,7 @@ void EmRegsEZ::SetSubBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetRealAddress
+//		â€¢ EmRegsEZ::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmRegsEZ::GetRealAddress (emuptr address)
@@ -611,7 +611,7 @@ uint8* EmRegsEZ::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetAddressStart
+//		â€¢ EmRegsEZ::GetAddressStart
 // ---------------------------------------------------------------------------
 
 emuptr EmRegsEZ::GetAddressStart (void)
@@ -621,7 +621,7 @@ emuptr EmRegsEZ::GetAddressStart (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetAddressRange
+//		â€¢ EmRegsEZ::GetAddressRange
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsEZ::GetAddressRange (void)
@@ -631,7 +631,7 @@ uint32 EmRegsEZ::GetAddressRange (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::Cycle
+//		â€¢ EmRegsEZ::Cycle
 // ---------------------------------------------------------------------------
 // Handles periodic events that need to occur when the processor cycles (like
 // updating timer registers).  This function is called in two places from
@@ -707,7 +707,7 @@ void EmRegsEZ::Cycle (Bool sleeping)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::CycleSlowly
+//		â€¢ EmRegsEZ::CycleSlowly
 // ---------------------------------------------------------------------------
 // Handles periodic events that need to occur when the processor cycles (like
 // updating timer registers).  This function is called in two places from
@@ -769,7 +769,7 @@ void EmRegsEZ::CycleSlowly (Bool sleeping)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::TurnSoundOff
+//		â€¢ EmRegsEZ::TurnSoundOff
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::TurnSoundOff (void)
@@ -780,7 +780,7 @@ void EmRegsEZ::TurnSoundOff (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::ResetTimer
+//		â€¢ EmRegsEZ::ResetTimer
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::ResetTimer (void)
@@ -790,7 +790,7 @@ void EmRegsEZ::ResetTimer (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::ResetRTC
+//		â€¢ EmRegsEZ::ResetRTC
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::ResetRTC (void)
@@ -804,7 +804,7 @@ void EmRegsEZ::ResetRTC (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetInterruptLevel
+//		â€¢ EmRegsEZ::GetInterruptLevel
 // ---------------------------------------------------------------------------
 
 int32 EmRegsEZ::GetInterruptLevel (void)
@@ -868,7 +868,7 @@ int32 EmRegsEZ::GetInterruptLevel (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetInterruptBase
+//		â€¢ EmRegsEZ::GetInterruptBase
 // ---------------------------------------------------------------------------
 
 int32 EmRegsEZ::GetInterruptBase (void)
@@ -878,7 +878,7 @@ int32 EmRegsEZ::GetInterruptBase (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetLCDHasFrame
+//		â€¢ EmRegsEZ::GetLCDHasFrame
 // ---------------------------------------------------------------------------
 
 Bool EmRegsEZ::GetLCDHasFrame (void)
@@ -888,7 +888,7 @@ Bool EmRegsEZ::GetLCDHasFrame (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetLCDBeginEnd
+//		â€¢ EmRegsEZ::GetLCDBeginEnd
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::GetLCDBeginEnd (emuptr& begin, emuptr& end)
@@ -903,7 +903,7 @@ void EmRegsEZ::GetLCDBeginEnd (emuptr& begin, emuptr& end)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetLCDScanlines
+//		â€¢ EmRegsEZ::GetLCDScanlines
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::GetLCDScanlines (EmScreenUpdateInfo& info)
@@ -976,7 +976,7 @@ void EmRegsEZ::GetLCDScanlines (EmScreenUpdateInfo& info)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetUARTDevice
+//		â€¢ EmRegsEZ::GetUARTDevice
 // ---------------------------------------------------------------------------
 // Return what sort of device is hooked up to the given UART.
 
@@ -1001,7 +1001,7 @@ EmUARTDeviceType EmRegsEZ::GetUARTDevice (int /*uartNum*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetDynamicHeapSize
+//		â€¢ EmRegsEZ::GetDynamicHeapSize
 // ---------------------------------------------------------------------------
 
 int32 EmRegsEZ::GetDynamicHeapSize (void)
@@ -1038,7 +1038,7 @@ int32 EmRegsEZ::GetDynamicHeapSize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetROMSize
+//		â€¢ EmRegsEZ::GetROMSize
 // ---------------------------------------------------------------------------
 
 int32 EmRegsEZ::GetROMSize (void)
@@ -1073,7 +1073,7 @@ int32 EmRegsEZ::GetROMSize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetROMBaseAddress
+//		â€¢ EmRegsEZ::GetROMBaseAddress
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsEZ::GetROMBaseAddress (void)
@@ -1105,7 +1105,7 @@ uint32 EmRegsEZ::GetROMBaseAddress (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::ChipSelectsConfigured
+//		â€¢ EmRegsEZ::ChipSelectsConfigured
 // ---------------------------------------------------------------------------
 
 Bool EmRegsEZ::ChipSelectsConfigured (void)
@@ -1115,7 +1115,7 @@ Bool EmRegsEZ::ChipSelectsConfigured (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetSystemClockFrequency
+//		â€¢ EmRegsEZ::GetSystemClockFrequency
 // ---------------------------------------------------------------------------
 
 int32 EmRegsEZ::GetSystemClockFrequency (void)
@@ -1163,7 +1163,7 @@ int32 EmRegsEZ::GetSystemClockFrequency (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetCanStop
+//		â€¢ EmRegsEZ::GetCanStop
 // ---------------------------------------------------------------------------
 
 Bool EmRegsEZ::GetCanStop (void)
@@ -1181,7 +1181,7 @@ Bool EmRegsEZ::GetCanStop (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetAsleep
+//		â€¢ EmRegsEZ::GetAsleep
 // ---------------------------------------------------------------------------
 
 Bool EmRegsEZ::GetAsleep (void)
@@ -1191,7 +1191,7 @@ Bool EmRegsEZ::GetAsleep (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetPortInputValue
+//		â€¢ EmRegsEZ::GetPortInputValue
 // ---------------------------------------------------------------------------
 // Return the GPIO values for the pins on the port.  These values are used
 // if the select pins are high.
@@ -1210,7 +1210,7 @@ uint8 EmRegsEZ::GetPortInputValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetPortInternalValue
+//		â€¢ EmRegsEZ::GetPortInternalValue
 // ---------------------------------------------------------------------------
 // Return the dedicated values for the pins on the port.  These values are
 // used if the select pins are low.
@@ -1244,7 +1244,7 @@ uint8 EmRegsEZ::GetPortInternalValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::PortDataChanged
+//		â€¢ EmRegsEZ::PortDataChanged
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::PortDataChanged (int port, uint8, uint8 newValue)
@@ -1272,7 +1272,7 @@ void EmRegsEZ::PortDataChanged (int port, uint8, uint8 newValue)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::pllFreqSelRead
+//		â€¢ EmRegsEZ::pllFreqSelRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsEZ::pllFreqSelRead (emuptr address, int size)
@@ -1291,7 +1291,7 @@ uint32 EmRegsEZ::pllFreqSelRead (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::portXDataRead
+//		â€¢ EmRegsEZ::portXDataRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsEZ::portXDataRead (emuptr address, int)
@@ -1370,7 +1370,7 @@ uint32 EmRegsEZ::portXDataRead (emuptr address, int)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::tmr1StatusRead
+//		â€¢ EmRegsEZ::tmr1StatusRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsEZ::tmr1StatusRead (emuptr address, int size)
@@ -1411,7 +1411,7 @@ uint32 EmRegsEZ::tmr1StatusRead (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::uartRead
+//		â€¢ EmRegsEZ::uartRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsEZ::uartRead (emuptr address, int size)
@@ -1431,7 +1431,7 @@ uint32 EmRegsEZ::uartRead (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::rtcHourMinSecRead
+//		â€¢ EmRegsEZ::rtcHourMinSecRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsEZ::rtcHourMinSecRead (emuptr address, int size)
@@ -1464,7 +1464,7 @@ uint32 EmRegsEZ::rtcHourMinSecRead (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::csASelectWrite
+//		â€¢ EmRegsEZ::csASelectWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::csASelectWrite (emuptr address, int size, uint32 value)
@@ -1488,7 +1488,7 @@ void EmRegsEZ::csASelectWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::csDSelectWrite
+//		â€¢ EmRegsEZ::csDSelectWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::csDSelectWrite (emuptr address, int size, uint32 value)
@@ -1516,7 +1516,7 @@ void EmRegsEZ::csDSelectWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::intMaskHiWrite
+//		â€¢ EmRegsEZ::intMaskHiWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::intMaskHiWrite (emuptr address, int size, uint32 value)
@@ -1532,7 +1532,7 @@ void EmRegsEZ::intMaskHiWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::intMaskLoWrite
+//		â€¢ EmRegsEZ::intMaskLoWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::intMaskLoWrite (emuptr address, int size, uint32 value)
@@ -1548,7 +1548,7 @@ void EmRegsEZ::intMaskLoWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::intStatusHiWrite
+//		â€¢ EmRegsEZ::intStatusHiWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::intStatusHiWrite (emuptr address, int size, uint32 value)
@@ -1628,7 +1628,7 @@ void EmRegsEZ::intStatusHiWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::portXDataWrite
+//		â€¢ EmRegsEZ::portXDataWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::portXDataWrite (emuptr address, int size, uint32 value)
@@ -1661,7 +1661,7 @@ void EmRegsEZ::portXDataWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::portDIntReqEnWrite
+//		â€¢ EmRegsEZ::portDIntReqEnWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::portDIntReqEnWrite (emuptr address, int size, uint32 value)
@@ -1677,7 +1677,7 @@ void EmRegsEZ::portDIntReqEnWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::tmr1StatusWrite
+//		â€¢ EmRegsEZ::tmr1StatusWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::tmr1StatusWrite (emuptr address, int size, uint32 value)
@@ -1714,7 +1714,7 @@ void EmRegsEZ::tmr1StatusWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::spiMasterControlWrite
+//		â€¢ EmRegsEZ::spiMasterControlWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::spiMasterControlWrite (emuptr address, int size, uint32 value)
@@ -1776,7 +1776,7 @@ void EmRegsEZ::spiMasterControlWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::uartWrite
+//		â€¢ EmRegsEZ::uartWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::uartWrite(emuptr address, int size, uint32 value)
@@ -1799,7 +1799,7 @@ void EmRegsEZ::uartWrite(emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::lcdRegisterWrite
+//		â€¢ EmRegsEZ::lcdRegisterWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::lcdRegisterWrite (emuptr address, int size, uint32 value)
@@ -1854,7 +1854,7 @@ void EmRegsEZ::lcdRegisterWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::rtcControlWrite
+//		â€¢ EmRegsEZ::rtcControlWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::rtcControlWrite (emuptr address, int size, uint32 value)
@@ -1870,7 +1870,7 @@ void EmRegsEZ::rtcControlWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::rtcIntStatusWrite
+//		â€¢ EmRegsEZ::rtcIntStatusWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::rtcIntStatusWrite (emuptr address, int size, uint32 value)
@@ -1904,7 +1904,7 @@ void EmRegsEZ::rtcIntStatusWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::rtcIntEnableWrite
+//		â€¢ EmRegsEZ::rtcIntEnableWrite
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::rtcIntEnableWrite (emuptr address, int size, uint32 value)
@@ -1920,7 +1920,7 @@ void EmRegsEZ::rtcIntEnableWrite (emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::ButtonEvent
+//		â€¢ EmRegsEZ::ButtonEvent
 // ---------------------------------------------------------------------------
 // Handles a Palm device button event by updating the appropriate registers.
 
@@ -1966,7 +1966,7 @@ void EmRegsEZ::ButtonEvent (SkinElementType button, Bool buttonIsDown)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::HotSyncEvent
+//		â€¢ EmRegsEZ::HotSyncEvent
 // ---------------------------------------------------------------------------
 // Handles a HotSync button event by updating the appropriate registers.
 
@@ -1994,7 +1994,7 @@ void EmRegsEZ::HotSyncEvent (Bool buttonIsDown)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetKeyBits
+//		â€¢ EmRegsEZ::GetKeyBits
 // ---------------------------------------------------------------------------
 
 uint8 EmRegsEZ::GetKeyBits (void)
@@ -2057,7 +2057,7 @@ uint8 EmRegsEZ::GetKeyBits (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::ButtonToBits
+//		â€¢ EmRegsEZ::ButtonToBits
 // ---------------------------------------------------------------------------
 
 uint16 EmRegsEZ::ButtonToBits (SkinElementType button)
@@ -2086,7 +2086,7 @@ uint16 EmRegsEZ::ButtonToBits (SkinElementType button)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetSPISlave
+//		â€¢ EmRegsEZ::GetSPISlave
 // ---------------------------------------------------------------------------
 
 EmSPISlave* EmRegsEZ::GetSPISlave (void)
@@ -2096,7 +2096,7 @@ EmSPISlave* EmRegsEZ::GetSPISlave (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::UpdateInterrupts
+//		â€¢ EmRegsEZ::UpdateInterrupts
 // ---------------------------------------------------------------------------
 // Determines whether an interrupt has occurred by copying the Interrupt
 // Pending Register to the Interrupt Status Register.
@@ -2131,7 +2131,7 @@ void EmRegsEZ::UpdateInterrupts (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::UpdatePortDInterrupts
+//		â€¢ EmRegsEZ::UpdatePortDInterrupts
 // ---------------------------------------------------------------------------
 // Determine what interrupts need to be generated based on the current
 // settings in portDData and fPortDEdge.
@@ -2232,7 +2232,7 @@ void EmRegsEZ::UpdatePortDInterrupts (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::UpdateRTCInterrupts
+//		â€¢ EmRegsEZ::UpdateRTCInterrupts
 // ---------------------------------------------------------------------------
 // Determine whether to set or clear the RTC bit in the interrupt pending
 // register based on the current RTC register values.
@@ -2283,7 +2283,7 @@ void EmRegsEZ::UpdateRTCInterrupts (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::IDDetectAsserted
+//		â€¢ EmRegsEZ::IDDetectAsserted
 // ---------------------------------------------------------------------------
 // cf. HwrIdentifyFeatures and HwrPreRAMInit.
 
@@ -2303,7 +2303,7 @@ Bool EmRegsEZ::IDDetectAsserted (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetHardwareID
+//		â€¢ EmRegsEZ::GetHardwareID
 // ---------------------------------------------------------------------------
 
 UInt8 EmRegsEZ::GetHardwareID (void)
@@ -2335,7 +2335,7 @@ UInt8 EmRegsEZ::GetHardwareID (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::UARTStateChanged
+//		â€¢ EmRegsEZ::UARTStateChanged
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::UARTStateChanged (Bool sendTxData)
@@ -2351,7 +2351,7 @@ void EmRegsEZ::UARTStateChanged (Bool sendTxData)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::UpdateUARTState
+//		â€¢ EmRegsEZ::UpdateUARTState
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::UpdateUARTState (Bool refreshRxData)
@@ -2367,7 +2367,7 @@ void EmRegsEZ::UpdateUARTState (Bool refreshRxData)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::UpdateUARTInterrupts
+//		â€¢ EmRegsEZ::UpdateUARTInterrupts
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::UpdateUARTInterrupts (const EmUARTDragonball::State& state)
@@ -2399,7 +2399,7 @@ void EmRegsEZ::UpdateUARTInterrupts (const EmUARTDragonball::State& state)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::MarshalUARTState
+//		â€¢ EmRegsEZ::MarshalUARTState
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::MarshalUARTState (EmUARTDragonball::State& state)
@@ -2486,7 +2486,7 @@ void EmRegsEZ::MarshalUARTState (EmUARTDragonball::State& state)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::UnmarshalUARTState
+//		â€¢ EmRegsEZ::UnmarshalUARTState
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::UnmarshalUARTState (const EmUARTDragonball::State& state)
@@ -2582,7 +2582,7 @@ void EmRegsEZ::UnmarshalUARTState (const EmUARTDragonball::State& state)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::GetPort
+//		â€¢ EmRegsEZ::GetPort
 // ---------------------------------------------------------------------------
 // Given an address, return a value indicating what port it is associated with.
 
@@ -2607,7 +2607,7 @@ int EmRegsEZ::GetPort (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZ::PrvGetPalette
+//		â€¢ EmRegsEZ::PrvGetPalette
 // ---------------------------------------------------------------------------
 
 void EmRegsEZ::PrvGetPalette (RGBList& thePalette)

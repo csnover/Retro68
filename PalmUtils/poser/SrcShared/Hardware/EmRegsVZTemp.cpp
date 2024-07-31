@@ -51,7 +51,7 @@ const uint16	kButtonMap[kNumButtonRows][kNumButtonCols] =
 #define	hwrVZPalmI705PortMIR_SD		0x20	// (L) Infrared Shut-down (UART 2)
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmI705::EmRegsVZPalmI705
+//		â€¢ EmRegsVZPalmI705::EmRegsVZPalmI705
 // ---------------------------------------------------------------------------
 
 EmRegsVZPalmI705::EmRegsVZPalmI705 (void) :
@@ -62,7 +62,7 @@ EmRegsVZPalmI705::EmRegsVZPalmI705 (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmI705::~EmRegsVZPalmI705
+//		â€¢ EmRegsVZPalmI705::~EmRegsVZPalmI705
 // ---------------------------------------------------------------------------
 
 EmRegsVZPalmI705::~EmRegsVZPalmI705 (void)
@@ -72,7 +72,7 @@ EmRegsVZPalmI705::~EmRegsVZPalmI705 (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmI705::GetLCDScreenOn
+//		â€¢ EmRegsVZPalmI705::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZPalmI705::GetLCDScreenOn (void)
@@ -82,7 +82,7 @@ Bool EmRegsVZPalmI705::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmI705::GetLCDBacklightOn
+//		â€¢ EmRegsVZPalmI705::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZPalmI705::GetLCDBacklightOn (void)
@@ -92,7 +92,7 @@ Bool EmRegsVZPalmI705::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmI705::GetLineDriverState
+//		â€¢ EmRegsVZPalmI705::GetLineDriverState
 // ---------------------------------------------------------------------------
 // Return whether or not the line drivers for the given object are open or
 // closed.
@@ -110,7 +110,7 @@ Bool EmRegsVZPalmI705::GetLineDriverState (EmUARTDeviceType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmI705::GetUARTDevice
+//		â€¢ EmRegsVZPalmI705::GetUARTDevice
 // ---------------------------------------------------------------------------
 // Return what sort of device is hooked up to the given UART.
 
@@ -155,7 +155,7 @@ EmUARTDeviceType EmRegsVZPalmI705::GetUARTDevice (int uartNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmI705::GetVibrateOn
+//		â€¢ EmRegsVZPalmI705::GetVibrateOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZPalmI705::GetVibrateOn (void)
@@ -165,7 +165,7 @@ Bool EmRegsVZPalmI705::GetVibrateOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmI705::GetPortInputValue
+//		â€¢ EmRegsVZPalmI705::GetPortInputValue
 // ---------------------------------------------------------------------------
 // Return the GPIO values for the pins on the port.  These values are used
 // if the select pins are high.
@@ -179,7 +179,7 @@ uint8 EmRegsVZPalmI705::GetPortInputValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmI705::GetPortInternalValue
+//		â€¢ EmRegsVZPalmI705::GetPortInternalValue
 // ---------------------------------------------------------------------------
 // Return the dedicated values for the pins on the port.  These values are
 // used if the select pins are low.
@@ -204,7 +204,7 @@ uint8 EmRegsVZPalmI705::GetPortInternalValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmI705::GetKeyInfo
+//		â€¢ EmRegsVZPalmI705::GetKeyInfo
 // ---------------------------------------------------------------------------
 
 void EmRegsVZPalmI705::GetKeyInfo (int* numRows, int* numCols,
@@ -227,7 +227,7 @@ void EmRegsVZPalmI705::GetKeyInfo (int* numRows, int* numCols,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmI705::GetSPISlave
+//		â€¢ EmRegsVZPalmI705::GetSPISlave
 // ---------------------------------------------------------------------------
 
 EmSPISlave* EmRegsVZPalmI705::GetSPISlave (void)
@@ -267,7 +267,7 @@ const uint16	kButtonMapPalmM125[kNumButtonRows][kNumButtonCols] =
 };
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM125::EmRegsVZPalmM125
+//		â€¢ EmRegsVZPalmM125::EmRegsVZPalmM125
 // ---------------------------------------------------------------------------
 
 EmRegsVZPalmM125::EmRegsVZPalmM125 (void) :
@@ -278,7 +278,7 @@ EmRegsVZPalmM125::EmRegsVZPalmM125 (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM125::~EmRegsVZPalmM125
+//		â€¢ EmRegsVZPalmM125::~EmRegsVZPalmM125
 // ---------------------------------------------------------------------------
 
 EmRegsVZPalmM125::~EmRegsVZPalmM125 (void)
@@ -288,7 +288,7 @@ EmRegsVZPalmM125::~EmRegsVZPalmM125 (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM125::GetLCDScreenOn
+//		â€¢ EmRegsVZPalmM125::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZPalmM125::GetLCDScreenOn (void)
@@ -298,7 +298,7 @@ Bool EmRegsVZPalmM125::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM125::GetLCDBacklightOn
+//		â€¢ EmRegsVZPalmM125::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZPalmM125::GetLCDBacklightOn (void)
@@ -308,7 +308,7 @@ Bool EmRegsVZPalmM125::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM125::GetLineDriverState
+//		â€¢ EmRegsVZPalmM125::GetLineDriverState
 // ---------------------------------------------------------------------------
 // Return whether or not the line drivers for the given object are open or
 // closed.
@@ -326,7 +326,7 @@ Bool EmRegsVZPalmM125::GetLineDriverState (EmUARTDeviceType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM125::GetUARTDevice
+//		â€¢ EmRegsVZPalmM125::GetUARTDevice
 // ---------------------------------------------------------------------------
 // Return what sort of device is hooked up to the given UART.
 
@@ -356,7 +356,7 @@ EmUARTDeviceType EmRegsVZPalmM125::GetUARTDevice (int uartNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM125::GetPortInputValue
+//		â€¢ EmRegsVZPalmM125::GetPortInputValue
 // ---------------------------------------------------------------------------
 // Return the GPIO values for the pins on the port.  These values are used
 // if the select pins are high.
@@ -370,7 +370,7 @@ uint8 EmRegsVZPalmM125::GetPortInputValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM125::GetPortInternalValue
+//		â€¢ EmRegsVZPalmM125::GetPortInternalValue
 // ---------------------------------------------------------------------------
 // Return the dedicated values for the pins on the port.  These values are
 // used if the select pins are low.
@@ -395,7 +395,7 @@ uint8 EmRegsVZPalmM125::GetPortInternalValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM125::GetKeyInfo
+//		â€¢ EmRegsVZPalmM125::GetKeyInfo
 // ---------------------------------------------------------------------------
 
 void EmRegsVZPalmM125::GetKeyInfo (int* numRows, int* numCols,
@@ -418,7 +418,7 @@ void EmRegsVZPalmM125::GetKeyInfo (int* numRows, int* numCols,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM125::GetSPISlave
+//		â€¢ EmRegsVZPalmM125::GetSPISlave
 // ---------------------------------------------------------------------------
 
 EmSPISlave* EmRegsVZPalmM125::GetSPISlave (void)
@@ -456,7 +456,7 @@ const uint16	kButtonMapPalmM130[kNumButtonRows][kNumButtonCols] =
 };
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM130::EmRegsVZPalmM130
+//		â€¢ EmRegsVZPalmM130::EmRegsVZPalmM130
 // ---------------------------------------------------------------------------
 
 EmRegsVZPalmM130::EmRegsVZPalmM130 (void) :
@@ -467,7 +467,7 @@ EmRegsVZPalmM130::EmRegsVZPalmM130 (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM130::~EmRegsVZPalmM130
+//		â€¢ EmRegsVZPalmM130::~EmRegsVZPalmM130
 // ---------------------------------------------------------------------------
 
 EmRegsVZPalmM130::~EmRegsVZPalmM130 (void)
@@ -477,7 +477,7 @@ EmRegsVZPalmM130::~EmRegsVZPalmM130 (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM130::GetLCDScreenOn
+//		â€¢ EmRegsVZPalmM130::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZPalmM130::GetLCDScreenOn (void)
@@ -487,7 +487,7 @@ Bool EmRegsVZPalmM130::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM130::GetLCDBacklightOn
+//		â€¢ EmRegsVZPalmM130::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZPalmM130::GetLCDBacklightOn (void)
@@ -497,7 +497,7 @@ Bool EmRegsVZPalmM130::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM130::GetLineDriverState
+//		â€¢ EmRegsVZPalmM130::GetLineDriverState
 // ---------------------------------------------------------------------------
 // Return whether or not the line drivers for the given object are open or
 // closed.
@@ -515,7 +515,7 @@ Bool EmRegsVZPalmM130::GetLineDriverState (EmUARTDeviceType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM130::GetUARTDevice
+//		â€¢ EmRegsVZPalmM130::GetUARTDevice
 // ---------------------------------------------------------------------------
 // Return what sort of device is hooked up to the given UART.
 
@@ -545,7 +545,7 @@ EmUARTDeviceType EmRegsVZPalmM130::GetUARTDevice (int uartNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM130::GetPortInputValue
+//		â€¢ EmRegsVZPalmM130::GetPortInputValue
 // ---------------------------------------------------------------------------
 // Return the GPIO values for the pins on the port.  These values are used
 // if the select pins are high.
@@ -559,7 +559,7 @@ uint8 EmRegsVZPalmM130::GetPortInputValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM130::GetPortInternalValue
+//		â€¢ EmRegsVZPalmM130::GetPortInternalValue
 // ---------------------------------------------------------------------------
 // Return the dedicated values for the pins on the port.  These values are
 // used if the select pins are low.
@@ -584,7 +584,7 @@ uint8 EmRegsVZPalmM130::GetPortInternalValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM130::GetKeyInfo
+//		â€¢ EmRegsVZPalmM130::GetKeyInfo
 // ---------------------------------------------------------------------------
 
 void EmRegsVZPalmM130::GetKeyInfo (int* numRows, int* numCols,
@@ -607,7 +607,7 @@ void EmRegsVZPalmM130::GetKeyInfo (int* numRows, int* numCols,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZPalmM130::GetSPISlave
+//		â€¢ EmRegsVZPalmM130::GetSPISlave
 // ---------------------------------------------------------------------------
 
 EmSPISlave* EmRegsVZPalmM130::GetSPISlave (void)
@@ -642,7 +642,7 @@ EmSPISlave* EmRegsVZPalmM130::GetSPISlave (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmI705::EmRegsPLDPalmI705
+//		â€¢ EmRegsPLDPalmI705::EmRegsPLDPalmI705
 // ---------------------------------------------------------------------------
 
 EmRegsPLDPalmI705::EmRegsPLDPalmI705 (emuptr baseAddr) :
@@ -652,7 +652,7 @@ EmRegsPLDPalmI705::EmRegsPLDPalmI705 (emuptr baseAddr) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmI705::~EmRegsPLDPalmI705
+//		â€¢ EmRegsPLDPalmI705::~EmRegsPLDPalmI705
 // ---------------------------------------------------------------------------
 
 EmRegsPLDPalmI705::~EmRegsPLDPalmI705 (void)
@@ -661,7 +661,7 @@ EmRegsPLDPalmI705::~EmRegsPLDPalmI705 (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmI705::Initialize
+//		â€¢ EmRegsPLDPalmI705::Initialize
 // ---------------------------------------------------------------------------
 
 void EmRegsPLDPalmI705::Initialize (void)
@@ -671,7 +671,7 @@ void EmRegsPLDPalmI705::Initialize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmI705::Reset
+//		â€¢ EmRegsPLDPalmI705::Reset
 // ---------------------------------------------------------------------------
 
 void EmRegsPLDPalmI705::Reset (Bool hardwareReset)
@@ -686,7 +686,7 @@ void EmRegsPLDPalmI705::Reset (Bool hardwareReset)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmI705::Save
+//		â€¢ EmRegsPLDPalmI705::Save
 // ---------------------------------------------------------------------------
 
 void EmRegsPLDPalmI705::Save (SessionFile& f)
@@ -696,7 +696,7 @@ void EmRegsPLDPalmI705::Save (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmI705::Load
+//		â€¢ EmRegsPLDPalmI705::Load
 // ---------------------------------------------------------------------------
 
 void EmRegsPLDPalmI705::Load (SessionFile& f)
@@ -706,7 +706,7 @@ void EmRegsPLDPalmI705::Load (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmI705::Dispose
+//		â€¢ EmRegsPLDPalmI705::Dispose
 // ---------------------------------------------------------------------------
 
 void EmRegsPLDPalmI705::Dispose (void)
@@ -716,7 +716,7 @@ void EmRegsPLDPalmI705::Dispose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmI705::GetLEDState
+//		â€¢ EmRegsPLDPalmI705::GetLEDState
 // ---------------------------------------------------------------------------
 
 uint16 EmRegsPLDPalmI705::GetLEDState (void)
@@ -734,7 +734,7 @@ uint16 EmRegsPLDPalmI705::GetLEDState (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmI705::SetSubBankHandlers
+//		â€¢ EmRegsPLDPalmI705::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegsPLDPalmI705::SetSubBankHandlers (void)
@@ -770,7 +770,7 @@ void EmRegsPLDPalmI705::SetSubBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmI705::GetRealAddress
+//		â€¢ EmRegsPLDPalmI705::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmRegsPLDPalmI705::GetRealAddress (emuptr address)
@@ -780,7 +780,7 @@ uint8* EmRegsPLDPalmI705::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmI705::GetAddressStart
+//		â€¢ EmRegsPLDPalmI705::GetAddressStart
 // ---------------------------------------------------------------------------
 
 emuptr EmRegsPLDPalmI705::GetAddressStart (void)
@@ -790,7 +790,7 @@ emuptr EmRegsPLDPalmI705::GetAddressStart (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmI705::GetAddressRange
+//		â€¢ EmRegsPLDPalmI705::GetAddressRange
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsPLDPalmI705::GetAddressRange (void)
@@ -800,7 +800,7 @@ uint32 EmRegsPLDPalmI705::GetAddressRange (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmI705::low_battRead
+//		â€¢ EmRegsPLDPalmI705::low_battRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsPLDPalmI705::low_battRead (emuptr address, int size)
@@ -823,7 +823,7 @@ uint32 EmRegsPLDPalmI705::low_battRead (emuptr address, int size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmI705::usb_intRead
+//		â€¢ EmRegsPLDPalmI705::usb_intRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsPLDPalmI705::usb_intRead (emuptr /*address*/, int /*size*/)
@@ -835,7 +835,7 @@ uint32 EmRegsPLDPalmI705::usb_intRead (emuptr /*address*/, int /*size*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsPLDPalmI705::bullet_detRead
+//		â€¢ EmRegsPLDPalmI705::bullet_detRead
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsPLDPalmI705::bullet_detRead (emuptr /*address*/, int /*size*/)

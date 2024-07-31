@@ -73,7 +73,7 @@ struct EmPrvMenuItem
 
 	Mac OS X reserves certain keyboard combinations as equivalents to menu
 	commands; these shortcuts affect all applications. Even if your application
-	doesnÕt support all the combinations shown in Table 8-3, donÕt use any of
+	doesnâ€™t support all the combinations shown in Table 8-3, donâ€™t use any of
 	them for another function.
 
 		Table 8-3 Reserved and recommended keyboard equivalents
@@ -280,7 +280,7 @@ EmPrvMenuItem	kPrvMenuItems[] =
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ MenuInitialize
+//		â€¢ MenuInitialize
 // ---------------------------------------------------------------------------
 // Create all of our menu hierarchies.
 
@@ -296,7 +296,7 @@ void MenuInitialize (Bool alternateLayout)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MenuFindMenu
+//		â€¢ MenuFindMenu
 // ---------------------------------------------------------------------------
 // Find the top-level menu with the given menu ID and return a pointer to it.
 // If the menu ID is unknown, this function returns NULL.
@@ -326,7 +326,7 @@ EmMenu* MenuFindMenu (EmMenuID menuID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MenuFindMenuItemByCommandID
+//		â€¢ MenuFindMenuItemByCommandID
 // ---------------------------------------------------------------------------
 // Find the menu item in the given menu (or menu hierarchy if recurse is true)
 // that has the given command ID.  If more than one menu item has that ID, the
@@ -362,7 +362,7 @@ EmMenuItem* MenuFindMenuItemByCommandID (EmMenuItemList& menu,
 
 
 // ---------------------------------------------------------------------------
-//		¥ MenuFindMenuContainingCommandID
+//		â€¢ MenuFindMenuContainingCommandID
 // ---------------------------------------------------------------------------
 // Return the menu containing the menu item that has the given command ID.
 // If no such menu item can be found, return NULL.
@@ -398,7 +398,7 @@ EmMenuItemList* MenuFindMenuContainingCommandID (EmMenuItemList& menu, EmCommand
 
 
 // ---------------------------------------------------------------------------
-//		¥ MenuUpdateMruMenus
+//		â€¢ MenuUpdateMruMenus
 // ---------------------------------------------------------------------------
 // Update the MRU menu items according to the current preferences.
 
@@ -418,7 +418,7 @@ void MenuUpdateMruMenus (EmMenu& menu)
 
 
 // ---------------------------------------------------------------------------
-//		¥ MenuUpdateMenuItemStatus
+//		â€¢ MenuUpdateMenuItemStatus
 // ---------------------------------------------------------------------------
 
 void MenuUpdateMenuItemStatus (EmMenuItemList& menu)
@@ -446,7 +446,7 @@ void MenuUpdateMenuItemStatus (EmMenuItemList& menu)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ PrvInitializeMenus
+//		â€¢ PrvInitializeMenus
 // ---------------------------------------------------------------------------
 // Create all of our menu hierarchies.
 
@@ -702,7 +702,7 @@ void PrvInitializeMenus (Bool alternateLayout)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvAddMenuItem
+//		â€¢ PrvAddMenuItem
 // ---------------------------------------------------------------------------
 // Look up the template for the given command ID and use it to create a new
 // menu item, adding it to the given menu.
@@ -735,7 +735,7 @@ void PrvAddMenuItem (EmMenuItemList& menu, EmCommandID cmd)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvSetSubMenu
+//		â€¢ PrvSetSubMenu
 // ---------------------------------------------------------------------------
 // Find the menu item with the given command and set its children.
 
@@ -756,7 +756,7 @@ void PrvSetSubMenu (EmMenuItemList& menu, EmCommandID cmd, EmMenuItemList& subMe
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvUpdateMruMenus
+//		â€¢ PrvUpdateMruMenus
 // ---------------------------------------------------------------------------
 // Update the MRU menu items according to the current preferences.
 
@@ -816,7 +816,7 @@ void PrvUpdateMruMenus (const EmFileRefList& files,
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvCollectFiles
+//		â€¢ PrvCollectFiles
 // ---------------------------------------------------------------------------
 // Collect the MRU files from the preferences system.
 
@@ -851,7 +851,7 @@ void PrvCollectFiles (EmFileRefList& session, EmFileRefList& database)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvGetItemStatus
+//		â€¢ PrvGetItemStatus
 // ---------------------------------------------------------------------------
 // Return whether the given menu item should be enabled or not.
 
@@ -960,7 +960,7 @@ Bool PrvGetItemStatus (const EmMenuItem& item)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvGetItemStatus
+//		â€¢ PrvGetItemStatus
 // ---------------------------------------------------------------------------
 // Respond to the preference change by invalidating one of our flags.  This
 // flag will be inspected later when getting a menu to display.
@@ -979,7 +979,7 @@ void PrvPrefsChanged (PrefKeyType key, void*)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvPreferredMenuID
+//		â€¢ PrvPreferredMenuID
 // ---------------------------------------------------------------------------
 // Translate the given menu ID into the one we really should use.  For the
 // most cases, that merely means returning the given ID.  However, for
@@ -1016,7 +1016,7 @@ EmMenuID PrvPreferredMenuID (EmMenuID id)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::EmMenuItem
+//		â€¢ EmMenuItem::EmMenuItem
 // ---------------------------------------------------------------------------
 
 EmMenuItem::EmMenuItem (void) :
@@ -1032,7 +1032,7 @@ EmMenuItem::EmMenuItem (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::EmMenuItem
+//		â€¢ EmMenuItem::EmMenuItem
 // ---------------------------------------------------------------------------
 
 EmMenuItem::EmMenuItem (const EmMenuItem& other) :
@@ -1048,7 +1048,7 @@ EmMenuItem::EmMenuItem (const EmMenuItem& other) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::EmMenuItem
+//		â€¢ EmMenuItem::EmMenuItem
 // ---------------------------------------------------------------------------
 
 EmMenuItem::EmMenuItem (StrCode str, EmCommandID cmd) :
@@ -1064,7 +1064,7 @@ EmMenuItem::EmMenuItem (StrCode str, EmCommandID cmd) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::EmMenuItem
+//		â€¢ EmMenuItem::EmMenuItem
 // ---------------------------------------------------------------------------
 
 EmMenuItem::EmMenuItem (const string& title, EmCommandID cmd) :
@@ -1080,7 +1080,7 @@ EmMenuItem::EmMenuItem (const string& title, EmCommandID cmd) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::~EmMenuItem
+//		â€¢ EmMenuItem::~EmMenuItem
 // ---------------------------------------------------------------------------
 
 EmMenuItem::~EmMenuItem (void)
@@ -1089,7 +1089,7 @@ EmMenuItem::~EmMenuItem (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::GetTitle
+//		â€¢ EmMenuItem::GetTitle
 // ---------------------------------------------------------------------------
 
 const string &EmMenuItem::GetTitle (void) const
@@ -1099,7 +1099,7 @@ const string &EmMenuItem::GetTitle (void) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::GetShortcut
+//		â€¢ EmMenuItem::GetShortcut
 // ---------------------------------------------------------------------------
 
 char EmMenuItem::GetShortcut (void) const
@@ -1109,7 +1109,7 @@ char EmMenuItem::GetShortcut (void) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::GetCommand
+//		â€¢ EmMenuItem::GetCommand
 // ---------------------------------------------------------------------------
 
 EmCommandID EmMenuItem::GetCommand (void) const
@@ -1119,7 +1119,7 @@ EmCommandID EmMenuItem::GetCommand (void) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::GetChildren
+//		â€¢ EmMenuItem::GetChildren
 // ---------------------------------------------------------------------------
 
 EmMenuItemList& EmMenuItem::GetChildren (void)
@@ -1134,7 +1134,7 @@ const EmMenuItemList& EmMenuItem::GetChildren (void) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::GetIsActive
+//		â€¢ EmMenuItem::GetIsActive
 // ---------------------------------------------------------------------------
 
 Bool EmMenuItem::GetIsActive (void) const
@@ -1144,7 +1144,7 @@ Bool EmMenuItem::GetIsActive (void) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::GetIsChecked
+//		â€¢ EmMenuItem::GetIsChecked
 // ---------------------------------------------------------------------------
 
 Bool EmMenuItem::GetIsChecked (void) const
@@ -1154,7 +1154,7 @@ Bool EmMenuItem::GetIsChecked (void) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::GetIsDivider
+//		â€¢ EmMenuItem::GetIsDivider
 // ---------------------------------------------------------------------------
 
 Bool EmMenuItem::GetIsDivider (void) const
@@ -1164,7 +1164,7 @@ Bool EmMenuItem::GetIsDivider (void) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::SetTitle
+//		â€¢ EmMenuItem::SetTitle
 // ---------------------------------------------------------------------------
 
 void EmMenuItem::SetTitle (const string& title)
@@ -1175,7 +1175,7 @@ void EmMenuItem::SetTitle (const string& title)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::SetShortcut
+//		â€¢ EmMenuItem::SetShortcut
 // ---------------------------------------------------------------------------
 
 void EmMenuItem::SetShortcut (char shortcut)
@@ -1185,7 +1185,7 @@ void EmMenuItem::SetShortcut (char shortcut)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::SetCommand
+//		â€¢ EmMenuItem::SetCommand
 // ---------------------------------------------------------------------------
 
 void EmMenuItem::SetCommand (EmCommandID command)
@@ -1195,7 +1195,7 @@ void EmMenuItem::SetCommand (EmCommandID command)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::SetChildren
+//		â€¢ EmMenuItem::SetChildren
 // ---------------------------------------------------------------------------
 
 void EmMenuItem::SetChildren (const EmMenuItemList& children)
@@ -1205,7 +1205,7 @@ void EmMenuItem::SetChildren (const EmMenuItemList& children)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::SetIsActive
+//		â€¢ EmMenuItem::SetIsActive
 // ---------------------------------------------------------------------------
 
 void EmMenuItem::SetIsActive (Bool active)
@@ -1215,7 +1215,7 @@ void EmMenuItem::SetIsActive (Bool active)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::SetIsChecked
+//		â€¢ EmMenuItem::SetIsChecked
 // ---------------------------------------------------------------------------
 
 void EmMenuItem::SetIsChecked (Bool checked)
@@ -1225,7 +1225,7 @@ void EmMenuItem::SetIsChecked (Bool checked)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::SetIsDivider
+//		â€¢ EmMenuItem::SetIsDivider
 // ---------------------------------------------------------------------------
 
 void EmMenuItem::SetIsDivider (Bool divider)
@@ -1235,7 +1235,7 @@ void EmMenuItem::SetIsDivider (Bool divider)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::ExtractTitle
+//		â€¢ EmMenuItem::ExtractTitle
 // ---------------------------------------------------------------------------
 
 string EmMenuItem::ExtractTitle (const string& title) const
@@ -1255,7 +1255,7 @@ string EmMenuItem::ExtractTitle (const string& title) const
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmMenuItem::ExtractShortcut
+//		â€¢ EmMenuItem::ExtractShortcut
 // ---------------------------------------------------------------------------
 
 char EmMenuItem::ExtractShortcut (const string& title) const

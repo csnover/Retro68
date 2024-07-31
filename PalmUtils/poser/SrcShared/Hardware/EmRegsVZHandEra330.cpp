@@ -39,7 +39,7 @@ const uint16	kButtonMap[kNumButtonRows][kNumButtonCols] =
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::EmRegsVZHandEra330
+//		â€¢ EmRegsVZHandEra330::EmRegsVZHandEra330
 // ---------------------------------------------------------------------------
 
 EmRegsVZHandEra330::EmRegsVZHandEra330 (HandEra330PortManager ** fPortManager) :
@@ -89,7 +89,7 @@ EmRegsVZHandEra330::EmRegsVZHandEra330 (HandEra330PortManager ** fPortManager) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::~EmRegsVZHandEra330
+//		â€¢ EmRegsVZHandEra330::~EmRegsVZHandEra330
 // ---------------------------------------------------------------------------
 
 EmRegsVZHandEra330::~EmRegsVZHandEra330 (void)
@@ -113,7 +113,7 @@ void EmRegsVZHandEra330::Dispose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::GetLCDScreenOn
+//		â€¢ EmRegsVZHandEra330::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZHandEra330::GetLCDScreenOn (void)
@@ -124,7 +124,7 @@ Bool EmRegsVZHandEra330::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::GetLCDBacklightOn
+//		â€¢ EmRegsVZHandEra330::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZHandEra330::GetLCDBacklightOn (void)
@@ -135,7 +135,7 @@ Bool EmRegsVZHandEra330::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::GetLineDriverState
+//		â€¢ EmRegsVZHandEra330::GetLineDriverState
 // ---------------------------------------------------------------------------
 // Return whether or not the line drivers for the given object are open or
 // closed.
@@ -153,7 +153,7 @@ Bool EmRegsVZHandEra330::GetLineDriverState (EmUARTDeviceType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::GetUARTDevice
+//		â€¢ EmRegsVZHandEra330::GetUARTDevice
 // ---------------------------------------------------------------------------
 // Return what sort of device is hooked up to the given UART.
 
@@ -183,7 +183,7 @@ EmUARTDeviceType EmRegsVZHandEra330::GetUARTDevice (int /*uartNum*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::GetVibrateOn
+//		â€¢ EmRegsVZHandEra330::GetVibrateOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsVZHandEra330::GetVibrateOn (void)
@@ -193,7 +193,7 @@ Bool EmRegsVZHandEra330::GetVibrateOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::GetInterruptLevel
+//		â€¢ EmRegsVZHandEra330::GetInterruptLevel
 // ---------------------------------------------------------------------------
 
 int32 EmRegsVZHandEra330::GetInterruptLevel (void)
@@ -210,7 +210,7 @@ int32 EmRegsVZHandEra330::GetInterruptLevel (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::GetLEDState
+//		â€¢ EmRegsVZHandEra330::GetLEDState
 // ---------------------------------------------------------------------------
 
 uint16 EmRegsVZHandEra330::GetLEDState (void)
@@ -229,7 +229,7 @@ uint16 EmRegsVZHandEra330::GetLEDState (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::GetPortD
+//		â€¢ EmRegsVZHandEra330::GetPortD
 // ---------------------------------------------------------------------------
 
 uint8 EmRegsVZHandEra330::GetPortD (uint8 result)
@@ -242,7 +242,7 @@ uint8 EmRegsVZHandEra330::GetPortD (uint8 result)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::GetPortInputValue
+//		â€¢ EmRegsVZHandEra330::GetPortInputValue
 // ---------------------------------------------------------------------------
 // Return the GPIO values for the pins on the port.  These values are used
 // if the select pins are high.
@@ -279,7 +279,7 @@ uint8 EmRegsVZHandEra330::GetPortInputValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::GetPortInternalValue
+//		â€¢ EmRegsVZHandEra330::GetPortInternalValue
 // ---------------------------------------------------------------------------
 // Return the dedicated values for the pins on the port.  These values are
 // used if the select pins are low.
@@ -315,7 +315,7 @@ uint8 EmRegsVZHandEra330::GetPortInternalValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::GetKeyInfo
+//		â€¢ EmRegsVZHandEra330::GetKeyInfo
 // ---------------------------------------------------------------------------
 
 void EmRegsVZHandEra330::GetKeyInfo (int* numRows, int* numCols,
@@ -335,7 +335,7 @@ void EmRegsVZHandEra330::GetKeyInfo (int* numRows, int* numCols,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::GetSPISlave
+//		â€¢ EmRegsVZHandEra330::GetSPISlave
 // ---------------------------------------------------------------------------
 
 EmSPISlave* EmRegsVZHandEra330::GetSPISlave (void)
@@ -353,7 +353,7 @@ EmSPISlave* EmRegsVZHandEra330::GetSPISlave (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::GetROMSize
+//		â€¢ EmRegsVZHandEra330::GetROMSize
 // ---------------------------------------------------------------------------
 
 int32 EmRegsVZHandEra330::GetROMSize (void)
@@ -363,7 +363,7 @@ int32 EmRegsVZHandEra330::GetROMSize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::ButtonToBits
+//		â€¢ EmRegsVZHandEra330::ButtonToBits
 // ---------------------------------------------------------------------------
 
 uint16 EmRegsVZHandEra330::ButtonToBits (SkinElementType button)
@@ -577,7 +577,7 @@ uint32 EmRegsVZHandEra330::spiIntCSRead(emuptr /* address */, int /* size */)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsVZHandEra330::SetSubBankHandlers
+//		â€¢ EmRegsVZHandEra330::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegsVZHandEra330::SetSubBankHandlers(void)

@@ -34,7 +34,7 @@
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBPhilipsPDIUSBD12::EmRegsUSBPhilipsPDIUSBD12
+//		â€¢ EmRegsUSBPhilipsPDIUSBD12::EmRegsUSBPhilipsPDIUSBD12
 // ---------------------------------------------------------------------------
 
 EmRegsUSBPhilipsPDIUSBD12::EmRegsUSBPhilipsPDIUSBD12 (emuptr baseAddr) :
@@ -44,7 +44,7 @@ EmRegsUSBPhilipsPDIUSBD12::EmRegsUSBPhilipsPDIUSBD12 (emuptr baseAddr) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBPhilipsPDIUSBD12::~EmRegsUSBPhilipsPDIUSBD12
+//		â€¢ EmRegsUSBPhilipsPDIUSBD12::~EmRegsUSBPhilipsPDIUSBD12
 // ---------------------------------------------------------------------------
 
 EmRegsUSBPhilipsPDIUSBD12::~EmRegsUSBPhilipsPDIUSBD12 (void)
@@ -53,7 +53,7 @@ EmRegsUSBPhilipsPDIUSBD12::~EmRegsUSBPhilipsPDIUSBD12 (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBPhilipsPDIUSBD12::Initialize
+//		â€¢ EmRegsUSBPhilipsPDIUSBD12::Initialize
 // ---------------------------------------------------------------------------
 
 void EmRegsUSBPhilipsPDIUSBD12::Initialize (void)
@@ -63,7 +63,7 @@ void EmRegsUSBPhilipsPDIUSBD12::Initialize (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBPhilipsPDIUSBD12::Reset
+//		â€¢ EmRegsUSBPhilipsPDIUSBD12::Reset
 // ---------------------------------------------------------------------------
 
 void EmRegsUSBPhilipsPDIUSBD12::Reset (Bool hardwareReset)
@@ -78,7 +78,7 @@ void EmRegsUSBPhilipsPDIUSBD12::Reset (Bool hardwareReset)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBPhilipsPDIUSBD12::Save
+//		â€¢ EmRegsUSBPhilipsPDIUSBD12::Save
 // ---------------------------------------------------------------------------
 
 void EmRegsUSBPhilipsPDIUSBD12::Save (SessionFile& f)
@@ -88,7 +88,7 @@ void EmRegsUSBPhilipsPDIUSBD12::Save (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBPhilipsPDIUSBD12::Load
+//		â€¢ EmRegsUSBPhilipsPDIUSBD12::Load
 // ---------------------------------------------------------------------------
 
 void EmRegsUSBPhilipsPDIUSBD12::Load (SessionFile& f)
@@ -98,7 +98,7 @@ void EmRegsUSBPhilipsPDIUSBD12::Load (SessionFile& f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBPhilipsPDIUSBD12::Dispose
+//		â€¢ EmRegsUSBPhilipsPDIUSBD12::Dispose
 // ---------------------------------------------------------------------------
 
 void EmRegsUSBPhilipsPDIUSBD12::Dispose (void)
@@ -108,7 +108,7 @@ void EmRegsUSBPhilipsPDIUSBD12::Dispose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBPhilipsPDIUSBD12::SetSubBankHandlers
+//		â€¢ EmRegsUSBPhilipsPDIUSBD12::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegsUSBPhilipsPDIUSBD12::SetSubBankHandlers (void)
@@ -125,7 +125,7 @@ void EmRegsUSBPhilipsPDIUSBD12::SetSubBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBPhilipsPDIUSBD12::GetRealAddress
+//		â€¢ EmRegsUSBPhilipsPDIUSBD12::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmRegsUSBPhilipsPDIUSBD12::GetRealAddress (emuptr address)
@@ -135,7 +135,7 @@ uint8* EmRegsUSBPhilipsPDIUSBD12::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBPhilipsPDIUSBD12::GetAddressStart
+//		â€¢ EmRegsUSBPhilipsPDIUSBD12::GetAddressStart
 // ---------------------------------------------------------------------------
 
 emuptr EmRegsUSBPhilipsPDIUSBD12::GetAddressStart (void)
@@ -145,7 +145,7 @@ emuptr EmRegsUSBPhilipsPDIUSBD12::GetAddressStart (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsUSBPhilipsPDIUSBD12::GetAddressRange
+//		â€¢ EmRegsUSBPhilipsPDIUSBD12::GetAddressRange
 // ---------------------------------------------------------------------------
 
 uint32 EmRegsUSBPhilipsPDIUSBD12::GetAddressRange (void)

@@ -15,7 +15,7 @@
 #include "Chars.h"
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlaveSTMicro::EmSPISlaveSTMicro
+//		â€¢ EmSPISlaveSTMicro::EmSPISlaveSTMicro
 // ---------------------------------------------------------------------------
 
 EmSPISlaveSTMicro::EmSPISlaveSTMicro (void)
@@ -36,7 +36,7 @@ EmSPISlaveSTMicro::EmSPISlaveSTMicro (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlaveSTMicro::~EmSPISlaveSTMicro
+//		â€¢ EmSPISlaveSTMicro::~EmSPISlaveSTMicro
 // ---------------------------------------------------------------------------
 
 EmSPISlaveSTMicro::~EmSPISlaveSTMicro (void)
@@ -45,7 +45,7 @@ EmSPISlaveSTMicro::~EmSPISlaveSTMicro (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlaveSTMicro::DoExchange
+//		â€¢ EmSPISlaveSTMicro::DoExchange
 // ---------------------------------------------------------------------------
 
 uint16 EmSPISlaveSTMicro::DoExchange (uint16, uint16 data)
@@ -91,7 +91,7 @@ uint16 EmSPISlaveSTMicro::DoExchange (uint16, uint16 data)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlaveSTMicro::NeedsExchange
+//		â€¢ EmSPISlaveSTMicro::NeedsExchange
 // ---------------------------------------------------------------------------
 
 uint8 EmSPISlaveSTMicro::NeedsExchange (void)
@@ -113,7 +113,7 @@ uint8 EmSPISlaveSTMicro::NeedsExchange (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlaveSTMicro::PortKOutputEnable
+//		â€¢ EmSPISlaveSTMicro::PortKOutputEnable
 // ---------------------------------------------------------------------------
 
 void EmSPISlaveSTMicro::PortKOutputEnable (void)
@@ -122,7 +122,7 @@ void EmSPISlaveSTMicro::PortKOutputEnable (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlaveSTMicro::ProcessEventCommand
+//		â€¢ EmSPISlaveSTMicro::ProcessEventCommand
 // ---------------------------------------------------------------------------
 
 void EmSPISlaveSTMicro::ProcessEventCommand (void)
@@ -167,7 +167,7 @@ void EmSPISlaveSTMicro::ProcessEventCommand (void)
 } while (0)
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlaveSTMicro::ButtonEvent
+//		â€¢ EmSPISlaveSTMicro::ButtonEvent
 // ---------------------------------------------------------------------------
 
 void EmSPISlaveSTMicro::ButtonEvent (void)
@@ -261,7 +261,7 @@ void EmSPISlaveSTMicro::ButtonEvent (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlaveSTMicro::KeyEvent
+//		â€¢ EmSPISlaveSTMicro::KeyEvent
 // ---------------------------------------------------------------------------
 
 void EmSPISlaveSTMicro::KeyEvent (void)
@@ -413,7 +413,7 @@ void EmSPISlaveSTMicro::KeyEvent (void)
 #undef DO_BIT_OP
 
 // ---------------------------------------------------------------------------
-//		¥ EmSPISlaveSTMicro::ProcessVersionCommand
+//		â€¢ EmSPISlaveSTMicro::ProcessVersionCommand
 // ---------------------------------------------------------------------------
 
 uint8 EmSPISlaveSTMicro::ProcessVersionCommand (uint8 command)

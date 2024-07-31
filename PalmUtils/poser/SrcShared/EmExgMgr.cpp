@@ -111,7 +111,7 @@ const UInt16	kHostExgLibBeamCompleted	= exgLibCtlSpecificOp | 2;
  ***********************************************************************/
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgr::EmExgMgr
+//		â€¢ EmExgMgr::EmExgMgr
 // ---------------------------------------------------------------------------
 //	Constructor for abstract base class.  Does nothing.
 
@@ -121,7 +121,7 @@ EmExgMgr::EmExgMgr (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgr::~EmExgMgr
+//		â€¢ EmExgMgr::~EmExgMgr
 // ---------------------------------------------------------------------------
 //	Destructor for abstract base class.  Does nothing.
 
@@ -131,7 +131,7 @@ EmExgMgr::~EmExgMgr (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgr::GetExgMgr
+//		â€¢ EmExgMgr::GetExgMgr
 // ---------------------------------------------------------------------------
 //	Static method for finding and returning the host-implemented Exchange
 //	Manager driver associated with the given library or socket.  Our stub
@@ -162,7 +162,7 @@ EmExgMgr* EmExgMgr::GetExgMgr (UInt16 libRefNum)
  ***********************************************************************/
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrStream::EmExgMgrStream
+//		â€¢ EmExgMgrStream::EmExgMgrStream
 // ---------------------------------------------------------------------------
 
 EmExgMgrStream::EmExgMgrStream (EmStream& stream) :
@@ -172,7 +172,7 @@ EmExgMgrStream::EmExgMgrStream (EmStream& stream) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrStream::~EmExgMgrStream
+//		â€¢ EmExgMgrStream::~EmExgMgrStream
 // ---------------------------------------------------------------------------
 
 EmExgMgrStream::~EmExgMgrStream (void)
@@ -181,7 +181,7 @@ EmExgMgrStream::~EmExgMgrStream (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrStream::ExgLibOpen
+//		â€¢ EmExgMgrStream::ExgLibOpen
 // ---------------------------------------------------------------------------
 
 Err EmExgMgrStream::ExgLibOpen (UInt16 /*libRefNum*/)
@@ -191,7 +191,7 @@ Err EmExgMgrStream::ExgLibOpen (UInt16 /*libRefNum*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrStream::ExgLibClose
+//		â€¢ EmExgMgrStream::ExgLibClose
 // ---------------------------------------------------------------------------
 
 Err EmExgMgrStream::ExgLibClose (UInt16 /*libRefNum*/)
@@ -201,7 +201,7 @@ Err EmExgMgrStream::ExgLibClose (UInt16 /*libRefNum*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrStream::ExgLibSleep
+//		â€¢ EmExgMgrStream::ExgLibSleep
 // ---------------------------------------------------------------------------
 
 Err EmExgMgrStream::ExgLibSleep (UInt16 /*libRefNum*/)
@@ -211,7 +211,7 @@ Err EmExgMgrStream::ExgLibSleep (UInt16 /*libRefNum*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrStream::ExgLibWake
+//		â€¢ EmExgMgrStream::ExgLibWake
 // ---------------------------------------------------------------------------
 
 Err EmExgMgrStream::ExgLibWake (UInt16 /*libRefNum*/)
@@ -221,7 +221,7 @@ Err EmExgMgrStream::ExgLibWake (UInt16 /*libRefNum*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrStream::ExgLibHandleEvent
+//		â€¢ EmExgMgrStream::ExgLibHandleEvent
 // ---------------------------------------------------------------------------
 
 Boolean EmExgMgrStream::ExgLibHandleEvent (UInt16 /*libRefNum*/, emuptr /*eventP*/)
@@ -231,7 +231,7 @@ Boolean EmExgMgrStream::ExgLibHandleEvent (UInt16 /*libRefNum*/, emuptr /*eventP
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrStream::ExgLibConnect
+//		â€¢ EmExgMgrStream::ExgLibConnect
 // ---------------------------------------------------------------------------
 
 Err EmExgMgrStream::ExgLibConnect (UInt16 libRefNum, emuptr exgSocketP)
@@ -245,7 +245,7 @@ Err EmExgMgrStream::ExgLibConnect (UInt16 libRefNum, emuptr exgSocketP)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrStream::ExgLibAccept
+//		â€¢ EmExgMgrStream::ExgLibAccept
 // ---------------------------------------------------------------------------
 
 Err EmExgMgrStream::ExgLibAccept (UInt16 /*libRefNum*/, emuptr /*exgSocketP*/)
@@ -256,7 +256,7 @@ Err EmExgMgrStream::ExgLibAccept (UInt16 /*libRefNum*/, emuptr /*exgSocketP*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrStream::ExgLibDisconnect
+//		â€¢ EmExgMgrStream::ExgLibDisconnect
 // ---------------------------------------------------------------------------
 
 Err EmExgMgrStream::ExgLibDisconnect (UInt16 /*libRefNum*/, emuptr /*exgSocketP*/, Err error)
@@ -266,7 +266,7 @@ Err EmExgMgrStream::ExgLibDisconnect (UInt16 /*libRefNum*/, emuptr /*exgSocketP*
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrStream::ExgLibPut
+//		â€¢ EmExgMgrStream::ExgLibPut
 // ---------------------------------------------------------------------------
 
 Err EmExgMgrStream::ExgLibPut (UInt16 /*libRefNum*/, emuptr /*exgSocketP*/)
@@ -280,7 +280,7 @@ Err EmExgMgrStream::ExgLibPut (UInt16 /*libRefNum*/, emuptr /*exgSocketP*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrStream::ExgLibGet
+//		â€¢ EmExgMgrStream::ExgLibGet
 // ---------------------------------------------------------------------------
 
 Err EmExgMgrStream::ExgLibGet (UInt16 /*libRefNum*/, emuptr /*exgSocketP*/)
@@ -293,7 +293,7 @@ Err EmExgMgrStream::ExgLibGet (UInt16 /*libRefNum*/, emuptr /*exgSocketP*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrStream::ExgLibSend
+//		â€¢ EmExgMgrStream::ExgLibSend
 // ---------------------------------------------------------------------------
 
 UInt32 EmExgMgrStream::ExgLibSend (UInt16 /*libRefNum*/, emuptr /*exgSocketP*/,
@@ -315,7 +315,7 @@ UInt32 EmExgMgrStream::ExgLibSend (UInt16 /*libRefNum*/, emuptr /*exgSocketP*/,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrStream::ExgLibReceive
+//		â€¢ EmExgMgrStream::ExgLibReceive
 // ---------------------------------------------------------------------------
 
 UInt32 EmExgMgrStream::ExgLibReceive (UInt16 /*libRefNum*/, emuptr /*exgSocketP*/,
@@ -344,7 +344,7 @@ UInt32 EmExgMgrStream::ExgLibReceive (UInt16 /*libRefNum*/, emuptr /*exgSocketP*
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrStream::ExgLibControl
+//		â€¢ EmExgMgrStream::ExgLibControl
 // ---------------------------------------------------------------------------
 
 Err EmExgMgrStream::ExgLibControl (UInt16 libRefNum, UInt16 op,
@@ -439,7 +439,7 @@ Err EmExgMgrStream::ExgLibControl (UInt16 libRefNum, UInt16 op,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrStream::ExgLibRequest
+//		â€¢ EmExgMgrStream::ExgLibRequest
 // ---------------------------------------------------------------------------
 
 Err EmExgMgrStream::ExgLibRequest (UInt16 /*libRefNum*/, emuptr /*exgSocketP*/)
@@ -464,7 +464,7 @@ Err EmExgMgrStream::ExgLibRequest (UInt16 /*libRefNum*/, emuptr /*exgSocketP*/)
  ***********************************************************************/
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::EmExgMgrImportWrapper
+//		â€¢ EmExgMgrImportWrapper::EmExgMgrImportWrapper
 // ---------------------------------------------------------------------------
 //	Remember the wrapped object, as well as the EmFileImport object we
 //	communicate with.  Initialize our "aborting" flag to false.
@@ -478,7 +478,7 @@ EmExgMgrImportWrapper::EmExgMgrImportWrapper (EmExgMgr& exgMgr, EmFileImport& im
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::~EmExgMgrImportWrapper
+//		â€¢ EmExgMgrImportWrapper::~EmExgMgrImportWrapper
 // ---------------------------------------------------------------------------
 
 EmExgMgrImportWrapper::~EmExgMgrImportWrapper (void)
@@ -487,7 +487,7 @@ EmExgMgrImportWrapper::~EmExgMgrImportWrapper (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::Cancel
+//		â€¢ EmExgMgrImportWrapper::Cancel
 // ---------------------------------------------------------------------------
 //	Set our "aborting" flag to true.  This will cause our read and write
 //	methods to return "user cancelled".
@@ -499,7 +499,7 @@ void EmExgMgrImportWrapper::Cancel (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::ExgLibOpen
+//		â€¢ EmExgMgrImportWrapper::ExgLibOpen
 // ---------------------------------------------------------------------------
 //	Merely call the wrapped method.
 
@@ -510,7 +510,7 @@ Err EmExgMgrImportWrapper::ExgLibOpen (UInt16 libRefNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::ExgLibClose
+//		â€¢ EmExgMgrImportWrapper::ExgLibClose
 // ---------------------------------------------------------------------------
 //	Merely call the wrapped method.
 
@@ -521,7 +521,7 @@ Err EmExgMgrImportWrapper::ExgLibClose (UInt16 libRefNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::ExgLibSleep
+//		â€¢ EmExgMgrImportWrapper::ExgLibSleep
 // ---------------------------------------------------------------------------
 //	Merely call the wrapped method.
 
@@ -532,7 +532,7 @@ Err EmExgMgrImportWrapper::ExgLibSleep (UInt16 libRefNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::ExgLibWake
+//		â€¢ EmExgMgrImportWrapper::ExgLibWake
 // ---------------------------------------------------------------------------
 //	Merely call the wrapped method.
 
@@ -543,7 +543,7 @@ Err EmExgMgrImportWrapper::ExgLibWake (UInt16 libRefNum)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::ExgLibHandleEvent
+//		â€¢ EmExgMgrImportWrapper::ExgLibHandleEvent
 // ---------------------------------------------------------------------------
 //	Merely call the wrapped method.
 
@@ -554,7 +554,7 @@ Boolean EmExgMgrImportWrapper::ExgLibHandleEvent (UInt16 libRefNum, emuptr event
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::ExgLibConnect
+//		â€¢ EmExgMgrImportWrapper::ExgLibConnect
 // ---------------------------------------------------------------------------
 //	Merely call the wrapped method.
 
@@ -565,7 +565,7 @@ Err EmExgMgrImportWrapper::ExgLibConnect (UInt16 libRefNum, emuptr exgSocketP)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::ExgLibAccept
+//		â€¢ EmExgMgrImportWrapper::ExgLibAccept
 // ---------------------------------------------------------------------------
 //	Merely call the wrapped method.
 
@@ -576,7 +576,7 @@ Err EmExgMgrImportWrapper::ExgLibAccept (UInt16 libRefNum, emuptr exgSocketP)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::ExgLibDisconnect
+//		â€¢ EmExgMgrImportWrapper::ExgLibDisconnect
 // ---------------------------------------------------------------------------
 //	Merely call the wrapped method.
 
@@ -587,7 +587,7 @@ Err EmExgMgrImportWrapper::ExgLibDisconnect (UInt16 libRefNum, emuptr exgSocketP
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::ExgLibPut
+//		â€¢ EmExgMgrImportWrapper::ExgLibPut
 // ---------------------------------------------------------------------------
 //	Merely call the wrapped method.
 
@@ -598,7 +598,7 @@ Err EmExgMgrImportWrapper::ExgLibPut (UInt16 libRefNum, emuptr exgSocketP)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::ExgLibGet
+//		â€¢ EmExgMgrImportWrapper::ExgLibGet
 // ---------------------------------------------------------------------------
 //	Merely call the wrapped method.
 
@@ -609,7 +609,7 @@ Err EmExgMgrImportWrapper::ExgLibGet (UInt16 libRefNum, emuptr exgSocketP)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::ExgLibSend
+//		â€¢ EmExgMgrImportWrapper::ExgLibSend
 // ---------------------------------------------------------------------------
 //	If aborting, return "user cancelled".  Otherwise, call the wrapped method.
 
@@ -626,7 +626,7 @@ UInt32 EmExgMgrImportWrapper::ExgLibSend (UInt16 libRefNum, emuptr exgSocketP, v
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::ExgLibReceive
+//		â€¢ EmExgMgrImportWrapper::ExgLibReceive
 // ---------------------------------------------------------------------------
 //	If aborting, return "user cancelled".  Otherwise, call the wrapped method.
 //	Also, set the emulator flag indicating that the emulation loop should
@@ -651,7 +651,7 @@ UInt32 EmExgMgrImportWrapper::ExgLibReceive (UInt16 libRefNum, emuptr exgSocketP
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::ExgLibControl
+//		â€¢ EmExgMgrImportWrapper::ExgLibControl
 // ---------------------------------------------------------------------------
 //	See if the operation is "beam completed".  If so, let the EmFileImport
 //	object know so that it can close the progress dialog and report any
@@ -672,7 +672,7 @@ Err EmExgMgrImportWrapper::ExgLibControl (UInt16 libRefNum, UInt16 op, emuptr va
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmExgMgrImportWrapper::ExgLibRequest
+//		â€¢ EmExgMgrImportWrapper::ExgLibRequest
 // ---------------------------------------------------------------------------
 //	Merely call the wrapped method.
 

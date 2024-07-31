@@ -261,7 +261,7 @@ class StDisableMemoryCycleCounting
 #define HAS_PROFILING_DEBUG		0	// turn on code to help debug profiler
 
 
-// ¥¥¥ normally passed in to ProfileInit, but here for CEmulatorApp.cpp
+// â€¢â€¢â€¢ normally passed in to ProfileInit, but here for CEmulatorApp.cpp
 #define MAXFNCALLS		0x10000
 #define MAXUNIQUEFNS	2500
 #define MAXDEPTH		200

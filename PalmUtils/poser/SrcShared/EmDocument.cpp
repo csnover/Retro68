@@ -140,7 +140,7 @@ void EmActionDialog::Do (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoNew
+//		â€¢ EmDocument::DoNew
 // ---------------------------------------------------------------------------
 // Bottleneck for all document creation.  Creates a new document, associates
 // it with the given application, creates a new window, creates a new session,
@@ -196,7 +196,7 @@ EmDocument* EmDocument::DoNew (const Configuration& cfg)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoOpen
+//		â€¢ EmDocument::DoOpen
 // ---------------------------------------------------------------------------
 // Bottleneck for all document opening.  Creates a new document, associates
 // it with the given application, creates a new window, opens an old session,
@@ -276,7 +276,7 @@ EmDocument* EmDocument::DoOpen (const EmFileRef& file)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoNewBound
+//		â€¢ EmDocument::DoNewBound
 // ---------------------------------------------------------------------------
 
 EmDocument* EmDocument::DoNewBound (void)
@@ -310,7 +310,7 @@ EmDocument* EmDocument::DoNewBound (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoOpenBound
+//		â€¢ EmDocument::DoOpenBound
 // ---------------------------------------------------------------------------
 
 EmDocument* EmDocument::DoOpenBound (void)
@@ -342,7 +342,7 @@ EmDocument* EmDocument::DoOpenBound (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::EmDocument
+//		â€¢ EmDocument::EmDocument
 // ---------------------------------------------------------------------------
 // Constructor.  Set our data members to NULL, and set the global application
 // variable to point to us.
@@ -358,7 +358,7 @@ EmDocument::EmDocument (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::~EmDocument
+//		â€¢ EmDocument::~EmDocument
 // ---------------------------------------------------------------------------
 // Destructor.  Close the Gremlin Control window, disassociate us from the
 // application object, clear the global document variable, and delete the
@@ -382,7 +382,7 @@ EmDocument::~EmDocument (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::HandleCommand
+//		â€¢ EmDocument::HandleCommand
 // ---------------------------------------------------------------------------
 // Handle a user command.  Normally the command is generated when the user
 // makes a menu selection, but the command could really come from anywhere
@@ -436,7 +436,7 @@ Bool EmDocument::HandleCommand (EmCommandID commandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::HandleKey
+//		â€¢ EmDocument::HandleKey
 // ---------------------------------------------------------------------------
 // Handle the user pressing a key on their keyboard.
 
@@ -449,7 +449,7 @@ void EmDocument::HandleKey (const EmKeyEvent& event)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::HandleButton
+//		â€¢ EmDocument::HandleButton
 // ---------------------------------------------------------------------------
 // Handle the user pressing on a skin button with their mouse.
 
@@ -463,7 +463,7 @@ void EmDocument::HandleButton (SkinElementType theButton, Bool isDown)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::HandleIdle
+//		â€¢ EmDocument::HandleIdle
 // ---------------------------------------------------------------------------
 // Perform any document-level idle time operations.
 
@@ -500,7 +500,7 @@ void EmDocument::HandleIdle (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::HandleSave
+//		â€¢ EmDocument::HandleSave
 // ---------------------------------------------------------------------------
 // Perform a standard Save operation.  If the document hasn't been saved
 // before, perform a "Save As" operation.  Return whether or not the user
@@ -518,7 +518,7 @@ Bool EmDocument::HandleSave (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::HandleSaveAs
+//		â€¢ EmDocument::HandleSaveAs
 // ---------------------------------------------------------------------------
 // Perform a standard Save As operation, asking the user for a file name.
 // Return whether or not the user cancelled the operation.  On failure,
@@ -544,7 +544,7 @@ Bool EmDocument::HandleSaveAs (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::HandleSaveTo
+//		â€¢ EmDocument::HandleSaveTo
 // ---------------------------------------------------------------------------
 // Perform a save operation to the given file.  The given file may or may not
 // already exist, but it must at least be specified.  The user will NOT be
@@ -589,7 +589,7 @@ Bool EmDocument::HandleSaveTo (const EmFileRef& destRef)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::HandleClose
+//		â€¢ EmDocument::HandleClose
 // ---------------------------------------------------------------------------
 // Handle a request to close the document.  Get the user's preference with
 // regards to saving the document before it's closed, and then call the
@@ -606,7 +606,7 @@ Bool EmDocument::HandleClose (Bool quitting)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::HandleClose
+//		â€¢ EmDocument::HandleClose
 // ---------------------------------------------------------------------------
 // Handle a request to close the document.  First, determine whether or not
 // to save the document, based either on preference or on querying the user.
@@ -688,7 +688,7 @@ Bool EmDocument::HandleClose (CloseActionType closeAction, Bool quitting)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::ScheduleNewHorde
+//		â€¢ EmDocument::ScheduleNewHorde
 // ---------------------------------------------------------------------------
 
 void EmDocument::ScheduleNewHorde (const HordeInfo& info)
@@ -698,7 +698,7 @@ void EmDocument::ScheduleNewHorde (const HordeInfo& info)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::ScheduleDialog
+//		â€¢ EmDocument::ScheduleDialog
 // ---------------------------------------------------------------------------
 
 void EmDocument::ScheduleDialog (EmDlgThreadFn fn,
@@ -712,7 +712,7 @@ void EmDocument::ScheduleDialog (EmDlgThreadFn fn,
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoSave
+//		â€¢ EmDocument::DoSave
 // ---------------------------------------------------------------------------
 // Handle the Save menu item.
 
@@ -723,7 +723,7 @@ void EmDocument::DoSave (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoSaveAs
+//		â€¢ EmDocument::DoSaveAs
 // ---------------------------------------------------------------------------
 // Handle the Save As menu item.
 
@@ -734,7 +734,7 @@ void EmDocument::DoSaveAs (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoSaveBound
+//		â€¢ EmDocument::DoSaveBound
 // ---------------------------------------------------------------------------
 // Handle the Save Bound menu item.
 
@@ -748,7 +748,7 @@ void EmDocument::DoSaveBound (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoSaveScreen
+//		â€¢ EmDocument::DoSaveScreen
 // ---------------------------------------------------------------------------
 // Handle the Save Screen menu item.
 
@@ -763,7 +763,7 @@ void EmDocument::DoSaveScreen (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoInfo
+//		â€¢ EmDocument::DoInfo
 // ---------------------------------------------------------------------------
 // Handle the Session Info menu item.
 
@@ -774,7 +774,7 @@ void EmDocument::DoInfo (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoImport
+//		â€¢ EmDocument::DoImport
 // ---------------------------------------------------------------------------
 // Handle the Install Application/Database menu items.  We handle all menu
 // items in the sub-menu here.
@@ -826,7 +826,7 @@ void EmDocument::DoImport (EmCommandID commandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoExport
+//		â€¢ EmDocument::DoExport
 // ---------------------------------------------------------------------------
 // Handle the Export Database menu item.
 
@@ -838,7 +838,7 @@ void EmDocument::DoExport (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoHotSync
+//		â€¢ EmDocument::DoHotSync
 // ---------------------------------------------------------------------------
 // Handle the HotSync menu item by simulating a press on the cradle button.
 
@@ -850,7 +850,7 @@ void EmDocument::DoHotSync (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoReset
+//		â€¢ EmDocument::DoReset
 // ---------------------------------------------------------------------------
 // Handle the Reset menu item.
 
@@ -867,7 +867,7 @@ void EmDocument::DoReset (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoGremlinNew
+//		â€¢ EmDocument::DoGremlinNew
 // ---------------------------------------------------------------------------
 // Handle the New Gremlin menu item.
 
@@ -879,7 +879,7 @@ void EmDocument::DoGremlinNew (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoGremlinSuspend
+//		â€¢ EmDocument::DoGremlinSuspend
 // ---------------------------------------------------------------------------
 // Handle the Suspend Gremlin menu item.
 
@@ -891,7 +891,7 @@ void EmDocument::DoGremlinSuspend (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoGremlinStep
+//		â€¢ EmDocument::DoGremlinStep
 // ---------------------------------------------------------------------------
 // Handle the Step Gremlin menu item.
 
@@ -903,7 +903,7 @@ void EmDocument::DoGremlinStep (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoGremlinResume
+//		â€¢ EmDocument::DoGremlinResume
 // ---------------------------------------------------------------------------
 // Handle the Resume Gremlin menu item.
 
@@ -915,7 +915,7 @@ void EmDocument::DoGremlinResume (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoGremlinStop
+//		â€¢ EmDocument::DoGremlinStop
 // ---------------------------------------------------------------------------
 // Handle the Stop Gremlin menu item.
 
@@ -928,7 +928,7 @@ void EmDocument::DoGremlinStop (EmCommandID)
 
 #if HAS_PROFILING
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoProfileStart
+//		â€¢ EmDocument::DoProfileStart
 // ---------------------------------------------------------------------------
 // Handle the Start Profile menu item.
 
@@ -940,7 +940,7 @@ void EmDocument::DoProfileStart (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoProfileStop
+//		â€¢ EmDocument::DoProfileStop
 // ---------------------------------------------------------------------------
 // Handle the Stop Profile menu item.
 
@@ -952,7 +952,7 @@ void EmDocument::DoProfileStop (EmCommandID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::DoProfileDump
+//		â€¢ EmDocument::DoProfileDump
 // ---------------------------------------------------------------------------
 // Handle the Dump Profile menu item.
 
@@ -967,7 +967,7 @@ void EmDocument::DoProfileDump (EmCommandID)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::AskNewSession
+//		â€¢ EmDocument::AskNewSession
 // ---------------------------------------------------------------------------
 // Ask the user for new session configuration information.  If the user
 // cancels, return false.  Otherwise, return true and store the new
@@ -989,7 +989,7 @@ Bool EmDocument::AskNewSession (Configuration& cfg)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::AskSaveSession
+//		â€¢ EmDocument::AskSaveSession
 // ---------------------------------------------------------------------------
 // Ask the user for a file to which to save the document.  If the user
 // cancels, return false.  Otherwise, return true and store the specified
@@ -1026,7 +1026,7 @@ Bool EmDocument::AskSaveSession (EmFileRef& ref)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::AskLoadSession
+//		â€¢ EmDocument::AskLoadSession
 // ---------------------------------------------------------------------------
 // Ask the user for a session document to load.  If the user cancels, return
 // false.  Otherwise, return true and store the specified file name in "ref".
@@ -1063,7 +1063,7 @@ Bool EmDocument::AskLoadSession (EmFileRef& ref, EmFileType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::AskSaveChanges
+//		â€¢ EmDocument::AskSaveChanges
 // ---------------------------------------------------------------------------
 // Ask the user if they want to save their changes to the session document.
 // If the document had been saved before, ask the user if they want to save
@@ -1095,7 +1095,7 @@ EmDlgItemID EmDocument::AskSaveChanges (Bool quitting)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::AskSaveScreen
+//		â€¢ EmDocument::AskSaveScreen
 // ---------------------------------------------------------------------------
 // Ask the user for a file to which they want to save the screen contents.  If
 // the user cancels, return false.  Otherwise, return true and store the
@@ -1129,7 +1129,7 @@ Bool EmDocument::AskSaveScreen (EmFileRef& ref)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::AskImportFiles
+//		â€¢ EmDocument::AskImportFiles
 // ---------------------------------------------------------------------------
 // Ask the user for files they want to import.  If the user cancels, return
 // false.  Otherwise, return true and store the specified file names in
@@ -1170,7 +1170,7 @@ Bool EmDocument::AskImportFiles (EmFileRefList& listRef)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::HostCanSaveBound
+//		â€¢ EmDocument::HostCanSaveBound
 // ---------------------------------------------------------------------------
 
 Bool EmDocument::HostCanSaveBound (void)
@@ -1180,7 +1180,7 @@ Bool EmDocument::HostCanSaveBound (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::HostSaveScreen
+//		â€¢ EmDocument::HostSaveScreen
 // ---------------------------------------------------------------------------
 
 void EmDocument::HostSaveScreen (const EmFileRef&)
@@ -1191,7 +1191,7 @@ void EmDocument::HostSaveScreen (const EmFileRef&)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ EmDocument::PrvOpenWindow
+//		â€¢ EmDocument::PrvOpenWindow
 // ---------------------------------------------------------------------------
 // Create the window for a new document.
 

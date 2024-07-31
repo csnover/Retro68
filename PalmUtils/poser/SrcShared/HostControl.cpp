@@ -340,7 +340,7 @@ EmProxyHostTmType	gLocalTime;
 
 
 // ---------------------------------------------------------------------------
-//		¥ HandleHostControlCall
+//		â€¢ HandleHostControlCall
 // ---------------------------------------------------------------------------
 
 CallROMType HandleHostControlCall (void)
@@ -367,7 +367,7 @@ CallROMType HandleHostControlCall (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ _HostGetHostVersion
+//		â€¢ _HostGetHostVersion
 // ---------------------------------------------------------------------------
 
 static void _HostGetHostVersion (void)
@@ -457,7 +457,7 @@ VersionParseDone:
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostGetHostID
+//		â€¢ _HostGetHostID
 // ---------------------------------------------------------------------------
 
 static void _HostGetHostID (void)
@@ -473,7 +473,7 @@ static void _HostGetHostID (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostGetHostPlatform
+//		â€¢ _HostGetHostPlatform
 // ---------------------------------------------------------------------------
 
 static void _HostGetHostPlatform (void)
@@ -497,7 +497,7 @@ static void _HostGetHostPlatform (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostIsSelectorImplemented
+//		â€¢ _HostIsSelectorImplemented
 // ---------------------------------------------------------------------------
 
 static void _HostIsSelectorImplemented (void)
@@ -517,7 +517,7 @@ static void _HostIsSelectorImplemented (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostGestalt
+//		â€¢ _HostGestalt
 // ---------------------------------------------------------------------------
 
 static void _HostGestalt (void)
@@ -533,7 +533,7 @@ static void _HostGestalt (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostIsCallingTrap
+//		â€¢ _HostIsCallingTrap
 // ---------------------------------------------------------------------------
 
 static void _HostIsCallingTrap (void)
@@ -551,7 +551,7 @@ static void _HostIsCallingTrap (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ _HostProfileInit
+//		â€¢ _HostProfileInit
 // ---------------------------------------------------------------------------
 #if HAS_PROFILING
 
@@ -585,7 +585,7 @@ static void _HostProfileInit (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostProfileStart
+//		â€¢ _HostProfileStart
 // ---------------------------------------------------------------------------
 #if HAS_PROFILING
 
@@ -614,7 +614,7 @@ static void _HostProfileStart (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostProfileStop
+//		â€¢ _HostProfileStop
 // ---------------------------------------------------------------------------
 #if HAS_PROFILING
 
@@ -643,7 +643,7 @@ static void _HostProfileStop (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostProfileDump
+//		â€¢ _HostProfileDump
 // ---------------------------------------------------------------------------
 #if HAS_PROFILING
 
@@ -676,7 +676,7 @@ static void _HostProfileDump (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostProfileCleanup
+//		â€¢ _HostProfileCleanup
 // ---------------------------------------------------------------------------
 #if HAS_PROFILING
 
@@ -708,7 +708,7 @@ static void _HostProfileCleanup (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostProfileDetailFn
+//		â€¢ _HostProfileDetailFn
 // ---------------------------------------------------------------------------
 #if HAS_PROFILING
 
@@ -736,7 +736,7 @@ static void _HostProfileDetailFn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostProfileGetCycles
+//		â€¢ _HostProfileGetCycles
 // ---------------------------------------------------------------------------
 #if HAS_PROFILING
 
@@ -759,7 +759,7 @@ static void _HostProfileGetCycles (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ _HostErrNo
+//		â€¢ _HostErrNo
 // ---------------------------------------------------------------------------
 
 static void _HostErrNo (void)
@@ -779,7 +779,7 @@ static void _HostErrNo (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFClose
+//		â€¢ _HostFClose
 // ---------------------------------------------------------------------------
 
 static void _HostFClose (void)
@@ -824,7 +824,7 @@ static void _HostFClose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFEOF
+//		â€¢ _HostFEOF
 // ---------------------------------------------------------------------------
 
 static void _HostFEOF (void)
@@ -856,7 +856,7 @@ static void _HostFEOF (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFError
+//		â€¢ _HostFError
 // ---------------------------------------------------------------------------
 
 static void _HostFError (void)
@@ -888,7 +888,7 @@ static void _HostFError (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFFlush
+//		â€¢ _HostFFlush
 // ---------------------------------------------------------------------------
 
 static void _HostFFlush (void)
@@ -921,7 +921,7 @@ static void _HostFFlush (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFGetC
+//		â€¢ _HostFGetC
 // ---------------------------------------------------------------------------
 
 static void _HostFGetC (void)
@@ -954,7 +954,7 @@ static void _HostFGetC (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFGetPos
+//		â€¢ _HostFGetPos
 // ---------------------------------------------------------------------------
 
 static void _HostFGetPos (void)
@@ -997,7 +997,7 @@ static void _HostFGetPos (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFGetS
+//		â€¢ _HostFGetS
 // ---------------------------------------------------------------------------
 
 static void _HostFGetS (void)
@@ -1049,7 +1049,7 @@ static void _HostFGetS (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFOpen
+//		â€¢ _HostFOpen
 // ---------------------------------------------------------------------------
 
 static void _HostFOpen (void)
@@ -1088,7 +1088,7 @@ static void _HostFOpen (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFPrintF
+//		â€¢ _HostFPrintF
 // ---------------------------------------------------------------------------
 
 static void _HostFPrintF (void)
@@ -1140,7 +1140,7 @@ static void _HostFPrintF (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFPutC
+//		â€¢ _HostFPutC
 // ---------------------------------------------------------------------------
 
 static void _HostFPutC (void)
@@ -1174,7 +1174,7 @@ static void _HostFPutC (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFPutS
+//		â€¢ _HostFPutS
 // ---------------------------------------------------------------------------
 
 static void _HostFPutS (void)
@@ -1208,7 +1208,7 @@ static void _HostFPutS (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFRead
+//		â€¢ _HostFRead
 // ---------------------------------------------------------------------------
 
 static void _HostFRead (void)
@@ -1251,7 +1251,7 @@ static void _HostFRead (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFReopen
+//		â€¢ _HostFReopen
 // ---------------------------------------------------------------------------
 
 #if 0
@@ -1262,7 +1262,7 @@ static void _HostFReopen (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFScanF
+//		â€¢ _HostFScanF
 // ---------------------------------------------------------------------------
 
 #if 0
@@ -1273,7 +1273,7 @@ static void _HostFScanF (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFSeek
+//		â€¢ _HostFSeek
 // ---------------------------------------------------------------------------
 
 static void _HostFSeek (void)
@@ -1308,7 +1308,7 @@ static void _HostFSeek (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFSetPos
+//		â€¢ _HostFSetPos
 // ---------------------------------------------------------------------------
 
 static void _HostFSetPos (void)
@@ -1342,7 +1342,7 @@ static void _HostFSetPos (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFTell
+//		â€¢ _HostFTell
 // ---------------------------------------------------------------------------
 
 static void _HostFTell (void)
@@ -1375,7 +1375,7 @@ static void _HostFTell (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFWrite
+//		â€¢ _HostFWrite
 // ---------------------------------------------------------------------------
 
 static void _HostFWrite (void)
@@ -1411,7 +1411,7 @@ static void _HostFWrite (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostRemove
+//		â€¢ _HostRemove
 // ---------------------------------------------------------------------------
 
 static void _HostRemove (void)
@@ -1435,7 +1435,7 @@ static void _HostRemove (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostRename
+//		â€¢ _HostRename
 // ---------------------------------------------------------------------------
 
 static void _HostRename (void)
@@ -1460,7 +1460,7 @@ static void _HostRename (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostTmpFile
+//		â€¢ _HostTmpFile
 // ---------------------------------------------------------------------------
 
 static void _HostTmpFile (void)
@@ -1482,7 +1482,7 @@ static void _HostTmpFile (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostTmpNam
+//		â€¢ _HostTmpNam
 // ---------------------------------------------------------------------------
 
 static void _HostTmpNam (void)
@@ -1569,7 +1569,7 @@ static void _HostTmpNam (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostGetEnv
+//		â€¢ _HostGetEnv
 // ---------------------------------------------------------------------------
 
 static void _HostGetEnv (void)
@@ -1604,7 +1604,7 @@ static void _HostGetEnv (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ _HostMalloc
+//		â€¢ _HostMalloc
 // ---------------------------------------------------------------------------
 
 static void _HostMalloc (void)
@@ -1628,7 +1628,7 @@ static void _HostMalloc (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostRealloc
+//		â€¢ _HostRealloc
 // ---------------------------------------------------------------------------
 
 static void _HostRealloc (void)
@@ -1667,7 +1667,7 @@ static void _HostRealloc (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostFree
+//		â€¢ _HostFree
 // ---------------------------------------------------------------------------
 
 static void _HostFree (void)
@@ -1687,7 +1687,7 @@ static void _HostFree (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostAscTime
+//		â€¢ _HostAscTime
 // ---------------------------------------------------------------------------
 
 static void _HostAscTime (void)
@@ -1715,7 +1715,7 @@ static void _HostAscTime (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostClock
+//		â€¢ _HostClock
 // ---------------------------------------------------------------------------
 
 static void _HostClock (void)
@@ -1737,7 +1737,7 @@ static void _HostClock (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostCTime
+//		â€¢ _HostCTime
 // ---------------------------------------------------------------------------
 
 static void _HostCTime (void)
@@ -1763,7 +1763,7 @@ static void _HostCTime (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostDiffTime
+//		â€¢ _HostDiffTime
 // ---------------------------------------------------------------------------
 
 #if 0
@@ -1774,7 +1774,7 @@ static void _HostDiffTime (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostGMTime
+//		â€¢ _HostGMTime
 // ---------------------------------------------------------------------------
 
 static void _HostGMTime (void)
@@ -1802,7 +1802,7 @@ static void _HostGMTime (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostLocalTime
+//		â€¢ _HostLocalTime
 // ---------------------------------------------------------------------------
 
 static void _HostLocalTime (void)
@@ -1830,7 +1830,7 @@ static void _HostLocalTime (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostMkTime
+//		â€¢ _HostMkTime
 // ---------------------------------------------------------------------------
 
 static void _HostMkTime (void)
@@ -1858,7 +1858,7 @@ static void _HostMkTime (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostStrFTime
+//		â€¢ _HostStrFTime
 // ---------------------------------------------------------------------------
 
 static void _HostStrFTime (void)
@@ -1898,7 +1898,7 @@ static void _HostStrFTime (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostTime
+//		â€¢ _HostTime
 // ---------------------------------------------------------------------------
 
 static void _HostTime (void)
@@ -1929,7 +1929,7 @@ static void _HostTime (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostMkDir
+//		â€¢ _HostMkDir
 // ---------------------------------------------------------------------------
 
 static void _HostMkDir (void)
@@ -1953,7 +1953,7 @@ static void _HostMkDir (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostRmDir
+//		â€¢ _HostRmDir
 // ---------------------------------------------------------------------------
 
 static void _HostRmDir (void)
@@ -1977,7 +1977,7 @@ static void _HostRmDir (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostOpenDir
+//		â€¢ _HostOpenDir
 // ---------------------------------------------------------------------------
 
 static void _HostOpenDir (void)
@@ -2025,7 +2025,7 @@ static void _HostOpenDir (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostReadDir
+//		â€¢ _HostReadDir
 // ---------------------------------------------------------------------------
 
 static void _HostReadDir(void)
@@ -2127,7 +2127,7 @@ FoundIt:
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostCloseDir
+//		â€¢ _HostCloseDir
 // ---------------------------------------------------------------------------
 
 static void _HostCloseDir (void)
@@ -2174,7 +2174,7 @@ static void _HostCloseDir (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostStat
+//		â€¢ _HostStat
 // ---------------------------------------------------------------------------
 
 static void _HostStat(void)
@@ -2236,7 +2236,7 @@ static void _HostStat(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostTruncate
+//		â€¢ _HostTruncate
 // ---------------------------------------------------------------------------
 
 static void _HostTruncate (void)
@@ -2280,7 +2280,7 @@ static void _HostTruncate (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostUTime
+//		â€¢ _HostUTime
 // ---------------------------------------------------------------------------
 
 static void _HostUTime (void)
@@ -2324,7 +2324,7 @@ static void _HostUTime (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostGetFileAttr
+//		â€¢ _HostGetFileAttr
 // ---------------------------------------------------------------------------
 
 static void _HostGetFileAttr(void)
@@ -2369,7 +2369,7 @@ static void _HostGetFileAttr(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostSetFileAttr
+//		â€¢ _HostSetFileAttr
 // ---------------------------------------------------------------------------
 
 static void _HostSetFileAttr(void)
@@ -2412,7 +2412,7 @@ static void _HostSetFileAttr(void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ _HostGremlinIsRunning
+//		â€¢ _HostGremlinIsRunning
 // ---------------------------------------------------------------------------
 
 static void _HostGremlinIsRunning (void)
@@ -2426,7 +2426,7 @@ static void _HostGremlinIsRunning (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostGremlinNumber
+//		â€¢ _HostGremlinNumber
 // ---------------------------------------------------------------------------
 
 static void _HostGremlinNumber (void)
@@ -2440,7 +2440,7 @@ static void _HostGremlinNumber (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostGremlinCounter
+//		â€¢ _HostGremlinCounter
 // ---------------------------------------------------------------------------
 
 static void _HostGremlinCounter (void)
@@ -2454,7 +2454,7 @@ static void _HostGremlinCounter (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostGremlinLimit
+//		â€¢ _HostGremlinLimit
 // ---------------------------------------------------------------------------
 
 static void _HostGremlinLimit (void)
@@ -2468,7 +2468,7 @@ static void _HostGremlinLimit (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostGremlinNew
+//		â€¢ _HostGremlinNew
 // ---------------------------------------------------------------------------
 
 static void _HostGremlinNew (void)
@@ -2558,7 +2558,7 @@ static void _HostGremlinNew (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ _HostImportFile
+//		â€¢ _HostImportFile
 // ---------------------------------------------------------------------------
 
 static void _HostImportFile (void)
@@ -2604,7 +2604,7 @@ static void _HostImportFile (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostImportFileWithID
+//		â€¢ _HostImportFileWithID
 // ---------------------------------------------------------------------------
 
 static void _HostImportFileWithID (void)
@@ -2658,7 +2658,7 @@ static void _HostImportFileWithID (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostExportFile
+//		â€¢ _HostExportFile
 // ---------------------------------------------------------------------------
 
 static void _HostExportFile (void)
@@ -2703,7 +2703,7 @@ static void _HostExportFile (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostSaveScreen
+//		â€¢ _HostSaveScreen
 // ---------------------------------------------------------------------------
 
 static void _HostSaveScreen (void)
@@ -2750,7 +2750,7 @@ static void _HostSaveScreen (void)
 #define exgErrBadData			(exgErrorClass | 8)  // internal data was not valid
 
 // ---------------------------------------------------------------------------
-//		¥ _HostExgLibOpen
+//		â€¢ _HostExgLibOpen
 // ---------------------------------------------------------------------------
 
 static void _HostExgLibOpen (void)
@@ -2783,7 +2783,7 @@ static void _HostExgLibOpen (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostExgLibClose
+//		â€¢ _HostExgLibClose
 // ---------------------------------------------------------------------------
 
 static void _HostExgLibClose (void)
@@ -2816,7 +2816,7 @@ static void _HostExgLibClose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostExgLibSleep
+//		â€¢ _HostExgLibSleep
 // ---------------------------------------------------------------------------
 
 static void _HostExgLibSleep (void)
@@ -2849,7 +2849,7 @@ static void _HostExgLibSleep (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostExgLibWake
+//		â€¢ _HostExgLibWake
 // ---------------------------------------------------------------------------
 
 static void _HostExgLibWake (void)
@@ -2882,7 +2882,7 @@ static void _HostExgLibWake (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostExgLibHandleEvent
+//		â€¢ _HostExgLibHandleEvent
 // ---------------------------------------------------------------------------
 
 static void _HostExgLibHandleEvent (void)
@@ -2916,7 +2916,7 @@ static void _HostExgLibHandleEvent (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostExgLibConnect
+//		â€¢ _HostExgLibConnect
 // ---------------------------------------------------------------------------
 
 static void _HostExgLibConnect (void)
@@ -2950,7 +2950,7 @@ static void _HostExgLibConnect (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostExgLibAccept
+//		â€¢ _HostExgLibAccept
 // ---------------------------------------------------------------------------
 
 static void _HostExgLibAccept (void)
@@ -2984,7 +2984,7 @@ static void _HostExgLibAccept (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostExgLibDisconnect
+//		â€¢ _HostExgLibDisconnect
 // ---------------------------------------------------------------------------
 
 static void _HostExgLibDisconnect (void)
@@ -3019,7 +3019,7 @@ static void _HostExgLibDisconnect (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostExgLibPut
+//		â€¢ _HostExgLibPut
 // ---------------------------------------------------------------------------
 
 static void _HostExgLibPut (void)
@@ -3053,7 +3053,7 @@ static void _HostExgLibPut (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostExgLibGet
+//		â€¢ _HostExgLibGet
 // ---------------------------------------------------------------------------
 
 static void _HostExgLibGet (void)
@@ -3087,7 +3087,7 @@ static void _HostExgLibGet (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostExgLibSend
+//		â€¢ _HostExgLibSend
 // ---------------------------------------------------------------------------
 
 static void _HostExgLibSend (void)
@@ -3129,7 +3129,7 @@ static void _HostExgLibSend (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostExgLibReceive
+//		â€¢ _HostExgLibReceive
 // ---------------------------------------------------------------------------
 
 static void _HostExgLibReceive (void)
@@ -3172,7 +3172,7 @@ static void _HostExgLibReceive (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostExgLibControl
+//		â€¢ _HostExgLibControl
 // ---------------------------------------------------------------------------
 
 static void _HostExgLibControl (void)
@@ -3207,7 +3207,7 @@ static void _HostExgLibControl (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostExgLibRequest
+//		â€¢ _HostExgLibRequest
 // ---------------------------------------------------------------------------
 
 static void _HostExgLibRequest (void)
@@ -3243,7 +3243,7 @@ static void _HostExgLibRequest (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ _HostGetPreference
+//		â€¢ _HostGetPreference
 // ---------------------------------------------------------------------------
 
 static void _HostGetPreference (void)
@@ -3277,7 +3277,7 @@ static void _HostGetPreference (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostSet1Preference
+//		â€¢ _HostSet1Preference
 // ---------------------------------------------------------------------------
 
 static void _HostSetPreference (void)
@@ -3306,7 +3306,7 @@ static void _HostSetPreference (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ _HostLogFile
+//		â€¢ _HostLogFile
 // ---------------------------------------------------------------------------
 
 static void _HostLogFile (void)
@@ -3320,7 +3320,7 @@ static void _HostLogFile (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostSetLogFileSize
+//		â€¢ _HostSetLogFileSize
 // ---------------------------------------------------------------------------
 
 static void _HostSetLogFileSize (void)
@@ -3339,7 +3339,7 @@ static void _HostSetLogFileSize (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ _HostSessionCreate
+//		â€¢ _HostSessionCreate
 // ---------------------------------------------------------------------------
 
 #if 0
@@ -3430,7 +3430,7 @@ static void _HostSessionCreate (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostSessionOpen
+//		â€¢ _HostSessionOpen
 // ---------------------------------------------------------------------------
 
 #if 0
@@ -3473,7 +3473,7 @@ static void _HostSessionOpen (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostSessionSave
+//		â€¢ _HostSessionSave
 // ---------------------------------------------------------------------------
 
 static void _HostSessionSave (void)
@@ -3531,7 +3531,7 @@ static void _HostSessionSave (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostSessionClose
+//		â€¢ _HostSessionClose
 // ---------------------------------------------------------------------------
 
 static void _HostSessionClose (void)
@@ -3563,7 +3563,7 @@ static void _HostSessionClose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostSessionQuit
+//		â€¢ _HostSessionQuit
 // ---------------------------------------------------------------------------
 
 static void _HostSessionQuit (void)
@@ -3591,7 +3591,7 @@ static void _HostSessionQuit (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostSignalSend
+//		â€¢ _HostSignalSend
 // ---------------------------------------------------------------------------
 // Called by anyone wanting to send a signal to any waiting scripts.
 
@@ -3612,7 +3612,7 @@ static void _HostSignalSend (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostSignalWait
+//		â€¢ _HostSignalWait
 // ---------------------------------------------------------------------------
 // Called by scripts that want to get a signal sent from HostSignalSend.
 
@@ -3650,7 +3650,7 @@ static void _HostSignalWait (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostSignalResume
+//		â€¢ _HostSignalResume
 // ---------------------------------------------------------------------------
 // Called by scripts to restart the emulator after it has sent a signal and
 // then suspended itself.
@@ -3674,7 +3674,7 @@ static void _HostSignalResume (void)
 
 #if HAS_TRACER
 // ---------------------------------------------------------------------------
-//		¥ _HostTraceInit
+//		â€¢ _HostTraceInit
 // ---------------------------------------------------------------------------
 
 static void _HostTraceInit (void)
@@ -3684,7 +3684,7 @@ static void _HostTraceInit (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostTraceClose
+//		â€¢ _HostTraceClose
 // ---------------------------------------------------------------------------
 
 static void _HostTraceClose (void)
@@ -3694,7 +3694,7 @@ static void _HostTraceClose (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostTraceOutputT
+//		â€¢ _HostTraceOutputT
 // ---------------------------------------------------------------------------
 
 static void _HostTraceOutputT (void)
@@ -3738,7 +3738,7 @@ static void _HostTraceOutputT (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostTraceOutputTL
+//		â€¢ _HostTraceOutputTL
 // ---------------------------------------------------------------------------
 
 static void _HostTraceOutputTL (void)
@@ -3782,7 +3782,7 @@ static void _HostTraceOutputTL (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostOutputVT
+//		â€¢ _HostOutputVT
 // ---------------------------------------------------------------------------
 
 static void _HostTraceOutputVT (void)
@@ -3833,7 +3833,7 @@ static void _HostTraceOutputVT (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostOutputVTL
+//		â€¢ _HostOutputVTL
 // ---------------------------------------------------------------------------
 
 static void _HostTraceOutputVTL (void)
@@ -3884,7 +3884,7 @@ static void _HostTraceOutputVTL (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostOutputB
+//		â€¢ _HostOutputB
 // ---------------------------------------------------------------------------
 
 static void _HostTraceOutputB (void)
@@ -3916,7 +3916,7 @@ static void _HostTraceOutputB (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ _HostDbgSetDataBreak
+//		â€¢ _HostDbgSetDataBreak
 // ---------------------------------------------------------------------------
 
 static void _HostDbgSetDataBreak (void)
@@ -3955,7 +3955,7 @@ static void _HostDbgSetDataBreak (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostDbgClearDataBreak
+//		â€¢ _HostDbgClearDataBreak
 // ---------------------------------------------------------------------------
 
 static void _HostDbgClearDataBreak (void)
@@ -3987,7 +3987,7 @@ static void _HostDbgClearDataBreak (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ _HostSlotMax
+//		â€¢ _HostSlotMax
 // ---------------------------------------------------------------------------
 
 static void _HostSlotMax (void)
@@ -4016,7 +4016,7 @@ static void _HostSlotMax (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostSlotRoot
+//		â€¢ _HostSlotRoot
 // ---------------------------------------------------------------------------
 
 static void _HostSlotRoot (void)
@@ -4050,7 +4050,7 @@ static void _HostSlotRoot (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostSlotHasCard
+//		â€¢ _HostSlotHasCard
 // ---------------------------------------------------------------------------
 
 static void _HostSlotHasCard (void)
@@ -4082,7 +4082,7 @@ static void _HostSlotHasCard (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ _HostGetFile
+//		â€¢ _HostGetFile
 // ---------------------------------------------------------------------------
 
 static void _HostGetFile (void)
@@ -4109,7 +4109,7 @@ static void _HostGetFile (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostPutFile
+//		â€¢ _HostPutFile
 // ---------------------------------------------------------------------------
 
 static void _HostPutFile (void)
@@ -4138,7 +4138,7 @@ static void _HostPutFile (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ _HostGetDirectory
+//		â€¢ _HostGetDirectory
 // ---------------------------------------------------------------------------
 
 static void _HostGetDirectory (void)
@@ -4166,7 +4166,7 @@ static void _HostGetDirectory (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ PrvHostGetHandler
+//		â€¢ PrvHostGetHandler
 // ---------------------------------------------------------------------------
 
 HostHandler PrvHostGetHandler (HostControlSelectorType selector)
@@ -4190,7 +4190,7 @@ HostHandler PrvHostGetHandler (HostControlSelectorType selector)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvCollectParameters
+//		â€¢ PrvCollectParameters
 // ---------------------------------------------------------------------------
 
 Bool PrvCollectParameters (EmSubroutine& sub, const string& fmt, ByteList& stackData, StringList& stringData)
@@ -4363,7 +4363,7 @@ Bool PrvCollectParameters (EmSubroutine& sub, const string& fmt, ByteList& stack
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvPushShort
+//		â€¢ PrvPushShort
 // ---------------------------------------------------------------------------
 
 void PrvPushShort (EmSubroutine& sub, ByteList& stackData)
@@ -4390,7 +4390,7 @@ void PrvPushShort (EmSubroutine& sub, ByteList& stackData)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvPushLong
+//		â€¢ PrvPushLong
 // ---------------------------------------------------------------------------
 
 void PrvPushLong (EmSubroutine& sub, ByteList& stackData)
@@ -4417,7 +4417,7 @@ void PrvPushLong (EmSubroutine& sub, ByteList& stackData)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvPushDouble
+//		â€¢ PrvPushDouble
 // ---------------------------------------------------------------------------
 
 void PrvPushDouble (EmSubroutine& sub, ByteList& stackData)
@@ -4428,7 +4428,7 @@ void PrvPushDouble (EmSubroutine& sub, ByteList& stackData)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvPushLongDouble
+//		â€¢ PrvPushLongDouble
 // ---------------------------------------------------------------------------
 
 void PrvPushLongDouble (EmSubroutine& sub, ByteList& stackData)
@@ -4439,7 +4439,7 @@ void PrvPushLongDouble (EmSubroutine& sub, ByteList& stackData)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvPushString
+//		â€¢ PrvPushString
 // ---------------------------------------------------------------------------
 
 void PrvPushString (EmSubroutine& sub, ByteList& stackData, StringList& stringData)
@@ -4479,7 +4479,7 @@ void PrvPushString (EmSubroutine& sub, ByteList& stackData, StringList& stringDa
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvToFILE
+//		â€¢ PrvToFILE
 // ---------------------------------------------------------------------------
 
 FILE* PrvToFILE (emuptr f)
@@ -4494,7 +4494,7 @@ FILE* PrvToFILE (emuptr f)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvTmFromHostTm
+//		â€¢ PrvTmFromHostTm
 // ---------------------------------------------------------------------------
 
 void PrvTmFromHostTm (struct tm& dest, const HostTmType& src)
@@ -4512,7 +4512,7 @@ void PrvTmFromHostTm (struct tm& dest, const HostTmType& src)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvHostTmFromTm
+//		â€¢ PrvHostTmFromTm
 // ---------------------------------------------------------------------------
 
 void PrvHostTmFromTm (EmProxyHostTmType& dest, const struct tm& src)
@@ -4530,7 +4530,7 @@ void PrvHostTmFromTm (EmProxyHostTmType& dest, const struct tm& src)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvMapAndReturn
+//		â€¢ PrvMapAndReturn
 // ---------------------------------------------------------------------------
 
 void PrvMapAndReturn (const void* p, Int32 size, EmSubroutine& sub)
@@ -4548,7 +4548,7 @@ void PrvMapAndReturn (const void* p, Int32 size, EmSubroutine& sub)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvMapAndReturn
+//		â€¢ PrvMapAndReturn
 // ---------------------------------------------------------------------------
 
 void PrvMapAndReturn (const string& s, EmSubroutine& sub)
@@ -4558,7 +4558,7 @@ void PrvMapAndReturn (const string& s, EmSubroutine& sub)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvReturnString
+//		â€¢ PrvReturnString
 // ---------------------------------------------------------------------------
 
 void PrvReturnString (const char* p, EmSubroutine& sub)
@@ -4579,7 +4579,7 @@ void PrvReturnString (const char* p, EmSubroutine& sub)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvReturnString
+//		â€¢ PrvReturnString
 // ---------------------------------------------------------------------------
 
 void PrvReturnString (const string& s, EmSubroutine& sub)
@@ -4595,7 +4595,7 @@ void PrvReturnString (const string& s, EmSubroutine& sub)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ Host::Initialize
+//		â€¢ Host::Initialize
 // ---------------------------------------------------------------------------
 
 void Host::Initialize	(void)
@@ -4741,7 +4741,7 @@ void Host::Initialize	(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Host::Reset
+//		â€¢ Host::Reset
 // ---------------------------------------------------------------------------
 
 void Host::Reset		(void)
@@ -4751,7 +4751,7 @@ void Host::Reset		(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Host::Save
+//		â€¢ Host::Save
 // ---------------------------------------------------------------------------
 
 void Host::Save		(SessionFile&)
@@ -4760,7 +4760,7 @@ void Host::Save		(SessionFile&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Host::Load
+//		â€¢ Host::Load
 // ---------------------------------------------------------------------------
 
 void Host::Load		(SessionFile&)
@@ -4769,7 +4769,7 @@ void Host::Load		(SessionFile&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Host::Dispose
+//		â€¢ Host::Dispose
 // ---------------------------------------------------------------------------
 
 void Host::Dispose	(void)
@@ -4779,7 +4779,7 @@ void Host::Dispose	(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvReleaseAllResources
+//		â€¢ PrvReleaseAllResources
 // ---------------------------------------------------------------------------
 
 void PrvReleaseAllResources (void)
@@ -4837,7 +4837,7 @@ void PrvReleaseAllResources (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvMalloc
+//		â€¢ PrvMalloc
 // ---------------------------------------------------------------------------
 
 emuptr PrvMalloc (Int32 size)
@@ -4875,7 +4875,7 @@ emuptr PrvMalloc (Int32 size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvRealloc
+//		â€¢ PrvRealloc
 // ---------------------------------------------------------------------------
 
 emuptr PrvRealloc (emuptr p, Int32 size)
@@ -4947,7 +4947,7 @@ emuptr PrvRealloc (emuptr p, Int32 size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvFree
+//		â€¢ PrvFree
 // ---------------------------------------------------------------------------
 
 void PrvFree (emuptr p)

@@ -29,7 +29,7 @@ const uint16	kVisorButtonMap[kNumButtonRows][kNumButtonCols] =
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZVisor::EmRegsEZVisor
+//		â€¢ EmRegsEZVisor::EmRegsEZVisor
 // ---------------------------------------------------------------------------
 
 EmRegsEZVisor::EmRegsEZVisor (void) :
@@ -40,7 +40,7 @@ EmRegsEZVisor::EmRegsEZVisor (void) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZVisor::~EmRegsEZVisor
+//		â€¢ EmRegsEZVisor::~EmRegsEZVisor
 // ---------------------------------------------------------------------------
 
 EmRegsEZVisor::~EmRegsEZVisor (void)
@@ -50,7 +50,7 @@ EmRegsEZVisor::~EmRegsEZVisor (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZVisor::GetLCDScreenOn
+//		â€¢ EmRegsEZVisor::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsEZVisor::GetLCDScreenOn (void)
@@ -60,7 +60,7 @@ Bool EmRegsEZVisor::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZVisor::GetLCDBacklightOn
+//		â€¢ EmRegsEZVisor::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsEZVisor::GetLCDBacklightOn (void)
@@ -70,7 +70,7 @@ Bool EmRegsEZVisor::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZVisor::GetLineDriverState
+//		â€¢ EmRegsEZVisor::GetLineDriverState
 // ---------------------------------------------------------------------------
 // Return whether or not the line drivers for the given object are open or
 // closed.
@@ -100,7 +100,7 @@ Bool EmRegsEZVisor::GetLineDriverState (EmUARTDeviceType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZVisor::GetPortInputValue
+//		â€¢ EmRegsEZVisor::GetPortInputValue
 // ---------------------------------------------------------------------------
 // Return the GPIO values for the pins on the port.  These values are used
 // if the select pins are high.
@@ -158,7 +158,7 @@ uint8 EmRegsEZVisor::GetPortInputValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZVisor::GetPortInternalValue
+//		â€¢ EmRegsEZVisor::GetPortInternalValue
 // ---------------------------------------------------------------------------
 // Return the dedicated values for the pins on the port.  These values are
 // used if the select pins are low.
@@ -203,7 +203,7 @@ uint8 EmRegsEZVisor::GetPortInternalValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZVisor::GetKeyInfo
+//		â€¢ EmRegsEZVisor::GetKeyInfo
 // ---------------------------------------------------------------------------
 
 void EmRegsEZVisor::GetKeyInfo (int* numRows, int* numCols,
@@ -229,7 +229,7 @@ void EmRegsEZVisor::GetKeyInfo (int* numRows, int* numCols,
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZVisor::GetSPISlave
+//		â€¢ EmRegsEZVisor::GetSPISlave
 // ---------------------------------------------------------------------------
 
 EmSPISlave* EmRegsEZVisor::GetSPISlave (void)

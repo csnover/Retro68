@@ -41,7 +41,7 @@
 
 
 // ===========================================================================
-//		• Errors
+//		‚Ä¢ Errors
 // ===========================================================================
 
 #define FIELDS(type, name, fns)	\
@@ -677,7 +677,7 @@ static string PrvAsDecimal (int32 value)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• Errors::Initialize
+//		‚Ä¢ Errors::Initialize
 // ---------------------------------------------------------------------------
 
 void Errors::Initialize (void)
@@ -686,7 +686,7 @@ void Errors::Initialize (void)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::Reset
+//		‚Ä¢ Errors::Reset
 // ---------------------------------------------------------------------------
 
 void Errors::Reset (void)
@@ -695,7 +695,7 @@ void Errors::Reset (void)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::Save
+//		‚Ä¢ Errors::Save
 // ---------------------------------------------------------------------------
 
 void Errors::Save (SessionFile&)
@@ -704,7 +704,7 @@ void Errors::Save (SessionFile&)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::Load
+//		‚Ä¢ Errors::Load
 // ---------------------------------------------------------------------------
 
 void Errors::Load (SessionFile&)
@@ -713,7 +713,7 @@ void Errors::Load (SessionFile&)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::Dispose
+//		‚Ä¢ Errors::Dispose
 // ---------------------------------------------------------------------------
 
 void Errors::Dispose (void)
@@ -724,7 +724,7 @@ void Errors::Dispose (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportIfError
+//		‚Ä¢ Errors::ReportIfError
 // ---------------------------------------------------------------------------
 // Checks for the indicated error condition.  If there is an error, it
 // displays a "Could not foo because bar." message in a dialog with an OK
@@ -759,7 +759,7 @@ void Errors::ReportIfError (StrCode operation, ErrCode error, StrCode recovery, 
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportIfPalmError
+//		‚Ä¢ Errors::ReportIfPalmError
 // ---------------------------------------------------------------------------
 // Checks for the indicated error condition.  If there is an error, it
 // displays a "Could not foo because bar." message in a dialog with an OK
@@ -780,7 +780,7 @@ void Errors::ReportIfPalmError (StrCode operation, Err err, StrCode recovery, Bo
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportIfNULL
+//		‚Ä¢ Errors::ReportIfNULL
 // ---------------------------------------------------------------------------
 // Checks for the indicated error condition.  If there is an error, it
 // displays a "Could not foo because bar." message in a dialog with an OK
@@ -803,7 +803,7 @@ void Errors::ReportIfNULL (StrCode operation, void* p, StrCode recovery, Bool th
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrBusError
+//		‚Ä¢ Errors::ReportErrBusError
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrBusError (emuptr address, int32 size, Bool forRead)
@@ -835,7 +835,7 @@ void Errors::ReportErrBusError (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrAddressError
+//		‚Ä¢ Errors::ReportErrAddressError
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrAddressError (emuptr address, int32 size, Bool forRead)
@@ -849,7 +849,7 @@ void Errors::ReportErrAddressError (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrIllegalInstruction
+//		‚Ä¢ Errors::ReportErrIllegalInstruction
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrIllegalInstruction (uint16 opcode)
@@ -863,7 +863,7 @@ void Errors::ReportErrIllegalInstruction (uint16 opcode)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrDivideByZero
+//		‚Ä¢ Errors::ReportErrDivideByZero
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrDivideByZero (void)
@@ -873,7 +873,7 @@ void Errors::ReportErrDivideByZero (void)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrCHKInstruction
+//		‚Ä¢ Errors::ReportErrCHKInstruction
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrCHKInstruction (void)
@@ -883,7 +883,7 @@ void Errors::ReportErrCHKInstruction (void)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrTRAPVInstruction
+//		‚Ä¢ Errors::ReportErrTRAPVInstruction
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrTRAPVInstruction (void)
@@ -893,7 +893,7 @@ void Errors::ReportErrTRAPVInstruction (void)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrPrivilegeViolation
+//		‚Ä¢ Errors::ReportErrPrivilegeViolation
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrPrivilegeViolation (uint16 opcode)
@@ -907,7 +907,7 @@ void Errors::ReportErrPrivilegeViolation (uint16 opcode)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrTrace
+//		‚Ä¢ Errors::ReportErrTrace
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrTrace (void)
@@ -917,7 +917,7 @@ void Errors::ReportErrTrace (void)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrATrap
+//		‚Ä¢ Errors::ReportErrATrap
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrATrap (uint16 opcode)
@@ -935,7 +935,7 @@ void Errors::ReportErrATrap (uint16 opcode)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrFTrap
+//		‚Ä¢ Errors::ReportErrFTrap
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrFTrap (uint16 opcode)
@@ -945,7 +945,7 @@ void Errors::ReportErrFTrap (uint16 opcode)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrTRAPx
+//		‚Ä¢ Errors::ReportErrTRAPx
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrTRAPx (int trapNum)
@@ -983,7 +983,7 @@ void Errors::ReportErrTRAPx (int trapNum)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrStorageHeap
+//		‚Ä¢ Errors::ReportErrStorageHeap
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrStorageHeap (emuptr address, int32 size, Bool forRead)
@@ -997,7 +997,7 @@ void Errors::ReportErrStorageHeap (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrNoDrawWindow
+//		‚Ä¢ Errors::ReportErrNoDrawWindow
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrNoDrawWindow (emuptr address, int32 size, Bool forRead)
@@ -1011,7 +1011,7 @@ void Errors::ReportErrNoDrawWindow (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrNoGlobals
+//		‚Ä¢ Errors::ReportErrNoGlobals
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrNoGlobals (emuptr address, int32 size, Bool forRead)
@@ -1032,7 +1032,7 @@ void Errors::ReportErrNoGlobals (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrSANE
+//		‚Ä¢ Errors::ReportErrSANE
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrSANE (void)
@@ -1042,7 +1042,7 @@ void Errors::ReportErrSANE (void)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrTRAP0
+//		‚Ä¢ Errors::ReportErrTRAP0
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrTRAP0 (void)
@@ -1052,7 +1052,7 @@ void Errors::ReportErrTRAP0 (void)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrTRAP8
+//		‚Ä¢ Errors::ReportErrTRAP8
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrTRAP8 (void)
@@ -1064,7 +1064,7 @@ void Errors::ReportErrTRAP8 (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrStackOverflow
+//		‚Ä¢ Errors::ReportErrStackOverflow
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrStackOverflow (void)
@@ -1074,7 +1074,7 @@ void Errors::ReportErrStackOverflow (void)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrUnimplementedTrap
+//		‚Ä¢ Errors::ReportErrUnimplementedTrap
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrUnimplementedTrap (const SystemCallContext& context)
@@ -1114,7 +1114,7 @@ void Errors::ReportErrUnimplementedTrap (const SystemCallContext& context)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrInvalidRefNum
+//		‚Ä¢ Errors::ReportErrInvalidRefNum
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrInvalidRefNum (const SystemCallContext& context)
@@ -1134,7 +1134,7 @@ void Errors::ReportErrInvalidRefNum (const SystemCallContext& context)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrCorruptedHeap
+//		‚Ä¢ Errors::ReportErrCorruptedHeap
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrCorruptedHeap (ErrCode corruptionType, emuptr chunkHdr)
@@ -1193,7 +1193,7 @@ void Errors::ReportErrCorruptedHeap (ErrCode corruptionType, emuptr chunkHdr)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrInvalidPC
+//		‚Ä¢ Errors::ReportErrInvalidPC
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrInvalidPC (emuptr address, int reason)
@@ -1242,7 +1242,7 @@ void Errors::ReportErrInvalidPC (emuptr address, int reason)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrLowMemory
+//		‚Ä¢ Errors::ReportErrLowMemory
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrLowMemory (emuptr address, int32 size, Bool forRead)
@@ -1255,7 +1255,7 @@ void Errors::ReportErrLowMemory (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrSystemGlobals
+//		‚Ä¢ Errors::ReportErrSystemGlobals
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrSystemGlobals (emuptr address, int32 size, Bool forRead)
@@ -1268,7 +1268,7 @@ void Errors::ReportErrSystemGlobals (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrScreen
+//		‚Ä¢ Errors::ReportErrScreen
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrScreen (emuptr address, int32 size, Bool forRead)
@@ -1281,7 +1281,7 @@ void Errors::ReportErrScreen (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrHardwareRegisters
+//		‚Ä¢ Errors::ReportErrHardwareRegisters
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrHardwareRegisters (emuptr address, int32 size, Bool forRead)
@@ -1294,7 +1294,7 @@ void Errors::ReportErrHardwareRegisters (emuptr address, int32 size, Bool forRea
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrROM
+//		‚Ä¢ Errors::ReportErrROM
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrROM (emuptr address, int32 size, Bool forRead)
@@ -1307,7 +1307,7 @@ void Errors::ReportErrROM (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrMemMgrStructures
+//		‚Ä¢ Errors::ReportErrMemMgrStructures
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrMemMgrStructures (emuptr address, int32 size, Bool forRead)
@@ -1320,7 +1320,7 @@ void Errors::ReportErrMemMgrStructures (emuptr address, int32 size, Bool forRead
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrMemMgrLeaks
+//		‚Ä¢ Errors::ReportErrMemMgrLeaks
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrMemMgrLeaks (int leaks)
@@ -1342,7 +1342,7 @@ void Errors::ReportErrMemMgrLeaks (int leaks)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrMemMgrSemaphore
+//		‚Ä¢ Errors::ReportErrMemMgrSemaphore
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrMemMgrSemaphore (void)
@@ -1355,7 +1355,7 @@ void Errors::ReportErrMemMgrSemaphore (void)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrFreeChunk
+//		‚Ä¢ Errors::ReportErrFreeChunk
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrFreeChunk (emuptr address, int32 size, Bool forRead)
@@ -1368,7 +1368,7 @@ void Errors::ReportErrFreeChunk (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrUnlockedChunk
+//		‚Ä¢ Errors::ReportErrUnlockedChunk
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrUnlockedChunk (emuptr address, int32 size, Bool forRead)
@@ -1381,7 +1381,7 @@ void Errors::ReportErrUnlockedChunk (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrLowStack
+//		‚Ä¢ Errors::ReportErrLowStack
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrLowStack (emuptr stackLow,
@@ -1415,7 +1415,7 @@ void Errors::ReportErrLowStack (emuptr stackLow,
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrStackFull
+//		‚Ä¢ Errors::ReportErrStackFull
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrStackFull (void)
@@ -1428,7 +1428,7 @@ void Errors::ReportErrStackFull (void)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrSizelessObject
+//		‚Ä¢ Errors::ReportErrSizelessObject
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrSizelessObject (uint16 id, const EmRect& r)
@@ -1441,7 +1441,7 @@ void Errors::ReportErrSizelessObject (uint16 id, const EmRect& r)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrOffscreenObject
+//		‚Ä¢ Errors::ReportErrOffscreenObject
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrOffscreenObject (uint16 id, const EmRect& r)
@@ -1454,7 +1454,7 @@ void Errors::ReportErrOffscreenObject (uint16 id, const EmRect& r)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrFormAccess
+//		‚Ä¢ Errors::ReportErrFormAccess
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrFormAccess (emuptr formAddress, emuptr address, int32 size, Bool forRead)
@@ -1521,7 +1521,7 @@ void Errors::ReportErrFormAccess (emuptr formAddress, emuptr address, int32 size
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrFormObjectAccess
+//		‚Ä¢ Errors::ReportErrFormObjectAccess
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrFormObjectAccess (emuptr objectAddress, emuptr formAddress, emuptr address, int32 size, Bool forRead)
@@ -1587,7 +1587,7 @@ void Errors::ReportErrFormObjectAccess (emuptr objectAddress, emuptr formAddress
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrWindowAccess
+//		‚Ä¢ Errors::ReportErrWindowAccess
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrWindowAccess (emuptr windowAddress, emuptr address, int32 size, Bool forRead)
@@ -1617,7 +1617,7 @@ void Errors::ReportErrWindowAccess (emuptr windowAddress, emuptr address, int32 
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrBitmapAccess
+//		‚Ä¢ Errors::ReportErrBitmapAccess
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrBitmapAccess (emuptr bitmapAddress, emuptr address, int32 size, Bool forRead)
@@ -1647,7 +1647,7 @@ void Errors::ReportErrBitmapAccess (emuptr bitmapAddress, emuptr address, int32 
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrProscribedFunction
+//		‚Ä¢ Errors::ReportErrProscribedFunction
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrProscribedFunction (const SystemCallContext& context)
@@ -1677,7 +1677,7 @@ void Errors::ReportErrProscribedFunction (const SystemCallContext& context)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrStepSpy
+//		‚Ä¢ Errors::ReportErrStepSpy
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrStepSpy (emuptr writeAddress,
@@ -1728,7 +1728,7 @@ void Errors::ReportErrStepSpy (emuptr writeAddress,
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrWatchpoint
+//		‚Ä¢ Errors::ReportErrWatchpoint
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrWatchpoint (emuptr writeAddress,
@@ -1775,7 +1775,7 @@ void Errors::ReportErrWatchpoint (emuptr writeAddress,
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• Errors:ReportErrSysFatalAlert
+//		‚Ä¢ Errors:ReportErrSysFatalAlert
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrSysFatalAlert (const char* appMsg)
@@ -1796,7 +1796,7 @@ void Errors::ReportErrSysFatalAlert (const char* appMsg)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors:ReportErrDbgMessage
+//		‚Ä¢ Errors:ReportErrDbgMessage
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrDbgMessage (const char* appMsg)
@@ -1819,7 +1819,7 @@ void Errors::ReportErrDbgMessage (const char* appMsg)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrAccessCommon
+//		‚Ä¢ Errors::ReportErrAccessCommon
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrAccessCommon (StrCode strIndex, ExceptionNumber excNum, int flags,
@@ -1850,7 +1850,7 @@ void Errors::ReportErrAccessCommon (StrCode strIndex, ExceptionNumber excNum, in
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrObjectCommon
+//		‚Ä¢ Errors::ReportErrObjectCommon
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrObjectCommon (StrCode strIndex, ExceptionNumber excNum, int flags, 
@@ -1898,7 +1898,7 @@ void Errors::ReportErrObjectCommon (StrCode strIndex, ExceptionNumber excNum, in
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrOpcodeCommon
+//		‚Ä¢ Errors::ReportErrOpcodeCommon
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrOpcodeCommon (StrCode strIndex, ExceptionNumber excNum, int flags, uint16 opcode)
@@ -1921,7 +1921,7 @@ void Errors::ReportErrOpcodeCommon (StrCode strIndex, ExceptionNumber excNum, in
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrStackCommon
+//		‚Ä¢ Errors::ReportErrStackCommon
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrStackCommon (StrCode strIndex, ExceptionNumber excNum, int flags)
@@ -1953,7 +1953,7 @@ void Errors::ReportErrStackCommon (StrCode strIndex, ExceptionNumber excNum, int
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReportErrCommon
+//		‚Ä¢ Errors::ReportErrCommon
 // ---------------------------------------------------------------------------
 
 void Errors::ReportErrCommon (StrCode strIndex, ExceptionNumber excNum, int flags)
@@ -1971,7 +1971,7 @@ void Errors::ReportErrCommon (StrCode strIndex, ExceptionNumber excNum, int flag
 
 
 // ---------------------------------------------------------------------------
-//		• Errors:ReportErrCommPort
+//		‚Ä¢ Errors:ReportErrCommPort
 // ---------------------------------------------------------------------------
 
 EmDlgItemID Errors::ReportErrCommPort (string errString)
@@ -1987,7 +1987,7 @@ EmDlgItemID Errors::ReportErrCommPort (string errString)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors:ReportErrSockets
+//		‚Ä¢ Errors:ReportErrSockets
 // ---------------------------------------------------------------------------
 
 EmDlgItemID Errors::ReportErrSockets (string errString)
@@ -2005,7 +2005,7 @@ EmDlgItemID Errors::ReportErrSockets (string errString)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• Errors::SetParameter
+//		‚Ä¢ Errors::SetParameter
 // ---------------------------------------------------------------------------
 //	Add a user-supplied substitution rule. Parameters are deleted after they
 //	are used (by making a call to ReportMessage), so they need to be
@@ -2038,7 +2038,7 @@ void Errors::SetParameter (const string& key, int32 value)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ClearParameter
+//		‚Ä¢ Errors::ClearParameter
 // ---------------------------------------------------------------------------
 //	Remove a user-supplied substitution rule.
 
@@ -2061,7 +2061,7 @@ void Errors::ClearParameter (const string& key)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ClearAllParameters
+//		‚Ä¢ Errors::ClearAllParameters
 // ---------------------------------------------------------------------------
 //	Remove a user-supplied substitution rule.
 
@@ -2072,7 +2072,7 @@ void Errors::ClearAllParameters (void)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::SetErrorParameters
+//		‚Ä¢ Errors::SetErrorParameters
 // ---------------------------------------------------------------------------
 
 Bool Errors::SetErrorParameters (StrCode operation, ErrCode error, StrCode recovery)
@@ -2147,7 +2147,7 @@ Bool Errors::SetErrorParameters (StrCode operation, ErrCode error, StrCode recov
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::SetStandardParameters
+//		‚Ä¢ Errors::SetStandardParameters
 // ---------------------------------------------------------------------------
 //	Set the following three parameters for text substitution:
 //
@@ -2172,7 +2172,7 @@ void Errors::SetStandardParameters (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• Errors::HandleDialog
+//		‚Ä¢ Errors::HandleDialog
 // ---------------------------------------------------------------------------
 //	Display the dialog, handling button selections in a standard fashion:
 //
@@ -2299,7 +2299,7 @@ void Errors::HandleDialog (StrCode messageID,
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::DoDialog
+//		‚Ä¢ Errors::DoDialog
 // ---------------------------------------------------------------------------
 //	Displays a dialog box with the given message and according to
 //	the given flags.  Returns which button was clicked.
@@ -2312,7 +2312,7 @@ EmDlgItemID Errors::DoDialog (StrCode messageID, EmCommonDialogFlags flags)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::DoDialog
+//		‚Ä¢ Errors::DoDialog
 // ---------------------------------------------------------------------------
 //	Displays a dialog box with the given message and according to
 //	the given flags.  Returns which button was clicked.
@@ -2411,7 +2411,7 @@ EmDlgItemID Errors::DoDialog (const char* msg, EmCommonDialogFlags flags, StrCod
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReplaceParameters
+//		‚Ä¢ Errors::ReplaceParameters
 // ---------------------------------------------------------------------------
 //	Take a string template (that is, a string containing text interspersed
 //	with "parameters" (of the form "%parameterName") that need to be
@@ -2424,7 +2424,7 @@ string Errors::ReplaceParameters (StrCode templateID)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReplaceParameters
+//		‚Ä¢ Errors::ReplaceParameters
 // ---------------------------------------------------------------------------
 //	Take a string template (that is, a string containing text interspersed
 //	with "parameters" (of the form "%parameterName") that need to be
@@ -2438,7 +2438,7 @@ string Errors::ReplaceParameters (StrCode templateID, ParamList& params)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ReplaceParameters
+//		‚Ä¢ Errors::ReplaceParameters
 // ---------------------------------------------------------------------------
 //	Take a string template (that is, a string containing text interspersed
 //	with "parameters" (of the form "%parameterName") that need to be
@@ -2458,13 +2458,13 @@ string Errors::ReplaceParameters (StrCode templateID, ParamList& params)
 //
 //	string template "Could not %operation because %reason."
 //
-//	parameter list:		"%operation"	"save the file “%extra”"
+//	parameter list:		"%operation"	"save the file ‚Äú%extra‚Äù"
 //						"%reason"		"the disk is full"
 //						"%extra"		"FooBlitzky"
 //
-//	result: "Could not save the file “FooBlitzky" because the disk is full."
+//	result: "Could not save the file ‚ÄúFooBlitzky" because the disk is full."
 //
-//	If the "%extra" in "save the file “%extra”" had been "%operation", it
+//	If the "%extra" in "save the file ‚Äú%extra‚Äù" had been "%operation", it
 //	would have stayed that way and never been replaced (unless "%operation"
 //	appeared in the parameter list again).
 
@@ -2491,7 +2491,7 @@ string Errors::ReplaceParameters (const string& templ, ParamList& params)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• Errors::Throw
+//		‚Ä¢ Errors::Throw
 // ---------------------------------------------------------------------------
 
 #ifndef Throw_
@@ -2505,7 +2505,7 @@ void Errors::Throw (ErrCode error)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ThrowIfError
+//		‚Ä¢ Errors::ThrowIfError
 // ---------------------------------------------------------------------------
 
 void Errors::ThrowIfError (ErrCode error)
@@ -2518,7 +2518,7 @@ void Errors::ThrowIfError (ErrCode error)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ThrowIfPalmError
+//		‚Ä¢ Errors::ThrowIfPalmError
 // ---------------------------------------------------------------------------
 
 void Errors::ThrowIfPalmError (Err error)
@@ -2531,7 +2531,7 @@ void Errors::ThrowIfPalmError (Err error)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ThrowIfStdCError
+//		‚Ä¢ Errors::ThrowIfStdCError
 // ---------------------------------------------------------------------------
 
 void Errors::ThrowIfStdCError (int error)
@@ -2544,7 +2544,7 @@ void Errors::ThrowIfStdCError (int error)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::ThrowIfNULL
+//		‚Ä¢ Errors::ThrowIfNULL
 // ---------------------------------------------------------------------------
 
 void Errors::ThrowIfNULL (void* p)
@@ -2565,7 +2565,7 @@ void Errors::ThrowIfNULL (emuptr p)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::Scram
+//		‚Ä¢ Errors::Scram
 // ---------------------------------------------------------------------------
 
 void Errors::Scram (void)
@@ -2577,7 +2577,7 @@ void Errors::Scram (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• Errors::GetIDForError
+//		‚Ä¢ Errors::GetIDForError
 // ---------------------------------------------------------------------------
 
 int Errors::GetIDForError (ErrCode error)
@@ -2681,7 +2681,7 @@ int Errors::GetIDForError (ErrCode error)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::GetIDForRecovery
+//		‚Ä¢ Errors::GetIDForRecovery
 // ---------------------------------------------------------------------------
 
 int Errors::GetIDForRecovery (ErrCode error)
@@ -2708,7 +2708,7 @@ int Errors::GetIDForRecovery (ErrCode error)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::GetAppName
+//		‚Ä¢ Errors::GetAppName
 // ---------------------------------------------------------------------------
 // Get the current application's name.  If the name is not known, return
 // "Unknown application" and "unknown application".
@@ -2731,7 +2731,7 @@ void Errors::GetAppName (string& appNameUC, string& appNameLC)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::GetAppVersion
+//		‚Ä¢ Errors::GetAppVersion
 // ---------------------------------------------------------------------------
 // Get the current application's version.  If the version cannot be
 // determined, return "(unknown version)".
@@ -2752,7 +2752,7 @@ void Errors::GetAppVersion (string& appVersion)
 
 
 // ---------------------------------------------------------------------------
-//		• Errors::LooksLikeA5Access
+//		‚Ä¢ Errors::LooksLikeA5Access
 // ---------------------------------------------------------------------------
 
 Bool Errors::LooksLikeA5Access (emuptr address, int32 size, Bool forRead)
@@ -2801,7 +2801,7 @@ Bool Errors::LooksLikeA5Access (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		• PrvLookupField
+//		‚Ä¢ PrvLookupField
 // ---------------------------------------------------------------------------
 
 void PrvLookupField (const EmFieldLookup* table, size_t offset,
@@ -2849,7 +2849,7 @@ void PrvLookupField (const EmFieldLookup* table, size_t offset,
 
 
 // ---------------------------------------------------------------------------
-//		• PrvGetProscribedReason
+//		‚Ä¢ PrvGetProscribedReason
 // ---------------------------------------------------------------------------
 
 string PrvGetProscribedReason (const SystemCallContext& context)
@@ -2883,7 +2883,7 @@ string PrvGetProscribedReason (const SystemCallContext& context)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErr
+//		‚Ä¢ EmDeferredErr
 // ---------------------------------------------------------------------------
 
 EmDeferredErr::EmDeferredErr (void)
@@ -2898,7 +2898,7 @@ EmDeferredErr::~EmDeferredErr (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrAccessCommon
+//		‚Ä¢ EmDeferredErrAccessCommon
 // ---------------------------------------------------------------------------
 
 EmDeferredErrAccessCommon::EmDeferredErrAccessCommon (emuptr address, int32 size, Bool forRead) :
@@ -2917,7 +2917,7 @@ EmDeferredErrAccessCommon::~EmDeferredErrAccessCommon (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrLowMemory
+//		‚Ä¢ EmDeferredErrLowMemory
 // ---------------------------------------------------------------------------
 
 EmDeferredErrLowMemory::EmDeferredErrLowMemory (emuptr address, int32 size, Bool forRead) :
@@ -2938,7 +2938,7 @@ void EmDeferredErrLowMemory::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrSystemGlobals
+//		‚Ä¢ EmDeferredErrSystemGlobals
 // ---------------------------------------------------------------------------
 
 EmDeferredErrSystemGlobals::EmDeferredErrSystemGlobals (emuptr address, int32 size, Bool forRead) :
@@ -2959,7 +2959,7 @@ void EmDeferredErrSystemGlobals::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrScreen
+//		‚Ä¢ EmDeferredErrScreen
 // ---------------------------------------------------------------------------
 
 EmDeferredErrScreen::EmDeferredErrScreen (emuptr address, int32 size, Bool forRead) :
@@ -2980,7 +2980,7 @@ void EmDeferredErrScreen::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrHardwareRegisters
+//		‚Ä¢ EmDeferredErrHardwareRegisters
 // ---------------------------------------------------------------------------
 
 EmDeferredErrHardwareRegisters::EmDeferredErrHardwareRegisters (emuptr address, int32 size, Bool forRead) :
@@ -3001,7 +3001,7 @@ void EmDeferredErrHardwareRegisters::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrROM
+//		‚Ä¢ EmDeferredErrROM
 // ---------------------------------------------------------------------------
 
 EmDeferredErrROM::EmDeferredErrROM (emuptr address, int32 size, Bool forRead) :
@@ -3022,7 +3022,7 @@ void EmDeferredErrROM::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrMemMgrStructures
+//		‚Ä¢ EmDeferredErrMemMgrStructures
 // ---------------------------------------------------------------------------
 
 EmDeferredErrMemMgrStructures::EmDeferredErrMemMgrStructures (emuptr address, int32 size, Bool forRead) :
@@ -3043,7 +3043,7 @@ void EmDeferredErrMemMgrStructures::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrMemMgrSemaphore
+//		‚Ä¢ EmDeferredErrMemMgrSemaphore
 // ---------------------------------------------------------------------------
 
 EmDeferredErrMemMgrSemaphore::EmDeferredErrMemMgrSemaphore (void) :
@@ -3064,7 +3064,7 @@ void EmDeferredErrMemMgrSemaphore::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrFreeChunk
+//		‚Ä¢ EmDeferredErrFreeChunk
 // ---------------------------------------------------------------------------
 
 EmDeferredErrFreeChunk::EmDeferredErrFreeChunk (emuptr address, int32 size, Bool forRead) :
@@ -3085,7 +3085,7 @@ void EmDeferredErrFreeChunk::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrUnlockedChunk
+//		‚Ä¢ EmDeferredErrUnlockedChunk
 // ---------------------------------------------------------------------------
 
 EmDeferredErrUnlockedChunk::EmDeferredErrUnlockedChunk (emuptr address, int32 size, Bool forRead) :
@@ -3106,7 +3106,7 @@ void EmDeferredErrUnlockedChunk::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrLowStack
+//		‚Ä¢ EmDeferredErrLowStack
 // ---------------------------------------------------------------------------
 
 EmDeferredErrLowStack::EmDeferredErrLowStack (emuptr stackLow,
@@ -3136,7 +3136,7 @@ void EmDeferredErrLowStack::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrStackFull
+//		‚Ä¢ EmDeferredErrStackFull
 // ---------------------------------------------------------------------------
 
 EmDeferredErrStackFull::EmDeferredErrStackFull (void) :
@@ -3157,7 +3157,7 @@ void EmDeferredErrStackFull::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrObjectCommon
+//		‚Ä¢ EmDeferredErrObjectCommon
 // ---------------------------------------------------------------------------
 
 EmDeferredErrObjectCommon::EmDeferredErrObjectCommon (uint16 id, const EmRect& rect) :
@@ -3175,7 +3175,7 @@ EmDeferredErrObjectCommon::~EmDeferredErrObjectCommon (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrSizelessObject
+//		‚Ä¢ EmDeferredErrSizelessObject
 // ---------------------------------------------------------------------------
 
 EmDeferredErrSizelessObject::EmDeferredErrSizelessObject (uint16 id, const EmRect& rect) :
@@ -3196,7 +3196,7 @@ void EmDeferredErrSizelessObject::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrOffscreenObject
+//		‚Ä¢ EmDeferredErrOffscreenObject
 // ---------------------------------------------------------------------------
 
 EmDeferredErrOffscreenObject::EmDeferredErrOffscreenObject (uint16 id, const EmRect& rect) :
@@ -3217,7 +3217,7 @@ void EmDeferredErrOffscreenObject::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrFormAccess
+//		‚Ä¢ EmDeferredErrFormAccess
 // ---------------------------------------------------------------------------
 
 EmDeferredErrFormAccess::EmDeferredErrFormAccess (emuptr formAddress,
@@ -3242,7 +3242,7 @@ void EmDeferredErrFormAccess::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrFormObjectAccess
+//		‚Ä¢ EmDeferredErrFormObjectAccess
 // ---------------------------------------------------------------------------
 
 EmDeferredErrFormObjectAccess::EmDeferredErrFormObjectAccess (emuptr objectAddress,
@@ -3269,7 +3269,7 @@ void EmDeferredErrFormObjectAccess::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrWindowAccess
+//		‚Ä¢ EmDeferredErrWindowAccess
 // ---------------------------------------------------------------------------
 
 EmDeferredErrWindowAccess::EmDeferredErrWindowAccess (emuptr windowAddress,
@@ -3294,7 +3294,7 @@ void EmDeferredErrWindowAccess::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrBitmapAccess
+//		‚Ä¢ EmDeferredErrBitmapAccess
 // ---------------------------------------------------------------------------
 
 EmDeferredErrBitmapAccess::EmDeferredErrBitmapAccess (emuptr bitmapAddress,
@@ -3319,7 +3319,7 @@ void EmDeferredErrBitmapAccess::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrProscribedFunction
+//		‚Ä¢ EmDeferredErrProscribedFunction
 // ---------------------------------------------------------------------------
 
 EmDeferredErrProscribedFunction::EmDeferredErrProscribedFunction (const SystemCallContext& context) :
@@ -3341,7 +3341,7 @@ void EmDeferredErrProscribedFunction::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrStepSpy
+//		‚Ä¢ EmDeferredErrStepSpy
 // ---------------------------------------------------------------------------
 
 EmDeferredErrStepSpy::EmDeferredErrStepSpy (emuptr writeAddress,
@@ -3371,7 +3371,7 @@ void EmDeferredErrStepSpy::Do (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		• EmDeferredErrWatchpoint
+//		‚Ä¢ EmDeferredErrWatchpoint
 // ---------------------------------------------------------------------------
 
 EmDeferredErrWatchpoint::EmDeferredErrWatchpoint (emuptr writeAddress,

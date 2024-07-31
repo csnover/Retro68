@@ -29,7 +29,7 @@
 //-------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::EmRegsCFMemCard
+//		â€¢ EmRegsCFMemCard::EmRegsCFMemCard
 // ---------------------------------------------------------------------------
 
 EmRegsCFMemCard::EmRegsCFMemCard (CFBusManager * fBusManager)
@@ -39,7 +39,7 @@ EmRegsCFMemCard::EmRegsCFMemCard (CFBusManager * fBusManager)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::~EmRegsCFMemCard
+//		â€¢ EmRegsCFMemCard::~EmRegsCFMemCard
 // ---------------------------------------------------------------------------
 
 EmRegsCFMemCard::~EmRegsCFMemCard (void)
@@ -48,7 +48,7 @@ EmRegsCFMemCard::~EmRegsCFMemCard (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::Initialize
+//		â€¢ EmRegsCFMemCard::Initialize
 // ---------------------------------------------------------------------------
 
 void EmRegsCFMemCard::Initialize (void)
@@ -62,7 +62,7 @@ void EmRegsCFMemCard::Initialize (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::Reset
+//		â€¢ EmRegsCFMemCard::Reset
 // ---------------------------------------------------------------------------
 void EmRegsCFMemCard::Reset (Bool /*hardwareReset*/)
 {
@@ -70,7 +70,7 @@ void EmRegsCFMemCard::Reset (Bool /*hardwareReset*/)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::Save
+//		â€¢ EmRegsCFMemCard::Save
 // ---------------------------------------------------------------------------
 void EmRegsCFMemCard::Save (SessionFile& /*f*/)
 {
@@ -78,7 +78,7 @@ void EmRegsCFMemCard::Save (SessionFile& /*f*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::Load
+//		â€¢ EmRegsCFMemCard::Load
 // ---------------------------------------------------------------------------
 void EmRegsCFMemCard::Load (SessionFile& /*f*/)
 {
@@ -86,7 +86,7 @@ void EmRegsCFMemCard::Load (SessionFile& /*f*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::Dispose
+//		â€¢ EmRegsCFMemCard::Dispose
 // ---------------------------------------------------------------------------
 void EmRegsCFMemCard::Dispose (void)
 {
@@ -94,7 +94,7 @@ void EmRegsCFMemCard::Dispose (void)
 }
 
 // -------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::SetSubBankHandlers
+//		â€¢ EmRegsCFMemCard::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 void EmRegsCFMemCard::SetSubBankHandlers (void)
 {
@@ -109,7 +109,7 @@ void EmRegsCFMemCard::SetSubBankHandlers (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::GetRealAddress
+//		â€¢ EmRegsCFMemCard::GetRealAddress
 // ---------------------------------------------------------------------------
 uint8 * EmRegsCFMemCard::GetRealAddress (emuptr address)
 {
@@ -117,7 +117,7 @@ uint8 * EmRegsCFMemCard::GetRealAddress (emuptr address)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::GetLong
+//		â€¢ EmRegsCFMemCard::GetLong
 // ---------------------------------------------------------------------------
 uint32 EmRegsCFMemCard::GetLong (emuptr /*address*/)
 {
@@ -127,7 +127,7 @@ uint32 EmRegsCFMemCard::GetLong (emuptr /*address*/)
 #define INVALID_READ	0x3F
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::GetByte
+//		â€¢ EmRegsCFMemCard::GetByte
 // ---------------------------------------------------------------------------
 uint32 EmRegsCFMemCard::GetByte(emuptr address)
 {
@@ -154,7 +154,7 @@ uint32 EmRegsCFMemCard::GetByte(emuptr address)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::GetWord
+//		â€¢ EmRegsCFMemCard::GetWord
 // ---------------------------------------------------------------------------
 uint32 EmRegsCFMemCard::GetWord (emuptr address)
 {
@@ -193,7 +193,7 @@ uint32 EmRegsCFMemCard::GetWord (emuptr address)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::SetLong
+//		â€¢ EmRegsCFMemCard::SetLong
 // ---------------------------------------------------------------------------
 void EmRegsCFMemCard::SetLong (emuptr /*address*/, uint32 /*value*/)
 {
@@ -201,7 +201,7 @@ void EmRegsCFMemCard::SetLong (emuptr /*address*/, uint32 /*value*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::SetWord
+//		â€¢ EmRegsCFMemCard::SetWord
 // ---------------------------------------------------------------------------
 void EmRegsCFMemCard::SetWord (emuptr address, uint32 val)
 {
@@ -236,7 +236,7 @@ void EmRegsCFMemCard::SetWord (emuptr address, uint32 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::SetByte
+//		â€¢ EmRegsCFMemCard::SetByte
 // ---------------------------------------------------------------------------
 void EmRegsCFMemCard::SetByte (emuptr address, uint32 value)
 {
@@ -258,7 +258,7 @@ void EmRegsCFMemCard::SetByte (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::GetAddressStart
+//		â€¢ EmRegsCFMemCard::GetAddressStart
 // ---------------------------------------------------------------------------
 emuptr EmRegsCFMemCard::GetAddressStart (void)
 {
@@ -266,7 +266,7 @@ emuptr EmRegsCFMemCard::GetAddressStart (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::GetAddressRange
+//		â€¢ EmRegsCFMemCard::GetAddressRange
 // ---------------------------------------------------------------------------
 uint32 EmRegsCFMemCard::GetAddressRange (void)
 {
@@ -274,7 +274,7 @@ uint32 EmRegsCFMemCard::GetAddressRange (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::Read
+//		â€¢ EmRegsCFMemCard::Read
 // ---------------------------------------------------------------------------
 uint32 EmRegsCFMemCard::Read(emuptr address, int size)
 {
@@ -289,7 +289,7 @@ uint32 EmRegsCFMemCard::Read(emuptr address, int size)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsCFMemCard::Write
+//		â€¢ EmRegsCFMemCard::Write
 // ---------------------------------------------------------------------------
 void EmRegsCFMemCard::Write(emuptr address, int size, uint32 val)
 {

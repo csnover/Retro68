@@ -22,7 +22,7 @@
 
 
 // ===========================================================================
-//		¥ Dummy Bank Accessors
+//		â€¢ Dummy Bank Accessors
 // ===========================================================================
 // Dummy banks are non-existent blocks of memory.  Dummy bank accessors do
 // not do anything.
@@ -232,7 +232,7 @@ void EmBankMapped::SetBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankMapped::GetLong
+//		â€¢ EmBankMapped::GetLong
 // ---------------------------------------------------------------------------
 
 uint32 EmBankMapped::GetLong (emuptr address)
@@ -258,7 +258,7 @@ uint32 EmBankMapped::GetLong (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankMapped::GetWord
+//		â€¢ EmBankMapped::GetWord
 // ---------------------------------------------------------------------------
 
 uint32 EmBankMapped::GetWord (emuptr address)
@@ -284,7 +284,7 @@ uint32 EmBankMapped::GetWord (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankMapped::GetByte
+//		â€¢ EmBankMapped::GetByte
 // ---------------------------------------------------------------------------
 
 uint32 EmBankMapped::GetByte (emuptr address)
@@ -305,7 +305,7 @@ uint32 EmBankMapped::GetByte (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankMapped::SetLong
+//		â€¢ EmBankMapped::SetLong
 // ---------------------------------------------------------------------------
 
 void EmBankMapped::SetLong (emuptr address, uint32 value)
@@ -334,7 +334,7 @@ void EmBankMapped::SetLong (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankMapped::SetWord
+//		â€¢ EmBankMapped::SetWord
 // ---------------------------------------------------------------------------
 
 void EmBankMapped::SetWord (emuptr address, uint32 value)
@@ -361,7 +361,7 @@ void EmBankMapped::SetWord (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankMapped::SetByte
+//		â€¢ EmBankMapped::SetByte
 // ---------------------------------------------------------------------------
 
 void EmBankMapped::SetByte (emuptr address, uint32 value)
@@ -382,7 +382,7 @@ void EmBankMapped::SetByte (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankMapped::ValidAddress
+//		â€¢ EmBankMapped::ValidAddress
 // ---------------------------------------------------------------------------
 
 int EmBankMapped::ValidAddress (emuptr address, uint32)
@@ -395,7 +395,7 @@ int EmBankMapped::ValidAddress (emuptr address, uint32)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankMapped::GetRealAddress
+//		â€¢ EmBankMapped::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmBankMapped::GetRealAddress (emuptr address)
@@ -410,7 +410,7 @@ uint8* EmBankMapped::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankMapped::GetMetaAddress
+//		â€¢ EmBankMapped::GetMetaAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmBankMapped::GetMetaAddress (emuptr address)
@@ -424,7 +424,7 @@ uint8* EmBankMapped::GetMetaAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankMapped::GetEmulatedAddress
+//		â€¢ EmBankMapped::GetEmulatedAddress
 // ---------------------------------------------------------------------------
 
 emuptr EmBankMapped::GetEmulatedAddress (const void* address)
@@ -442,7 +442,7 @@ emuptr EmBankMapped::GetEmulatedAddress (const void* address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankMapped::AddOpcodeCycles
+//		â€¢ EmBankMapped::AddOpcodeCycles
 // ---------------------------------------------------------------------------
 
 void EmBankMapped::AddOpcodeCycles (void)
@@ -451,7 +451,7 @@ void EmBankMapped::AddOpcodeCycles (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankMapped::AddressError
+//		â€¢ EmBankMapped::AddressError
 // ---------------------------------------------------------------------------
 
 void EmBankMapped::AddressError (emuptr address, int32 size, Bool forRead)
@@ -462,7 +462,7 @@ void EmBankMapped::AddressError (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankMapped::InvalidAccess
+//		â€¢ EmBankMapped::InvalidAccess
 // ---------------------------------------------------------------------------
 
 void EmBankMapped::InvalidAccess (emuptr address, int32 size, Bool forRead)
@@ -473,7 +473,7 @@ void EmBankMapped::InvalidAccess (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankMapped::MapPhysicalMemory
+//		â€¢ EmBankMapped::MapPhysicalMemory
 // ---------------------------------------------------------------------------
 // Maps a range of physical memory to appear at the same location of the
 // emulated Palm OS's virtual memory.
@@ -554,7 +554,7 @@ void EmBankMapped::MapPhysicalMemory (const void* addr, uint32 size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankMapped::UnmapPhysicalMemory
+//		â€¢ EmBankMapped::UnmapPhysicalMemory
 // ---------------------------------------------------------------------------
 // Unmaps a range of physical memory from appearing at the same location of
 // the emulated Palm OS's virtual memory.
@@ -582,7 +582,7 @@ void EmBankMapped::UnmapPhysicalMemory (const void* addr)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankMapped::GetMappingInfo
+//		â€¢ EmBankMapped::GetMappingInfo
 // ---------------------------------------------------------------------------
 
 void EmBankMapped::GetMappingInfo	(emuptr addr, void** start, uint32* len)
@@ -609,7 +609,7 @@ void EmBankMapped::GetMappingInfo	(emuptr addr, void** start, uint32* len)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvGetMappingInfo
+//		â€¢ PrvGetMappingInfo
 // ---------------------------------------------------------------------------
 
 MapRangeList::iterator PrvGetMappingInfo (const void* addr)

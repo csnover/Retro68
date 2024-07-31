@@ -1888,7 +1888,7 @@ Hordes::GetGremlinDirectory (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Hordes::UseNewAutoSaveDirectory
+//		â€¢ Hordes::UseNewAutoSaveDirectory
 // ---------------------------------------------------------------------------
 
 void Hordes::UseNewAutoSaveDirectory (void)
@@ -1898,7 +1898,7 @@ void Hordes::UseNewAutoSaveDirectory (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Hordes::ComputeStatistics
+//		â€¢ Hordes::ComputeStatistics
 // ---------------------------------------------------------------------------
 
 void Hordes::ComputeStatistics (int32 &min,
@@ -1987,7 +1987,7 @@ void Hordes::ComputeStatistics (int32 &min,
 
 
 // ---------------------------------------------------------------------------
-//		¥ Hordes::GremlinReport
+//		â€¢ Hordes::GremlinReport
 // ---------------------------------------------------------------------------
 
 void Hordes::GremlinReport (void)
@@ -2132,7 +2132,7 @@ void Hordes::GremlinReport (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Hordes::GetAppList
+//		â€¢ Hordes::GetAppList
 // ---------------------------------------------------------------------------
 // Return the of applications that can be run under this Gremlin.
 
@@ -2180,7 +2180,7 @@ DatabaseInfoList Hordes::GetAppList (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ Hordes::TranslateErrorCode
+//		â€¢ Hordes::TranslateErrorCode
 // ---------------------------------------------------------------------------
 
 string Hordes::TranslateErrorCode (UInt32 errCode)

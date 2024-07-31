@@ -94,7 +94,7 @@ void LogShutdown (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ CLASS LogStream
+//		â€¢ CLASS LogStream
 // ---------------------------------------------------------------------------
 
 const int32		kFindUniqueFile			= -1;
@@ -1023,7 +1023,7 @@ void LogStreamInner::TrimLeading (void)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ StubEmFrmGetTitle
+//		â€¢ StubEmFrmGetTitle
 // ---------------------------------------------------------------------------
 // Returns a pointer to the title string of a form.  Copied from Form.c.
 
@@ -1043,7 +1043,7 @@ static string StubEmFrmGetTitle (const FormPtr frm)
 
 
 // ---------------------------------------------------------------------------
-//		¥ StubEmPrintFormID
+//		â€¢ StubEmPrintFormID
 // ---------------------------------------------------------------------------
 // Displays the form resource id associated with the window passed.
 
@@ -1114,7 +1114,7 @@ static const char* StubEmKeyDescription (Int16 key)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvGetEventText
+//		â€¢ PrvGetEventText
 // ---------------------------------------------------------------------------
 // Displays the passed event in the emulator's event tracewindow if it is
 // active.
@@ -1398,7 +1398,7 @@ static Bool PrvGetEventText(const EventType* eventP, char* eventText)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ LogEvtAddEventToQueue
+//		â€¢ LogEvtAddEventToQueue
 // ---------------------------------------------------------------------------
 
 void LogEvtAddEventToQueue (const EventType& event)
@@ -1417,7 +1417,7 @@ void LogEvtAddEventToQueue (const EventType& event)
 
 
 // ---------------------------------------------------------------------------
-//		¥ LogEvtAddUniqueEventToQueue
+//		â€¢ LogEvtAddUniqueEventToQueue
 // ---------------------------------------------------------------------------
 
 void LogEvtAddUniqueEventToQueue (const EventType& event, UInt32, Boolean)
@@ -1436,7 +1436,7 @@ void LogEvtAddUniqueEventToQueue (const EventType& event, UInt32, Boolean)
 
 
 // ---------------------------------------------------------------------------
-//		¥ LogEvtEnqueueKey
+//		â€¢ LogEvtEnqueueKey
 // ---------------------------------------------------------------------------
 
 void LogEvtEnqueueKey (UInt16 ascii, UInt16 keycode, UInt16 modifiers)
@@ -1458,7 +1458,7 @@ void LogEvtEnqueueKey (UInt16 ascii, UInt16 keycode, UInt16 modifiers)
 
 
 // ---------------------------------------------------------------------------
-//		¥ LogEvtEnqueuePenPoint
+//		â€¢ LogEvtEnqueuePenPoint
 // ---------------------------------------------------------------------------
 
 void LogEvtEnqueuePenPoint (const PointType& pt)
@@ -1471,7 +1471,7 @@ void LogEvtEnqueuePenPoint (const PointType& pt)
 
 
 // ---------------------------------------------------------------------------
-//		¥ LogEvtGetEvent
+//		â€¢ LogEvtGetEvent
 // ---------------------------------------------------------------------------
 
 void LogEvtGetEvent (const EventType& event, Int32 timeout)
@@ -1492,7 +1492,7 @@ void LogEvtGetEvent (const EventType& event, Int32 timeout)
 
 
 // ---------------------------------------------------------------------------
-//		¥ LogEvtGetPen
+//		â€¢ LogEvtGetPen
 // ---------------------------------------------------------------------------
 
 void LogEvtGetPen (Int16 screenX, Int16 screenY, Boolean penDown)
@@ -1529,7 +1529,7 @@ void LogEvtGetPen (Int16 screenX, Int16 screenY, Boolean penDown)
 
 
 // ---------------------------------------------------------------------------
-//		¥ LogEvtGetSysEvent
+//		â€¢ LogEvtGetSysEvent
 // ---------------------------------------------------------------------------
 
 void LogEvtGetSysEvent (const EventType& event, Int32 timeout)

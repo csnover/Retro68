@@ -252,21 +252,21 @@ static const EmSector _8MBRootDir =
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmGeneric8MB::EmGeneric8MB
+//		â€¢ EmGeneric8MB::EmGeneric8MB
 // ---------------------------------------------------------------------------
 EmGeneric8MB::EmGeneric8MB(void)
 {
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmGeneric8MB::~EmGeneric8MB
+//		â€¢ EmGeneric8MB::~EmGeneric8MB
 // ---------------------------------------------------------------------------
 EmGeneric8MB::~EmGeneric8MB(void)
 {
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmGeneric8MB::GetTuple
+//		â€¢ EmGeneric8MB::GetTuple
 // ---------------------------------------------------------------------------
 EmSector * EmGeneric8MB::GetTuple(void)
 {
@@ -284,7 +284,7 @@ uint8 * EmGeneric8MB::GetSD_CID(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmGeneric8MB::GetDriveID
+//		â€¢ EmGeneric8MB::GetDriveID
 // ---------------------------------------------------------------------------
 EmSector * EmGeneric8MB::GetDriveID(void)
 {
@@ -294,7 +294,7 @@ EmSector * EmGeneric8MB::GetDriveID(void)
 #define	_8MB_NUM_SECTORS		16384
 
 // ---------------------------------------------------------------------------
-//		¥ EmGeneric8MB::GetNumSectors
+//		â€¢ EmGeneric8MB::GetNumSectors
 // ---------------------------------------------------------------------------
 uint32 EmGeneric8MB::GetNumSectors(void)
 {
@@ -302,7 +302,7 @@ uint32 EmGeneric8MB::GetNumSectors(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmGeneric8MB::GetSector
+//		â€¢ EmGeneric8MB::GetSector
 // ---------------------------------------------------------------------------
 EmSector * EmGeneric8MB::GetSector(LogicalBlockAddr lba)
 {
@@ -354,7 +354,7 @@ static const EmSector DummySector =
 }};
 
 // ---------------------------------------------------------------------------
-//		¥ EmDiskType::EmDiskType
+//		â€¢ EmDiskType::EmDiskType
 // ---------------------------------------------------------------------------
 EmDiskType::EmDiskType(void)
 {
@@ -362,14 +362,14 @@ EmDiskType::EmDiskType(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmDiskType::~EmDiskType
+//		â€¢ EmDiskType::~EmDiskType
 // ---------------------------------------------------------------------------
 EmDiskType::~EmDiskType(void)
 {
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmDiskType::GetTuple
+//		â€¢ EmDiskType::GetTuple
 // ---------------------------------------------------------------------------
 EmSector * EmDiskType::GetTuple(void)
 {
@@ -387,7 +387,7 @@ uint8 * EmDiskType::GetSD_CID(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmDiskType::GetDriveID
+//		â€¢ EmDiskType::GetDriveID
 // ---------------------------------------------------------------------------
 EmSector * EmDiskType::GetDriveID(void)
 {
@@ -395,7 +395,7 @@ EmSector * EmDiskType::GetDriveID(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmDiskType::GetEmptySector
+//		â€¢ EmDiskType::GetEmptySector
 // ---------------------------------------------------------------------------
 EmSector * EmDiskType::GetEmptySector(void)
 {
@@ -403,14 +403,14 @@ EmSector * EmDiskType::GetEmptySector(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmCurrDiskType::EmCurrDiskType
+//		â€¢ EmCurrDiskType::EmCurrDiskType
 // ---------------------------------------------------------------------------
 EmCurrDiskType::EmCurrDiskType (void)
 {
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmCurrDiskType::~EmCurrDiskType
+//		â€¢ EmCurrDiskType::~EmCurrDiskType
 // ---------------------------------------------------------------------------
 EmCurrDiskType::~EmCurrDiskType(void)
 {
@@ -418,7 +418,7 @@ EmCurrDiskType::~EmCurrDiskType(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCurrDiskType::GetTuple
+//		â€¢ EmCurrDiskType::GetTuple
 // ---------------------------------------------------------------------------
 void EmCurrDiskType::GetTuple(EmDiskTypeID ID,
                               EmSector *   s)
@@ -462,7 +462,7 @@ uint8 *EmCurrDiskType::GetSD_CID(EmDiskTypeID ID)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCurrDiskType::GetDriveID
+//		â€¢ EmCurrDiskType::GetDriveID
 // ---------------------------------------------------------------------------
 void EmCurrDiskType::GetDriveID(EmDiskTypeID ID,
                                 EmSector *   s)
@@ -479,7 +479,7 @@ void EmCurrDiskType::GetDriveID(EmDiskTypeID ID,
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmCurrDiskType::GetNumSectors
+//		â€¢ EmCurrDiskType::GetNumSectors
 // ---------------------------------------------------------------------------
 uint32 EmCurrDiskType::GetNumSectors(EmDiskTypeID ID)
 {
@@ -493,7 +493,7 @@ uint32 EmCurrDiskType::GetNumSectors(EmDiskTypeID ID)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmCurrDiskType::GetSector
+//		â€¢ EmCurrDiskType::GetSector
 // ---------------------------------------------------------------------------
 void EmCurrDiskType::GetSector(EmDiskTypeID     ID,
                                LogicalBlockAddr lba,

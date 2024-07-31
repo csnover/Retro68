@@ -210,7 +210,7 @@ ARMul_OSException (ARMul_State * state, ARMword vector, ARMword pc)
 EmCPUARM*	gCPUARM;
 
 // ---------------------------------------------------------------------------
-//		¥ EmCPUARM::EmCPUARM
+//		â€¢ EmCPUARM::EmCPUARM
 // ---------------------------------------------------------------------------
 
 EmCPUARM::EmCPUARM (EmSession* session) :
@@ -224,7 +224,7 @@ EmCPUARM::EmCPUARM (EmSession* session) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCPUARM::~EmCPUARM
+//		â€¢ EmCPUARM::~EmCPUARM
 // ---------------------------------------------------------------------------
 
 EmCPUARM::~EmCPUARM (void)
@@ -239,7 +239,7 @@ EmCPUARM::~EmCPUARM (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCPUARM::Reset
+//		â€¢ EmCPUARM::Reset
 // ---------------------------------------------------------------------------
 
 void EmCPUARM::Reset (Bool hardwareReset)
@@ -252,7 +252,7 @@ void EmCPUARM::Reset (Bool hardwareReset)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCPUARM::Save
+//		â€¢ EmCPUARM::Save
 // ---------------------------------------------------------------------------
 
 void EmCPUARM::Save (SessionFile&)
@@ -261,7 +261,7 @@ void EmCPUARM::Save (SessionFile&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCPUARM::Load
+//		â€¢ EmCPUARM::Load
 // ---------------------------------------------------------------------------
 
 void EmCPUARM::Load (SessionFile&)
@@ -270,7 +270,7 @@ void EmCPUARM::Load (SessionFile&)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCPUARM::Execute
+//		â€¢ EmCPUARM::Execute
 // ---------------------------------------------------------------------------
 
 void EmCPUARM::Execute (void)
@@ -283,7 +283,7 @@ void EmCPUARM::Execute (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCPUARM::CheckAfterCycle
+//		â€¢ EmCPUARM::CheckAfterCycle
 // ---------------------------------------------------------------------------
 
 void EmCPUARM::CheckAfterCycle (void)
@@ -295,7 +295,7 @@ void EmCPUARM::CheckAfterCycle (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCPUARM::GetPC
+//		â€¢ EmCPUARM::GetPC
 // ---------------------------------------------------------------------------
 
 emuptr EmCPUARM::GetPC (void)
@@ -305,7 +305,7 @@ emuptr EmCPUARM::GetPC (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCPUARM::GetSP
+//		â€¢ EmCPUARM::GetSP
 // ---------------------------------------------------------------------------
 
 emuptr EmCPUARM::GetSP (void)
@@ -315,7 +315,7 @@ emuptr EmCPUARM::GetSP (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCPUARM::GetRegister
+//		â€¢ EmCPUARM::GetRegister
 // ---------------------------------------------------------------------------
 
 uint32 EmCPUARM::GetRegister (int /*index*/)
@@ -325,7 +325,7 @@ uint32 EmCPUARM::GetRegister (int /*index*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCPUARM::SetPC
+//		â€¢ EmCPUARM::SetPC
 // ---------------------------------------------------------------------------
 
 void EmCPUARM::SetPC (emuptr /*newPC*/)
@@ -334,7 +334,7 @@ void EmCPUARM::SetPC (emuptr /*newPC*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCPUARM::SetSP
+//		â€¢ EmCPUARM::SetSP
 // ---------------------------------------------------------------------------
 
 void EmCPUARM::SetSP (emuptr /*newPC*/)
@@ -343,7 +343,7 @@ void EmCPUARM::SetSP (emuptr /*newPC*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCPUARM::SetRegister
+//		â€¢ EmCPUARM::SetRegister
 // ---------------------------------------------------------------------------
 
 void EmCPUARM::SetRegister (int /*index*/, uint32 /*val*/)
@@ -352,7 +352,7 @@ void EmCPUARM::SetRegister (int /*index*/, uint32 /*val*/)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCPUARM::Stopped
+//		â€¢ EmCPUARM::Stopped
 // ---------------------------------------------------------------------------
 // Return whether or not the CPU itself is halted.  This is seperate from
 // whether or not the session (that is, the thread emulating the CPU) is
@@ -365,7 +365,7 @@ Bool EmCPUARM::Stopped (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmCPUARM::DoReset
+//		â€¢ EmCPUARM::DoReset
 // ---------------------------------------------------------------------------
 
 void EmCPUARM::DoReset (Bool /*cold*/)

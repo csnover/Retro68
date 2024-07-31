@@ -425,7 +425,7 @@ ROMMapRecord*	gROMMap = NULL;
 int				gROMMapEnd = 0;
 
 
-// ¥¥¥ÊDOLATER ¥¥¥
+// â€¢â€¢â€¢Â DOLATER â€¢â€¢â€¢
 // We need to handle shared library routines, which are called by
 // trap dispatcher.  They start at 0x0000A800
 
@@ -470,7 +470,7 @@ uint32 inline PrvGetCyclesPerMillisecond (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ GetRoutineName
+//		â€¢ GetRoutineName
 // ---------------------------------------------------------------------------
 // GetRoutineName turns an address (or interrupt number or trap number) into a
 // string representation for that function. It attempts to use the ROM.map
@@ -540,7 +540,7 @@ static char * GetRoutineName (emuptr addr)
 	if (gROMMap != NULL)
 	{
 		int i = 0;
-		// ¥¥¥ÊDOLATER ¥¥¥  use binary search, since gROMMap is sorted by address
+		// â€¢â€¢â€¢Â DOLATER â€¢â€¢â€¢  use binary search, since gROMMap is sorted by address
 		while (i < gROMMapEnd && addr > gROMMap[i].address)
 			i++;
 		if (i < gROMMapEnd && addr == gROMMap[i].address)
@@ -596,7 +596,7 @@ int		gStringTableCapacity;
 
 
 // ---------------------------------------------------------------------------
-//		¥ InitStringTable
+//		â€¢ InitStringTable
 // ---------------------------------------------------------------------------
 // Allocate the string table
 
@@ -613,7 +613,7 @@ static void InitStringTable (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ CleanupStringTable
+//		â€¢ CleanupStringTable
 // ---------------------------------------------------------------------------
 
 static void CleanupStringTable (void)
@@ -623,7 +623,7 @@ static void CleanupStringTable (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ FindOrAddString
+//		â€¢ FindOrAddString
 // ---------------------------------------------------------------------------
 
 static int FindOrAddString (const char* newS)
@@ -661,7 +661,7 @@ static int FindOrAddString (const char* newS)
 
 
 // ---------------------------------------------------------------------------
-//		¥ LinearAddressToStrings
+//		â€¢ LinearAddressToStrings
 // ---------------------------------------------------------------------------
 
 // Llamagraphics, Inc:  This routine used to be recursive, but we rewrote
@@ -684,7 +684,7 @@ static void LinearAddressToStrings (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ CheckTree
+//		â€¢ CheckTree
 // ---------------------------------------------------------------------------
 
 #if 0
@@ -783,7 +783,7 @@ static void CheckTree (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ RecursivePrintBlock
+//		â€¢ RecursivePrintBlock
 // ---------------------------------------------------------------------------
 
 static void RecursivePrintBlock(FILE* resultsLog, int i, int depth, int parent)
@@ -848,7 +848,7 @@ static void RecursivePrintBlock(FILE* resultsLog, int i, int depth, int parent)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrintBlock
+//		â€¢ PrintBlock
 // ---------------------------------------------------------------------------
 
 static void PrintBlock(FILE *resultsLog, int i)
@@ -858,7 +858,7 @@ static void PrintBlock(FILE *resultsLog, int i)
 
 
 // ---------------------------------------------------------------------------
-//		¥ RecursiveSortKids
+//		â€¢ RecursiveSortKids
 // ---------------------------------------------------------------------------
 
 static void RecursiveSortKids(int parent)
@@ -926,7 +926,7 @@ static void RecursiveSortKids(int parent)
 //---------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------
-//		¥ PopCallStackFn
+//		â€¢ PopCallStackFn
 // ---------------------------------------------------------------------------
 // PopCallStackFn is used when a function or interrupt is being exited from.
 // It updates the nodes in the tree to properly track call counts and time
@@ -980,7 +980,7 @@ static int64 PopCallStackFn(Boolean normalReturn)
 
 
 // ---------------------------------------------------------------------------
-//		¥ FindOrAddCall
+//		â€¢ FindOrAddCall
 // ---------------------------------------------------------------------------
 // FindOrAddCall is used when a function or interrupt is being entered. It
 // looks to see if the function has prevously been called from the current
@@ -1076,7 +1076,7 @@ Bool ProfileCanDump (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ ProfileInit
+//		â€¢ ProfileInit
 // ---------------------------------------------------------------------------
 // ProfileInit allocates the stack and tree with the passed sizes, and
 // initializes a bunch of other data structures.
@@ -1133,13 +1133,13 @@ void ProfileInit(int maxCalls, int maxDepth)
 
 	gProfilingDetailLog = NULL;
 
-	// ¥¥¥ for testing
+	// â€¢â€¢â€¢ for testing
 	// ProfileDetailFn(0x10CA68A0, true);
 }
 
 
 // ---------------------------------------------------------------------------
-//		¥ ProfileCleanup
+//		â€¢ ProfileCleanup
 // ---------------------------------------------------------------------------
 // ProfileCleanup frees the data structures allocated in ProfileInit.
 
@@ -1158,7 +1158,7 @@ void ProfileCleanup()
 
 
 // ---------------------------------------------------------------------------
-//		¥ ProfileStart
+//		â€¢ ProfileStart
 // ---------------------------------------------------------------------------
 // ProfileStart turns on the profiling flags. Currently it assumes that it is
 // not called from within an interrupt, often is not the case. When invoked
@@ -1185,7 +1185,7 @@ void ProfileStart()
 
 
 // ---------------------------------------------------------------------------
-//		¥ ProfileStop
+//		â€¢ ProfileStop
 // ---------------------------------------------------------------------------
 // ProfileStop turns off collection of profiling data. If there are functions
 // currently on the profiling stack, they are popped.
@@ -1208,7 +1208,7 @@ void ProfileStop()
 
 
 // ---------------------------------------------------------------------------
-//		¥ ProfilePrint
+//		â€¢ ProfilePrint
 // ---------------------------------------------------------------------------
 
 void ProfilePrint(const char* fileName)
@@ -1269,7 +1269,7 @@ void ProfilePrint(const char* fileName)
 
 
 // ---------------------------------------------------------------------------
-//		¥ ScanROMMapFile
+//		â€¢ ScanROMMapFile
 // ---------------------------------------------------------------------------
 // Process the next line of text from the ROM map file, and return true
 // if we found a valid name/address pair.
@@ -1305,7 +1305,7 @@ static Boolean ScanROMMapFile(FILE* iROMMapFile, char* oRoutineName, emuptr* oAd
 
 
 // ---------------------------------------------------------------------------
-//		¥ ProfileDump
+//		â€¢ ProfileDump
 // ---------------------------------------------------------------------------
 // ProfileDump reads in the ROM.map file, turns all the addresses in the call
 // tree into real function names, generating the string table in the process,
@@ -1565,7 +1565,7 @@ void ProfileDump (const char* fileName)
 #pragma mark -
 
 // ---------------------------------------------------------------------------
-//		¥ ProfileFnEnter
+//		â€¢ ProfileFnEnter
 // ---------------------------------------------------------------------------
 // ProfileFnEnter is called by the emulator when a JSR is executed, and at a
 // couple of other places. It creates a record for the function (or reuses an
@@ -1667,7 +1667,7 @@ void ProfileFnEnter(emuptr destAddress, emuptr returnAddress)
 
 
 // ---------------------------------------------------------------------------
-//		¥ ProfileFnExit
+//		â€¢ ProfileFnExit
 // ---------------------------------------------------------------------------
 // ProfileFnExit is called by the emulator when an RTS is executed The Palm OS
 // does some funny things such that there is not always an RTS for every JSR.
@@ -1759,7 +1759,7 @@ void ProfileFnExit(emuptr returnAddress, emuptr oldAddress)
 
 
 // ---------------------------------------------------------------------------
-//		¥ ProfileInterruptEnter
+//		â€¢ ProfileInterruptEnter
 // ---------------------------------------------------------------------------
 // ProfileInterruptEnter does almost the same thing as ProfileFnEnter. The
 // difference is that the current call is added to the "interrupt" root rather
@@ -1797,7 +1797,7 @@ void ProfileInterruptEnter(int32 iException, emuptr returnAddress)
 
 
 // ---------------------------------------------------------------------------
-//		¥ ProfileInterruptExit
+//		â€¢ ProfileInterruptExit
 // ---------------------------------------------------------------------------
 // ProfileInterruptExit works much like ProfileFnExit, the calls stack's
 // record for the interrupt "function" is popped. Unlike with RTS, RTE is

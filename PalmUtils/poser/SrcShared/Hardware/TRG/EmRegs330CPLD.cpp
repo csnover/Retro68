@@ -30,7 +30,7 @@
  ****************************************************************************/
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs330CPLD::EmRegs330CPLD
+//		â€¢ EmRegs330CPLD::EmRegs330CPLD
 // ---------------------------------------------------------------------------
 EmRegs330CPLD::EmRegs330CPLD (HandEra330PortManager * fPortManager)
 {
@@ -65,7 +65,7 @@ EmRegs330CPLD::EmRegs330CPLD (HandEra330PortManager * fPortManager)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs330CPLD::~EmRegs330CPLD
+//		â€¢ EmRegs330CPLD::~EmRegs330CPLD
 // ---------------------------------------------------------------------------
 
 EmRegs330CPLD::~EmRegs330CPLD (void)
@@ -90,7 +90,7 @@ void EmRegs330CPLD::Reset(Bool /*hardwareReset*/)
 }
 
 // -------------------------------------------------------------------------
-//		¥ EmRegs330CPLD::SetSubBankHandlers
+//		â€¢ EmRegs330CPLD::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 void EmRegs330CPLD::SetSubBankHandlers (void)
 {
@@ -105,7 +105,7 @@ void EmRegs330CPLD::SetSubBankHandlers (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs330CPLD::GetRealAddress
+//		â€¢ EmRegs330CPLD::GetRealAddress
 // ---------------------------------------------------------------------------
 uint8 * EmRegs330CPLD::GetRealAddress (emuptr address)
 {
@@ -113,7 +113,7 @@ uint8 * EmRegs330CPLD::GetRealAddress (emuptr address)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs330CPLD::GetWord
+//		â€¢ EmRegs330CPLD::GetWord
 // ---------------------------------------------------------------------------
 uint32 EmRegs330CPLD::GetWord (emuptr address)
 {
@@ -149,7 +149,7 @@ uint32 EmRegs330CPLD::GetWord (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs330CPLD::SetWord
+//		â€¢ EmRegs330CPLD::SetWord
 // ---------------------------------------------------------------------------
 void EmRegs330CPLD::SetWord (emuptr address, uint32 val)
 {
@@ -215,7 +215,7 @@ void EmRegs330CPLD::SetWord (emuptr address, uint32 val)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs330CPLD::GetAddressStart
+//		â€¢ EmRegs330CPLD::GetAddressStart
 // ---------------------------------------------------------------------------
 emuptr EmRegs330CPLD::GetAddressStart (void)
 {
@@ -223,7 +223,7 @@ emuptr EmRegs330CPLD::GetAddressStart (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs330CPLD::GetAddressRange
+//		â€¢ EmRegs330CPLD::GetAddressRange
 // ---------------------------------------------------------------------------
 uint32 EmRegs330CPLD::GetAddressRange (void)
 {
@@ -231,7 +231,7 @@ uint32 EmRegs330CPLD::GetAddressRange (void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs330CPLD::Read
+//		â€¢ EmRegs330CPLD::Read
 // ---------------------------------------------------------------------------
 uint32 EmRegs330CPLD::Read(emuptr address, int size)
 {
@@ -246,7 +246,7 @@ uint32 EmRegs330CPLD::Read(emuptr address, int size)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegs330CPLD::Write
+//		â€¢ EmRegs330CPLD::Write
 // ---------------------------------------------------------------------------
 void EmRegs330CPLD::Write(emuptr address, int size, uint32 val)
 {

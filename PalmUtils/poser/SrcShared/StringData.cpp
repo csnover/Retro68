@@ -15,7 +15,7 @@
 #include "StringData.h"
 
 // ---------------------------------------------------------------------------
-//		¥ Names of exception types
+//		â€¢ Names of exception types
 // ---------------------------------------------------------------------------
 
 const char* kExceptionNames [] =
@@ -93,7 +93,7 @@ const char* kExceptionNames [] =
 
 
 // ---------------------------------------------------------------------------
-//		¥ Names of system packets
+//		â€¢ Names of system packets
 // ---------------------------------------------------------------------------
 
 const char* kPacketNames [256] =
@@ -183,7 +183,7 @@ const char* kPacketNames [256] =
 
 
 // ---------------------------------------------------------------------------
-//		¥ VirtualKeyDescriptions
+//		â€¢ VirtualKeyDescriptions
 // ---------------------------------------------------------------------------
 // Return a key description
 

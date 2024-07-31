@@ -259,7 +259,7 @@ void EmBankRegs::SetBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankRegs::GetLong
+//		â€¢ EmBankRegs::GetLong
 // ---------------------------------------------------------------------------
 
 uint32 EmBankRegs::GetLong (emuptr address)
@@ -302,7 +302,7 @@ uint32 EmBankRegs::GetLong (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankRegs::GetWord
+//		â€¢ EmBankRegs::GetWord
 // ---------------------------------------------------------------------------
 
 uint32 EmBankRegs::GetWord (emuptr address)
@@ -345,7 +345,7 @@ uint32 EmBankRegs::GetWord (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankRegs::GetByte
+//		â€¢ EmBankRegs::GetByte
 // ---------------------------------------------------------------------------
 
 uint32 EmBankRegs::GetByte (emuptr address)
@@ -381,7 +381,7 @@ uint32 EmBankRegs::GetByte (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankRegs::SetLong
+//		â€¢ EmBankRegs::SetLong
 // ---------------------------------------------------------------------------
 
 void EmBankRegs::SetLong (emuptr address, uint32 value)
@@ -436,7 +436,7 @@ void EmBankRegs::SetLong (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankRegs::SetWord
+//		â€¢ EmBankRegs::SetWord
 // ---------------------------------------------------------------------------
 
 void EmBankRegs::SetWord (emuptr address, uint32 value)
@@ -485,7 +485,7 @@ void EmBankRegs::SetWord (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankRegs::SetByte
+//		â€¢ EmBankRegs::SetByte
 // ---------------------------------------------------------------------------
 
 void EmBankRegs::SetByte (emuptr address, uint32 value)
@@ -527,7 +527,7 @@ void EmBankRegs::SetByte (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankRegs::ValidAddress
+//		â€¢ EmBankRegs::ValidAddress
 // ---------------------------------------------------------------------------
 
 int EmBankRegs::ValidAddress (emuptr address, uint32 size)
@@ -544,7 +544,7 @@ int EmBankRegs::ValidAddress (emuptr address, uint32 size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankRegs::GetRealAddress
+//		â€¢ EmBankRegs::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmBankRegs::GetRealAddress (emuptr address)
@@ -561,7 +561,7 @@ uint8* EmBankRegs::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankRegs::AddSubBank
+//		â€¢ EmBankRegs::AddSubBank
 // ---------------------------------------------------------------------------
 
 void EmBankRegs::AddSubBank (EmRegs* bank)
@@ -572,7 +572,7 @@ void EmBankRegs::AddSubBank (EmRegs* bank)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankRegs::EnableSubBank
+//		â€¢ EmBankRegs::EnableSubBank
 // ---------------------------------------------------------------------------
 
 void EmBankRegs::EnableSubBank (emuptr address)
@@ -582,7 +582,7 @@ void EmBankRegs::EnableSubBank (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankRegs::DisableSubBank
+//		â€¢ EmBankRegs::DisableSubBank
 // ---------------------------------------------------------------------------
 
 void EmBankRegs::DisableSubBank (emuptr address)
@@ -592,7 +592,7 @@ void EmBankRegs::DisableSubBank (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankRegs::GetSubBank
+//		â€¢ EmBankRegs::GetSubBank
 // ---------------------------------------------------------------------------
 
 EmRegs* EmBankRegs::GetSubBank (emuptr address, int32 size)
@@ -638,7 +638,7 @@ EmRegs* EmBankRegs::GetSubBank (emuptr address, int32 size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankRegs::AddressError
+//		â€¢ EmBankRegs::AddressError
 // ---------------------------------------------------------------------------
 
 void EmBankRegs::AddressError (emuptr address, int32 size, Bool forRead)
@@ -649,7 +649,7 @@ void EmBankRegs::AddressError (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankRegs::InvalidAccess
+//		â€¢ EmBankRegs::InvalidAccess
 // ---------------------------------------------------------------------------
 
 void EmBankRegs::InvalidAccess (emuptr address, int32 size, Bool forRead)
@@ -660,7 +660,7 @@ void EmBankRegs::InvalidAccess (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankRegs::PreventedAccess
+//		â€¢ EmBankRegs::PreventedAccess
 // ---------------------------------------------------------------------------
 
 void EmBankRegs::PreventedAccess (emuptr address, int32 size, Bool forRead)
@@ -671,7 +671,7 @@ void EmBankRegs::PreventedAccess (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		¥ PrvSwitchBanks
+//		â€¢ PrvSwitchBanks
 // ---------------------------------------------------------------------------
 
 void PrvSwitchBanks (EmRegsList& fromList, EmRegsList& toList, emuptr address)

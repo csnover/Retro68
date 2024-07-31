@@ -44,7 +44,7 @@ const uint16	kButtonMap[kNumButtonRows][kNumButtonCols] =
 };
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZTRGpro::EmRegsEZTRGpro
+//		â€¢ EmRegsEZTRGpro::EmRegsEZTRGpro
 // ---------------------------------------------------------------------------
 
 EmRegsEZTRGpro::EmRegsEZTRGpro (CFBusManager ** fBusMgr) :
@@ -56,7 +56,7 @@ EmRegsEZTRGpro::EmRegsEZTRGpro (CFBusManager ** fBusMgr) :
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZTRGpro::~EmRegsEZTRGpro
+//		â€¢ EmRegsEZTRGpro::~EmRegsEZTRGpro
 // ---------------------------------------------------------------------------
 
 EmRegsEZTRGpro::~EmRegsEZTRGpro (void)
@@ -66,7 +66,7 @@ EmRegsEZTRGpro::~EmRegsEZTRGpro (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZTRGpro::Initialize
+//		â€¢ EmRegsEZTRGpro::Initialize
 // ---------------------------------------------------------------------------
 
 void EmRegsEZTRGpro::Initialize(void)
@@ -79,7 +79,7 @@ void EmRegsEZTRGpro::Initialize(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZTRGpro::GetLCDScreenOn
+//		â€¢ EmRegsEZTRGpro::GetLCDScreenOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsEZTRGpro::GetLCDScreenOn (void)
@@ -89,7 +89,7 @@ Bool EmRegsEZTRGpro::GetLCDScreenOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZTRGpro::GetLCDBacklightOn
+//		â€¢ EmRegsEZTRGpro::GetLCDBacklightOn
 // ---------------------------------------------------------------------------
 
 Bool EmRegsEZTRGpro::GetLCDBacklightOn (void)
@@ -99,7 +99,7 @@ Bool EmRegsEZTRGpro::GetLCDBacklightOn (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZTRGpro::GetLineDriverState
+//		â€¢ EmRegsEZTRGpro::GetLineDriverState
 // ---------------------------------------------------------------------------
 // Return whether or not the line drivers for the given object are open or
 // closed.
@@ -117,7 +117,7 @@ Bool EmRegsEZTRGpro::GetLineDriverState (EmUARTDeviceType type)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZTRGpro::GetPortInputValue
+//		â€¢ EmRegsEZTRGpro::GetPortInputValue
 // ---------------------------------------------------------------------------
 // Return the GPIO values for the pins on the port.  These values are used
 // if the select pins are high.
@@ -131,7 +131,7 @@ uint8 EmRegsEZTRGpro::GetPortInputValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZTRGpro::GetPortInternalValue
+//		â€¢ EmRegsEZTRGpro::GetPortInternalValue
 // ---------------------------------------------------------------------------
 // Return the dedicated values for the pins on the port.  These values are
 // used if the select pins are low.
@@ -153,7 +153,7 @@ uint8 EmRegsEZTRGpro::GetPortInternalValue (int port)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZTRGpro::GetKeyInfo
+//		â€¢ EmRegsEZTRGpro::GetKeyInfo
 // ---------------------------------------------------------------------------
 
 void EmRegsEZTRGpro::GetKeyInfo (int* numRows, int* numCols,
@@ -190,7 +190,7 @@ void EmRegsEZTRGpro::LatchSpi(void)
 }
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZTRGpro::GetKeyInfo
+//		â€¢ EmRegsEZTRGpro::GetKeyInfo
 // ---------------------------------------------------------------------------
 
 void EmRegsEZTRGpro::PortDataChanged (int port, uint8 oldValue, uint8 newValue)
@@ -210,7 +210,7 @@ void EmRegsEZTRGpro::PortDataChanged (int port, uint8 oldValue, uint8 newValue)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZTRGpro::spiWrite
+//		â€¢ EmRegsEZTRGpro::spiWrite
 //
 // We need to share SPI writes with the touchscreen ...
 // ---------------------------------------------------------------------------
@@ -223,7 +223,7 @@ void EmRegsEZTRGpro::spiWrite(emuptr address, int size, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZTRGpro::SetSubBankHandlers
+//		â€¢ EmRegsEZTRGpro::SetSubBankHandlers
 // ---------------------------------------------------------------------------
 
 void EmRegsEZTRGpro::SetSubBankHandlers(void)
@@ -237,7 +237,7 @@ void EmRegsEZTRGpro::SetSubBankHandlers(void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmRegsEZTRGpro::GetSPISlave
+//		â€¢ EmRegsEZTRGpro::GetSPISlave
 // ---------------------------------------------------------------------------
 
 EmSPISlave* EmRegsEZTRGpro::GetSPISlave (void)

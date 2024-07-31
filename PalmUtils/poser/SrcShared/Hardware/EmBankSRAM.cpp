@@ -27,7 +27,7 @@
 
 
 // ===========================================================================
-//		¥ SRAM Bank Accessors
+//		â€¢ SRAM Bank Accessors
 // ===========================================================================
 // These functions provide fetch and store access to the emulator's random
 // access memory.
@@ -288,7 +288,7 @@ void EmBankSRAM::SetBankHandlers (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankSRAM::GetLong
+//		â€¢ EmBankSRAM::GetLong
 // ---------------------------------------------------------------------------
 
 uint32 EmBankSRAM::GetLong (emuptr address)
@@ -331,7 +331,7 @@ uint32 EmBankSRAM::GetLong (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankSRAM::GetWord
+//		â€¢ EmBankSRAM::GetWord
 // ---------------------------------------------------------------------------
 
 uint32 EmBankSRAM::GetWord (emuptr address)
@@ -372,7 +372,7 @@ uint32 EmBankSRAM::GetWord (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankSRAM::GetByte
+//		â€¢ EmBankSRAM::GetByte
 // ---------------------------------------------------------------------------
 
 uint32 EmBankSRAM::GetByte (emuptr address)
@@ -406,7 +406,7 @@ uint32 EmBankSRAM::GetByte (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankSRAM::SetLong
+//		â€¢ EmBankSRAM::SetLong
 // ---------------------------------------------------------------------------
 
 void EmBankSRAM::SetLong (emuptr address, uint32 value)
@@ -459,7 +459,7 @@ void EmBankSRAM::SetLong (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankSRAM::SetWord
+//		â€¢ EmBankSRAM::SetWord
 // ---------------------------------------------------------------------------
 
 void EmBankSRAM::SetWord (emuptr address, uint32 value)
@@ -510,7 +510,7 @@ void EmBankSRAM::SetWord (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankSRAM::SetByte
+//		â€¢ EmBankSRAM::SetByte
 // ---------------------------------------------------------------------------
 
 void EmBankSRAM::SetByte (emuptr address, uint32 value)
@@ -554,7 +554,7 @@ void EmBankSRAM::SetByte (emuptr address, uint32 value)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankSRAM::ValidAddress
+//		â€¢ EmBankSRAM::ValidAddress
 // ---------------------------------------------------------------------------
 
 int EmBankSRAM::ValidAddress (emuptr address, uint32 size)
@@ -567,7 +567,7 @@ int EmBankSRAM::ValidAddress (emuptr address, uint32 size)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankSRAM::GetRealAddress
+//		â€¢ EmBankSRAM::GetRealAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmBankSRAM::GetRealAddress (emuptr address)
@@ -581,7 +581,7 @@ uint8* EmBankSRAM::GetRealAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankSRAM::GetMetaAddress
+//		â€¢ EmBankSRAM::GetMetaAddress
 // ---------------------------------------------------------------------------
 
 uint8* EmBankSRAM::GetMetaAddress (emuptr address)
@@ -595,7 +595,7 @@ uint8* EmBankSRAM::GetMetaAddress (emuptr address)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankSRAM::AddOpcodeCycles
+//		â€¢ EmBankSRAM::AddOpcodeCycles
 // ---------------------------------------------------------------------------
 
 void EmBankSRAM::AddOpcodeCycles (void)
@@ -607,7 +607,7 @@ void EmBankSRAM::AddOpcodeCycles (void)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankSRAM::AddressError
+//		â€¢ EmBankSRAM::AddressError
 // ---------------------------------------------------------------------------
 
 void EmBankSRAM::AddressError (emuptr address, int32 size, Bool forRead)
@@ -618,7 +618,7 @@ void EmBankSRAM::AddressError (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankSRAM::InvalidAccess
+//		â€¢ EmBankSRAM::InvalidAccess
 // ---------------------------------------------------------------------------
 
 void EmBankSRAM::InvalidAccess (emuptr address, int32 size, Bool forRead)
@@ -629,7 +629,7 @@ void EmBankSRAM::InvalidAccess (emuptr address, int32 size, Bool forRead)
 
 
 // ---------------------------------------------------------------------------
-//		¥ EmBankSRAM::ProtectedAccess
+//		â€¢ EmBankSRAM::ProtectedAccess
 // ---------------------------------------------------------------------------
 
 void EmBankSRAM::ProtectedAccess (emuptr address, int32 size, Bool forRead)
