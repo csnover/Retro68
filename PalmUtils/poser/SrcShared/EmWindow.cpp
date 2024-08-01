@@ -36,7 +36,7 @@ EmWindow::EmWindow (void) :
 	fSkinBase (),
 	fSkinCurrent (),
 	fSkinColors (),
-	fSkinRegion (),
+	fSkinMask (),
 	fPrevLCDColors (),
 	fCurrentButton (kElement_None),
 	fNeedWindowReset (false),
@@ -181,12 +181,7 @@ void EmWindow::WindowReset (void)
 
 	// Create a one-bpp mask of the skin.
 
-	EmPixMap	mask;
-	fSkinBase.CreateMask (mask);
-
-	// Convert it to a region.
-
-	fSkinRegion = mask.CreateRegion ();
+	fSkinBase.CreateMask (fSkinMask);
 
 	// Clear our color caches.  They'll get filled again on demand.
 
@@ -1118,12 +1113,12 @@ const RGBList& EmWindow::GetCurrentSkinColors (Bool polite)
 
 
 // ---------------------------------------------------------------------------
-//		• EmWindow::GetCurrentSkinRegion
+//		• EmWindow::GetCurrentSkinMask
 // ---------------------------------------------------------------------------
 
-const EmRegion& EmWindow::GetCurrentSkinRegion (void)
+const EmPixMap& EmWindow::GetCurrentSkinMask (void)
 {
-	return fSkinRegion;
+	return fSkinMask;
 }
 
 

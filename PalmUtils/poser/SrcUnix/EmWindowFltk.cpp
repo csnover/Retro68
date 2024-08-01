@@ -211,6 +211,7 @@ EmWindowFltk::EmWindowFltk (void) :
 	EmWindow (),
 	fMessage (NULL),
 	fCachedSkin (NULL),
+	fCachedSkinMask (NULL),
 	fMessageStr (),
 	fIcon (),
 	fCachedIcon (NULL)
@@ -224,7 +225,7 @@ EmWindowFltk::EmWindowFltk (void) :
 	HostSetDefaultIcon();
 
 	this->box (FL_FLAT_BOX);
-	this->color (fl_gray_ramp (FL_NUM_GRAY - 1));
+	this->color (FL_WHITE);
 
 	// Install a function to get called when the window is closed
 	// via a WM_DELETE_WINDOW message.
@@ -541,11 +542,13 @@ void EmWindowFltk::CacheFlush (void)
 {
 	delete fCachedSkin;
 	fCachedSkin = NULL;
+	delete fCachedSkinMask;
+	fCachedSkinMask = NULL;
 }
 
 
 // ---------------------------------------------------------------------------
-//		• EmWindowFltk::CacheFlush
+//		• EmWindowFltk::GetSkin
 // ---------------------------------------------------------------------------
 
 Fl_Image* EmWindowFltk::GetSkin (void)
@@ -564,6 +567,48 @@ Fl_Image* EmWindowFltk::GetSkin (void)
 	return fCachedSkin;
 }
 
+// ---------------------------------------------------------------------------
+//		• EmWindowFltk::GetSkinMask
+// ---------------------------------------------------------------------------
+
+Fl_Image* EmWindowFltk::GetSkinMask (void)
+{
+	if (!fCachedSkinMask)
+	{
+		const EmPixMap& p = this->GetCurrentSkinMask ();
+		EmPoint size = p.GetSize ();
+
+		// FLTK requires LSB with 8-bit alignment (EmPixMap does MSB & 32-bit)
+
+		size_t rowBytes = (size.fX + 7) / 8;
+		size_t packedSize = size.fY * rowBytes;
+		uint8 *bitMap = new uint8 [packedSize];
+
+		const uint8 *src = static_cast<const uint8 *>(p.GetBits ());
+		uint8 *dst = bitMap;
+		for (EmCoord y = 0; y < size.fY; ++y)
+		{
+			const uint8 *row = src;
+			for (size_t x = 0; x < rowBytes; ++x)
+			{
+				static const uint8 kBitSwap[] =
+					{ 0, 8, 4, 12, 2, 10, 6, 14, 1, 9, 5, 13, 3, 11, 7, 15 };
+				uint8 c = *row++;
+				*dst++ = (kBitSwap[c & 0xF] << 4) | kBitSwap[c >> 4];
+			}
+			src += p.GetRowBytes ();
+		}
+
+		Fl_Bitmap *bmp = new Fl_Bitmap (bitMap, size.fX, size.fY);
+		bmp->alloc_array = 1;
+		fCachedSkinMask = bmp;
+	}
+
+	EmAssert (fCachedSkinMask);
+
+	return fCachedSkinMask;
+}
+
 #pragma mark -
 
 // ---------------------------------------------------------------------------
@@ -573,7 +618,7 @@ Fl_Image* EmWindowFltk::GetSkin (void)
 
 void EmWindowFltk::HostWindowReset (void)
 {
-	// Delete te old image.
+	// Delete the old image.
 
 	this->CacheFlush ();
 
@@ -581,23 +626,31 @@ void EmWindowFltk::HostWindowReset (void)
 
 	// Get the desired client size.
 
-	EmRect	newBounds = this->GetCurrentSkinRegion ().Bounds ();
-	EmCoord	w = newBounds.Width ();
-	EmCoord	h = newBounds.Height ();
+	Fl_Image *skinRegion (this->GetSkinMask ());
 
-	// Protect against this function being called when their's
+	EmCoord	w = skinRegion->w ();
+	EmCoord	h = skinRegion->h ();
+
+	// Protect against this function being called when there's
 	// no established skin.
 
-	if (w == 0)
+	if (w != 0 && h != 0)
+	{
+		this->size (w, h);
+		this->size_range (w, h, w, h);
+		this->box (FL_NO_BOX);
+		this->hide ();
+		this->shape (skinRegion);
+		this->show ();
+	}
+	else
+	{
+		this->box (FL_FLAT_BOX);
 		w = kDefaultWidth;
-
-	if (h == 0)
 		h = kDefaultHeight;
-
-	// Resize the window.
-
-	this->size (w, h);
-	this->size_range (w, h, w, h);
+		this->size (w, h);
+		this->size_range (w, h, w, h);
+	}
 }
 
 

@@ -37,6 +37,7 @@ class EmWindowFltk : public Fl_Window, public EmWindow
 
 		void					CacheFlush			(void);
 		Fl_Image*				GetSkin				(void);
+		Fl_Image*				GetSkinMask			(void);
 
 	private:
 		virtual	void			draw				(void);
@@ -73,6 +74,7 @@ class EmWindowFltk : public Fl_Window, public EmWindow
 	private:
 		Fl_Box*					fMessage;
 		Fl_Image*				fCachedSkin;
+		Fl_Image*				fCachedSkinMask;
 		string					fTitleStr;
 		string					fMessageStr;
 		EmPixMap				fIcon;

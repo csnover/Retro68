@@ -105,7 +105,7 @@ class EmWindow
 
 		const EmPixMap&			GetCurrentSkin		(void);
 		const RGBList&			GetCurrentSkinColors(Bool polite);
-		const EmRegion&			GetCurrentSkinRegion(void);
+		const EmPixMap&			GetCurrentSkinMask	(void);
 
 	private:
 		virtual void			HostWindowReset		(void) = 0;
@@ -153,7 +153,7 @@ class EmWindow
 
 		RGBList					fSkinColors[16];
 
-		EmRegion				fSkinRegion;
+		EmPixMap				fSkinMask;
 
 		RGBList					fPrevLCDColors;
 
