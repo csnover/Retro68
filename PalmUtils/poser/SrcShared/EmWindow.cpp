@@ -256,15 +256,7 @@ void EmWindow::HandlePenEvent (const EmPoint& where, Bool down)
 	else if (what == kElement_Frame)
 	{
 		if (down)
-		{
 			this->HostWindowDrag ();
-
-			// We normally record the mouse button going up in
-			// EventMouseUp.  However, that method is not called
-			// after ClickInDrag, so say the mouse button is up here.
-
-			down = false;
-		}
 	}
 
 	// Otherwise, if we clicked on a button, start tracking it.

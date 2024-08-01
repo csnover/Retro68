@@ -214,7 +214,10 @@ EmWindowFltk::EmWindowFltk (void) :
 	fCachedSkinMask (NULL),
 	fMessageStr (),
 	fIcon (),
-	fCachedIcon (NULL)
+	fCachedIcon (NULL),
+	fDragMouseOrigin (),
+	fDragWindowOrigin (),
+	fInDrag ()
 {
 	EmAssert (gHostWindow == NULL);
 	gHostWindow = this;
@@ -674,6 +677,7 @@ void EmWindowFltk::HostMouseCapture (void)
 void EmWindowFltk::HostMouseRelease (void)
 {
 	Fl::grab (NULL);
+	fInDrag = false;
 }
 
 
@@ -744,6 +748,27 @@ void EmWindowFltk::HostWindowShow (void)
 {
 
 	this->show ();
+}
+
+// ---------------------------------------------------------------------------
+//		• EmWindowFltk::HostWindowDrag
+// ---------------------------------------------------------------------------
+
+void EmWindowFltk::HostWindowDrag (void)
+{
+	if (!fInDrag)
+	{
+		fDragMouseOrigin = EmPoint (Fl::event_x_root (), Fl::event_y_root ());
+		fDragWindowOrigin = EmPoint (x_root (), y_root ());
+		fInDrag = true;
+	}
+	else
+	{
+		// TODO: This should wait for the OS drag distance to latch
+		EmPoint pos = EmPoint (Fl::event_x_root (), Fl::event_y_root ());
+		EmPoint delta = pos - fDragMouseOrigin;
+		position (fDragWindowOrigin.fX + delta.fX, fDragWindowOrigin.fY + delta.fY);
+	}
 }
 
 

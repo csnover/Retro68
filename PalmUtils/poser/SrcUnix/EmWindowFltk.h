@@ -57,6 +57,7 @@ class EmWindowFltk : public Fl_Window, public EmWindow
 		virtual EmRect			HostWindowBoundsGet	(void);
 		virtual void			HostWindowCenter	(void);
 		virtual void			HostWindowShow		(void);
+		virtual void			HostWindowDrag		(void);
 
 		virtual void			HostRectFrame		(const EmRect&, const EmPoint&, const RGBType&);
 		virtual void			HostOvalPaint		(const EmRect&, const RGBType&);
@@ -79,6 +80,10 @@ class EmWindowFltk : public Fl_Window, public EmWindow
 		string					fMessageStr;
 		EmPixMap				fIcon;
 		Fl_RGB_Image*			fCachedIcon;
+
+		EmPoint					fDragMouseOrigin;
+		EmPoint					fDragWindowOrigin;
+		bool					fInDrag;
 };
 
 extern EmWindowFltk* gHostWindow;
