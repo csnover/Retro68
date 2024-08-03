@@ -634,6 +634,14 @@ void EmWindowFltk::HostWindowReset (void)
 	EmCoord	w = skinRegion->w ();
 	EmCoord	h = skinRegion->h ();
 
+	// If the dimensions are the same then probably this is just a reskin due
+	// to the window focus changing; do no more work. In particular, hiding
+	// and showing the window again is required for resetting the skin shape,
+	// but causes jank
+
+	if (this->w () == w && this->h () == h)
+		return;
+
 	// Protect against this function being called when there's
 	// no established skin.
 
