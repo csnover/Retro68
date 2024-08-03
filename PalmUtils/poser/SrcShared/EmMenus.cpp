@@ -776,7 +776,7 @@ void PrvUpdateMruMenus (const EmFileRefList& files,
 
 	if (files.size () > 0)
 	{
-		int								index = 1;
+		unsigned int					index = 1;
 		EmCommandID						cmd = ++identifyingMenuItem;
 		EmFileRefList::const_iterator	fileIter = files.begin ();
 
@@ -790,7 +790,7 @@ void PrvUpdateMruMenus (const EmFileRefList& files,
 			if (index <= 10)
 			{
 				char	buffer[4];
-				sprintf (buffer, "&%d ", index < 10 ? index : 0);
+				sprintf (buffer, "&%u ", index < 10 ? index : 0);
 				fileName = buffer + fileName;
 			}
 #endif

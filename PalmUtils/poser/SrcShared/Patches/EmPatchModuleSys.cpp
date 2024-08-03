@@ -3056,7 +3056,8 @@ void PrvAutoload (void)
 	if (!appToRun.empty())
 	{
 		char	name[dmDBNameLength];
-		strcpy (name, appToRun.c_str());
+		strncpy (name, appToRun.c_str(), sizeof(name) - 1);
+		name[sizeof(name) - 1] = '\0';
 
 		UInt16	cardNo = 0;
 		LocalID	dbID = ::DmFindDatabase (cardNo, name);
