@@ -1418,12 +1418,12 @@ CallROMType SysHeadpatch::SysAppExit (void)
 	UInt16	memOwnerID	= (*appInfoP).memOwnerID;
 	UInt16	launchFlags	= (*appInfoP).launchFlags;
 
-	if (false /*LogLaunchCodes ()*/)
+	if (LogApplicationCalls ())
 	{
-		emuptr	dbP		= EmMemPtr((*appInfoP).dbP);
-		emuptr	openP	= EmMemGet32 (dbP + offsetof (DmAccessType, openP));
-		LocalID	dbID	= EmMemGet32 (openP + offsetof (DmOpenInfoType, hdrID));
-		UInt16	cardNo	= EmMemGet16 (openP + offsetof (DmOpenInfoType, cardNo));
+		EmAliasDmAccessType<PAS> db(EmMemPtr((*appInfoP).dbP));
+		EmAliasDmOpenInfoType<PAS> open(db.openP);
+		LocalID	dbID	= open.hdrID;
+		UInt16	cardNo	= open.cardNo;
 
 		char	name[dmDBNameLength] = {0};
 		UInt32	type = 0;
@@ -1435,12 +1435,15 @@ CallROMType SysHeadpatch::SysAppExit (void)
 				NULL, NULL, NULL, NULL,
 				&type, &creator);
 
+		type = BYTE_SWAP_32(type);
+		creator = BYTE_SWAP_32(creator);
+
 		LogAppendMsg ("SysAppExit called:");
-		LogAppendMsg ("	cardNo:			%ld",		(int32) cardNo);
-		LogAppendMsg ("	dbID:			0x%08lX",	(int32) dbID);
+		LogAppendMsg ("	cardNo:			%d",		(int32) cardNo);
+		LogAppendMsg ("	dbID:			0x%08X",	(int32) dbID);
 		LogAppendMsg ("		name:		%s",		name);
-		LogAppendMsg ("		type:		%04lX",		type);
-		LogAppendMsg ("		creator:	%04lX",		creator);
+		LogAppendMsg ("		type:		%.4s",		&type);
+		LogAppendMsg ("		creator:	%.4s",		&creator);
 	}
 
 	if (cmd == sysAppLaunchCmdNormalLaunch)
@@ -1496,7 +1499,7 @@ CallROMType SysHeadpatch::SysAppLaunch (void)
 	CALLED_GET_PARAM_VAL (UInt16, launchFlags);
 	CALLED_GET_PARAM_VAL (UInt16, cmd);
 
-	if (false /*LogLaunchCodes ()*/)
+	if (LogApplicationCalls ())
 	{
 		const char* launchStr = ::LaunchCmdToString (cmd);
 
@@ -1510,14 +1513,17 @@ CallROMType SysHeadpatch::SysAppLaunch (void)
 				NULL, NULL, NULL, NULL,
 				&type, &creator);
 
+		type = BYTE_SWAP_32(type);
+		creator = BYTE_SWAP_32(creator);
+
 		LogAppendMsg ("SysAppLaunch called:");
-		LogAppendMsg ("	cardNo:			%ld",		(int32) cardNo);
-		LogAppendMsg ("	dbID:			0x%08lX",	(int32) dbID);
+		LogAppendMsg ("	cardNo:			%d",		(int32) cardNo);
+		LogAppendMsg ("	dbID:			0x%08X",	(int32) dbID);
 		LogAppendMsg ("		name:		%s",		name);
-		LogAppendMsg ("		type:		%04lX",		type);
-		LogAppendMsg ("		creator:	%04lX",		creator);
-		LogAppendMsg ("	launchFlags:	0x%08lX",	(int32) launchFlags);
-		LogAppendMsg ("	cmd:			%ld (%s)",	(int32) cmd, launchStr);
+		LogAppendMsg ("		type:		%.4s",		&type);
+		LogAppendMsg ("		creator:	%.4s",		&creator);
+		LogAppendMsg ("	launchFlags:	0x%08X",	(int32) launchFlags);
+		LogAppendMsg ("	cmd:			%d (%s)",	(int32) cmd, launchStr);
 
 #if 0
 		switch (cmd)
@@ -2046,7 +2052,7 @@ CallROMType SysHeadpatch::SysUIAppSwitch (void)
 	CALLED_GET_PARAM_VAL (LocalID, dbID);
 	CALLED_GET_PARAM_VAL (MemPtr, cmdPBP);
 
-	if (false /*LogLaunchCodes ()*/)
+	if (LogApplicationCalls ())
 	{
 		char	name[dmDBNameLength] = {0};
 		UInt32	type = 0;
@@ -2058,12 +2064,15 @@ CallROMType SysHeadpatch::SysUIAppSwitch (void)
 				NULL, NULL, NULL, NULL,
 				&type, &creator);
 
+		type = BYTE_SWAP_32(type);
+		creator = BYTE_SWAP_32(creator);
+
 		LogAppendMsg ("SysUIAppSwitch called:");
-		LogAppendMsg ("	cardNo:			%ld",		(int32) cardNo);
-		LogAppendMsg ("	dbID:			0x%08lX",	(int32) dbID);
+		LogAppendMsg ("	cardNo:			%d",		(int32) cardNo);
+		LogAppendMsg ("	dbID:			0x%08X",	(int32) dbID);
 		LogAppendMsg ("		name:		%s",		name);
-		LogAppendMsg ("		type:		%04lX",		type);
-		LogAppendMsg ("		creator:	%04lX",		creator);
+		LogAppendMsg ("		type:		%.4s",		&type);
+		LogAppendMsg ("		creator:	%.4s",		&creator);
 	}
 
 	// We are headpatching SysUIAppSwitch; if we skip the ROM version, we
@@ -2721,12 +2730,14 @@ void SysTailpatch::SysAppStartup (void)
 	if (!appInfoP)
 		return;
 
-	if (false /*LogLaunchCodes ()*/)
+	EmAliasSysAppInfoType<PAS> appInfo(appInfoP);
+
+	if (LogApplicationCalls ())
 	{
-		emuptr	dbP		= EmMemGet32 (appInfoP + offsetof (SysAppInfoType, dbP));
-		emuptr	openP	= EmMemGet32 (dbP + offsetof (DmAccessType, openP));
-		LocalID	dbID	= EmMemGet32 (openP + offsetof (DmOpenInfoType, hdrID));
-		UInt16	cardNo	= EmMemGet16 (openP + offsetof (DmOpenInfoType, cardNo));
+		EmAliasDmAccessType<PAS> db(appInfo.dbP);
+		EmAliasDmOpenInfoType<PAS> open(db.openP);
+		LocalID	dbID	= open.hdrID;
+		UInt16	cardNo	= open.cardNo;
 
 		char	name[dmDBNameLength] = {0};
 		UInt32	type = 0;
@@ -2738,15 +2749,18 @@ void SysTailpatch::SysAppStartup (void)
 				NULL, NULL, NULL, NULL,
 				&type, &creator);
 
+		type = BYTE_SWAP_32(type);
+		creator = BYTE_SWAP_32(creator);
+
 		LogAppendMsg ("SysAppStartup called:");
-		LogAppendMsg ("	cardNo:			%ld",		(int32) cardNo);
-		LogAppendMsg ("	dbID:			0x%08lX",	(int32) dbID);
+		LogAppendMsg ("	cardNo:			%d",		(int32) cardNo);
+		LogAppendMsg ("	dbID:			0x%08X",	(int32) dbID);
 		LogAppendMsg ("		name:		%s",		name);
-		LogAppendMsg ("		type:		%04lX",		type);
-		LogAppendMsg ("		creator:	%04lX",		creator);
+		LogAppendMsg ("		type:		%.4s",		&type);
+		LogAppendMsg ("		creator:	%.4s",		&creator);
 	}
 
-	Int16 cmd = EmMemGet16 (appInfoP + offsetof (SysAppInfoType, cmd));
+	Int16 cmd = appInfo.cmd;
 
 	EmuAppInfo	newAppInfo;
 	EmPatchState::CollectCurrentAppInfo (appInfoP, newAppInfo);

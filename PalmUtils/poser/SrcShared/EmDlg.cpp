@@ -2668,7 +2668,6 @@ EmDlgFnResult EmDlg::PrvEditLoggingOptions (EmDlgContext& context)
 			// Disable unsupported options.
 
 			EmDlg::DisableItem (dlg, kDlgItemLogLogCPUOpcodes);
-			EmDlg::DisableItem (dlg, kDlgItemLogLogApplicationCalls);
 
 			break;
 		}
