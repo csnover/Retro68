@@ -88,6 +88,7 @@ char* _strdup( const char *s )
 
 void Platform::Initialize( void )
 {
+	signal (SIGTRAP, SIG_IGN);
 }
 
 
