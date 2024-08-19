@@ -329,6 +329,18 @@ void EmWindowFltk::draw (void)
 //		• EmWindowFltk::handle
 // ---------------------------------------------------------------------------
 
+static void PopulateEventModifiers (EmKeyEvent& event)
+{
+	int state = Fl::event_state ();
+	event.fAltDown = (state & FL_ALT) != 0;
+	event.fCapsLockDown = (state & FL_CAPS_LOCK) != 0;
+	event.fCommandDown = (state & FL_COMMAND) != 0;
+	event.fControlDown = (state & FL_CTRL) != 0;
+	event.fNumLockDown = (state & FL_NUM_LOCK) != 0;
+	event.fShiftDown = (state & FL_SHIFT) != 0;
+	event.fWindowsDown = (state & FL_META) != 0;
+}
+
 int EmWindowFltk::handle (int event)
 {
 	EmPoint	where (Fl::event_x(), Fl::event_y());
@@ -403,11 +415,11 @@ int EmWindowFltk::handle (int event)
 			{
 				// Handle printable characters.
 
-				if (strlen (Fl::event_text ()) > 0)
+				if (Fl::event_length () > 0)
 				{
 					int key = (unsigned char) Fl::event_text()[0];
 					EmKeyEvent event (key);
-					// !!! Need to get modifiers
+					PopulateEventModifiers (event);
 					gDocument->HandleKey (event);
 					return 1;
 				}
@@ -454,7 +466,7 @@ int EmWindowFltk::handle (int event)
 						if (kConvert[ii].fKey)
 						{
 							EmKeyEvent event (kConvert[ii].fKey);
-							// !!! Need to get modifiers
+							PopulateEventModifiers (event);
 							gDocument->HandleKey (event);
 							return 1;
 						}
@@ -470,7 +482,7 @@ int EmWindowFltk::handle (int event)
 				if (c < 0x100)
 				{
 					EmKeyEvent event (c);
-					// !!! Need to get modifiers
+					PopulateEventModifiers (event);
 					gDocument->HandleKey (event);
 					return 1;
 				}
