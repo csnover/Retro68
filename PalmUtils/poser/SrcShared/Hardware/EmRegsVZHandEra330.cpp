@@ -95,6 +95,7 @@ EmRegsVZHandEra330::EmRegsVZHandEra330 (HandEra330PortManager ** fPortManager) :
 EmRegsVZHandEra330::~EmRegsVZHandEra330 (void)
 {
 	delete fSPISlaveADC;
+    delete fSPISlaveCurrent;
 }
 
 void EmRegsVZHandEra330::Initialize(void)
