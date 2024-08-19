@@ -427,7 +427,7 @@ void Platform::RemapHostToPalmChars	(const ByteList& hostChars,
 	{
 		uint8	ch = *iter++;
 
-		if (ch == 0x0A)
+		if (ch == chrCarriageReturn)
 		{
 			palmChars.push_back (chrLineFeed);
 		}
@@ -461,9 +461,9 @@ void Platform::RemapPalmToHostChars	(const ByteList& palmChars,
 	{
 		uint8	ch = *iter++;
 
-		if (ch == chrLineFeed)
+		if (ch == chrCarriageReturn)
 		{
-			hostChars.push_back (0x0A);
+			hostChars.push_back (chrLineFeed);
 		}
 		else
 		{
@@ -537,15 +537,15 @@ void Platform::ToHostEOL (	StMemory& dest, int32& destLen,
 
 		// Convert 0x0D to 0x0A.
 		
-		if (ch == 0x0D)
+		if (ch == chrCarriageReturn)
 		{
-			*p++ = 0x0A;
+			*p++ = chrLineFeed;
 		}
 
 		// If we're looking at a 0x0A that's part of
 		// a 0x0D/0x0A, just swallow it.
 
-		else if (ch == 0x0A && previousWas0x0D)
+		else if (ch == chrLineFeed && previousWas0x0D)
 		{
 			// Nothing
 		}
@@ -557,7 +557,7 @@ void Platform::ToHostEOL (	StMemory& dest, int32& destLen,
 			*p++ = ch;
 		}
 
-		previousWas0x0D = ch == 0x0D;
+		previousWas0x0D = ch == chrCarriageReturn;
 	}
 
 	destLen = p - d;
