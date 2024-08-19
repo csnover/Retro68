@@ -468,7 +468,6 @@ target_compile_definitions(pose PRIVATE
     PLATFORM_UNIX=1
     __PALMOS_TRAPS__=0
     EMULATION_LEVEL=EMULATION_UNIX
-    NoNanoSleep
     PthreadDraftVersion=10
     PROJECT_NAME="${PROJECT_NAME}"
     SKINS_DIR="${skinsdir}"
