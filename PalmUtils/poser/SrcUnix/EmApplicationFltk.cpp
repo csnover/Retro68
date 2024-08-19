@@ -134,7 +134,8 @@ int main (int argc, char** argv)
 
 EmApplicationFltk::EmApplicationFltk (void) :
 	EmApplication (),
-	fAppWindow (NULL)
+	fAppWindow (NULL),
+	fClipboardWidget (NULL)
 {
 	EmAssert (gHostApplication == NULL);
 	gHostApplication = this;
@@ -157,6 +158,7 @@ EmApplicationFltk::EmApplicationFltk (void) :
 EmApplicationFltk::~EmApplicationFltk (void)
 {
 	delete fAppWindow;
+	delete fClipboardWidget;
 
 	EmAssert (gHostApplication == this);
 	gHostApplication = NULL;
