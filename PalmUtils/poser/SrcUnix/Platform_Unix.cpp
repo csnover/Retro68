@@ -692,7 +692,7 @@ void Platform::RealDisposeMemory (void* p)
 
 Bool Platform::ForceStartupScreen (void)
 {
-	return false;
+	return (Fl::event_state () & FL_CAPS_LOCK) != 0;
 }
 
 
@@ -744,7 +744,7 @@ void Platform::PrintHelp (void)
 
 uint32 Platform::GetMilliseconds( void )
 {
-	int32 long usecs = ::PrvGetMicroseconds ();
+	int64    usecs = ::PrvGetMicroseconds ();
 	uint32   millis = (uint32) (usecs / 1000);
 
 	return millis;
