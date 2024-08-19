@@ -13,6 +13,7 @@
 
 #include "EmCommon.h"
 #include "Platform.h"
+#include "EmSession.h"
 
 #include "ErrorHandling.h"		// Errors::ThrowIfNULL
 #include "Miscellaneous.h"		// StMemory
@@ -606,10 +607,13 @@ void Platform::Delay (void)
 	// Delay 10 msecs.	Delaying by this amount pauses us 1/100 of a second,
 	// which is the rate at which the device's tickcount counter increments.
 	//
-	// Wait on an event instead of just calling Sleep(10) so that another
-	// thread can wake us up before our time.
+	// Using omni_thread::sleep causes wakeups whenever an event occurs, which
+	// causes the emulated CPU to run at a broken speed and cause e.g. text
+	// insertion point flashes at the wrong speed. This is an accuracy issue
+	// with the CPU emulation, but we will just follow what the Windows
+	// backend does here.
 
-	omni_thread::sleep( 0, 10000 ); // 10k nanoseconds = 1/100 sec
+	gSession->Sleep(10);
 }
 
 
