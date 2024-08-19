@@ -486,8 +486,18 @@ void Platform::RemapPalmToHostChars	(const ByteList& palmChars,
 
 Bool Platform::PinToScreen (EmRect& r)
 {
-	// !!! TBD
-	return false;
+	EmRect orig = r;
+
+	EmRect screen;
+	int w, h;
+	Fl::screen_work_area (
+		screen.fLeft, screen.fTop, w, h, r.Center ().fX, r.Center ().fY);
+	screen.fRight = screen.fLeft + w;
+	screen.fBottom = screen.fRight + h;
+
+	r.IntersectWith(screen);
+
+	return r != orig;
 }
 
 

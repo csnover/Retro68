@@ -1115,8 +1115,8 @@ void EmDlg::CenterDlg (EmDlgRef dlg)
 		return;
 
 	o->position (
-		(Fl::w () - o->w ()) / 2,
-		(Fl::h () - o->h ()) / 3);
+		Fl::x () + (Fl::w () - o->w ()) / 2,
+		Fl::y () + (Fl::h () - o->h ()) / 2);
 }
 
 

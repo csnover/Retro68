@@ -756,6 +756,7 @@ EmRect EmWindowFltk::HostWindowBoundsGet (void)
 
 void EmWindowFltk::HostWindowCenter (void)
 {
+	position (Fl::x () + (Fl::w () - w ()) / 2, Fl::y () + (Fl::h () - h ()) / 2);
 }
 
 
