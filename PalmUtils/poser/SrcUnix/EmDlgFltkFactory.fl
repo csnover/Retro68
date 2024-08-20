@@ -981,13 +981,16 @@ Function {PrvMakeEditErrorHandlingDialog()} {} {
   }
 }
 
-Function {PrvMakeAboutDialog()} {open
-} {
+decl {\#include <FL/Fl_Pixmap.H>} {private global
+}
+
+decl {\#include "poser.xpm"} {private global
+}
+
+Function {PrvMakeAboutDialog()} {} {
   Fl_Window {} {
-    label {About Palm OS(R) Emulator} open
-    xywh {2105 437 360 230} type Double
-    code0 {\#include <FL/Fl_Pixmap.H>}
-    code1 {\#include "poser.xpm"} modal visible
+    label {About Palm OS® Emulator}
+    xywh {2255 432 360 230} type Double hide modal
   } {
     Fl_Return_Button {} {
       label OK
