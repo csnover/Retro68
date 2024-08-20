@@ -24,6 +24,7 @@
 #include <FL/x.H>				// fl_display
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_File_Icon.H>
+#include <FL/fl_ask.H>
 #if HAVE_UNISTD_H
 #include <unistd.h>
 #endif
@@ -106,9 +107,7 @@ int main (int argc, char** argv)
 	}
 	catch (...)
 	{
-		// !!! TBD
-//		::MessageBox (NULL, "Palm OS Emulator: Fatal Internal Error",
-//			"Fatal Error", MB_OK);
+		fl_alert ("Palm OS Emulator: Fatal Internal Error");
 	}
 
 	theApp.Shutdown ();

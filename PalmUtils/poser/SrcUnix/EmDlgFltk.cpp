@@ -898,13 +898,10 @@ EmDlgItemID	EmDlg::HostRunSessionSave (const void* parameters)
 
 	string msg = Errors::ReplaceParameters (saveChanges, paramList);
 
-	int hs = fl_message_hotspot ();
-	fl_message_hotspot (false);
 	int result = fl_choice (msg.c_str(),
 							Platform::GetString (kStr_Cancel).c_str(),
 							Platform::GetString (kStr_Yes).c_str(),
 							Platform::GetString (kStr_No).c_str() );
-	fl_message_hotspot (hs);
 
 	if (result == 1) // yes
 		return kDlgItemYes;
