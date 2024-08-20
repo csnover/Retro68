@@ -154,6 +154,7 @@ static void 		PrvPushString			(EmSubroutine& sub, ByteList& stackData,
 											 StringList& stringData);
 
 static FILE*		PrvToFILE				(emuptr);
+static MyDIR*		PrvToMyDIR				(emuptr);
 
 static void			PrvTmFromHostTm			(struct tm& dest, const HostTmType& src);
 static void			PrvHostTmFromTm			(EmProxyHostTmType& dest, const struct tm& src);
@@ -174,9 +175,14 @@ static void			PrvFree					(emuptr p);
 // output with that created by any host logging facilities
 // (such as event logging).
 
-#define hostLogFile ((HostFILEType*) -1)
+#define hostLogFile ((emuptr) -1)
 #define hostLogFILE ((FILE*) -1)
 
+// It is not necessary for FILE or MyDIR to be accessible from Palm OS, so only
+// the minimum amount of memory is reserved in the guest memory address space.
+// (EmBankMapped is just a convenient way to smuggle host pointers across the
+// emulator boundary.)
+enum { kHostOnly = 1 };
 
 inline int x_fclose (FILE* f)
 {
@@ -810,6 +816,7 @@ static void _HostFClose (void)
 	{
 		if (*iter == fh)
 		{
+			EmBankMapped::UnmapPhysicalMemory (fh);
 			gOpenFiles.erase (iter);
 			break;
 		}
@@ -1083,7 +1090,7 @@ static void _HostFOpen (void)
 
 	// Return the result.
 
-	PUT_RESULT_PTR (result);
+	::PrvMapAndReturn (result, kHostOnly, sub);
 }
 
 
@@ -1477,7 +1484,7 @@ static void _HostTmpFile (void)
 
 	// Return the result.
 
-	PUT_RESULT_PTR (result);
+	::PrvMapAndReturn (result, kHostOnly, sub);
 }
 
 
@@ -2020,7 +2027,7 @@ static void _HostOpenDir (void)
 
 	// Return the result.
 
-	PUT_RESULT_PTR (dir);
+	::PrvMapAndReturn (dir, kHostOnly, sub);
 }
 
 
@@ -2038,7 +2045,7 @@ static void _HostReadDir(void)
 
 	CALLED_GET_PARAM_VAL (emuptr, dirP);
 
-	MyDIR*	dir = EmMemFakeT<MyDIR *>(dirP);
+	MyDIR*	dir = ::PrvToMyDIR (dirP);
 
 	// Make sure dir is valid.
 
@@ -2140,7 +2147,7 @@ static void _HostCloseDir (void)
 
 	CALLED_GET_PARAM_VAL (emuptr, dirP);
 
-	MyDIR*	dir = EmMemFakeT<MyDIR *>(dirP);
+	MyDIR*	dir = ::PrvToMyDIR (dirP);
 
 	// Make sure dir is valid.
 
@@ -2151,6 +2158,7 @@ static void _HostCloseDir (void)
 		{
 			// It's on our list.  Remove it from the list and delete it.
 
+			EmBankMapped::UnmapPhysicalMemory (dir);
 			gOpenDirs.erase (iter);
 			delete dir;
 			break;
@@ -3315,7 +3323,7 @@ static void _HostLogFile (void)
 
 	CALLED_SETUP_HC ("HostFILEType", "void");
 
-	PUT_RESULT_PTR (hostLogFile);
+	PUT_RESULT_VAL (emuptr, hostLogFile);
 }
 
 
@@ -4484,12 +4492,24 @@ void PrvPushString (EmSubroutine& sub, ByteList& stackData, StringList& stringDa
 
 FILE* PrvToFILE (emuptr f)
 {
-	if (EmMemFakeT<HostFILEType *>(f) == hostLogFile)
-	{
+	if (f == EmMemNULL)
+		return NULL;
+	else if (f == hostLogFile)
 		return hostLogFILE;
-	}
+	else
+		return reinterpret_cast<FILE *> (EmBankMapped::GetRealAddress (f));
+}
 
-	return EmMemFakeT<FILE *>(f);
+// ---------------------------------------------------------------------------
+//		• PrvToMyDIR
+// ---------------------------------------------------------------------------
+
+MyDIR* PrvToMyDIR (emuptr d)
+{
+	if (d == EmMemNULL)
+		return NULL;
+	else
+		return reinterpret_cast<MyDIR *> (EmBankMapped::GetRealAddress (d));
 }
 
 
@@ -4790,6 +4810,7 @@ void PrvReleaseAllResources (void)
 		vector<FILE*>::iterator	iter = gOpenFiles.begin ();
 		while (iter != gOpenFiles.end ())
 		{
+			EmBankMapped::UnmapPhysicalMemory (*iter);
 			fclose (*iter);
 			++iter;
 		}
@@ -4803,6 +4824,7 @@ void PrvReleaseAllResources (void)
 		vector<MyDIR*>::iterator	iter = gOpenDirs.begin ();
 		while (iter != gOpenDirs.end ())
 		{
+			EmBankMapped::UnmapPhysicalMemory (*iter);
 			delete *iter;
 			++iter;
 		}

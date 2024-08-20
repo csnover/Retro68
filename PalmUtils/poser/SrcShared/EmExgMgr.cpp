@@ -145,9 +145,7 @@ EmExgMgr* EmExgMgr::GetExgMgr (UInt16 libRefNum)
 		return NULL;
 
 	EmAliasSysLibTblEntryType<PAS>	entry (entryP);
-	emuptr	globalsP = entry.globalsP;
-	EmASSERT(false && "packing 64-bit pointer like this will never work");
-	return EmMemFakeT<EmExgMgr *>(globalsP);
+	return reinterpret_cast<EmExgMgr *> (EmBankMapped::GetRealAddress (entry.globalsP));
 }
 
 

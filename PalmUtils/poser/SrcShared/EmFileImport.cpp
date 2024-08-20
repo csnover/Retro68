@@ -1760,7 +1760,22 @@ void PrvSetExgMgr (void* mgr)
 		if (tblP)
 		{
 			EmAliasSysLibTblEntryType<PAS>	tbl (tblP);
-			tbl.globalsP = EmMemPtr(mgr);
+
+			if (tbl.globalsP != EmMemNULL)
+			{
+				void* oldMgr = EmBankMapped::GetRealAddress (tbl.globalsP);
+				if (oldMgr)
+					EmBankMapped::UnmapPhysicalMemory (oldMgr);
+			}
+
+			if (mgr == NULL)
+				tbl.globalsP = EmMemNULL;
+			else
+			{
+				enum { kHostOnly = 1 };
+				EmBankMapped::MapPhysicalMemory (mgr, kHostOnly);
+				tbl.globalsP = EmBankMapped::GetEmulatedAddress (mgr);
+			}
 		}
 	}
 }

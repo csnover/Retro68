@@ -181,10 +181,6 @@ typedef UInt8*					UInt8Ptr;
 	Marshal::PutReturnVal (sub, (type) val);
 
 
-#define PUT_RESULT_PTR(val)									\
-	Marshal::PutReturnVal (sub, (const void *) val);
-
-
 #define RETURN_RESULT_VAL(type)								\
 	GET_RESULT_VAL (type);									\
 	return result
