@@ -178,6 +178,59 @@ EmDlgItemID EmDlg::DoAboutBox (void)
 
 /***********************************************************************
  *
+ * FUNCTION:	DoStartupDialog
+ *
+ * DESCRIPTION:
+ *
+ * PARAMETERS:	None
+ *
+ * RETURNED:	Nothing
+ *
+ ***********************************************************************/
+
+EmDlgFnResult EmDlg::PrvStartup (EmDlgContext& context)
+{
+	switch (context.fCommandID)
+	{
+		case kDlgCmdInit:
+		case kDlgCmdIdle:
+		case kDlgCmdDestroy:
+		case kDlgCmdPanelEnter:
+		case kDlgCmdPanelExit:
+		case kDlgCmdNone:
+			break;
+
+		case kDlgCmdItemSelected:
+		{
+			switch (context.fItemID)
+			{
+				case kDlgItemStartupNew:
+				case kDlgItemStartupOpen:
+				case kDlgItemStartupDownload:
+				case kDlgItemStartupExit:
+					return kDlgResultClose;
+
+				default:
+					EmAssert (false);
+			}
+
+			break;
+		}
+	}
+
+	return kDlgResultContinue;
+}
+
+EmDlgItemID EmDlg::DoStartupDialog (void)
+{
+	return EmDlg::RunDialog (EmDlg::PrvStartup, NULL, kDlgStartup);
+}
+
+
+#pragma mark -
+
+/***********************************************************************
+ *
  * FUNCTION:	DoSessionNew
  *
  * DESCRIPTION:	

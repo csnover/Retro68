@@ -2242,6 +2242,10 @@ Fl_Window* PrvMakeDialog (EmDlgID id)
 		case kDlgMinimizeProgress:
 			w = ::PrvMakeMinimizeDialog ();
 			break;
+
+		case kDlgStartup:
+			w = ::PrvMakeStartupDialog ();
+			break;
 	}
 
 	return w;

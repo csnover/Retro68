@@ -73,11 +73,9 @@ class EmWindowFltk : public Fl_Window, public EmWindow
 		virtual EmPoint			HostGetCurrentMouse	(void);
 
 	private:
-		Fl_Box*					fMessage;
 		Fl_Image*				fCachedSkin;
 		Fl_Image*				fCachedSkinMask;
 		string					fTitleStr;
-		string					fMessageStr;
 		EmPixMap				fIcon;
 		Fl_RGB_Image*			fCachedIcon;
 
@@ -85,7 +83,5 @@ class EmWindowFltk : public Fl_Window, public EmWindow
 		EmPoint					fDragWindowOrigin;
 		bool					fInDrag;
 };
-
-extern EmWindowFltk* gHostWindow;
 
 #endif	// EmWindowFltk_h

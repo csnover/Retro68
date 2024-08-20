@@ -29,18 +29,17 @@ class EmApplicationFltk : public EmApplication
 	public:
 		virtual Bool			Startup					(int argc, char** argv);
 		void					Run						(void);
-		virtual void			Shutdown				(void);
 		void					HandleIdle				(void);
 
 	private:
-		void					PrvCreateWindow		(int argc, char** argv);
-
 		Bool					PrvIdleClipboard		(void);
 		static void				PrvClipboardPeriodic	(void* data);
 		Fl_Widget*				PrvGetClipboardWidget	(void);
 
+		EmCommandID				PrvStartupScreen		(void);
+		void					HandleStartupDialog		(void);
+
 	private:
-		EmWindowFltk*			fAppWindow;
 		Fl_Widget*				fClipboardWidget;
 		ByteList				fClipboardData;
 };

@@ -134,7 +134,6 @@ int main (int argc, char** argv)
 
 EmApplicationFltk::EmApplicationFltk (void) :
 	EmApplication (),
-	fAppWindow (NULL),
 	fClipboardWidget (NULL)
 {
 	EmAssert (gHostApplication == NULL);
@@ -157,7 +156,6 @@ EmApplicationFltk::EmApplicationFltk (void) :
 
 EmApplicationFltk::~EmApplicationFltk (void)
 {
-	delete fAppWindow;
 	delete fClipboardWidget;
 
 	EmAssert (gHostApplication == this);
@@ -192,14 +190,12 @@ Bool EmApplicationFltk::Startup (int argc, char** argv)
 
 	// Initialize the base system.
 
+	Fl::visual (FL_RGB);
 	Fl_File_Icon::load_system_icons();
+	fl_message_hotspot (false);
 
 	if (!EmApplication::Startup (argc, argv))
 		return false;
-
-	// Create our window.
-
-	this->PrvCreateWindow (argc, argv);
 
 	// Start up the sub-systems.
 
@@ -207,7 +203,7 @@ Bool EmApplicationFltk::Startup (int argc, char** argv)
 
 	// Start the clipboard idling.
 	// !!! Get rid of this special clipboard window.  I think that
-	// we can roll this functionality into fAppWindow.
+	// we can roll this functionality into EmWindowFltk.
 
 	(void) this->PrvGetClipboardWidget ();
 
@@ -231,41 +227,41 @@ void EmApplicationFltk::Run (void)
 {
 	this->HandleStartupActions ();
 
-	while (1)
+	while (!this->GetTimeToQuit ())
 	{
+		if (gDocument)
+			HandleIdle ();
+		else
+			HandleStartupDialog ();
+
 		Fl::wait (0.1);
-
-		if (this->GetTimeToQuit ())
-			break;
-
-		this->HandleIdle ();
 	}
 }
 
-
-/***********************************************************************
- *
- * FUNCTION:	EmApplicationFltk::Shutdown
- *
- * DESCRIPTION:	Performs one-time shutdown operations.
- *
- * PARAMETERS:	None
- *
- * RETURNED:	Nothing
- *
- ***********************************************************************/
-
-void EmApplicationFltk::Shutdown (void)
+void EmApplicationFltk::HandleStartupDialog (void)
 {
-	// Delete our window now, so that its position will be recorded
-	// in the preferences before EmApplication::Shutdown saves them.
+	EmCommandID command;
 
-	delete fAppWindow;
-	fAppWindow = NULL;
+	if (IsBoundPartially ())
+		command = kCommandSessionNew;
+	else if (IsBoundFully ())
+		command = kCommandSessionOpenOther;
+	else
+		command = this->PrvStartupScreen ();
 
-	// Perform common shutdown.
+	HandleCommand (command);
+}
 
-	EmApplication::Shutdown ();
+EmCommandID EmApplicationFltk::PrvStartupScreen (void)
+{
+	switch (EmDlg::DoStartupDialog ())
+	{
+		case kDlgItemStartupNew: return kCommandSessionNew;
+		case kDlgItemStartupOpen: return kCommandSessionOpenOther;
+		case kDlgItemStartupDownload: return kCommandDownloadROM;
+		case kDlgItemStartupExit: return kCommandQuit;
+		default: return kCommandNone;
+	}
 }
 
 
@@ -294,29 +290,6 @@ void EmApplicationFltk::HandleIdle (void)
 	::HandleDialogs ();
 
 	EmApplication::HandleIdle ();
-}
-
-
-/***********************************************************************
- *
- * FUNCTION:	EmApplicationFltk::PrvCreateWindow
- *
- * DESCRIPTION:	Create the window that displays the LCD/skin stuff,
- *				or the message saying to right-click to show a menu.
- *
- * PARAMETERS:	argc, argv from main()
- *
- * RETURNED:	Nothing
- *
- ***********************************************************************/
-
-void EmApplicationFltk::PrvCreateWindow (int argc, char** argv)
-{
-	Fl::visual (FL_RGB);
-
-	fAppWindow = new EmWindowFltk;
-	fAppWindow->WindowInit ();
-	fAppWindow->show (argc, argv);
 }
 
 

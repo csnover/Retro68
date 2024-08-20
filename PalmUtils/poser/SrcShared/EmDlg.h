@@ -201,7 +201,8 @@ enum EmDlgID
 	kDlgSessionInfo				= 22,
 	kDlgGetSocketAddress		= 23,
 	kDlgEditErrorHandling		= 24,
-	kDlgMinimizeProgress		= 25
+	kDlgMinimizeProgress		= 25,
+	kDlgStartup					= 26
 };
 
 enum EmDlgPanelID
@@ -367,6 +368,11 @@ enum EmDlgItemID
 	kDlgItemMinRange			= DLG_BASE(kDlgMinimizeProgress) + 3,
 	kDlgItemMinDiscarded		= DLG_BASE(kDlgMinimizeProgress) + 4,
 	kDlgItemMinProgress			= DLG_BASE(kDlgMinimizeProgress) + 5,
+
+	kDlgItemStartupNew			= DLG_BASE(kDlgStartup) + 0,
+	kDlgItemStartupOpen			= DLG_BASE(kDlgStartup) + 1,
+	kDlgItemStartupDownload		= DLG_BASE(kDlgStartup) + 2,
+	kDlgItemStartupExit			= DLG_BASE(kDlgStartup) + 3,
 
 	kDlgItemLast
 };
@@ -648,6 +654,7 @@ class EmDlg
 															 const EmDirRef& defaultPath);
 
 		static EmDlgItemID		DoAboutBox					(void);
+		static EmDlgItemID		DoStartupDialog				(void);
 
 		static EmDlgItemID		DoSessionNew				(Configuration&);
 		static EmDlgItemID		DoSessionSave				(const string& docName,
@@ -753,6 +760,7 @@ class EmDlg
 		static EmDlgFnResult	PrvGetSocketAddress			(EmDlgContext&);
 		static EmDlgFnResult	PrvGremlinControl			(EmDlgContext&);
 		static EmDlgFnResult	PrvMinimizeProgress			(EmDlgContext&);
+		static EmDlgFnResult	PrvStartup					(EmDlgContext&);
 
 		// DoSessionNew
 

@@ -37,11 +37,6 @@
 #include "DefaultLarge.xpm"
 #include "poser.xpm"
 
-const int kDefaultWidth = 220;
-const int kDefaultHeight = 330;
-
-EmWindowFltk* gHostWindow;
-
 static void ParseXPixMap(EmPixMap &pixMap, const char **xpm)
 {
 	/*
@@ -188,15 +183,9 @@ static void ParseXPixMap(EmPixMap &pixMap, const char **xpm)
 
 EmWindow* EmWindow::NewWindow (void)
 {
-	// This is the type of window we should create.  However, on Unix, we
-	// create one and only one window when we create the application.  This
-	// method -- called by the document to create its window -- therefore
-	// doesn't need to actually create a window.
-
-//	return new EmWindowFltk;
-
-	EmAssert (gHostWindow != NULL);
-	return NULL;
+	EmWindowFltk *window = new EmWindowFltk;
+	window->WindowInit ();
+	return window;
 }
 
 
@@ -207,25 +196,20 @@ EmWindow* EmWindow::NewWindow (void)
 // ---------------------------------------------------------------------------
 
 EmWindowFltk::EmWindowFltk (void) :
-	Fl_Window (kDefaultWidth, kDefaultHeight, "pose"),
+	Fl_Window (0, 0, "pose"),
 	EmWindow (),
-	fMessage (NULL),
 	fCachedSkin (NULL),
 	fCachedSkinMask (NULL),
-	fMessageStr (),
 	fIcon (),
 	fCachedIcon (NULL),
 	fDragMouseOrigin (),
 	fDragWindowOrigin (),
 	fInDrag ()
 {
-	EmAssert (gHostWindow == NULL);
-	gHostWindow = this;
+	fTitleStr = Platform::GetString (kStr_AppName);
+	label (fTitleStr.c_str());
 
-	fTitleStr = Platform::GetString(kStr_AppName);
-	label(fTitleStr.c_str());
-
-	HostSetDefaultIcon();
+	HostSetDefaultIcon ();
 
 	this->box (FL_FLAT_BOX);
 	this->color (FL_WHITE);
@@ -238,15 +222,6 @@ EmWindowFltk::EmWindowFltk (void) :
 	// Ensure that the user can't resize this window.
 
 	this->resizable (NULL);
-
-	// Create the message to display when there's no session running.
-
-	fMessageStr = Platform::GetString(kStr_MainWindowInstructions);
-	fMessage = new Fl_Box (0, 0, 200, 40, fMessageStr.c_str());
-	fMessage->box (FL_NO_BOX);
-	fMessage->align (FL_ALIGN_CENTER | FL_ALIGN_WRAP | FL_ALIGN_INSIDE);
-
-	this->end ();
 
 	// Set the X-Windows window class.  Normally, this is done when
 	// Fl_Window::show (argc, argv) is called (in main()).  However, the
@@ -278,9 +253,6 @@ EmWindowFltk::~EmWindowFltk (void)
 	this->CacheFlush ();
 
 	delete fCachedIcon;
-
-	EmAssert (gHostWindow == this);
-	gHostWindow = NULL;
 }
 
 
@@ -308,20 +280,7 @@ void EmWindowFltk::CloseCallback (Fl_Widget*, void*)
 
 void EmWindowFltk::draw (void)
 {
-	if (gDocument)
-	{
-		this->HandleUpdate ();
-	}
-	else
-	{
-		fl_color (255, 255, 255);
-		fl_rect (0, 0, this->w (), this->h ());
-
-		fMessage->position (
-			(this->w () - fMessage->w ()) / 2,
-			(this->h () - fMessage->h ()) / 3);
-		this->draw_child (*fMessage);
-	}
+	this->HandleUpdate ();
 }
 
 
@@ -669,14 +628,6 @@ void EmWindowFltk::HostWindowReset (void)
 		this->hide ();
 		this->shape (skinRegion);
 		this->show ();
-	}
-	else
-	{
-		this->box (FL_FLAT_BOX);
-		w = kDefaultWidth;
-		h = kDefaultHeight;
-		this->size (w, h);
-		this->size_range (w, h, w, h);
 	}
 }
 

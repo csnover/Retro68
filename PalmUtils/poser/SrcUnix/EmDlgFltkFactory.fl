@@ -1147,3 +1147,47 @@ Function {PrvMakeMinimizeDialog()} {} {
     }
   }
 }
+
+Function {PrvMakeStartupDialog()} {} {
+  Fl_Window {} {
+    label {Palm OS® Emulator} open
+    xywh {2130 361 390 140} type Double color 50 labelcolor 51 visible
+  } {
+    Fl_Button {} {
+      label {&New}
+      xywh {15 13 80 22} down_box DOWN_BOX labelsize 12
+      code0 {::PrvSetWidgetID (o, kDlgItemStartupNew);}
+    }
+    Fl_Button {} {
+      label {&Open}
+      xywh {15 43 80 22} down_box DOWN_BOX labelsize 12
+      code0 {::PrvSetWidgetID (o, kDlgItemStartupOpen);}
+    }
+    Fl_Button {} {
+      label {&Download}
+      xywh {15 73 80 22} down_box DOWN_BOX labelsize 12
+      code0 {::PrvSetWidgetID (o, kDlgItemStartupDownload);}
+    }
+    Fl_Button {} {
+      label {E&xit}
+      xywh {15 103 80 22} down_box DOWN_BOX labelsize 12
+      code0 {::PrvSetWidgetID (o, kDlgItemStartupExit);}
+    }
+    Fl_Box {} {
+      label {Start a new emulator session}
+      xywh {105 13 280 22} labelsize 12 align 20
+    }
+    Fl_Box {} {
+      label {Load a previous emulator session from disk}
+      xywh {105 43 280 22} labelsize 12 align 20
+    }
+    Fl_Box {} {
+      label {Download a ROM image from a Palm OS device}
+      xywh {105 73 280 22} labelsize 12 align 20
+    }
+    Fl_Box {} {
+      label {Leave the Palm OS Emulator}
+      xywh {105 103 280 22} labelsize 12 align 20
+    }
+  }
+}
