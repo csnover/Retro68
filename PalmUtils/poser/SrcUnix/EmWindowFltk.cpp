@@ -688,7 +688,6 @@ void EmWindowFltk::HostWindowReset (void)
 
 void EmWindowFltk::HostMouseCapture (void)
 {
-	Fl::grab (this);
 }
 
 
@@ -700,7 +699,6 @@ void EmWindowFltk::HostMouseCapture (void)
 
 void EmWindowFltk::HostMouseRelease (void)
 {
-	Fl::grab (NULL);
 	fInDrag = false;
 }
 
