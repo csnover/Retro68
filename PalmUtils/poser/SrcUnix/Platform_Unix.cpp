@@ -322,7 +322,7 @@ int Platform::GetIDForRecovery( ErrCode error )
 
 string Platform::GetShortVersionString( void )
 {
-	return string("3.5");
+	return string(PROJECT_VERSION);
 }
 
 

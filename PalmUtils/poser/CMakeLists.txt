@@ -1,4 +1,4 @@
-project(POSER VERSION 3.5.1 HOMEPAGE_URL https://sourceforge.net/projects/pose/)
+project(POSER VERSION 3.6.0)
 
 include(GNUInstallDirs)
 
@@ -470,6 +470,7 @@ target_compile_definitions(pose PRIVATE
     EMULATION_LEVEL=EMULATION_UNIX
     PthreadDraftVersion=10
     PROJECT_NAME="${PROJECT_NAME}"
+    PROJECT_VERSION="${PROJECT_VERSION}"
     SKINS_DIR="${skinsdir}"
 )
 
