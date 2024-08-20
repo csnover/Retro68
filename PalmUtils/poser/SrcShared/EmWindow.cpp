@@ -596,6 +596,10 @@ void EmWindow::PaintScreen (Bool drawCase, Bool wholeLCD)
 
 	if (drawLCD)
 	{
+		Preference<bool> prefDimWhenInactive (kPrefKeyDimWhenInactive);
+		if (!fActive && *prefDimWhenInactive)
+			info.fImage.ChangeTone (40);
+
 		this->PaintLCD (info);
 	}
 

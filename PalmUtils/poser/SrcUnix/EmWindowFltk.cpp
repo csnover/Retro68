@@ -652,7 +652,11 @@ void EmWindowFltk::HostWindowReset (void)
 	// but causes jank
 
 	if (this->w () == w && this->h () == h)
+	{
+		// Setting damage is required to get the skin to update
+		damage (FL_DAMAGE_CHILD);
 		return;
+	}
 
 	// Protect against this function being called when there's
 	// no established skin.
