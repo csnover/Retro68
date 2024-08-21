@@ -3937,7 +3937,7 @@ void EmDlg::PrvGetCodeBreakpoints (EmDlgContext& context)
 	for (int ii = 0; ii < dbgTotalBreakpoints; ++ii)
 	{
 		data.fCodeBreakpoints[ii].fEnabled		= gDebuggerGlobals.bp[ii].enabled;
-		data.fCodeBreakpoints[ii].fAddress		= EmMemPtr(gDebuggerGlobals.bp[ii].addr);
+		data.fCodeBreakpoints[ii].fAddress		= gDebuggerGlobals.bp[ii].addr;
 		data.fCodeBreakpoints[ii].fCondition	= "";
 
 		BreakpointCondition*	c = gDebuggerGlobals.bpCondition[ii];

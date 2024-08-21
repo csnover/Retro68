@@ -664,7 +664,7 @@ ErrCode CTCPSocket::Write (const void* buffer, int32 amountToWrite, int32* amtWr
  *
  ***********************************************************************/
 
-ErrCode CTCPSocket::Read (void* buffer, int32 sizeOfBuffer, int32* amtRead)
+ErrCode CTCPSocket::Read (void* buffer, int32 sizeOfBuffer, int32* amtRead, int flags)
 {
 	PRINTF ("CTCPSocket(0x%08X)::Read...", this);
 
@@ -678,7 +678,7 @@ ErrCode CTCPSocket::Read (void* buffer, int32 sizeOfBuffer, int32* amtRead)
 	{
 		while (*amtRead < sizeOfBuffer)
 		{
-			int32	r = recv (fConnectedSocket, ((char*) buffer) + *amtRead, sizeOfBuffer - *amtRead, 0);
+			int32	r = recv (fConnectedSocket, ((char*) buffer) + *amtRead, sizeOfBuffer - *amtRead, (flags & kFlagPeek) ? MSG_PEEK : 0);
 
 			// More from the sockets manual for the select() function:
 			//
@@ -717,6 +717,9 @@ ErrCode CTCPSocket::Read (void* buffer, int32 sizeOfBuffer, int32* amtRead)
 				else
 					PRINTF ("...got %ld of %ld bytes of data.", *amtRead, sizeOfBuffer);
 			}
+
+			if ((flags & kFlagReadExact) == 0)
+				break;
 		}
 	}
 	else

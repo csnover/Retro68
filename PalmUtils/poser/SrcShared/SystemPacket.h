@@ -38,15 +38,14 @@ class SystemPacket
 		static ErrCode			Find				(SLP&);
 		static ErrCode			GetTrapConditions	(SLP&);
 		static ErrCode			SetTrapConditions	(SLP&);
+		static void 			GetRegs 			(M68KRegsType&);
+		static void 			SetRegs 			(const M68KRegsType&);
 
 		static ErrCode			SendMessage			(SLP&, const char*);
 
 	private:
 		static ErrCode			SendResponse		(SLP&, UInt8 code);
 		static ErrCode			SendPacket			(SLP&, const void* body, int32 bodySize);
-
-		static void 			GetRegs 			(M68KRegsType&);
-		static void 			SetRegs 			(const M68KRegsType&);
 };
 
 #endif	// SYSTEMPACKET_H_

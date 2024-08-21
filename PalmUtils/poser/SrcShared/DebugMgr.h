@@ -79,7 +79,7 @@ struct BreakpointCondition
 
 struct EmBreakpointType
 {
-	MemPtr					addr;				// address of breakpoint
+	emuptr					addr;				// address of breakpoint
 	Boolean					enabled;			// true if enabled
 	Boolean					installed;			// for alignment
 };
@@ -150,7 +150,7 @@ class Debug
 		static void 			Startup 				(void);
 		static void 			Shutdown				(void);
 		static Bool 			ConnectedToTCPDebugger	(void);
-		static CTCPSocket*		GetTCPDebuggerSocket	(void);
+		static CSocket*			GetTCPDebuggerSocket	(void);
 		static CSocket*			GetDebuggerSocket		(void);
 
 		static ErrCode			HandleNewPacket 		(SLP&);

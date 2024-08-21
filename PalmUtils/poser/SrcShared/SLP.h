@@ -27,7 +27,7 @@ class SLP
 								SLP 			(const SLP&);
 								~SLP			(void);
 
-		static void 			EventCallback	(CSocket* s, int event);
+		static void 			EventCallback	(CSocket* s);
 		ErrCode 				HandleDataReceived	(void);
 
 		ErrCode 				HandleNewPacket (void);
@@ -49,10 +49,6 @@ class SLP
 		Bool					HasSocket		(CSocket* s) { return s == fSocket; }
 
 	private:
-		void					SetHeader		(void);
-		void					SetBody			(void);
-		void					SetFooter		(void);
-
 		SlkPktHeaderChecksum	CalcHdrChecksum (SlkPktHeaderChecksum start,
 												 UInt8* bufP, Int32 count);
 

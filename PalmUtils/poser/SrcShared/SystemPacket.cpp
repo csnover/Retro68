@@ -399,12 +399,12 @@ ErrCode SystemPacket::SendRoutineName (SLP& slp)
 	ENTER_PACKET ("SendRoutineName", SysPktRtnNameCmdType, SysPktRtnNameRspType);
 
 	emuptr	pc = ((emuptr) packet.address) & ~1;	// Protect against odd address.
-	void*	startAddr;
-	void*	endAddr;
+	emuptr	startAddr;
+	emuptr	endAddr;
 
 	::FindFunctionName( pc, (char*) response.name.GetPtr (),
-						(emuptr*) &startAddr,
-						(emuptr*) &endAddr);
+						&startAddr,
+						&endAddr);
 
 	response.address	= packet.address;
 	response.startAddr	= startAddr;

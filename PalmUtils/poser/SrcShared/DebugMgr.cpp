@@ -28,6 +28,7 @@
 #include "EmPatchState.h"		// EmPatchState::UIInitialized
 #include "EmSession.h"			// EmSessionStopper, SuspendByDebugger
 #include "ErrorHandling.h"		// ReportUnhandledException
+#include "GDBRemote.h"
 #include "Logging.h"			// gErrLog
 #include "MetaMemory.h"			// MetaMemory::MarkInstructionBreak
 #include "Platform.h"			// Platform::SendPacket
@@ -121,7 +122,7 @@ Bool	gExceptionForRead;
 static CSocket*			gDebuggerSocket1;	 // TCP socket on user-defined port
 static CSocket*			gDebuggerSocket2;	 // TCP socket on port 2000
 static CSocket*			gDebuggerSocket3;	 // Platform-specific socket
-static CTCPSocket*		gConnectedDebugSocket;
+static GDBRemote*		gConnectedDebugSocket;
 
 
 #pragma mark -
@@ -171,7 +172,7 @@ void Debug::Shutdown (void)
 	if (gConnectedDebugSocket)
 	{
 		gConnectedDebugSocket->Close ();
-		delete gConnectedDebugSocket;
+		gConnectedDebugSocket->Delete ();
 		gConnectedDebugSocket = NULL;
 	}
 }
@@ -215,7 +216,7 @@ Bool Debug::ConnectedToTCPDebugger (void)
  *
  ***********************************************************************/
 
-CTCPSocket* Debug::GetTCPDebuggerSocket (void)
+CSocket* Debug::GetTCPDebuggerSocket (void)
 {
 	return gConnectedDebugSocket;
 }
@@ -440,7 +441,7 @@ void Debug::Save (SessionFile& f)
 	int ii;
 	for (ii = 0; ii < dbgTotalBreakpoints; ++ii)
 	{
-		s << EmMemPtr(gDebuggerGlobals.bp[ii].addr);
+		s << gDebuggerGlobals.bp[ii].addr;
 		s << gDebuggerGlobals.bp[ii].enabled;
 		s << gDebuggerGlobals.bp[ii].installed;
 
@@ -531,8 +532,7 @@ void Debug::Load (SessionFile& f)
 			int ii;
 			for (ii = 0; ii < dbgTotalBreakpoints; ++ii)
 			{
-				emuptr temp;
-				s >> temp; gDebuggerGlobals.bp[ii].addr = EmMemFakeT<MemPtr>(temp);
+				s >> gDebuggerGlobals.bp[ii].addr;
 				s >> gDebuggerGlobals.bp[ii].enabled;
 				s >> gDebuggerGlobals.bp[ii].installed;
 				
@@ -1273,7 +1273,7 @@ ErrCode Debug::ExitDebugger (void)
 		if (gDebuggerGlobals.bp[ii].enabled == false)
 			continue;
 
-		emuptr addr = EmMemPtr(gDebuggerGlobals.bp[ii].addr);
+		emuptr addr = gDebuggerGlobals.bp[ii].addr;
 		if (!addr)
 			continue;
 
@@ -1365,7 +1365,7 @@ void Debug::InstallInstructionBreaks (void)
 	{
 		if (gDebuggerGlobals.bp[ii].enabled)
 		{
-			MetaMemory::MarkInstructionBreak (EmMemPtr(gDebuggerGlobals.bp[ii].addr));
+			MetaMemory::MarkInstructionBreak (gDebuggerGlobals.bp[ii].addr);
 		}
 	}
 }
@@ -1391,7 +1391,7 @@ void Debug::RemoveInstructionBreaks (void)
 	{
 		if (gDebuggerGlobals.bp[ii].enabled)
 		{
-			MetaMemory::UnmarkInstructionBreak (EmMemPtr(gDebuggerGlobals.bp[ii].addr));
+			MetaMemory::UnmarkInstructionBreak (gDebuggerGlobals.bp[ii].addr);
 		}
 	}
 }
@@ -1541,7 +1541,7 @@ void Debug::SetBreakpoint (int index, emuptr addr, BreakpointCondition* c)
 
 	gDebuggerGlobals.bp[index].enabled		= true;
 	gDebuggerGlobals.bp[index].installed	= false;
-	gDebuggerGlobals.bp[index].addr			= EmMemFakeT<MemPtr>(addr);
+	gDebuggerGlobals.bp[index].addr			= addr;
 	gDebuggerGlobals.bpCondition[index]		= c;
 
 	gSession->InstallInstructionBreaks ();
@@ -1566,7 +1566,7 @@ void Debug::ClearBreakpoint (int index)
 	gSession->RemoveInstructionBreaks ();
 
 	gDebuggerGlobals.bp[index].enabled = false;
-	gDebuggerGlobals.bp[index].addr = NULL;
+	gDebuggerGlobals.bp[index].addr = EmMemNULL;
 
 	Debug::DeleteBreakpointCondition (index);
 
@@ -1869,7 +1869,7 @@ Bool BreakpointCondition::Evaluate (void)
 
 void Debug::ConditionalBreak (void)
 {
-	MemPtr	bpAddress = EmMemFakeT<MemPtr>(m68k_getpc ());
+	emuptr	bpAddress = m68k_getpc ();
 
 	// Loop over the breakpoints to see if we've hit one.
 
@@ -2030,12 +2030,12 @@ void Debug::EventCallback (CSocket* s, int event)
 
 			if (s == gDebuggerSocket1)
 			{
-				gConnectedDebugSocket = (CTCPSocket*) gDebuggerSocket1;
+				gConnectedDebugSocket = new GDBRemote (gDebuggerSocket1);
 				gDebuggerSocket1 = NULL;
 			}
 			else if (s == gDebuggerSocket2)
 			{
-				gConnectedDebugSocket = (CTCPSocket*) gDebuggerSocket2;
+				gConnectedDebugSocket = new GDBRemote (gDebuggerSocket2);
 				gDebuggerSocket2 = NULL;
 			}
 			else	// s == gDebuggerSocket3
@@ -2062,6 +2062,7 @@ void Debug::EventCallback (CSocket* s, int event)
 
 		case CSocket::kDataReceived:
 		{
+			SLP::EventCallback (gConnectedDebugSocket);
 			break;
 		}
 
@@ -2072,8 +2073,9 @@ void Debug::EventCallback (CSocket* s, int event)
 			EmAssert (gDebuggerSocket1 == NULL);
 			EmAssert (gDebuggerSocket2 == NULL);
 			EmAssert (gDebuggerSocket3 == NULL);
-			EmAssert (gConnectedDebugSocket == s);
+			EmAssert (gConnectedDebugSocket && gConnectedDebugSocket->Socket () == s);
 
+			gConnectedDebugSocket->Delete ();
 			gConnectedDebugSocket = NULL;
 			s->Delete();
 
@@ -2091,8 +2093,6 @@ void Debug::EventCallback (CSocket* s, int event)
 			break;
 		}
 	}
-
-	SLP::EventCallback (s, event);
 }
 
 

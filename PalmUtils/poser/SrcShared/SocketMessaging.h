@@ -21,6 +21,11 @@ struct sockaddr;
 class CSocket
 {
 	public:
+		enum Flags {
+			kNoFlags = 0,
+			kFlagPeek = 1, //< do not consume data from the socket
+			kFlagReadExact = 2 //< read exactly the number of bytes requested
+		};
 		enum { kConnected, kDataReceived, kDisconnected };
 		typedef void (*EventCallback) (CSocket*, int event);
 
@@ -42,7 +47,7 @@ class CSocket
 		virtual ErrCode 		Open				(void) = 0;
 		virtual ErrCode 		Close				(void) = 0;
 		virtual ErrCode 		Write				(const void* buffer, int32 amountToWrite, int32* amtWritten) = 0;
-		virtual ErrCode 		Read				(void* buffer, int32 sizeOfBuffer, int32* amtRead) = 0;
+		virtual ErrCode 		Read				(void* buffer, int32 sizeOfBuffer, int32* amtRead, int flags = kFlagReadExact) = 0;
 		virtual Bool			HasUnreadData		(int32 timeout) = 0;
 		virtual ErrCode 		Idle				(void) = 0;
 
@@ -68,7 +73,7 @@ class CTCPSocket : public CSocket
 		virtual ErrCode 		Open				(void);
 		virtual ErrCode 		Close				(void);
 		virtual ErrCode 		Write				(const void* buffer, int32 amountToWrite, int32* amtWritten);
-		virtual ErrCode 		Read				(void* buffer, int32 sizeOfBuffer, int32* amtRead);
+		virtual ErrCode 		Read				(void* buffer, int32 sizeOfBuffer, int32* amtRead, int flags = kFlagReadExact);
 		virtual Bool			HasUnreadData		(int32 timeout);
 		virtual ErrCode 		Idle				(void);
 

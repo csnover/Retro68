@@ -390,6 +390,7 @@ void RPC::EventCallback (CSocket* s, int event)
 
 		case CSocket::kDataReceived:
 		{
+			SLP::EventCallback (s);
 			break;
 		}
 
@@ -415,8 +416,6 @@ void RPC::EventCallback (CSocket* s, int event)
 			s->Delete ();
 		}
 	}
-
-	SLP::EventCallback (s, event);
 }
 
 

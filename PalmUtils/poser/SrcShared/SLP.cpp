@@ -143,34 +143,13 @@ SLP::~SLP (void)
  *
  ***********************************************************************/
 
-void SLP::EventCallback (CSocket* s, int event)
+void SLP::EventCallback (CSocket* s)
 {
-	switch (event)
-	{
-		case CSocket::kConnected:
-		{
-			break;
-		}
-
-		case CSocket::kDataReceived:
-		{
-			ErrCode	result;
-			do {
-				SLP slp (s);
-				result = slp.HandleDataReceived ();
-			} while (result == errNone && s->HasUnreadData (500));
-			break;
-		}
-
-		case CSocket::kDisconnected:
-		{
-//			if (s == fSocket)
-//			{
-//				fSocket = NULL;
-//			}
-			break;
-		}
-	}
+	ErrCode	result;
+	do {
+		SLP slp (s);
+		result = slp.HandleDataReceived ();
+	} while (result == errNone && s->HasUnreadData (500));
 }
 
 
@@ -208,7 +187,8 @@ ErrCode SLP::HandleDataReceived (void)
 			if (this->Header ().bodySize > 0)
 			{
 				fSocket->Read (	this->Body ().GetPtr (),
-								this->Header ().bodySize,
+								std::min<size_t> (this->Body ().GetSize(),
+									this->Header ().bodySize),
 								NULL);
 			}
 

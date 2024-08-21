@@ -68,6 +68,8 @@ endfunction()
 poser_compiler_checks()
 
 add_executable(pose
+    Scripting/Python/GDBRemote.py
+
     SrcUnix/EmApplicationFltk.cpp
     SrcUnix/EmApplicationFltk.h
     SrcUnix/EmCommonUnix.h
@@ -206,6 +208,8 @@ add_executable(pose
     SrcShared/EmWindow.h
     SrcShared/ErrorHandling.cpp
     SrcShared/ErrorHandling.h
+    SrcShared/GDBRemote.cpp
+    SrcShared/GDBRemote.h
     SrcShared/Hordes.cpp
     SrcShared/Hordes.h
     SrcShared/HostControl.cpp
