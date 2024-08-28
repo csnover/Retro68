@@ -83,6 +83,6 @@ class PoserFrameDecorator(FrameDecorator):
             return name
 
         func = get_frame_func_from_pc(frame.pc())
-        return func.name if func is not None else "??"
+        return func.name if func and func.name else "??"
 
 initPoser()

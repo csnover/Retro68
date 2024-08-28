@@ -11,6 +11,8 @@
 \* ===================================================================== */
 
 #include "EmCommon.h"
+
+#include "DebugMgr.h"
 #include "EmBankSRAM.h"
 #include "EmBankROM.h"
 #include "EmErrCodes.h"
@@ -20,11 +22,16 @@
 #include "EmPatchState.h"
 #include "GDBRemote.h"
 #include "Logging.h"
+#include "ROMStubs.h"
 #include "SLP.h"
 #include "SocketMessaging.h"
 #include "SystemPacket.h"
 #include "UAE.h"
+#include <algorithm>
+#include <cstdio>
 #include <limits>
+#include <libelf.h>
+#include <sstream>
 
 #define PRINTF	if (!LogHLDebugger ()) ; else LogAppendMsg
 
@@ -49,7 +56,8 @@ static const char FEATURES_DESC[] =
 	";ConditionalBreakpoints+"
 	";qXfer:memory-map:read+"
 	";qXfer:features:read+"
-	";qXfer:exec-file:read+";
+	";qXfer:exec-file:read+"
+	";qXfer:libraries:read+";
 
 static const char TARGET_DESC[] = "<?xml version=\"1.0\"?>"
 	"<!DOCTYPE target SYSTEM \"gdb-target.dtd\">"
@@ -90,6 +98,10 @@ static const char MEMORY_MAP_DESC[] = "<?xml version=\"1.0\"?>"
 		"</memory>"
 	"</memory-map>";
 
+static const char LIBRARIES_DESC[] = "<library-list>"
+	"<library name=\"target:Palm OS ROM\">%s</library>"
+"</library-list>";
+
 enum { kInterrupt = '\x03' };
 
 enum {
@@ -100,10 +112,14 @@ enum {
 	errBadRegVal,
 	errBadHex,
 	errBadOffsetArgs,
-	errAgain    = kError_DbgErrBase + 11,
-	errInval    = kError_DbgErrBase + 22,
-	errFault    = kError_DbgErrBase + 33,
-	errBadMsg   = kError_DbgErrBase + 74,
+	errUnimplemented,
+	errMaxBreakpoints,
+	errAgain      = kError_DbgErrBase + 11,
+	errInval      = kError_DbgErrBase + 22,
+	errFault      = kError_DbgErrBase + 33,
+	errBadMsg     = kError_DbgErrBase + 74,
+	errBadElf     = kError_DbgErrBase + 100,
+	errBadElfLast = errBadElf + /* ELF_E_NUM, in private header only */ 50,
 };
 
 static const char* PrvErrString (ErrCode code)
@@ -116,12 +132,16 @@ static const char* PrvErrString (ErrCode code)
 		case errBadRegVal: return "Bad register value";
 		case errBadHex: return "Bad hex binary string length";
 		case errBadOffsetArgs: return "Bad offset/length";
+		case errUnimplemented: return "Unimplemented";
+		case errMaxBreakpoints: return "Breakpoint limit reached";
 		case errAgain: return "Try again";
 		case errInval: return "Invalid data";
 		case errFault: return "Fault";
 		case errBadMsg: return "Bad message";
 		default:
-			if (IsEmuError (code))
+			if (code >= errBadElf && code < errBadElfLast)
+				return elf_errmsg (code - errBadElf);
+			else if (IsEmuError (code))
 				return "Emulator error";
 			else if (IsPalmError (code))
 				return "Palm error";
@@ -222,7 +242,7 @@ ErrCode GDBParser::Read (CSocket *socket)
 				char ack = (fActualChecksum == fExpectedChecksum) ? '+' : '-';
 				fActualChecksum = 0;
 				fExpectedChecksum = 0;
-				result = socket->Write(&ack, 1, NULL);
+				result = socket->Write (&ack, 1, NULL);
 				uint16 entryLen = fParseIndex - fLen;
 				if (ack == '+')
 				{
@@ -279,37 +299,64 @@ ErrCode GDBParser::Read (CSocket *socket)
 }
 
 GDBWriter::GDBWriter (void)
-	: fLen(kGDBHeaderSize)
+	: fLen (kGDBHeaderSize)
 {
 	fBuf[0] = '$';
 }
 
-ErrCode GDBWriter::Push (const void* data, uint16 len)
+uint16 GDBWriter::Push (const void* data, uint16 len)
 {
-	if (Avail () < len)
-		return kError_OutOfMemory;
-	memcpy (WritePtr (), data, len);
-	fLen += len;
-	return kError_NoError;
+	const char* in = static_cast<const char*> (data);
+	const char* const inStart = in;
+	const char* const inEnd = in + len;
+
+	char* out = WritePtr ();
+	const char* const outStart = out;
+	const char* const outEnd = out + Avail ();
+
+	while (in != inEnd && out != outEnd)
+	{
+		char c = *in++;
+		if (c == '$' || c == '#' || c == '}' || c == '*')
+		{
+			enum { kEscapeLen = 1 };
+			if (out + kEscapeLen == outEnd)
+				break;
+
+			*out++ = '}';
+			*out++ = c ^ 0x20;
+		}
+		else
+			*out++ = c;
+	}
+	fLen += out - outStart;
+	return in - inStart;
 }
 
-ErrCode GDBWriter::PushHex (const void* data, uint16 len)
+ErrCode GDBWriter::PushFile (FILE* fp, uint32 offset, uint32 len)
 {
-	static const char LUT[] = "0123456789abcdef";
+	enum {
+		kResponsePrefixLen = 6, /* Fxxxx; */
+		kResponsePrefixLenWithNul = kResponsePrefixLen + 1
+	};
 
-	int outLen = int (len) * 2;
-	if (outLen > Avail ())
+	if (Avail () < kResponsePrefixLen)
 		return kError_OutOfMemory;
 
-	const uint8* in = reinterpret_cast<const uint8*> (data);
-	const uint8* const inEnd = in + len;
-	char* out = WritePtr ();
-	while (in != inEnd)
-	{
-		*out++ = LUT[*in >> 4];
-		*out++ = LUT[*in++ & 0xf];
-	}
-	fLen += outLen;
+	char data[GDBParser::kPacketSize - kResponsePrefixLen];
+	uint32 outSize = std::min<uint32> (sizeof (data), len);
+	int amtRead = pread (fileno (fp), data, outSize, offset);
+
+	char* outPrefix = WritePtr ();
+	fLen += kResponsePrefixLen;
+
+	uint16 amtWritten = Push (data, amtRead);
+
+	// Boy, this protocol.
+	char prefix[kResponsePrefixLenWithNul];
+	sprintf (prefix, "F%04hx;", amtWritten);
+	memcpy (outPrefix, prefix, kResponsePrefixLen);
+
 	return kError_NoError;
 }
 
@@ -334,10 +381,30 @@ ErrCode GDBWriter::PushFmt (const char* fmt, ...)
 	return kError_NoError;
 }
 
+ErrCode GDBWriter::PushHex (const void* data, uint16 len)
+{
+	static const char LUT[] = "0123456789abcdef";
+
+	int outLen = int (len) * 2;
+	if (outLen > Avail ())
+		return kError_OutOfMemory;
+
+	const uint8* in = reinterpret_cast<const uint8*> (data);
+	const uint8* const inEnd = in + len;
+	char* out = WritePtr ();
+	while (in != inEnd)
+	{
+		*out++ = LUT[*in >> 4];
+		*out++ = LUT[*in++ & 0xf];
+	}
+	fLen += outLen;
+	return kError_NoError;
+}
+
 ErrCode GDBWriter::PushStr (const char* cstr)
 {
 	uint16 len = strlen (cstr);
-	return Push (cstr, len);
+	return Push (cstr, len) == len ? kError_NoError : kError_OutOfMemory;
 }
 
 ErrCode GDBWriter::PushXfer	(uint16 offset, uint16 len, const char* fmt, ...)
@@ -352,47 +419,27 @@ ErrCode GDBWriter::PushXfer	(uint16 offset, uint16 len, const char* fmt, ...)
 	if (len == 0)
 		return Push ('l');
 
-	char tmp[1024];
+	char tmp[8192];
 	va_list args;
 	va_start (args, fmt);
-	int amtWritten = vsnprintf(tmp, sizeof (tmp), fmt, args);
+	int amtWritten = vsnprintf (tmp, sizeof (tmp), fmt, args);
 	va_end (args);
 
 	if (amtWritten < 0 || amtWritten >= int (sizeof (tmp)))
 		return errInval;
 
 	if (amtWritten <= offset)
-		return Push('l');
-
-	len = std::min<int> (amtWritten - offset, len);
+		return Push ('l');
 
 	const char* in = tmp + offset;
-	const char* const inEnd = in + len;
+	int amtToWrite = amtWritten - offset;
 
-	enum { kStatusLen = 1 };
+	enum { kStateLen = 1 };
 	char* state = WritePtr ();
-	char* out = state + kStatusLen;
-	char* const outEnd = state + Avail ();
+	fLen += kStateLen;
 
-	while (in != inEnd && out != outEnd)
-	{
-		char c = *in++;
-		if (c == '$' || c == '#' || c == '}' || c == '*')
-		{
-			enum { kEscapeLen = 1 };
-			if (out + kEscapeLen == outEnd)
-				break;
-
-			++len;
-			*out++ = '}';
-			*out++ = c ^ 0x20;
-		}
-		else
-			*out++ = c;
-	}
-
-	fLen += kStatusLen + len;
-	*state = (in == inEnd ? 'l' : 'm');
+	amtWritten = Push (in, std::min<int> (amtToWrite, len));
+	*state = (amtToWrite == amtWritten ? 'l' : 'm');
 
 	return kError_NoError;
 }
@@ -409,7 +456,7 @@ static inline uint8 PrvCalcChecksum (const void* data, size_t len)
 ErrCode GDBWriter::Write (CSocket* socket)
 {
 	uint8 checksum = PrvCalcChecksum (Data (), DataSize ());
-	sprintf(WritePtr (), "#%02x", checksum);
+	sprintf (WritePtr (), "#%02x", checksum);
 
 	ErrCode result = socket->Write (fBuf, DataSize () + kGDBPacketFrameSize, NULL);
 	fLen = kGDBHeaderSize;
@@ -424,12 +471,19 @@ GDBRemote::GDBRemote (CSocket* s) :
 	fGDBWriter (),
 	fSLPRequest (),
 	fSLPResponse (),
-	fSocketType (kSocketUnknown)
+	fSocketType (kSocketUnknown),
+	fROMSymbolTable ()
 {
+}
+
+static int PrvCloseFile (FILE* fp)
+{
+	return (fp == NULL ? -1 : fclose (fp));
 }
 
 GDBRemote::~GDBRemote (void)
 {
+	std::for_each (fROMSymbolTable.begin (), fROMSymbolTable.end (), PrvCloseFile);
 }
 
 ErrCode GDBRemote::Open (void)
@@ -526,6 +580,54 @@ Bool GDBRemote::ShortPacketHack (void)
 Bool GDBRemote::ByteswapHack (void)
 {
 	return fSocket->ByteswapHack ();
+}
+
+ErrCode GDBRemote::GDBBreakpoint (const char* in, size_t len)
+{
+	enum GDBBreakpointType
+	{
+		SWBreak = 0,
+		HWBreak,
+		WriteWatch,
+		ReadWatch,
+		AccessWatch
+	};
+
+	char action;
+	int type;
+	emuptr address;
+	int kind;
+
+	if (sscanf (in, "%c%x,%x,%x", &action, &type, &address, &kind) != 4)
+		return errBadMsg;
+
+	bool insert = (action == 'Z');
+
+	// TODO: Watchpoint and conditional breakpoints
+	if (type != SWBreak && type != HWBreak)
+		return errUnimplemented;
+
+	unsigned int index = 0;
+	for (; index < countof (gDebuggerGlobals.bp); ++index)
+	{
+		EmBreakpointType& bp = gDebuggerGlobals.bp[index];
+		if (insert && !bp.enabled)
+		{
+			Debug::SetBreakpoint (index, address, NULL);
+			break;
+		}
+		else if (!insert && bp.addr == address)
+		{
+			Debug::ClearBreakpoint (index);
+			break;
+		}
+	}
+
+	if (index == countof (gDebuggerGlobals.bp))
+		return errMaxBreakpoints;
+
+	TRY (fGDBWriter.PushStr ("OK"));
+	return fGDBWriter.Write (fSocket);
 }
 
 static inline bool PrvIsCommand (const char *name, size_t nameLen, const char*& in, size_t& len)
@@ -727,7 +829,7 @@ ErrCode GDBRemote::GDBCommandRead (const char* in, size_t len)
 	{
 		case 'q': return GDBQuery (in, len);
 		case kInterrupt:
-			EmASSERT(false && "TODO; like '?' except should stop with signal");
+			EmASSERT (false && "TODO; like '?' except should stop with signal");
 		case '?': return GDBCommand (sysPktStateCmd, in, len);
 		case 'k':
 		case 'c':
@@ -741,32 +843,383 @@ ErrCode GDBRemote::GDBCommandRead (const char* in, size_t len)
 		case 'M': return GDBCommand (sysPktWriteMemCmd, in, len);
 		case 'p': return GDBSingleRegister (false, in, len);
 		case 'P': return GDBSingleRegister (true, in, len);
-		case 'v': return GDBExtendedCommand (in, len);
+		case 'v': return GDBVerboseCommand (in, len);
 		// TODO: Should be possible by 'M', if needed
 		// case 'X': EmAssert (false);
-		case 'z': return GDBCommand (sysPktGetBreakpointsCmd, in, len);
-		case 'Z': return GDBCommand (sysPktSetBreakpointsCmd, in, len);
+		case 'z':
+		case 'Z': return GDBBreakpoint (in - 1, len + 1);
 		default: return fGDBWriter.Write (fSocket);
 	}
 }
 
-ErrCode GDBRemote::GDBExtendedCommand (const char* in, size_t len)
-{
-	TRY_SLP_COMMAND ("CtrlC", sysPktStateCmd);
-	TRY_SLP_COMMAND ("FlashWrite", sysPktExecFlashCmd);
+typedef std::vector<char> ElfStringTable;
+typedef std::vector<Elf32_Sym> ElfSymbolTable;
 
-	if (COMMAND ("Cont?"))
-		fGDBWriter.PushStr ("vCont;c;s");
-	else if (COMMAND ("Cont"))
+struct ElfContainer
+{
+	Elf* elf;
+	FILE* file;
+	emuptr entrypoint;
+	ElfStringTable sectionNameTable;
+	ElfStringTable symbolNameTable;
+	ElfSymbolTable symbolTable;
+	UInt16 textSegmentCount;
+
+	ElfContainer (FILE* f) :
+		elf (NULL),
+		file (f),
+		entrypoint (0),
+		textSegmentCount (0)
 	{
-		if (len < 1)
+		elf = elf_begin (fileno (f), ELF_C_WRITE, NULL);
+	}
+
+	~ElfContainer ()
+	{
+		if (elf != NULL)
+			elf_end (elf);
+		if (file != NULL)
+			fclose (file);
+	}
+};
+
+struct ElfSection
+{
+	Elf_Scn* section;
+	Elf32_Shdr* header;
+	Elf_Data* data;
+};
+
+static size_t PrvPushCStr (ElfStringTable& vec, const char* str)
+{
+	size_t pos = vec.size ();
+	vec.insert (vec.end (), str, str + strlen (str) + 1);
+	return pos;
+}
+
+template <typename T>
+static void PrvAssignData (Elf_Data* data, std::vector<T>& buf)
+{
+	data->d_buf = buf.data ();
+	data->d_size = buf.size () * sizeof (T);
+}
+
+static ElfSection PrvAddSection (ElfContainer& elf, const char* name)
+{
+	ElfSection container;
+
+	Elf_Scn* section = elf_newscn (elf.elf);
+	Elf32_Shdr* header = elf32_getshdr (section);
+
+	header->sh_name = PrvPushCStr (elf.sectionNameTable, name);
+
+	container.section = section;
+	container.header = header;
+	container.data = elf_newdata (section);
+	return container;
+}
+
+static ElfSection PrvAddCodeSection (ElfContainer& elf,
+	const char* name, emuptr addr, uint32 size, const void* ptr)
+{
+	ElfSection text = PrvAddSection (elf, name);
+	text.header->sh_type = SHT_PROGBITS;
+	text.header->sh_flags = SHF_ALLOC | SHF_EXECINSTR | SHF_WRITE;
+	text.header->sh_addralign = 1;
+	text.header->sh_addr = addr;
+	text.header->sh_size = size;
+	text.data->d_buf = const_cast<void*> (ptr);
+	text.data->d_size = size;
+	return text;
+}
+
+static void PrvAddCodeRange (ElfContainer& elf, const char* sectionName, emuptr start, emuptr size)
+{
+	ElfSection text = PrvAddCodeSection (elf, sectionName, start, size,
+		EmMemGetRealAddress (start));
+
+	emuptr fnStart = start;
+	emuptr end = start + size;
+	emuptr fnEnd;
+	while (fnStart < end && (fnEnd = FindFunctionEnd (fnStart)) != EmMemNULL)
+	{
+		char name[64];
+		emuptr fnNext;
+		GetMacsbugInfo (fnEnd, name, sizeof (name), &fnNext);
+
+		if (fnNext != fnEnd)
+		{
+			Elf32_Sym sym;
+			sym.st_name = PrvPushCStr (elf.symbolNameTable, name);
+			sym.st_size = fnEnd - fnStart;
+			sym.st_value = fnStart - start;
+			sym.st_info = ELF32_ST_INFO (STB_GLOBAL, STT_FUNC);
+			sym.st_shndx = elf_ndxscn (text.section);
+			elf.symbolTable.push_back (sym);
+		}
+
+		fnStart = fnNext;
+	}
+}
+
+template <typename Fn>
+static ErrCode PrvWalkDBRecordsOfType (UInt16 cardNo, LocalID dbID, UInt32 type, Fn callback)
+{
+	DmOpenRef dbP = ::DmOpenDatabase (cardNo, dbID, dmModeReadOnly);
+	if (dbP == NULL)
+		return ::DmGetLastErr ();
+
+	int typeIndex = 0;
+	ErrCode result = kError_NoError;
+	while (result == kError_NoError)
+	{
+		int resIndex = ::DmFindResourceType (dbP, type, typeIndex++);
+		if (resIndex == dmMaxRecordIndex)
+			break;
+
+		MemHandle resource = ::DmGetResourceIndex (dbP, resIndex);
+		result = (callback)(resIndex, resource);
+		::DmReleaseResource (resource);
+	}
+
+	::DmCloseDatabase (dbP);
+	return result;
+}
+
+struct AddDatabaseFunctor
+{
+	ElfContainer& elf;
+	UInt32 type;
+	AddDatabaseFunctor (ElfContainer& e, UInt32 t) :
+		elf (e),
+		type (t)
+	{
+	}
+
+	ErrCode operator () (UInt16 resIndex, MemHandle code)
+	{
+		MemPtr codeP = ::MemHandleLock (code);
+		emuptr start = EmMemPtr (codeP);
+
+		if (type == sysResTAppCode && resIndex == 1)
+			elf.entrypoint = start;
+
+		char sectionName[16];
+		sprintf (sectionName, ".text.%d", elf.textSegmentCount++);
+		PrvAddCodeRange (elf, sectionName, start, ::MemHandleSize (code));
+
+		::MemHandleUnlock (code);
+
+		return kError_NoError;
+	}
+};
+
+static ErrCode PrvAddDatabase (ElfContainer& elf, UInt16 cardNo, LocalID dbID, UInt32 type)
+{
+	return PrvWalkDBRecordsOfType (cardNo, dbID, type, AddDatabaseFunctor (elf, type));
+}
+
+template <typename Fn>
+static ErrCode PrvWalkROMDatabases (Fn callback)
+{
+	bool newSearch = true;
+	DmSearchStateType stateInfo;
+	for (;;)
+	{
+		UInt16 cardNo;
+		LocalID dbID;
+		if (::DmGetNextDatabaseByTypeCreator (newSearch, &stateInfo, 0,
+			sysFileCSystem, false, &cardNo, &dbID) != errNone)
+			break;
+		TRY ((callback)(cardNo, dbID));
+		newSearch = false;
+	}
+
+	return kError_NoError;
+}
+
+static UInt32 CODE_RESOURCES[] = {
+	sysResTAppCode,
+	sysResTBootCode,
+	sysResTExtensionCode,
+	sysResTExtensionOEMCode,
+	0
+};
+
+struct MakeROMWalkFunctor
+{
+	ElfContainer& elf;
+
+	MakeROMWalkFunctor (ElfContainer& e)
+		: elf (e)
+	{
+	}
+
+	ErrCode operator () (UInt16 cardNo, LocalID dbID)
+	{
+		UInt32* type = CODE_RESOURCES;
+		ErrCode result = kError_NoError;
+		for (; result == kError_NoError && *type != 0; ++type)
+			result = PrvAddDatabase (elf, cardNo, dbID, *type);
+		return result;
+	}
+};
+
+static ErrCode PrvMakeROMDebugFile (ElfContainer& elf)
+{
+	emuptr rom = EmBankROM::GetMemoryStart ();
+
+	EmAliasCardHeaderType<PAS> header (rom);
+	elf.entrypoint = header.resetVector;
+
+	emuptr fnStart = rom;
+	emuptr fnEnd;
+	emuptr romEnd = rom + EmBankROM::GetImageSize ();
+	while (fnStart < romEnd && (fnEnd = FindFunctionEnd (fnStart)) != EmMemNULL)
+		GetMacsbugInfo (fnEnd, NULL, 0, &fnStart);
+
+	PrvAddCodeRange (elf, ".text", rom, fnStart - rom);
+
+	return PrvWalkROMDatabases (MakeROMWalkFunctor (elf));
+}
+
+static ErrCode PrvMakeAppDebugFile (ElfContainer& elf, const char* filename)
+{
+	LocalID dbID = ::DmFindDatabase (0, filename);
+	if (dbID == 0)
+		return ::DmGetLastErr ();
+
+	return PrvAddDatabase (elf, 0, dbID, sysResTAppCode);
+}
+
+static ErrCode PrvMakeDebugFile (FILE *& file, const char* filename)
+{
+	file = NULL;
+
+	if (elf_version (EV_CURRENT) == EV_NONE)
+		return errFault;
+
+	ElfContainer elf (std::tmpfile ());
+
+	Elf32_Ehdr* elfHeader = elf32_newehdr (elf.elf);
+	elfHeader->e_ident[EI_DATA] = ELFDATA2MSB;
+	elfHeader->e_machine = EM_68K;
+	elfHeader->e_type = ET_DYN;
+
+	Elf32_Phdr* programHeader = elf32_newphdr (elf.elf, 1);
+
+	// indexes in ELF cannot be zero
+	elf.sectionNameTable.push_back ('\0');
+	elf.symbolNameTable.push_back ('\0');
+
+	ElfSection shstrtab = PrvAddSection (elf, ".shstrtab");
+	shstrtab.header->sh_type = SHT_STRTAB;
+	shstrtab.header->sh_flags = SHF_STRINGS;
+	shstrtab.header->sh_addralign = 1;
+	elfHeader->e_shstrndx = elf_ndxscn (shstrtab.section);
+
+	ElfSection strtab = PrvAddSection (elf, ".strtab");
+	strtab.header->sh_type = SHT_STRTAB;
+	strtab.header->sh_flags = SHF_STRINGS;
+	strtab.header->sh_addralign = 1;
+
+	ElfSection symtab = PrvAddSection (elf, ".symtab");
+	symtab.header->sh_type = SHT_SYMTAB;
+	symtab.header->sh_entsize = sizeof (Elf32_Sym);
+	symtab.header->sh_link = elf_ndxscn (strtab.section);
+	symtab.data->d_type = ELF_T_SYM;
+
+	if (strcmp ("Palm OS ROM", filename) == 0)
+		TRY (PrvMakeROMDebugFile (elf));
+	else
+		TRY (PrvMakeAppDebugFile (elf, filename));
+
+	elfHeader->e_entry = elf.entrypoint;
+
+	PrvAssignData (shstrtab.data, elf.sectionNameTable);
+	PrvAssignData (symtab.data, elf.symbolTable);
+	PrvAssignData (strtab.data, elf.symbolNameTable);
+
+	int result = elf_update (elf.elf, ELF_C_NULL);
+	if (result >= 0)
+	{
+		programHeader->p_type = PT_PHDR;
+		programHeader->p_offset = elfHeader->e_phoff;
+		programHeader->p_filesz = elf32_fsize (ELF_T_PHDR, 1, EV_CURRENT);
+		elf_flagphdr (elf.elf, ELF_C_SET, ELF_F_DIRTY);
+		result = elf_update (elf.elf, ELF_C_WRITE);
+	}
+
+	if (result < 0)
+		return errBadElf + elf_errno ();
+
+	file = elf.file;
+	elf.file = NULL;
+	return kError_NoError;
+}
+
+ErrCode GDBRemote::GDBHostIO (const char* in, size_t len)
+{
+	if (COMMAND ("open:"))
+	{
+		const char* hexFilenameEnd = strchr (in, ',');
+		if (hexFilenameEnd == NULL)
 			return errBadMsg;
-		else if (*in == 'c')
-			return GDBCommand (sysPktContinueCmd, in, len);
-		else if (*in == 's')
-			return GDBCommand (sysPktSingleStepCmd, in, len);
+
+		uint32 flags, mode;
+		if (sscanf (hexFilenameEnd, ",%x,%x", &flags, &mode) != 2)
+			return errBadMsg;
+
+		ptrdiff_t hexLen = hexFilenameEnd - in;
+		char filename[256];
+		TRY (PrvGDBHexToBinary (filename, sizeof (filename) - 1, in, hexLen));
+		filename[hexLen / 2] = '\0';
+
+		if (flags == /* O_RDONLY */ 0 && strcmp ("just probing", filename) != 0)
+		{
+			FileTable::iterator it = std::find (fROMSymbolTable.begin (),
+				fROMSymbolTable.end (), static_cast<FILE*> (NULL));
+			int fd;
+			if (it == fROMSymbolTable.end ())
+			{
+				fd = fROMSymbolTable.size ();
+				fROMSymbolTable.push_back (NULL);
+			}
+			else
+				fd = it - fROMSymbolTable.begin ();
+
+			TRY (PrvMakeDebugFile (fROMSymbolTable[fd], filename));
+			TRY (fGDBWriter.PushFmt ("F%x", fd));
+		}
 		else
+			TRY (fGDBWriter.PushFmt ("F%x", -1));
+	}
+	else if (COMMAND ("close:"))
+	{
+		int fd;
+		if (sscanf (in, "%x", &fd) != 1)
 			return errBadMsg;
+
+		int result = -1;
+		if (fd < int (fROMSymbolTable.size ()))
+		{
+			result = PrvCloseFile (fROMSymbolTable[fd]);
+			if (result == 0)
+				fROMSymbolTable[fd] = NULL;
+		}
+		TRY (fGDBWriter.PushFmt ("F%x", result));
+	}
+	else if (COMMAND ("pread:"))
+	{
+		int fd;
+		uint32 count, offset;
+		if (sscanf (in, "%x,%x,%x", &fd, &count, &offset) != 3)
+			return errBadMsg;
+
+		if (fd >= int (fROMSymbolTable.size ()) || fROMSymbolTable[fd] == NULL)
+			TRY (fGDBWriter.PushFmt ("F%x,%x", 0, /* EINVAL */ 22));
+		else
+			TRY (fGDBWriter.PushFile (fROMSymbolTable[fd], offset, count));
 	}
 
 	return fGDBWriter.Write (fSocket);
@@ -783,6 +1236,60 @@ ErrCode GDBRemote::GDBPacketIn (void)
 	return kError_NoError;
 }
 
+static void PrvAddXMLLibrarySection (std::ostringstream& sections, emuptr p)
+{
+	sections << "<section address=\"" << p << "\"/>";
+}
+
+struct ROMXMLSectionsFunctor
+{
+	struct AddSectionFunctor
+	{
+		std::ostringstream& sections;
+		AddSectionFunctor (std::ostringstream& s) :
+			sections (s)
+		{
+		}
+
+		ErrCode operator () (UInt16, MemHandle code)
+		{
+			emuptr p = EmMemPtr (::MemHandleLock (code));
+			PrvAddXMLLibrarySection (sections, p);
+			::MemHandleUnlock (code);
+			return kError_NoError;
+		}
+	};
+
+	std::ostringstream& sections;
+	ROMXMLSectionsFunctor (std::ostringstream& s) :
+		sections (s)
+	{
+	}
+
+	ErrCode operator () (UInt16 cardNo, LocalID dbID)
+	{
+		UInt32* type = CODE_RESOURCES;
+		ErrCode result = kError_NoError;
+		for (; result == kError_NoError && *type != 0; ++type)
+			result = PrvWalkDBRecordsOfType (cardNo, dbID, *type, AddSectionFunctor (sections));
+		return result;
+	}
+};
+
+static ErrCode PrvMakeROMXMLSections (std::string& out)
+{
+	std::ostringstream sections;
+
+	PrvAddXMLLibrarySection (sections, EmBankROM::GetMemoryStart ());
+
+	ErrCode result = PrvWalkROMDatabases (ROMXMLSectionsFunctor (sections));
+
+	if (result == kError_NoError)
+		out = sections.str ();
+
+	return result;
+}
+
 ErrCode GDBRemote::GDBQuery (const char* in, size_t len)
 {
 	TRY_SLP_COMMAND ("CRC", sysPktChecksumCmd);
@@ -793,7 +1300,7 @@ ErrCode GDBRemote::GDBQuery (const char* in, size_t len)
 	else if (COMMAND ("Xfer:memory-map:read::"))
 	{
 		uint32 offset, length;
-		if (sscanf(in, "%x,%x", &offset, &length) != 2)
+		if (sscanf (in, "%x,%x", &offset, &length) != 2)
 			return errBadOffsetArgs;
 
 		TRY (fGDBWriter.PushXfer (offset, length, MEMORY_MAP_DESC,
@@ -805,10 +1312,10 @@ ErrCode GDBRemote::GDBQuery (const char* in, size_t len)
 	else if (COMMAND ("Xfer:features:read:target.xml:"))
 	{
 		uint32 offset, length;
-		if (sscanf(in, "%x,%x", &offset, &length) != 2)
+		if (sscanf (in, "%x,%x", &offset, &length) != 2)
 			return errBadOffsetArgs;
 
-		TRY (fGDBWriter.PushXfer(offset, length, TARGET_DESC));
+		TRY (fGDBWriter.PushXfer (offset, length, TARGET_DESC));
 	}
 	else if (COMMAND ("Xfer:exec-file:read:"))
 	{
@@ -819,7 +1326,28 @@ ErrCode GDBRemote::GDBQuery (const char* in, size_t len)
 
 		EmuAppInfo appInfo = EmPatchState::GetCurrentAppInfo ();
 
-		TRY (fGDBWriter.PushXfer(offset, length, "%s", appInfo.fName));
+		// If app is in ROM then it is necessary to tell GDB to request the file
+		// from the target in order to see any symbols. (This assumes that
+		// whatever app a user plans to debug themselves will be loadable from
+		// a local file with the correct debug information.)
+		emuptr appAddress = EmMemPtr (::MemLocalIDToGlobal (appInfo.fDBID, appInfo.fCardNo));
+		const char* prefix;
+		if (appAddress >= EmBankROM::GetMemoryStart ())
+			prefix = "target:";
+		else
+			prefix = "";
+
+		TRY (fGDBWriter.PushXfer (offset, length, "%s%s", prefix, appInfo.fName));
+	}
+	else if (COMMAND ("Xfer:libraries:read::"))
+	{
+		uint32 offset, length;
+		if (sscanf (in, "%x,%x", &offset, &length) != 2)
+			return errBadOffsetArgs;
+
+		std::string romSections;
+		TRY (PrvMakeROMXMLSections (romSections));
+		TRY (fGDBWriter.PushXfer (offset, length, LIBRARIES_DESC, romSections.c_str ()));
 	}
 	else if (COMMAND ("HostInfo"))
 		TRY (fGDBWriter.PushStr (HOSTINFO_DESC));
@@ -830,7 +1358,7 @@ ErrCode GDBRemote::GDBQuery (const char* in, size_t len)
 			return errBadMsg;
 		char name[256];
 		emuptr start, end;
-		::FindFunctionName(pc & ~1, name, &start, &end, sizeof (name) - 1);
+		::FindFunctionName (pc & ~1, name, &start, &end, sizeof (name) - 1);
 		TRY (fGDBWriter.PushFmt ("%08x%08x%s", start, end, name));
 	}
 
@@ -842,6 +1370,8 @@ ErrCode GDBRemote::GDBQuery (const char* in, size_t len)
 	else if (COMMAND ("sThreadInfo"))
 		TRY (fGDBWriter.PushStr ("l"));
 
+	else if (COMMAND ("Symbol::"))
+		TRY (fGDBWriter.PushStr ("OK"));
 	else if (COMMAND ("Offsets"))
 		EmASSERT (false && "TODO");
 	else if (COMMAND ("CatchSyscalls"))
@@ -850,9 +1380,6 @@ ErrCode GDBRemote::GDBQuery (const char* in, size_t len)
 
 	return fGDBWriter.Write (fSocket);
 }
-
-#undef TRY_SLP_COMMAND
-#undef COMMAND
 
 ErrCode GDBRemote::GDBSendError (ErrCode code)
 {
@@ -865,9 +1392,9 @@ ErrCode GDBRemote::GDBSingleRegister (bool set, const char* command, size_t len)
 {
 	int which;
 	uint32 value;
-	if (set && sscanf(command, "%x=%x", &which, &value) != 2)
+	if (set && sscanf (command, "%x=%x", &which, &value) != 2)
 		return errBadMsg;
-	else if (!set && sscanf(command, "%x", &which) != 1)
+	else if (!set && sscanf (command, "%x", &which) != 1)
 		return errBadMsg;
 
 	// GetRegs does some extra stuff to make sure registers are correct, and
@@ -898,7 +1425,7 @@ ErrCode GDBRemote::GDBSingleRegister (bool set, const char* command, size_t len)
 	else
 	{
 		value = *reg;
-		TRY (fGDBWriter.PushFmt("%08x", value));
+		TRY (fGDBWriter.PushFmt ("%08x", value));
 	}
 
 	return fGDBWriter.Write (fSocket);
@@ -918,6 +1445,33 @@ ErrCode GDBRemote::GDBThread (const char* command, size_t len)
 	TRY (fGDBWriter.PushStr ("OK"));
 	return fGDBWriter.Write (fSocket);
 }
+
+ErrCode GDBRemote::GDBVerboseCommand (const char* in, size_t len)
+{
+	TRY_SLP_COMMAND ("CtrlC", sysPktStateCmd);
+	TRY_SLP_COMMAND ("FlashWrite", sysPktExecFlashCmd);
+
+	if (COMMAND ("Cont?"))
+		fGDBWriter.PushStr ("vCont;c;s");
+	else if (COMMAND ("Cont"))
+	{
+		if (len < 1)
+			return errBadMsg;
+		else if (*in == 'c')
+			return GDBCommand (sysPktContinueCmd, in, len);
+		else if (*in == 's')
+			return GDBCommand (sysPktSingleStepCmd, in, len);
+		else
+			return errBadMsg;
+	}
+	else if (COMMAND ("File:"))
+		return GDBHostIO (in, len);
+
+	return fGDBWriter.Write (fSocket);
+}
+
+#undef TRY_SLP_COMMAND
+#undef COMMAND
 
 void GDBRemote::SLPRequestOut (void* buffer, int32 sizeOfBuffer, int32* amtRead, int flags)
 {

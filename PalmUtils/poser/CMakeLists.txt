@@ -456,6 +456,7 @@ target_include_directories(pose PRIVATE
 )
 
 target_link_libraries(pose PRIVATE
+    ELF
     ZLIB::ZLIB
     Threads::Threads
     JPEG::JPEG

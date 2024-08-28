@@ -16,6 +16,7 @@
 #include "EmTypes.h"
 #include "SocketMessaging.h"
 #include <cstddef>
+#include <vector>
 
 class CSocket;
 
@@ -71,9 +72,10 @@ class GDBWriter
 							GDBWriter			(void);
 
 		inline ErrCode		Push				(char c);
-		ErrCode				Push				(const void* data, uint16 len);
-		ErrCode 			PushHex				(const void* data, uint16 len);
+		uint16				Push				(const void* data, uint16 len);
+		ErrCode				PushFile			(FILE* fp, uint32 offset, uint32 len);
 		ErrCode 			PushFmt				(const char* fmt, ...);
+		ErrCode 			PushHex				(const void* data, uint16 len);
 		ErrCode				PushStr				(const char* cstr);
 		ErrCode 			PushXfer			(uint16 offset, uint16 len, const char* fmt, ...);
 		inline void			Reset				(void);
@@ -113,14 +115,16 @@ class GDBRemote : public CSocket
 							GDBRemote			(const GDBRemote&);
 		GDBRemote&			operator=			(const GDBRemote&);
 
+		ErrCode				GDBBreakpoint		(const char* command, size_t len);
 		ErrCode				GDBCommand			(int slpType, const char* command, size_t len);
 		ErrCode				GDBCommandRead		(const char* command, size_t len);
-		ErrCode				GDBExtendedCommand	(const char* command, size_t len);
+		ErrCode				GDBHostIO			(const char* command, size_t len);
 		ErrCode				GDBPacketIn			(void);
 		ErrCode				GDBQuery			(const char* command, size_t len);
 		ErrCode				GDBSendError		(ErrCode code);
 		ErrCode				GDBSingleRegister	(bool set, const char* command, size_t len);
 		ErrCode				GDBThread			(const char* command, size_t len);
+		ErrCode				GDBVerboseCommand	(const char* command, size_t len);
 
 		void				SLPRequestOut		(void* buffer, int32 sizeOfBuffer, int32* amtRead, int flags);
 		ErrCode				SLPResponseOut		(size_t packetSize);
@@ -146,6 +150,7 @@ class GDBRemote : public CSocket
 		};
 
 		enum SocketType { kSocketUnknown, kSocketGDB, kSocketSLP };
+		typedef std::vector<FILE*> FileTable;
 
 		CSocket*		fSocket;
 		GDBParser		fGDBParser;
@@ -153,6 +158,7 @@ class GDBRemote : public CSocket
 		FixedBuffer		fSLPRequest;
 		FixedBuffer		fSLPResponse;
 		SocketType		fSocketType;
+		FileTable		fROMSymbolTable;
 };
 
 GDBParser::Packet::operator bool () const

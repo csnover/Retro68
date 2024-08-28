@@ -37,6 +37,7 @@ const uint16	kOpcode_JMP 	= 0x4ED0;
 const uint16	kOpcode_CMPW	= 0xB47C;		// CMP.W	#$xxxx,D2
 const uint16	kOpcode_ADDW	= 0xD442;		// ADD.W	D2,D2
 const uint32	kOpcode_JMPPC	= 0x4EFB2002;	// JMP		*+$0004(D2.W)
+const uint16	kOpcode_JMPREL1 = 0x4EE9;		// JMP		($xx,A1)
 const uint16	kOpcode_JMPREL	= 0x4EFA;		// JMP		*+$xxxx
 const uint16	kOpcode_MOVEL	= 0x2038;		// MOVE.L	$xxxxxxxx,D0
 
@@ -1602,6 +1603,23 @@ void FindFunctionName (emuptr addr, char* nameP,
  *
  ***********************************************************************/
 
+static int PrvInstructionSize (emuptr addr)
+{
+	// TODO: Should use table68k or cpufunctbl or something that actually knows
+	// the right answer, but these structures are not documented well enough to
+	// figure out what to look at to learn the size of the whole instruction
+	// without doing too much work
+	switch (EmMemGet16 (addr))
+	{
+		case kOpcode_JMPREL1:
+		case kOpcode_JMPREL:
+		case kOpcode_JMPPC:
+			return 4;
+		default:
+			return 2;
+	}
+}
+
 emuptr FindFunctionStart (emuptr addr)
 {
 	emuptr	beginAddr = addr - 0x02000;	// Set a default value.
@@ -1617,6 +1635,10 @@ emuptr FindFunctionStart (emuptr addr)
 		{
 			beginAddr = chunk->BodyStart ();
 		}
+		else if (heap->DataStart () > beginAddr)
+		{
+			beginAddr = heap->DataStart ();
+		}
 	}
 
 	while ((addr -= 2) >= beginAddr)
@@ -1630,7 +1652,7 @@ emuptr FindFunctionStart (emuptr addr)
 
 		if (::EndOfFunctionSequence (addr))
 		{
-			addr += 2;	// skip past the final RTS (or whatever).
+			addr += PrvInstructionSize (addr);	// skip past the final RTS (or whatever).
 
 			// Skip over the Macsbug name (and any constant data).
 
@@ -1683,6 +1705,10 @@ emuptr FindFunctionEnd (emuptr addr)
 		{
 			endAddr = chunk->BodyEnd ();
 		}
+		else if (heap->DataEnd () < endAddr)
+		{
+			endAddr = heap->DataEnd ();
+		}
 	}
 
 	while (addr < endAddr)
@@ -1696,10 +1722,10 @@ emuptr FindFunctionEnd (emuptr addr)
 
 		if (::EndOfFunctionSequence (addr))
 		{
-			return addr + 2;
+			return addr + PrvInstructionSize (addr);
 		}
 
-		addr += 2;
+		addr += PrvInstructionSize (addr);
 	}
 
 	return EmMemNULL;
@@ -1746,6 +1772,16 @@ Bool EndOfFunctionSequence (emuptr addr)
 		opcode == kOpcode_RTD)
 	{
 		return true;
+	}
+
+	// Sometimes relative jumps are intrafunction, sometimes they are returns;
+	// the least unreliable way to tell seems to be to look for the Macsbug
+	// signature, since if that exists, it is definitely at the end
+	if (opcode == kOpcode_JMPREL || opcode == kOpcode_JMPREL1)
+	{
+		emuptr next;
+		GetMacsbugInfo (addr + 4, NULL, 0, &next);
+		return (next != addr + 4);
 	}
 
 	return false;

@@ -35,6 +35,7 @@ Err DmDatabaseInfo (UInt16 cardNo, LocalID	dbID, Char* nameP,
 					UInt32* creatorP);
 Err DmDeleteDatabase (UInt16 cardNo, LocalID dbID);
 LocalID DmFindDatabase (UInt16 cardNo, const Char* nameP);
+UInt16 DmFindResourceType (DmOpenRef dbP, DmResType resType, UInt16 typeIndex);
 MemHandle DmGet1Resource (DmResType type, DmResID id);
 LocalID DmGetDatabase (UInt16 cardNo, UInt16 index);
 Err DmGetLastErr (void);

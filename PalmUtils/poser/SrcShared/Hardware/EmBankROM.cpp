@@ -578,6 +578,15 @@ void EmBankROM::AddOpcodeCycles (void)
 #endif
 }
 
+// ---------------------------------------------------------------------------
+//		• EmBankROM::GetImageSize
+// ---------------------------------------------------------------------------
+
+uint32 EmBankROM::GetImageSize (void)
+{
+	return gROMImage_Size;
+}
+
 
 // ---------------------------------------------------------------------------
 //		• EmBankROM::AddressError

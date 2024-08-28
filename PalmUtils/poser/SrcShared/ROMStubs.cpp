@@ -374,6 +374,30 @@ LocalID DmFindDatabase (UInt16 cardNo, const Char* nameP)
 // --------------------
 // Called:
 //
+//	*	by GDBRemote to get 'code' and 'boot' resources.
+
+UInt16 DmFindResourceType (DmOpenRef dbP, DmResType resType, UInt16 typeIndex)
+{
+	// Prepare the stack.
+	CALLER_SETUP ("UInt16", "DmOpenRef dbP, DmResType resType, UInt16 typeIndex");
+
+	// Set the parameters.
+	CALLER_PUT_PARAM_VAL (DmOpenRef, dbP);
+	CALLER_PUT_PARAM_VAL (DmResType, resType);
+	CALLER_PUT_PARAM_VAL (UInt16, typeIndex);
+
+	// Call the function.
+	sub.Call (sysTrapDmFindResourceType);
+
+	// Write back any "by ref" parameters.
+
+	// Return the result.
+	RETURN_RESULT_VAL (UInt16);
+}
+
+// --------------------
+// Called:
+//
 //	*	by AppGetExtraInfo to get the 'tAIN' resource.
 //
 //	*	by CollectCurrentAppInfo to get the 'tAIN' and 'tver' resources.
