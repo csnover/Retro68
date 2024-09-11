@@ -27,11 +27,11 @@ Note: There is now experimental support for the [Nix Package Manager](www.nixos.
 ### Prerequisites
 
 - Linux, Mac OS X or Windows (via Cygwin)
-- boost
+- boost (optional; for Rez and LaunchAPPL client)
 - CMake 3.15 or later
 - GCC dependencies: GMP 4.2+, MPFR 2.3.1+ and MPC 0.8.0+
 - bison version 3.0.2 or later
-- ruby version 2.1 or later
+- ruby version 2.1 or later (optional; for multiversal)
 - flex
 - texinfo
 - Recommended: Apple Universal Interfaces (version 3.x; version 3.4 is tested)
