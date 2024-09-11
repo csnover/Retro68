@@ -5,6 +5,8 @@
 #include <sstream>
 #include <arpa/inet.h>
 
+#include <boost/program_options.hpp>
+
 StreamBasedLauncher::StreamBasedLauncher(boost::program_options::variables_map &options)
     : Launcher(options)
 {

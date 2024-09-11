@@ -2,7 +2,7 @@
 #include <fstream>
 #include <iostream>
 
-#include "boost/program_options.hpp"
+#include <boost/program_options.hpp>
 
 #include "RezParser.generated.hh"
 #include "RezLexer.h"

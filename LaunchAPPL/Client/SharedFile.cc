@@ -8,6 +8,8 @@
 #include <filesystem>
 #include <fstream>
 
+#include <boost/program_options.hpp>
+
 namespace fs = std::filesystem;
 namespace po = boost::program_options;
 using namespace std::literals::chrono_literals;

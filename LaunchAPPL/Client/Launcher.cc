@@ -6,6 +6,8 @@
 #include <iostream>
 #include <sstream>
 
+#include <boost/program_options.hpp>
+
 namespace fs = std::filesystem;
 using std::string;
 using std::vector;

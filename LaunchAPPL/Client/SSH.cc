@@ -8,6 +8,8 @@
 #include <sys/wait.h>
 #include <signal.h>
 
+#include <boost/program_options.hpp>
+
 namespace po = boost::program_options;
 using std::string;
 using std::vector;

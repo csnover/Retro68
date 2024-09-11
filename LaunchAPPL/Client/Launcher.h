@@ -1,9 +1,10 @@
 #ifndef LAUNCHER_H
 #define LAUNCHER_H
 
-#include <boost/program_options/variables_map.hpp>
 #include "ResourceFile.h"
 #include <filesystem>
+
+namespace boost::program_options { class variables_map; }
 
 /**
  * @brief The Launcher class

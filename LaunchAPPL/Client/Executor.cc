@@ -2,6 +2,8 @@
 #include "Launcher.h"
 #include "Utilities.h"
 
+#include <boost/program_options.hpp>
+
 namespace po = boost::program_options;
 
 class ExecutorLauncher : public Launcher

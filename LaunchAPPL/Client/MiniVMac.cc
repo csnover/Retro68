@@ -17,6 +17,7 @@ extern "C" {
 #include <filesystem>
 #include <fstream>
 
+#include <boost/program_options.hpp>
 
 #ifdef __APPLE__
 #define ResType MacResType

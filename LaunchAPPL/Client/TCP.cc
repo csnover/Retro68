@@ -11,6 +11,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 
+#include <boost/program_options.hpp>
+
 namespace po = boost::program_options;
 using namespace std::literals::chrono_literals;
 

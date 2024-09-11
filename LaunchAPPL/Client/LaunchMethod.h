@@ -1,11 +1,14 @@
 #ifndef LAUNCHMETHOD_H
 #define LAUNCHMETHOD_H
 
-#include <string>
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options/variables_map.hpp>
-
 #include <memory>
+#include <string>
+
+namespace boost::program_options
+{
+    class options_description;
+    class variables_map;
+}
 
 class Launcher;
 
@@ -22,7 +25,7 @@ public:
     typedef boost::program_options::variables_map variables_map;
 
     LaunchMethod();
-    virtual ~LaunchMethod();
+    virtual ~LaunchMethod() = 0;
 
     /**
      * @brief GetName

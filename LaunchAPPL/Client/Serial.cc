@@ -12,6 +12,8 @@
 #include <chrono>
 #include <iostream>
 
+#include <boost/program_options.hpp>
+
 namespace po = boost::program_options;
 using namespace std::literals::chrono_literals;
 
