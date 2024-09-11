@@ -20,9 +20,9 @@
 #ifndef RELOC_H
 #define RELOC_H
 
-#include <gelf.h>
-#include <stdint.h>
+#include <libelf.h>
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -35,26 +35,21 @@ enum class RelocBase
     code1
 };
 
-class Reloc : public GElf_Rela
+struct RuntimeReloc
 {
-public:
-    RelocBase relocBase;
+    RelocBase base;
+    uint32_t offset;
+    bool relative;
 
-    Reloc();
-    Reloc(const GElf_Rela& rela);
+    RuntimeReloc(RelocBase base_, uint32_t offset_, bool relative_ = false)
+        : base(base_)
+        , offset(offset_)
+        , relative(relative_) {}
 };
 
-class RuntimeReloc
-{
-public:
-    RelocBase base = RelocBase::code;
-    uint32_t offset = 0;
-    bool relative = false;
-
-    RuntimeReloc(RelocBase b = RelocBase::code, uint32_t o = 0, bool r = false) : base(b), offset(o), relative(r) {}
-};
-
-std::string SerializeRelocsUncompressed(std::vector<RuntimeReloc> relocs);
-std::string SerializeRelocs(std::vector<RuntimeReloc> relocs);
+#ifdef PALMOS
+std::string SerializeRelocsPalm(const std::vector<RuntimeReloc> &relocs, bool codeSegment);
+#endif
+std::string SerializeRelocs(const std::vector<RuntimeReloc> &relocs);
 
 #endif // RELOC_H

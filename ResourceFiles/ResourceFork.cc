@@ -155,7 +155,7 @@ Resources::Resources(std::istream &in)
             in.read(tmp.data(), size);
             std::string data(tmp.data(), size);
 
-            addResource(Resource(type, id, data, name, attr));
+            addResource(Resource(type, id, std::move(data), std::move(name), attr));
         }
     }
 }
@@ -185,10 +185,8 @@ Resources::Resources(std::istream &in, prc_t)
         std::vector<char> tmp(size);
         in.seekg(record.offset);
         in.read(tmp.data(), size);
-        // TODO: std::string is inappropriate storage type for raw bytes since
-        // the standard requires the data to end with a null terminator
         std::string data(tmp.data(), size);
-        addResource(Resource(record.type, record.id, data));
+        addResource(Resource(record.type, record.id, std::move(data)));
     }
 }
 

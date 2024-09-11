@@ -15,17 +15,21 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Retro68.  If not, see <http://www.gnu.org/licenses/>.
 
-find_package(Boost COMPONENTS REQUIRED)
+find_package(Boost REQUIRED)
 
 add_executable(Elf2Mac
-    Elf2Mac.h Elf2Mac.cc SegmentMap.cc LdScript.cc
-    Reloc.h Reloc.cc
-    Symbol.h Symbol.cc
-    Symtab.h Symtab.cc
-    Section.h Section.cc
-    Object.h Object.cc)
+    Elf2Mac.cc
+    Object.cc
+    Object.h
+    Reloc.cc
+    Reloc.h
+    SegmentMap.cc
+    SegmentMap.h
+    Symtab.cc
+    Symtab.h
+)
 
-target_link_libraries(Elf2Mac PRIVATE ResourceFiles ELF Boost::headers)
+target_link_libraries(Elf2Mac PRIVATE ResourceFiles ELF)
 target_include_directories(Elf2Mac PRIVATE ${CMAKE_INSTALL_PREFIX}/include)
 
 install(TARGETS Elf2Mac)

@@ -20,31 +20,30 @@
 #ifndef SYMTAB_H
 #define SYMTAB_H
 
-#include <gelf.h>
-
-#include <vector>
 #include <map>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
 
-class Object;
-class Symbol;
+#include <libelf.h>
 
 class Symtab
 {
 public:
-    Elf_Scn *elfsec;
-    Elf_Data *data;
-    std::vector<Symbol> symbols;
-    std::map<std::pair<int,uint32_t>, int> symbolsByAddress;
-    std::unordered_map<std::string, int> symbolsByName;
+    using Address = std::pair<Elf32_Section, Elf32_Off>;
 
-    Symtab(Object &theObject, Elf_Scn *elfsec);
-    ~Symtab();
+    void Load(Elf_Scn *scn, const char *strtab);
 
-    Symbol& GetSym(int idx);
-    int FindSym(int secidx, uint32_t addr);
-    int FindSym(std::string name);
+    const Elf32_Sym *GetSym(int index) const;
+    int FindSym(Elf32_Section sectionIndex, Elf32_Off offset) const;
+    int FindSym(const std::string &name) const;
+
+private:
+    Elf32_Sym *m_symbols = nullptr;
+    Elf32_Word m_count = 0;
+    std::map<Address, int> m_symbolsByAddress;
+    std::unordered_map<std::string, int> m_symbolsByName;
 };
 
 

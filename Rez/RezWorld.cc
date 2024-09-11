@@ -41,14 +41,14 @@ void RezWorld::addResource(ResSpec spec, CompoundExprPtr body, yy::location loc)
     ResourceCompiler compiler(*this, def, body, verboseFlag);
     compiler.compile();
 
-    resources.addResource(Resource(spec.type(), spec.id(), compiler.resourceData(), spec.name(), spec.attr()));
+    resources.addResource(Resource(spec.type(), spec.id(), compiler.resourceData(), std::move(spec.name()), spec.attr()));
 }
 
 void RezWorld::addData(ResSpec spec, const std::string &data, yy::location loc)
 {
     if(verboseFlag)
         std::cout << "DATA " << spec.type() << "(" << spec.id() << ", " << "\"" << spec.name() << "\"" << spec.attr() << ")" << std::endl;
-    resources.addResource(Resource(spec.type(), spec.id(), data, spec.name(), spec.attr()));
+    resources.addResource(Resource(spec.type(), spec.id(), std::string(data), std::move(spec.name()), spec.attr()));
 }
 
 void RezWorld::problem(Diagnostic d)

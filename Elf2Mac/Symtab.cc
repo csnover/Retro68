@@ -19,63 +19,51 @@
 
 #include "Symtab.h"
 
+#include <libelf.h>
 #include <assert.h>
 #include <utility>
 
-#include "Symbol.h"
+#include "Object.h"
 
-using std::make_pair;
-using std::string;
-
-Symtab::Symtab(Object& theObject, Elf_Scn *elfsec)
-    : elfsec(elfsec)
+void Symtab::Load(Elf_Scn *scn, const char *strtab)
 {
-    data = elf_getdata(elfsec, NULL);
+    const auto *shdr = elf32_getshdr(scn);
+    m_symbols = static_cast<Elf32_Sym *>(elf_getdata(scn, nullptr)->d_buf);
+    m_count = shdr->sh_size / shdr->sh_entsize;
 
-    GElf_Shdr shdr;
-    gelf_getshdr(elfsec, &shdr);
-
-    int count = shdr.sh_size / shdr.sh_entsize;
-    symbols.reserve(count);
-
-    for(int i = 0; i < count; i++)
+    for (auto index = 0U; index < m_count; ++index)
     {
-        GElf_Sym sym;
-        auto res = gelf_getsym(data, i, &sym);
-        assert(res != 0);
-        symbols.emplace_back(theObject, sym);
+        const auto &symbol = m_symbols[index];
 
-        if(sym.st_shndx != SHN_UNDEF && sym.st_shndx < SHN_LORESERVE)
-            symbolsByAddress[make_pair((int)sym.st_shndx,sym.st_value)] = i;
-        if(sym.st_name)
-            symbolsByName[symbols.back().name] = i;
+        if (symbol.st_shndx != SHN_UNDEF && symbol.st_shndx < SHN_LORESERVE)
+            m_symbolsByAddress[{symbol.st_shndx, symbol.st_value}] = index;
+
+        if (symbol.st_name)
+            m_symbolsByName[{strtab + symbol.st_name}] = index;
     }
 }
 
-Symtab::~Symtab()
+const Elf32_Sym *Symtab::GetSym(int index) const
 {
-
+    Elf32_Sym *symbol = nullptr;
+    if (index >= 0 && index < int(m_count))
+        symbol = m_symbols + index;
+    return symbol;
 }
 
-Symbol &Symtab::GetSym(int idx)
+int Symtab::FindSym(Elf32_Section sectionIndex, Elf32_Off offset) const
 {
-    return symbols[idx];
+    int index = -1;
+    Address key { sectionIndex, offset };
+    if (auto p = m_symbolsByAddress.find(key); p != m_symbolsByAddress.end())
+        index = p->second;
+    return index;
 }
 
-int Symtab::FindSym(int secidx, uint32_t addr)
+int Symtab::FindSym(const std::string &name) const
 {
-    auto p = symbolsByAddress.find(make_pair(secidx, addr));
-    if(p != symbolsByAddress.end())
-        return p->second;
-    else
-        return -1;
-}
-
-int Symtab::FindSym(string name)
-{
-    auto p = symbolsByName.find(name);
-    if(p != symbolsByName.end())
-        return p->second;
-    else
-        return -1;
+    int index = -1;
+    if (auto p = m_symbolsByName.find(name); p != m_symbolsByName.end())
+        index = p->second;
+    return index;
 }

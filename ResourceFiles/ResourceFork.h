@@ -17,14 +17,14 @@ class Resource
     int attr;
 public:
     Resource() {}
-    Resource(ResType type, int id, std::string data, std::string name = "", int attr = 0)
+    Resource(ResType type, int id, std::string &&data, std::string &&name = "", int attr = 0)
         : type(type), id(id), name(name), data(data), attr(attr) {}
 
     const std::string& getData() const { return data; }
     inline ResType getType() const { return type; }
     inline int getID() const { return id; }
     inline ResRef getTypeAndID() const { return ResRef(type, id); }
-    std::string getName() const { return name; }
+    const std::string &getName() const { return name; }
     int getAttr() const { return attr; }
 };
 

@@ -20,37 +20,42 @@
 #ifndef SEGMENTMAP_H
 #define SEGMENTMAP_H
 
-#include <vector>
+#include <ostream>
 #include <string>
+#include <vector>
 
-class SegmentInfo
+struct SegmentInfo
 {
-public:
-    int id;
-    std::string name;
-    std::vector<std::string> filters;
-    SegmentInfo();
-
     template<typename... Args>
-    SegmentInfo(int id, std::string name, Args... args)
-        : id(id), name(name), filters { args... }
+    SegmentInfo(int id, std::string &&name, Args... args)
+        : id(id)
+        , name(name)
+        , filters { args... }
     {
     }
 
-    void WriteFilters(std::ostream& out, std::string section);
-    void WriteFiltersKeep(std::ostream& out, std::string section);
-    void CreateLdScript(std::ostream& out, std::string entryPoint);
+    void WriteFilters(std::ostream& out, const std::string &section) const;
+    void WriteFiltersKeep(std::ostream& out, const std::string &section) const;
+    void CreateLdScript(std::ostream& out, const char *entryPoint) const;
+
+    int id;
+    std::string name;
+    std::vector<std::string> filters;
 };
 
 class SegmentMap
 {
-    std::vector<SegmentInfo> segments;
 public:
     SegmentMap();
-    SegmentMap(std::string filename);
+    SegmentMap(const std::string &filename);
 
-    void CreateLdScript(std::ostream& out, std::string entryPoint, bool stripMacsbug);
-    std::string GetSegmentName(int id);
+    void CreateLdScript(std::ostream& out, const char *entryPoint, bool stripMacsbug) const;
+    const std::string &GetSegmentName(int id) const;
+
+private:
+    std::vector<SegmentInfo> m_segments;
 };
+
+void CreateFlatLdScript(std::ostream& out, const char *entryPoint, bool stripMacsbug);
 
 #endif // SEGMENTMAP_H
