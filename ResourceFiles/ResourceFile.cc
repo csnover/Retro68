@@ -1,10 +1,10 @@
 #include "ResourceFile.h"
 #include "BinaryIO.h"
 
-#include <boost/filesystem.hpp>
-#include "boost/filesystem/fstream.hpp"
 #include <chrono>
 #include <ctime>
+#include <filesystem>
+#include <fstream>
 #include <sstream>
 #include <iostream>
 
@@ -20,7 +20,7 @@ extern "C" {
 }
 #endif
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 // CRC 16 table lookup array
 static unsigned short CRC16Table[256] =
@@ -158,7 +158,7 @@ bool ResourceFile::write(std::string path, Format f)
 static bool CheckAppleDouble(fs::path path, std::string prefix)
 {
     fs::path adPath = path.parent_path() / (prefix  + path.filename().string());
-    fs::ifstream in(adPath);
+    std::ifstream in(adPath);
     if(in)
     {
         int magic1 = longword(in);
@@ -222,7 +222,7 @@ bool ResourceFile::assign(std::string pathstring, ResourceFile::Format f)
     }
     if(format == Format::autodetect)
     {
-        fs::ifstream in(path);
+        std::ifstream in(path);
         if(in)
         {
             int magic1 = longword(in);
@@ -448,7 +448,7 @@ bool ResourceFile::read()
 
     if(isSingleFork(format))
     {
-        fs::ifstream in(path);
+        std::ifstream in(path);
         return read(in, format);
     }
 
@@ -456,16 +456,16 @@ bool ResourceFile::read()
     {
         case Format::basilisk:
             {
-                fs::ifstream dataIn(path);
+                std::ifstream dataIn(path);
                 if(!dataIn)
                     return false;
                 data = std::string(std::istreambuf_iterator<char>(dataIn),
                                    std::istreambuf_iterator<char>());
 
-                fs::ifstream rsrcIn(path.parent_path() / ".rsrc" / path.filename());
+                std::ifstream rsrcIn(path.parent_path() / ".rsrc" / path.filename());
                 if(rsrcIn)
                     resources = Resources(rsrcIn);
-                fs::ifstream finfIn(path.parent_path() / ".finf" / path.filename());
+                std::ifstream finfIn(path.parent_path() / ".finf" / path.filename());
                 if(finfIn)
                 {
                     type = ostype(finfIn);
@@ -501,7 +501,7 @@ bool ResourceFile::read()
         case Format::underscore_appledouble:
         case Format::percent_appledouble:
             {
-                fs::ifstream dataIn(path);
+                std::ifstream dataIn(path);
                 data = std::string(std::istreambuf_iterator<char>(dataIn),
                                    std::istreambuf_iterator<char>());
 
@@ -509,7 +509,7 @@ bool ResourceFile::read()
                                         "._" : "%";
 
                 fs::path adPath = path.parent_path() / (prefix  + path.filename().string());
-                fs::ifstream in(adPath);
+                std::ifstream in(adPath);
                 if(longword(in) != 0x00051607)
                     return false;
                 if(longword(in) != 0x00020000)
@@ -627,7 +627,7 @@ bool ResourceFile::write()
 
     if(isSingleFork(format))
     {
-        fs::ofstream out(path);
+        std::ofstream out(path);
         return write(out, format);
     }
 
@@ -638,9 +638,9 @@ bool ResourceFile::write()
                 fs::create_directory(path.parent_path() / ".rsrc");
                 fs::create_directory(path.parent_path() / ".finf");
 
-                fs::ofstream dataOut(path);
-                fs::ofstream rsrcOut(path.parent_path() / ".rsrc" / path.filename());
-                fs::ofstream finfOut(path.parent_path() / ".finf" / path.filename());
+                std::ofstream dataOut(path);
+                std::ofstream rsrcOut(path.parent_path() / ".rsrc" / path.filename());
+                std::ofstream finfOut(path.parent_path() / ".finf" / path.filename());
 
                 dataOut << data;
                 resources.writeFork(rsrcOut);
@@ -674,7 +674,7 @@ bool ResourceFile::write()
         case Format::underscore_appledouble:
         case Format::percent_appledouble:
             {
-                fs::ofstream dataOut(path);
+                std::ofstream dataOut(path);
 
                 dataOut << data;
 
@@ -683,7 +683,7 @@ bool ResourceFile::write()
 
                 fs::path adPath = path.parent_path() / (prefix  + path.filename().string());
 
-                fs::ofstream out(adPath);
+                std::ofstream out(adPath);
 
                 longword(out, 0x00051607);
                 longword(out, 0x00020000);
@@ -722,7 +722,7 @@ bool ResourceFile::write()
                 size += 20 * 1024;
                 size += 800*1024 - size % (800*1024);
 
-                fs::ofstream(path, std::ios::binary | std::ios::trunc).seekp(size-1).put(0);
+                std::ofstream(path, std::ios::binary | std::ios::trunc).seekp(size-1).put(0);
 
                 hfs_format(pathstring.c_str(), 0, 0, path.stem().string().substr(0,27).c_str(), 0, NULL);
                 hfsvol *vol = hfs_mount(pathstring.c_str(), 0, HFS_MODE_RDWR);

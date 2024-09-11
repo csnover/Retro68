@@ -3,7 +3,7 @@
 
 #include <boost/program_options/variables_map.hpp>
 #include "ResourceFile.h"
-#include <boost/filesystem.hpp>
+#include <filesystem>
 
 /**
  * @brief The Launcher class
@@ -17,7 +17,7 @@ protected:
     boost::program_options::variables_map& options;
 
     ResourceFile app;
-    boost::filesystem::path tempDir, appPath, outPath;
+    std::filesystem::path tempDir, appPath, outPath;
     bool keepTempFiles;
 public:
     /**

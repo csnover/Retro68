@@ -3,7 +3,7 @@
 #include <boost/wave.hpp>
 #include <boost/wave/cpplexer/cpp_lex_iterator.hpp>
 #include <boost/wave/token_ids.hpp>
-#include <boost/regex.hpp>
+#include <regex>
 
 #include "RezLexerWaveToken.h"
 #include "RezWorld.h"
@@ -23,11 +23,11 @@ static std::string readContents(std::istream&& instream)
 
 static std::string preFilter(std::string str)
 {
-    boost::regex endif("#endif[^\r\n]*");
-    str = boost::regex_replace(str, endif, "#endif");
+    std::regex endif("#endif[^\r\n]*");
+    str = std::regex_replace(str, endif, "#endif");
 
-    boost::regex dollar_escape("\\\\\\$([a-zA-Z0-9][a-zA-Z0-9])");
-    str = boost::regex_replace(str, dollar_escape, "\\\\0x$1");
+    std::regex dollar_escape("\\\\\\$([a-zA-Z0-9][a-zA-Z0-9])");
+    str = std::regex_replace(str, dollar_escape, "\\\\0x$1");
 
     if(str.size() == 0 || str[str.size()-1] != '\n')
         str += "\n";

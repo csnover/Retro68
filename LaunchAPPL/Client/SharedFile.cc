@@ -5,10 +5,10 @@
 #include "ServerProtocol.h"
 #include <chrono>
 #include <iostream>
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
+#include <filesystem>
+#include <fstream>
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 namespace po = boost::program_options;
 using namespace std::literals::chrono_literals;
 
@@ -49,7 +49,7 @@ void SharedFileStream::write(const void* p, size_t n)
         return;
     
     {
-        fs::ofstream out(shared_directory / "in_channel_1", std::ios::binary);
+        std::ofstream out(shared_directory / "in_channel_1", std::ios::binary);
         out.write((const char*)p, n);
     }
 
@@ -67,7 +67,7 @@ void SharedFileStream::wait()
     if(fs::exists(shared_directory / "out_channel"))
     {
         {
-            fs::ifstream in(shared_directory / "out_channel");
+            std::ifstream in(shared_directory / "out_channel");
 
             while(in.read((char*)readBuffer, sizeof(readBuffer)), in.gcount() > 0)
                 notifyReceive(readBuffer, in.gcount());

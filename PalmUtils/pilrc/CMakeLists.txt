@@ -46,7 +46,7 @@ if(TARGET GTK2::gtk)
     target_link_libraries(pilrcui PRIVATE pilrc-common GTK2::gtk)
     install(TARGETS pilrcui)
 else()
-    message(STATUS "GTK not found, not building PilRC UI")
+    message(STATUS "GTK not found. Not building PilRC UI")
 endif()
 
 install(

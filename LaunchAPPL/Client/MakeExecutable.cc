@@ -1,13 +1,13 @@
 #include <string>
 #include <iostream>
 #include <fstream>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <stdlib.h>
 
 #include "ResourceFile.h"
 
 using std::string;
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 void MakeExecutable(string fn)
 {
@@ -49,5 +49,8 @@ void MakeExecutable(string fn)
 
     std::fstream(fn, std::ios::in | std::ios::out | std::ios::binary) << headerString;
 
-    fs::permissions(fs::path(fn), fs::owner_exe | fs::group_exe | fs::others_exe | fs::add_perms);
+    fs::permissions(fs::path(fn), fs::status(fn).permissions()
+        | fs::perms::owner_exec
+        | fs::perms::group_exec
+        | fs::perms::others_exec);
 }

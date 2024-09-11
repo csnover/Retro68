@@ -7,7 +7,6 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <signal.h>
-#include <boost/lexical_cast.hpp>
 
 namespace po = boost::program_options;
 using std::string;
@@ -54,7 +53,7 @@ bool SSHLauncher::Go(int timeout)
     if(timeout)
     {
         args.push_back("--timeout");
-        args.push_back(boost::lexical_cast<std::string>(timeout));
+        args.push_back(std::to_string(timeout));
     }
     args.push_back("-");
 

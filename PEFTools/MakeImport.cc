@@ -1,4 +1,5 @@
 #include <iostream>
+#include <filesystem>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
@@ -20,10 +21,7 @@
 
 #include "ResourceFile.h"
 
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
-
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 
 using std::cout;
@@ -171,8 +169,8 @@ void MakeImportLibrary(char *pefptr, size_t pefsize, fs::path dest, fs::path tmp
                 stub_o(tmpdir / "__stub.o");
 
     {
-        fs::ofstream expFile(stub_exp);
-        fs::ofstream sFile(stub_s);
+        std::ofstream expFile(stub_exp);
+        std::ofstream sFile(stub_s);
         sFile << "\t.toc\n";
         for(uint32_t i=0; i< nSymbols; i++)
         {
@@ -271,7 +269,10 @@ bool MakeImportLibraryMulti(fs::path path, fs::path libname)
         return false;
     }
 
-    fs::path tmpdir = libname.parent_path() / fs::unique_path("makeimport-tmp-%%%%-%%%%-%%%%-%%%%");
+    auto suffix = "makeimport-tmp-" + std::to_string(
+        std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
+
+    fs::path tmpdir = libname.parent_path() / suffix;
     fs::create_directory(tmpdir);
     try
     {

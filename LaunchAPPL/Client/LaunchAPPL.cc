@@ -1,6 +1,6 @@
 #include <boost/program_options.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
+#include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -24,7 +24,7 @@
 #include "SharedFile.h"
 
 namespace po = boost::program_options;
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 using std::string;
 using std::vector;

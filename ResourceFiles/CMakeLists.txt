@@ -15,18 +15,11 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Retro68.  If not, see <http://www.gnu.org/licenses/>.
 
-find_package(Boost COMPONENTS filesystem system REQUIRED)
-
 add_library(ResourceFiles
     ResourceFork.h ResourceFork.cc
     BinaryIO.h BinaryIO.cc
     ResType.h ResType.cc
     ResourceFile.h ResourceFile.cc)
-
-target_link_libraries(ResourceFiles PRIVATE
-    Boost::headers
-    Boost::filesystem
-    Boost::system)
 
 target_include_directories(ResourceFiles INTERFACE .)
 
@@ -44,11 +37,15 @@ if (RETRO_PALMOS)
     target_compile_definitions(ResourceFiles PUBLIC PALMOS)
 endif()
 
-find_package(Boost COMPONENTS program_options REQUIRED)
+find_package(Boost COMPONENTS program_options QUIET)
+
+if (NOT TARGET Boost::program_options)
+    message(STATUS "Boost::program_options not found. Building ResourceFiles without ResInfo")
+endif()
+
 add_executable(ResInfo ResInfo.cc)
 target_link_libraries(ResInfo PRIVATE
     ResourceFiles
-    Boost::headers
     Boost::program_options)
 
 install(TARGETS ResInfo)

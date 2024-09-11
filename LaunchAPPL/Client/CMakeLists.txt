@@ -1,4 +1,9 @@
-find_package(Boost COMPONENTS filesystem program_options)
+find_package(Boost COMPONENTS program_options QUIET)
+
+if(NOT TARGET Boost::program_options)
+    message(STATUS "Boost::program_options not found. Building LaunchAPPL without client")
+    return()
+endif()
 
 add_executable(LaunchAPPL)
 target_sources(LaunchAPPL PRIVATE
@@ -29,8 +34,6 @@ target_compile_definitions(LaunchAPPL PRIVATE RETRO68_PREFIX="${CMAKE_INSTALL_PR
 target_link_libraries(LaunchAPPL PRIVATE
     ResourceFiles
     LaunchAPPLCommon
-    Boost::headers
-    Boost::filesystem
     Boost::program_options)
 
 find_path(HFS_INCLUDE_DIR NAMES hfs.h)

@@ -1,10 +1,12 @@
 #include "Launcher.h"
-#include <boost/filesystem/fstream.hpp>
+
+#include <chrono>
+#include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <sstream>
 
-
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 using std::string;
 using std::vector;
 
@@ -25,14 +27,16 @@ Launcher::Launcher(boost::program_options::variables_map &options)
         if(!app.read(fn))
             throw std::runtime_error("Could not load application file.");
     }
-    
-    tempDir = fs::absolute(fs::unique_path());
+
+    auto suffix = "launchappl." + std::to_string(
+        std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
+    tempDir = fs::temp_directory_path() / suffix;
     fs::create_directories(tempDir);
 
     appPath = tempDir / "Application";
     outPath = tempDir / "out";
 
-    fs::ofstream out(outPath);
+    std::ofstream out(outPath);
 }
 
 Launcher::Launcher(boost::program_options::variables_map &options, ResourceFile::Format f)
@@ -43,7 +47,7 @@ Launcher::Launcher(boost::program_options::variables_map &options, ResourceFile:
 
 void Launcher::DumpOutput()
 {
-    fs::ifstream in(outPath);
+    std::ifstream in(outPath);
     std::cout << in.rdbuf();
 }
 

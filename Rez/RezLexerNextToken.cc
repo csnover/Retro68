@@ -3,8 +3,7 @@
 #include "RezParser.generated.hh"
 #include <unordered_map>
 #include <sstream>
-
-#include <boost/regex.hpp>
+#include <regex>
 
 using namespace boost::wave;
 
@@ -244,8 +243,8 @@ RezSymbol RezLexer::nextToken()
                         nextWave(), tok2 = peekWave();
 
                     //std::cout << "!" << std::hex << (token_id)tok2 << std::dec << "|" << tok2.get_value() << "!\n";
-                    static boost::regex binlit("[bB][01]+");
-                    if(tok2 == T_IDENTIFIER && boost::regex_match(tok2.get_value().c_str(), binlit))
+                    static std::regex binlit("[bB][01]+");
+                    if(tok2 == T_IDENTIFIER && std::regex_match(tok2.get_value().c_str(), binlit))
                         tok = nextWave();
                 }
                 return RezParser::make_INTLIT(readInt(tok.get_value().c_str()), loc);

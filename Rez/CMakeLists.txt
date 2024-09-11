@@ -15,9 +15,23 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Retro68.  If not, see <http://www.gnu.org/licenses/>.
 
-find_package(Boost COMPONENTS wave filesystem system thread regex program_options REQUIRED)
+find_package(Boost COMPONENTS wave program_options QUIET)
 
-find_package(BISON 3.0.2 REQUIRED)
+if(NOT TARGET Boost::program_options)
+    message(STATUS "Boost::program_options not found. Not building Rez")
+    return()
+endif()
+if(NOT TARGET Boost::wave)
+    message(STATUS "Boost::wave not found. Not building Rez")
+    return()
+endif()
+
+find_package(BISON 3.0.2 QUIET)
+
+if(NOT BISON_FOUND)
+    message(STATUS "BISON not found. Not building Rez")
+    return()
+endif()
 
 BISON_TARGET(RezLib_bison RezParser.yy RezParser.generated.cc DEFINES_FILE RezParser.generated.hh)
 
@@ -54,12 +68,7 @@ target_link_libraries(RezLib
     PUBLIC
         ResourceFiles
     PRIVATE
-        Boost::headers
         Boost::wave
-        Boost::filesystem
-        Boost::system
-        Boost::thread
-        Boost::regex
         Boost::program_options)
 
 add_executable(Rez Rez.cc)

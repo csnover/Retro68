@@ -1,13 +1,14 @@
 #include "Utilities.h"
 
+#include <cstring>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <signal.h>
-#include <boost/filesystem.hpp>
+#include <filesystem>
 #include <iostream>
 
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 using std::string;
 using std::vector;
 

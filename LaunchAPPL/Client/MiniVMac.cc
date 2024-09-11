@@ -14,8 +14,8 @@ extern "C" {
 }
 
 #include <iostream>
+#include <filesystem>
 #include <fstream>
-#include <boost/filesystem/fstream.hpp>
 
 
 #ifdef __APPLE__
@@ -23,12 +23,11 @@ extern "C" {
 #include <CoreFoundation/CoreFoundation.h>
 #endif
 
-namespace fs = boost::filesystem;
 using std::string;
 using std::vector;
 
 namespace po = boost::program_options;
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 
 /* Adapted from http://sebastien.kirche.free.fr/python_stuff/MacOS-aliases.txt */
@@ -194,7 +193,7 @@ static void copyDirectoryRecursively(const fs::path& sourceDir, const fs::path& 
 
 fs::path MiniVMacLauncher::ConvertImage(const fs::path& path)
 {
-    fs::ifstream in(path);
+    std::ifstream in(path);
     
     in.seekg(0x40);
     uint32_t diskCopyLength = longword(in);
@@ -214,9 +213,12 @@ fs::path MiniVMacLauncher::ConvertImage(const fs::path& path)
     if(diskCopySig == 0x0100 && actualSize == diskCopyLength + 0x54
         && diskCopyLength % 512 == 0 && diskCopyHFSSig == 0x4244)
     {
-        auto outPath = tempDir / fs::unique_path();
+        auto suffix = "launchappl.minivmac." + std::to_string(
+            std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
+
+        auto outPath = tempDir / suffix;
         
-        fs::ofstream out(outPath);
+        std::ofstream out(outPath);
 
         in.seekg(0x54);
 
@@ -237,7 +239,7 @@ MiniVMacLauncher::MiniVMacLauncher(po::variables_map &options)
       sysvol(NULL), vol(NULL)
 {
     vmacDir = fs::absolute( options["minivmac-dir"].as<std::string>() );
-    vmacPath = fs::absolute( options["minivmac-path"].as<std::string>(), vmacDir );
+    vmacPath = fs::absolute( vmacDir / options["minivmac-path"].as<std::string>() );
 
     fs::path dataDir;
 #ifdef __APPLE__
@@ -253,11 +255,11 @@ MiniVMacLauncher::MiniVMacLauncher(po::variables_map &options)
     }
     imagePath = dataDir / "disk1.dsk";
 
-    systemImage = fs::absolute(options["system-image"].as<std::string>(), vmacDir);
+    systemImage = fs::absolute(vmacDir / options["system-image"].as<std::string>());
     systemImage = ConvertImage(systemImage);
 
     std::vector<unsigned char> bootblock1(1024);
-    fs::ifstream(systemImage).read((char*) bootblock1.data(), 1024);
+    std::ifstream(systemImage).read((char*) bootblock1.data(), 1024);
 
     if(bootblock1[0] != 'L' || bootblock1[1] != 'K' || bootblock1[0xA] > 15)
         throw std::runtime_error("Not a bootable Mac disk image: " + systemImage.string());
@@ -281,7 +283,7 @@ MiniVMacLauncher::MiniVMacLauncher(po::variables_map &options)
         throw std::runtime_error(str.str());
     }
 
-    fs::path autoquitImage = fs::absolute(options[optionsKey].as<std::string>(), vmacDir);
+    fs::path autoquitImage = fs::absolute(vmacDir / options[optionsKey].as<std::string>());
     autoquitImage = ConvertImage(autoquitImage);
 
     /*
@@ -302,7 +304,7 @@ MiniVMacLauncher::MiniVMacLauncher(po::variables_map &options)
         vmacCopy = tempDir / "minivmac.app";
         copyDirectoryRecursively(vmacPath, vmacCopy);
         vmacPath = vmacCopy;
-        boost::filesystem::create_directories(dataDir);
+        fs::create_directories(dataDir);
     }
     else
 #endif
@@ -314,7 +316,7 @@ MiniVMacLauncher::MiniVMacLauncher(po::variables_map &options)
 
     int size = 5000*1024;
 
-    fs::ofstream(imagePath, std::ios::binary | std::ios::trunc).seekp(size-1).put(0);
+    std::ofstream(imagePath, std::ios::binary | std::ios::trunc).seekp(size-1).put(0);
     hfs_format(imagePath.string().c_str(), 0, 0, "SysAndApp", 0, NULL);
 
     if(!usesAutQuit7)
@@ -325,7 +327,7 @@ MiniVMacLauncher::MiniVMacLauncher(po::variables_map &options)
         bootblock1[0x5A] = 3;
         memcpy(&bootblock1[0x5B],"App", 3);
     }
-    fs::fstream(imagePath, std::ios::in | std::ios::out | std::ios::binary)
+    std::fstream(imagePath, std::ios::in | std::ios::out | std::ios::binary)
             .write((const char*) bootblock1.data(), 1024);
 
 
@@ -406,7 +408,7 @@ MiniVMacLauncher::MiniVMacLauncher(po::variables_map &options)
     hfs_umount(sysvol); sysvol = NULL;
     hfs_umount(vol); vol = NULL;
 
-    fs::path romFile = fs::absolute( options["minivmac-rom"].as<std::string>(), vmacDir );
+    fs::path romFile = fs::absolute( vmacDir / options["minivmac-rom"].as<std::string>() );
     
     fs::create_symlink(
         romFile,

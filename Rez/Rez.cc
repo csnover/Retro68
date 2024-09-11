@@ -1,7 +1,8 @@
+#include <filesystem>
+#include <fstream>
 #include <iostream>
+
 #include "boost/program_options.hpp"
-#include "boost/filesystem.hpp"
-#include "boost/filesystem/fstream.hpp"
 
 #include "RezParser.generated.hh"
 #include "RezLexer.h"
@@ -13,7 +14,7 @@
 #include "Diagnostic.h"
 
 namespace po = boost::program_options;
-namespace fs = boost::filesystem;
+namespace fs = std::filesystem;
 
 static po::options_description desc;
 
