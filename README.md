@@ -362,7 +362,7 @@ cmake instead of autotools. Much simpler now.
 
 ### hfsutils
 
-No changes.
+Made to build with cmake instead of autotools.
 
 ### ResourceFiles
 

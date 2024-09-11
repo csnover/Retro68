@@ -73,6 +73,7 @@ else()
     # to make sure no Apple stuff is broken by work to add Palm OS support
     # (Palm and Mac utilities are so close to the same thing that it seems bad
     # to have two different systems)
+    add_subdirectory(hfsutils.retro68)
     add_subdirectory(ConvertDiskImage)
     add_subdirectory(ConvertObj)
     add_subdirectory(Elf2Mac)

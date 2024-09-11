@@ -22,7 +22,8 @@
 # include "hfs.h"
 # include "apple.h"
 
-extern int errno;
+/* extern int errno; */
+#include <errno.h>
 
 # define ERROR(code, str)  \
     do { hfs_error = (str), errno = (code); goto fail; } while (0)

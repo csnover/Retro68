@@ -49,7 +49,7 @@ int dup(int);
 
 const char *cpo_error = "no error";
 
-extern int errno;
+/* extern int errno; */
 
 # define ERROR(code, str)	(cpo_error = (str), errno = (code))
 

@@ -44,7 +44,8 @@
 # include "suid.h"
 # include "version.h"
 
-extern int errno;
+/* extern int errno; */
+# include <errno.h>
 
 # define ERROR(code, str)	(hfs_error = (str), errno = (code))
 

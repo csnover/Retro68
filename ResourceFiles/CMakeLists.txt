@@ -22,16 +22,7 @@ add_library(ResourceFiles
     ResourceFile.h ResourceFile.cc)
 
 target_include_directories(ResourceFiles INTERFACE .)
-
-find_path(HFS_INCLUDE_DIR NAMES hfs.h)
-find_library(HFS_LIBRARY NAMES hfs)
-if (HFS_LIBRARY_FOUND)
-    target_link_libraries(ResourceFiles PRIVATE ${HFS_LIBRARY})
-    target_include_directories(ResourceFiles PRIVATE ${HFS_INCLUDE_DIR})
-    target_compile_definitions(ResourceFiles PUBLIC RETRO_HAVE_HFSUTILS)
-else()
-    message(STATUS "hfsutils not found. Building ResourceFiles without HFS support")
-endif()
+target_link_libraries(ResourceFiles PRIVATE hfsutils::hfs)
 
 if (RETRO_PALMOS)
     target_compile_definitions(ResourceFiles PUBLIC PALMOS)

@@ -42,6 +42,7 @@ int fstat(int, struct stat *);
 # endif
 
 # include <errno.h>
+# include <stdint.h>
 # include <sys/stat.h>
 
 # include "libhfs.h"
@@ -83,7 +84,7 @@ int os_open(void **priv, const char *path, int mode)
       (errno == EACCES || errno == EAGAIN))
     ERROR(EAGAIN, "unable to obtain lock for medium");
 
-  *priv = (void *) fd;
+  *priv = (void *) (intptr_t) fd;
 
   return 0;
 
@@ -100,7 +101,7 @@ fail:
  */
 int os_close(void **priv)
 {
-  int fd = (int) *priv;
+  int fd = (intptr_t) *priv;
 
   *priv = (void *) -1;
 
@@ -119,7 +120,7 @@ fail:
  */
 int os_same(void **priv, const char *path)
 {
-  int fd = (int) *priv;
+  int fd = (intptr_t) *priv;
   struct stat fdev, dev;
 
   if (fstat(fd, &fdev) == -1 ||
@@ -139,7 +140,7 @@ fail:
  */
 unsigned long os_seek(void **priv, unsigned long offset)
 {
-  int fd = (int) *priv;
+  int fd = (intptr_t) *priv;
   off_t result;
 
   /* offset == -1 special; seek to last block of device */
@@ -164,7 +165,7 @@ fail:
  */
 unsigned long os_read(void **priv, void *buf, unsigned long len)
 {
-  int fd = (int) *priv;
+  int fd = (intptr_t) *priv;
   ssize_t result;
 
   result = read(fd, buf, len << HFS_BLOCKSZ_BITS);
@@ -184,7 +185,7 @@ fail:
  */
 unsigned long os_write(void **priv, const void *buf, unsigned long len)
 {
-  int fd = (int) *priv;
+  int fd = (intptr_t) *priv;
   ssize_t result;
 
   result = write(fd, buf, len << HFS_BLOCKSZ_BITS);

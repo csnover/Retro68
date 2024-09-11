@@ -43,7 +43,7 @@ static mountent *mounts = 0;
 static int mtabsz = 0, nmounts = 0;
 static int curvol = -1, dirty = 0;
 
-extern int errno;
+/* extern int errno; */
 
 /*
  * NAME:	addent()

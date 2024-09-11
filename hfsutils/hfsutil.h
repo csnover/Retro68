@@ -19,7 +19,8 @@
  * $Id: hfsutil.h,v 1.8 1998/04/11 08:26:57 rob Exp $
  */
 
-extern int errno;
+/* extern int errno; */
+# include <errno.h>
 
 # define ERROR(code, str)	(hfs_error = (str), errno = (code))
 

@@ -48,7 +48,7 @@ int dup(int);
 
 const char *cpi_error = "no error";
 
-extern int errno;
+/* extern int errno; */
 
 # define ERROR(code, str)	(cpi_error = (str), errno = (code))
 

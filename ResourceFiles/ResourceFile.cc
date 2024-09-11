@@ -14,11 +14,9 @@
 #ifdef PALMOS
 #include <cctype>
 #endif
-#ifdef RETRO_HAVE_HFSUTILS
 extern "C" {
 #include "hfs.h"
 }
-#endif
 
 namespace fs = std::filesystem;
 
@@ -194,10 +192,8 @@ bool ResourceFile::assign(std::string pathstring, ResourceFile::Format f)
             format = Format::macbin;
         else if(path.extension() == ".as")
             format = Format::applesingle;
-#ifdef RETRO_HAVE_HFSUTILS
         else if(path.extension() == ".dsk")
             format = Format::diskimage;
-#endif
         else if(path.filename().string().substr(0,2) == "._")
         {
             path = path.parent_path() / path.filename().string().substr(2);
@@ -711,7 +707,6 @@ bool ResourceFile::write()
             }
             break;
 
-#ifdef RETRO_HAVE_HFSUTILS
         case Format::diskimage:
             {
                 std::ostringstream rsrcOut;
@@ -741,7 +736,6 @@ bool ResourceFile::write()
 
             }
             break;
-#endif
         default:
             return false;
     }

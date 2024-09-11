@@ -21,10 +21,8 @@ public:
         prc = 2,
 #endif
         macbin = 3,
-#ifdef RETRO_HAVE_HFSUTILS
-        diskimage = 4,
-#endif
-        basilisk = 5,
+        diskimage,
+        basilisk,
         applesingle,
         underscore_appledouble,
         percent_appledouble

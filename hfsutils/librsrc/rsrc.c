@@ -346,16 +346,16 @@ rsrchandle *gethandle(void *rdata)
 unsigned long rsrc_maxsize(rsrcfile *rfile, const char *type, int id)
 {
   const byte *ptr;
-  unsigned long offs1, offs2;
+  /* unsigned long offs1, offs2; */
 
   ptr = find(&rfile->map, type, compare_id, &id);
   if (ptr == 0)
     return 0;
 
-  offs1 = d_getul(ptr + 4) & 0x00ffffff;
+  /* offs1 = d_getul(ptr + 4) & 0x00ffffff; */
   /* ... */
 
-  offs2 = 0;
+  /* offs2 = 0; */
 
   return 0;
 }

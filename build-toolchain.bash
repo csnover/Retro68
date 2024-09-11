@@ -172,8 +172,7 @@ function missing_tools()
 	[[ ! -d "${PREFIX}" ]] \
 	|| missing_tools "${BUILD_PALM}" m68k-none-palmos \
 	|| missing_tools "${BUILD_68K}" m68k-apple-macos \
-	|| missing_tools "${BUILD_PPC}" powerpc-apple-macos \
-	|| [[ -n ${BUILD_MAC} && ! -x "${PREFIX}/bin/hfsutil" ]]; then
+	|| missing_tools "${BUILD_PPC}" powerpc-apple-macos ; then
 	BUILD_THIRDPARTY=1
 	echo "Not all third-party components have been built yet, ignoring --no-thirdparty."
 fi
@@ -241,7 +240,7 @@ if [[ -z ${YES} ]]; then
 	fi
 fi
 
-##################### Third-Party components: binutils, gcc, hfsutils
+##################### Third-Party components: binutils, gcc
 
 function start_build()
 {
@@ -356,18 +355,6 @@ if [[ -n ${BUILD_THIRDPARTY} ]]; then
 	unset CXX
 	unset CPPFLAGS
 	unset LDFLAGS
-
-	if [[ -n ${BUILD_MAC} ]]; then
-		[[ ! -d "${PREFIX}/lib" ]] && mkdir -p "${PREFIX}/lib"
-		[[ ! -d "${PREFIX}/share/man/man1" ]] && mkdir -p "${PREFIX}/share/man/man1"
-		start_build hfsutils
-		[[ ! -f Makefile ]] && "${SRC}/hfsutils/configure" "--prefix=${PREFIX}" \
-			"--mandir=${PREFIX}/share/man" --enable-devlibs
-		make
-		make install
-		end_build hfsutils
-		echo "Built hfsutils"
-	fi
 elif [[ -n ${BUILD_MAC} ]]; then # SKIP_THIRDPARTY
 	removeInterfacesAndLibraries
 fi # SKIP_THIRDPARTY
