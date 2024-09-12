@@ -49,7 +49,7 @@ Object::Object(const std::string &input, bool palmos, uint32_t stackSize)
     : m_codeOsType(palmos ? "code" : "CODE")
     , m_dataOsType(palmos ? "data" : "DATA")
     , m_applOsType(palmos ? "appl" : "APPL")
-    // On Palm OS, the loader will place 
+    // On Palm OS, the loader will place TODO
     , m_jtHeaderSize(palmos ? 0 : 0x20)
     , m_jtEntrySize(palmos ? 6 : 8)
     , m_jtFirstIndex(palmos ? 0 : 2)
@@ -127,7 +127,7 @@ void Object::loadSections()
             {
                 if(std::strcmp(name, ".data") == 0)
                     m_data = scn;
-                else if(std::strcmp(name, ".strippedmacsbugnames") != 0)
+                else
                 {
                     auto pos = std::lower_bound(m_code.begin(), m_code.end(), name,
                         [&](SSec<uint8_t> &section, const char *newName) {
@@ -208,8 +208,6 @@ void Object::SingleSegmentApp(const std::string &filename)
 
     {
         std::ostringstream code1;
-        word(code1, 0);
-        word(code1, 1);
         emitFlatCode(code1, secOutputBase(1));
         rsrc.addResource(Resource(m_codeOsType, 1, code1.str()));
     }
@@ -557,7 +555,7 @@ void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segm
             word(code, a5JtOffset);
             word(code, jumpTable.size());
             longword(code, a5JtOffset);
-            longword(code, secOutputBase(codeID) + section.header->sh_size);
+            longword(code, section.header->sh_addr + section.header->sh_size);
         }
         else
         {

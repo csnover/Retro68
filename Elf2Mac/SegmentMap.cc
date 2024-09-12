@@ -17,6 +17,11 @@
      along with Retro68.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/**
+ * Parts of the generated script are copied from
+ * <PREFIX>/<triple>/lib/ldscripts/m68kelf.xc.
+ */
+
 #include "SegmentMap.h"
 
 #include <algorithm>
@@ -220,14 +225,16 @@ static void WriteInitFini(std::ostream &out)
 
 static Block StartSections(std::ostream &out, const char *entryPoint, bool stripMacsbug, bool isMultiseg)
 {
-    auto indent = Block(out << "SECTIONS\n");
+    out <<
+        "/* ld script for Elf2Mac */\n"
+        "_MULTISEG_APP = " << int(isMultiseg) << ";\n"
+        "ENTRY(" << entryPoint << ")\n";
 
-    out << "_MULTISEG_APP = " << int(isMultiseg) << "\n"
-        << "ENTRY(" << entryPoint << ")\n";
+    auto indent = Block(out << "SECTIONS\n");
 
     if (stripMacsbug)
         out <<
-            ".strippedmacsbugnames 0 (NOLOAD) : { *(.text.*.macsbug) }\n"
+            ".strippedmacsbugnames 0 (INFO) : { *(.text.*.macsbug) }\n"
             ". = 0;\n";
 
     return indent;
@@ -235,15 +242,24 @@ static Block StartSections(std::ostream &out, const char *entryPoint, bool strip
 
 static void WriteDataSection(std::ostream &out)
 {
-    Block section(out << ".data : ");
+    Block section(out << ".data 0 : ");
     out <<
         "_sdata = .;\n"
+        // TODO: Palm OS will shove loader pointer here
+
         "*(.got.plt)\n"
         "*(.got)\n"
+
+        // TODO: Why so much alignment?
         "FILL(0);\n"
         ". = ALIGN(0x20);\n"
+
+        // TODO: What is this?
         "LONG(-1);\n"
+
+        // TODO: Why so much alignment?
         ". = ALIGN(0x20);\n"
+
         "*(.rodata)\n"
         "*(.rodata1)\n"
         "*(.rodata.*)\n"
@@ -286,14 +302,15 @@ static void WriteBssSection(std::ostream &out)
         "*(.bss*)\n"
         "*(.gnu.linkonce.b*)\n"
         "*(COMMON)\n"
+        // TODO: Why so much alignment?
         ". = ALIGN(0x10);\n"
         "_ebss = .;\n";
 }
 
 static void WriteDebugSections(std::ostream &out)
 {
-    // These will be discarded by Elf2Mac but should be in the intermediate
-    // output so GDB can use them
+    // These will be discarded by Elf2Mac and will be kept in the intermediate
+    // output for GDB/LLDB
     out <<
         "/DISCARD/ : { *(.note.GNU-stack) }\n"
 
@@ -305,6 +322,7 @@ static void WriteDebugSections(std::ostream &out)
         ".stab.index 0 : { *(.stab.index) }\n"
         ".stab.indexstr 0 : { *(.stab.indexstr) }\n"
         ".comment 0 : { *(.comment) }\n"
+        ".gnu.build.attributes : { *(.gnu.build.attributes .gnu.build.attributes.*) }"
 
         // DWARF debug sections.
         // Symbols in the DWARF debugging sections are relative to the beginning
@@ -335,7 +353,22 @@ static void WriteDebugSections(std::ostream &out)
         ".debug_weaknames 0 : { *(.debug_weaknames) }\n"
         ".debug_funcnames 0 : { *(.debug_funcnames) }\n"
         ".debug_typenames 0 : { *(.debug_typenames) }\n"
-        ".debug_varnames 0 : { *(.debug_varnames) }\n";
+        ".debug_varnames 0 : { *(.debug_varnames) }\n"
+
+        // DWARF 3
+        ".debug_pubtypes 0 : { *(.debug_pubtypes) }\n"
+        ".debug_ranges   0 : { *(.debug_ranges) }\n"
+
+        // DWARF 5
+        ".debug_addr     0 : { *(.debug_addr) }\n"
+        ".debug_line_str 0 : { *(.debug_line_str) }\n"
+        ".debug_loclists 0 : { *(.debug_loclists) }\n"
+        ".debug_macro    0 : { *(.debug_macro) }\n"
+        ".debug_names    0 : { *(.debug_names) }\n"
+        ".debug_rnglists 0 : { *(.debug_rnglists) }\n"
+        ".debug_str_offsets 0 : { *(.debug_str_offsets) }\n"
+        ".debug_sup      0 : { *(.debug_sup) }\n"
+        ".gnu.attributes 0 : { KEEP(*(.gnu.attributes)) }\n";
 }
 
 static void EndSections(std::ostream &out, Block &)
@@ -363,6 +396,8 @@ static void WriteTextStart(std::ostream &out, const char *entryPoint, bool isMul
 {
     out <<
         "_stext = .;\n"
+        // Code 1 resource always starts with ori.b #1, d0
+        "LONG(1);\n"
         "FILL(" NOP ");\n"
         "PROVIDE(_rsrc_start = .);\n"
         ". = ALIGN(2);\n";
@@ -392,17 +427,22 @@ static void WriteTextEnd(std::ostream &out)
         "_etext = .;\n";
 }
 
-static void CreateLdScriptSegment(std::ostream &out, const char *entryPoint, const SegmentInfo &segment)
+static void CreateLdScriptSegment(std::ostream &out, const char *entryPoint, const SegmentInfo &segment, bool palmos)
 {
     char zeroPaddedId[6];
     std::sprintf(zeroPaddedId, "%05hu", segment.id);
 
-    Block sec(out << ".code" << zeroPaddedId << " : ");
+    Block sec(out << ".code" << zeroPaddedId << " 0 : ");
 
     if(segment.id == 1)
         WriteTextStart(out, entryPoint, true);
     else
-        out << "FILL(" NOP ");\n";
+    {
+        auto headerSize = palmos ? 12 : 40;
+        out << "FILL(0);\n"
+            << ". += " << headerSize << ";\n"
+            << "FILL(" NOP ");\n";
+    }
 
     WriteFilters<false>(out, ".text", segment.filters);
 
@@ -411,6 +451,7 @@ static void CreateLdScriptSegment(std::ostream &out, const char *entryPoint, con
     else if(segment.id == 2)
         out << "*(.gnu.linkonce.t*)\n";
 
+    // TODO: What is the reason?
     // this is important, for some reason.
     out << ". = ALIGN(4);\n";
 
@@ -419,18 +460,19 @@ static void CreateLdScriptSegment(std::ostream &out, const char *entryPoint, con
     if(segment.id == 1)
         WriteTextEnd(out);
     else
+        // TODO: Why all this empty space before EH frame?
         out <<
             "FILL(0);\n"
             ". += 0x20;\n"
             "LONG(__EH_FRAME_BEGIN__" << zeroPaddedId << " - .);\n";
 }
 
-void SegmentMap::CreateLdScript(std::ostream &out, const char *entryPoint, bool stripMacsbug) const
+void SegmentMap::CreateLdScript(std::ostream &out, const char *entryPoint, bool stripMacsbug, bool palmos) const
 {
     auto sections = StartSections(out, entryPoint, stripMacsbug, true);
 
     for(auto &segment : m_segments)
-        CreateLdScriptSegment(out, entryPoint, segment);
+        CreateLdScriptSegment(out, entryPoint, segment, palmos);
 
     EndSections(out, sections);
 }
@@ -451,7 +493,7 @@ void CreateFlatLdScript(std::ostream &out, const char *entryPoint, bool stripMac
     auto sections = StartSections(out, entryPoint, stripMacsbug, false);
 
     {
-        Block section(out << ".text : ");
+        Block section(out << ".text 0 : ");
         WriteTextStart(out, entryPoint, false);
         out <<
             "*/libretrocrt.a:start.c.obj(.text*)\n"
@@ -459,12 +501,7 @@ void CreateFlatLdScript(std::ostream &out, const char *entryPoint, bool stripMac
             "*/libretrocrt.a:*(.text*)\n"
             "*/libInterface.a:*(.text*)\n"
             "*(.text*)\n"
-
-            "*(.stub)\n"
-            "*(.gnu.linkonce.t*)\n"
-            "*(.glue_7t)\n"
-            "*(.glue_7)\n"
-            "*(.jcr)\n";
+            "*(.gnu.linkonce.t*)\n";
         WriteInitFini(out);
         WriteEHFrame(out, "", { "*" });
         WriteTextEnd(out);

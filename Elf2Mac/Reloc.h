@@ -37,19 +37,19 @@ enum class RelocBase
 
 struct RuntimeReloc
 {
-    RelocBase base;
-    uint32_t offset;
-    bool relative;
-
     RuntimeReloc(RelocBase base_, uint32_t offset_, bool relative_ = false)
         : base(base_)
         , offset(offset_)
         , relative(relative_) {}
+
+    RelocBase base;
+    uint32_t offset;
+    bool relative;
 };
 
+std::string SerializeRelocs(const std::vector<RuntimeReloc> &relocs);
 #ifdef PALMOS
 std::string SerializeRelocsPalm(const std::vector<RuntimeReloc> &relocs, bool codeSegment);
 #endif
-std::string SerializeRelocs(const std::vector<RuntimeReloc> &relocs);
 
 #endif // RELOC_H

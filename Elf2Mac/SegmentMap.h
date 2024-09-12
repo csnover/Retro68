@@ -20,6 +20,7 @@
 #ifndef SEGMENTMAP_H
 #define SEGMENTMAP_H
 
+#include <cstdint>
 #include <ostream>
 #include <string>
 #include <vector>
@@ -29,14 +30,14 @@ using Filters = std::vector<std::string>;
 struct SegmentInfo
 {
     template<typename... Args>
-    SegmentInfo(int id, std::string &&name, Args... args)
+    SegmentInfo(uint16_t id, std::string &&name, Args... args)
         : id(id)
         , name(name)
         , filters { args... }
     {
     }
 
-    int id;
+    uint16_t id;
     std::string name;
     Filters filters;
 };
@@ -47,7 +48,7 @@ public:
     SegmentMap();
     SegmentMap(const std::string &filename);
 
-    void CreateLdScript(std::ostream& out, const char *entryPoint, bool stripMacsbug) const;
+    void CreateLdScript(std::ostream& out, const char *entryPoint, bool stripMacsbug, bool palmos) const;
     const std::string &GetSegmentName(int id) const;
 
 private:
