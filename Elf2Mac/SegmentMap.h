@@ -24,6 +24,8 @@
 #include <string>
 #include <vector>
 
+using Filters = std::vector<std::string>;
+
 struct SegmentInfo
 {
     template<typename... Args>
@@ -34,13 +36,9 @@ struct SegmentInfo
     {
     }
 
-    void WriteFilters(std::ostream& out, const std::string &section) const;
-    void WriteFiltersKeep(std::ostream& out, const std::string &section) const;
-    void CreateLdScript(std::ostream& out, const char *entryPoint) const;
-
     int id;
     std::string name;
-    std::vector<std::string> filters;
+    Filters filters;
 };
 
 class SegmentMap
