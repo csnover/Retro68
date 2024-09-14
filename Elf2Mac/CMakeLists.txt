@@ -27,6 +27,12 @@ add_executable(Elf2Mac
     Symtab.h
 )
 
+if (RETRO_PALMOS)
+    target_sources(Elf2Mac PRIVATE
+        PalmCompressor.h
+        PalmCompressor.cc)
+endif()
+
 target_link_libraries(Elf2Mac PRIVATE ResourceFiles ELF)
 target_include_directories(Elf2Mac PRIVATE ${CMAKE_INSTALL_PREFIX}/include)
 

@@ -63,26 +63,15 @@
 
 using namespace std::literals::string_literals;
 
-static int RealLD(const std::string &realLdPath, const std::vector<std::string> &args)
+static int RealLD(const std::vector<const char *> &argv)
 {
-    std::vector<const char *> argv;
-    argv.reserve(args.size() + 2);
-    argv.push_back(realLdPath.c_str());
-    for(const auto &s : args)
-        argv.push_back(s.c_str());
-    argv.push_back(nullptr);
-
     pid_t pid = fork();
     if(pid < 0)
-    {
-        std::cerr << "unable to fork: " << strerror(errno) << std::endl;
-        return 1;
-    }
+        throw std::runtime_error("unable to fork: "s + strerror(errno));
     else if(pid == 0)
     {
         execvp(argv[0], const_cast<char* const *> (argv.data()));
-        std::cerr << "exec failed: " << strerror(errno) << std::endl;
-        return 1;
+        throw std::runtime_error("exec failed: "s + strerror(errno));
     }
 
     int wstatus;
@@ -92,11 +81,10 @@ static int RealLD(const std::string &realLdPath, const std::vector<std::string> 
         result = waitpid(pid, &wstatus, 0);
     } while(result == -1 && errno == EINTR);
 
-    if(WIFEXITED(wstatus))
-        return WEXITSTATUS(wstatus);
+    if(!WIFEXITED(wstatus))
+        throw std::runtime_error("ld process did not exit properly");
 
-    std::cerr << "ld process did not exit properly" << std::endl;
-    return 1;
+    return WEXITSTATUS(wstatus);
 }
 
 static inline bool flag(char **p, const char *name)
@@ -108,10 +96,7 @@ static inline char *nextArg(char **&p, const char *err)
 {
     ++p;
     if(*p == nullptr)
-    {
-        std::cerr << err << std::endl;
-        std::exit(1);
-    }
+        throw std::runtime_error(err);
     return *p;
 }
 
@@ -131,7 +116,7 @@ struct TempFileGuard
     const char *tmpfile;
 };
 
-int main(int, char *argv[])
+static int Elf2Mac(char *argv[])
 {
     std::string realLdPath;
     if (const char *path = getenv("RETRO68_REAL_LD"); path && path[0] != '\0')
@@ -140,7 +125,7 @@ int main(int, char *argv[])
         realLdPath = argv[0] + ".real"s;
     const char *outputFile = "a.out";
     const char *entryPoint = "_start";
-    uint32_t stackSize = 4096;
+    uint32_t stackSize = 0;
     bool elf2mac = false;
     bool flatoutput = false;
     bool segments = true;
@@ -150,11 +135,12 @@ int main(int, char *argv[])
 
     SegmentMap segmentMap;
 
-    std::vector<std::string> ldArgs;
+    std::vector<const char *> ldArgv;
+    ldArgv.push_back(realLdPath.c_str());
     for(auto p = argv + 1; *p != nullptr; ++p)
     {
         if(flag(p, "--elf2mac-real-ld"))
-            realLdPath = nextArg(p, "--elf2mac-real-ld missing argument");
+            ldArgv[0] = nextArg(p, "--elf2mac-real-ld missing argument");
         else if(flag(p, "-o"))
             outputFile = nextArg(p, "-o missing argument");
         else if(startsWith(p, "-o"))
@@ -191,21 +177,15 @@ int main(int, char *argv[])
         else if (flag(p, "--stack"))
             stackSize = std::atoi(nextArg(p, "--stack missing argument"));
         else
-            ldArgs.push_back(*p);
+            ldArgv.push_back(*p);
     }
 
     if(flatoutput && segments)
-    {
-        std::cerr << "--mac-segments can't be used with --mac-flat" << std::endl;
-        return 1;
-    }
+        throw std::runtime_error("--mac-segments can't be used with --mac-flat");
 
 #ifndef PALMOS
     if(palmos)
-    {
-        std::cerr << "Not compiled with Palm OS support" << std::endl;
-        return 1;
-    }
+        throw std::runtime_error("Not compiled with Palm OS support");
 #endif
 
     int result;
@@ -237,13 +217,14 @@ int main(int, char *argv[])
 
         std::string inputFile { outputFile + ".gdb"s };
 
-        ldArgs.push_back("--no-warn-rwx-segments");
-        ldArgs.push_back("-o");
-        ldArgs.push_back(inputFile);
-        ldArgs.push_back("-T");
-        ldArgs.push_back(tmpfile);
+        ldArgv.push_back("--no-warn-rwx-segments");
+        ldArgv.push_back("-o");
+        ldArgv.push_back(inputFile.c_str());
+        ldArgv.push_back("-T");
+        ldArgv.push_back(tmpfile.c_str());
+        ldArgv.push_back(nullptr);
 
-        if ((result = RealLD(realLdPath, ldArgs)) != 0)
+        if ((result = RealLD(ldArgv)) != 0)
             return result;
 
         Object theObject(inputFile, palmos, stackSize);
@@ -257,11 +238,28 @@ int main(int, char *argv[])
     }
     else
     {
-        for (auto p = argv + 1; *p != nullptr; ++p)
-            ldArgs.push_back(*p);
-
-        result = RealLD(realLdPath, ldArgs);
+        ldArgv.clear();
+        for (auto p = argv; *p != nullptr; ++p)
+            ldArgv.push_back(*p);
+        ldArgv.push_back(nullptr);
+        result = RealLD(ldArgv);
     }
 
     return result;
+}
+
+int main(int argc, char *argv[])
+{
+    try
+    {
+        if (argc < 1)
+            throw std::runtime_error("missing argv[0]");
+
+        return Elf2Mac(argv);
+    }
+    catch(const std::runtime_error &e)
+    {
+        std::cerr << "Error: " << e.what() << std::endl;
+        return 1;
+    }
 }

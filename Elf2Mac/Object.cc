@@ -18,13 +18,13 @@
 */
 
 #include "Object.h"
+#ifdef PALMOS
+#include "PalmCompressor.h"
+#endif
 #include "SegmentMap.h"
 #include "Symtab.h"
 
 #include <algorithm>
-#ifdef PALMOS
-#include <array>
-#endif
 #include <cassert>
 #include <cstring>
 #include <fstream>
@@ -49,7 +49,6 @@ Object::Object(const std::string &input, bool palmos, uint32_t stackSize)
     : m_codeOsType(palmos ? "code" : "CODE")
     , m_dataOsType(palmos ? "data" : "DATA")
     , m_applOsType(palmos ? "appl" : "APPL")
-    // On Palm OS, the loader will place TODO
     , m_jtHeaderSize(palmos ? 0 : 0x20)
     , m_jtEntrySize(palmos ? 6 : 8)
     , m_jtFirstIndex(palmos ? 0 : 2)
@@ -129,6 +128,11 @@ void Object::loadSections()
                     m_data = scn;
                 else
                 {
+                    // The output sections in the linker script have to be
+                    // sorted according to input match order because that
+                    // is how GNU ld works, but the final output should be
+                    // sorted by resource IDs which are given in the output
+                    // section name
                     auto pos = std::lower_bound(m_code.begin(), m_code.end(), name,
                         [&](SSec<uint8_t> &section, const char *newName) {
                             const char *ownName = m_shstrtab + section.header->sh_name;
@@ -438,8 +442,12 @@ std::vector<RuntimeReloc> Object::relocateSection(SSec<Elf32_Rela> &relaSection,
         if(multiSegment)
             offset -= source.header->sh_addr;
 
+        if(relaType == R_68K_PC32 && targetSymbol->st_shndx == sourceIndex)
+            continue;
+
         // TODO: determine relocBase
         RelocBase relocBase;
+
         if(relaType == R_68K_32)
             outRelocs.emplace_back(relocBase, offset);
         else if(relaType == R_68K_PC32 && targetSymbol->st_shndx != sourceIndex)
@@ -459,10 +467,11 @@ void Object::emitRes0(Resources &rsrc, uint32_t belowA5)
 
     auto jtDataSize = m_jtEntrySize * (m_jumpTable.size() + m_jtFirstIndex);
     // TODO: Not totally clear what the fixed value should be on Palm OS.
-    // Suppose it depends on if we need to cram any bookkeeping data at the
-    // top of A5. The loader will always shove a pointer to SysAppInfoType
-    // at A5BASE. prc-tools thinks that its data resource should be
-    // `128 + 33 * (data_size / 32)`, and these are all magic numbers.
+    // The loader will always shove a pointer to SysAppInfoType at A5BASE
+    // (same place where Mac OS shoves pointer to QDGlobals).
+    // prc-tools thinks that its data resource should be
+    // `128 + 33 * (data_size / 32)`, but these are all magic numbers and it
+    // seems like it uses some of A5 for its own relocation junk.
     auto aboveA5 = m_jtHeaderSize + jtDataSize;
 
     longword(code0, aboveA5);
@@ -473,11 +482,12 @@ void Object::emitRes0(Resources &rsrc, uint32_t belowA5)
     longword(code0, isPalm() ? 8 : jtDataSize);
     longword(code0, m_jtHeaderSize);
 
-    // jt entry for entrypoint
+    // Jump table entry for default entrypoint
+    // [function offset].w [move.w #resource id,-(sp)] [LoadSeg].w
     code0 << fromhex("0000 3F3C 0001 A9F0");
 
     if (!isPalm())
-        // 32-bit entries start from here
+        // flag entry to switch to “new format” 32-bit jump table entries
         code0 << fromhex("0000 FFFF 0000 0000");
 
     uint16_t codeID = 0; // TODO: Must emit by each individual jump table
@@ -608,245 +618,25 @@ void Object::finalizeFile(const std::string &filename, ResourceFile &file)
 }
 
 #ifdef PALMOS
-class PalmCompressor
-{
-public:
-    void CompressRange(const char *base, const char *start, const char *end);
-    std::string Done();
-    void EmitLiteral(const char *data, size_t len);
-    void EmitPattern(const char *data);
-    size_t EmitRun(char c, size_t len);
-
-private:
-    enum Op {
-        // Run of uncompressed literals given in the next N bytes
-        Literal     = 0x80,
-        // Run of zeros
-        ZeroRun     = 0x40,
-        // Run of a single value given in the next byte
-        ValueRun    = 0x20,
-        // Run of 0xff
-        FFRun       = 0x10,
-        /* 3 and 4 are compression for Mac OS jump table entries, but Palm OS
-           never uses those, so are useless and thus omitted */
-        // Run of 8 byte pattern with value given in the next 3 bytes
-        Pat0000FXXX = 2,
-        // Run of 8 byte pattern with value given in the next 2 bytes
-        Pat0000FFXX = 1,
-        // Termination marker
-        End         = 0,
-    };
-
-    std::ostringstream out;
-};
-
-static std::pair<char, size_t> RunLen(const char *start, const char *end)
-{
-    std::pair<char, size_t> run;
-    run.first = *start++;
-    run.second = 1;
-    while (start != end && *start++ == run.first)
-        ++run.second;
-    return run;
-}
-
-static bool ShouldEmitPattern(char c, size_t runLen, const char *start, const char *end)
-{
-    size_t len = end - start;
-    if (c != '\0' || runLen != 4 || len < 4 || start[0] != '\xff')
-        return false;
-
-    // 00 00 00 00 FF 00 00 00 ZRun+FRun+ZRun < Pat (3 < 4)
-    if (start[1] == '\0' && start[2] == '\0' && start[3] == '\0')
-        return false;
-
-    // 00 00 00 00 FF FF FF FF ZRun+FRun < Pat (2 < 3)
-    if (start[1] == '\xff' && start[2] == '\xff' && start[3] == '\xff')
-        return false;
-
-    // 00 00 00 00 FF AA AA AA AA BB ZRun+FRun+CRun+Lit < Pat+Lit (6 < 7)
-    if (len > 4 && start[1] == start[2] && start[2] == start[3] && start[3] == start[4])
-        return false;
-
-    // Other sequences should all be equivalent or worse than pattern?
-    return true;
-}
-
-void PalmCompressor::CompressRange(const char *base, const char *in, const char *end)
-{
-    const char* literal = in;
-    size_t literalLen = 0;
-
-    longword(out, in - base);
-
-    while (in != end)
-    {
-        auto [c, len] = RunLen(in, end);
-        in += len;
-        if (len > 1)
-        {
-            EmitLiteral(literal, literalLen);
-
-            size_t trailingLiteralLen;
-            if (ShouldEmitPattern(c, len, in, end))
-            {
-                EmitPattern(in);
-                in += 4;
-                trailingLiteralLen = 0;
-            }
-            else
-                trailingLiteralLen = EmitRun(c, len);
-
-            literal = in - trailingLiteralLen;
-            literalLen = trailingLiteralLen;
-        }
-        else
-            ++literalLen;
-    }
-
-    EmitLiteral(literal, literalLen);
-
-    out.put(End);
-}
-
-std::string PalmCompressor::Done()
-{
-    return out.str();
-}
-
-void PalmCompressor::EmitLiteral(const char *data, size_t len)
-{
-    while (len != 0)
-    {
-        uint8_t runSize = std::min<size_t>(Literal, len);
-        out.put(Literal | (runSize - 1));
-        out.write(data, runSize);
-        data += runSize;
-        len -= runSize;
-    }
-}
-
-void PalmCompressor::EmitPattern(const char *data)
-{
-    uint8_t op;
-    size_t len;
-    if (data[1] == '\xff')
-    {
-        op = Pat0000FFXX;
-        len = 2;
-    }
-    else
-    {
-        op = Pat0000FXXX;
-        len = 3;
-    }
-    data += (4 - len);
-    out.put(op);
-    out.write(data, len);
-}
-
-size_t PalmCompressor::EmitRun(char c, size_t len)
-{
-    uint8_t op;
-    if (c == '\0')
-        op = ZeroRun;
-    else if (c == '\xff' && len <= FFRun)
-        op = FFRun;
-    else
-        op = ValueRun;
-
-    while (len > 1)
-    {
-        uint8_t runSize = std::min<size_t>(op, len);
-        out.put(char(op | (runSize - 1)));
-        if (op == ValueRun)
-            out.put(c);
-        len -= runSize;
-    }
-
-    return len;
-}
-
-using FatPtr = std::pair<const char *, size_t>;
-static std::array<FatPtr, 2> FindLongestZeroRuns(const char *start, const char *end)
-{
-    // Input needs to be sorted by length
-    std::array<FatPtr, 2> best { FatPtr { end, 0 }, FatPtr { end, 0 } };
-    FatPtr next { nullptr, 0 };
-
-    auto update = [&]() {
-        if (next.second > best[0].second)
-        {
-            best[1] = best[0];
-            best[0] = next;
-        }
-        else if (next.second > best[1].second)
-            best[1] = next;
-    };
-
-    while (start != end)
-    {
-        if (*start == '\0')
-        {
-            if (next.first == nullptr)
-                next.first = start;
-            ++next.second;
-        }
-        else
-        {
-            update();
-            next.first = nullptr;
-            next.second = 0;
-        }
-
-        ++start;
-    }
-
-    update();
-
-    // Output needs to be sorted by pointer position
-    if (best[0].first > best[1].first)
-        std::swap(best[0], best[1]);
-
-    return best;
-}
-
-// Standard Palm OS data resource format is compressed data segment followed by
-// data resource relocation table.
 std::string Object::compressData(std::string &&input)
 {
     if (!isPalm())
         return input;
 
-    PalmCompressor compressor;
-
-    auto base = input.data();
-    auto in = base;
-    auto end = in + input.size();
-
-    while (in != end && *in == '\0')
-        ++in;
-
-    while (in != end && end[-1] == '\0')
-        --end;
-
-    // For whatever reason this format requires exactly two skips no matter
-    // what
-    auto [skip1, skip2] = FindLongestZeroRuns(in, end);
-
-    compressor.CompressRange(base, in, skip1.first);
-    compressor.CompressRange(base, skip1.first + skip1.second, skip2.first);
-    compressor.CompressRange(base, skip2.first + skip2.second, end);
-
-    return compressor.Done();
+    return CompressPalmData(std::move(input));
 }
 
 void Object::emitPref(Resources &rsrc)
 {
+    // 0xd00 is the default value used by Palm OS SysAppLaunch if pref 0 is
+    // missing
+    if (m_stackSize == 0 || m_stackSize == 0xd00)
+        return;
+
     std::ostringstream pref0;
-    word(pref0, 30);
-    longword(pref0, m_stackSize);
-    longword(pref0, 4096);
+    word(pref0, 30); // AMX task priority
+    longword(pref0, m_stackSize); // Stack size
+    longword(pref0, 0x1000); // Minimum heap free heap
     rsrc.addResource(Resource(ResType("pref"), 0, pref0.str()));
 }
 #endif

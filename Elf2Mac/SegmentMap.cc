@@ -18,8 +18,8 @@
 */
 
 /**
- * Parts of the generated script are copied from
- * <PREFIX>/<triple>/lib/ldscripts/m68kelf.xc.
+ * Parts of the generated script are copied from common parts of scripts at
+ * <PREFIX>/<triple>/lib/ldscripts/m68kelf.*.
  */
 
 #include "SegmentMap.h"
@@ -242,22 +242,42 @@ static Block StartSections(std::ostream &out, const char *entryPoint, bool strip
 
 static void WriteDataSection(std::ostream &out)
 {
+    // The data section has a runtime displacement of
+    // `%a5 - SIZEOF(.data + .bss)`. Jump tables from code 0 are placed at
+    // `%a5 + 32` on Mac OS. This can be confusing because the diagrams in Apple
+    // documentation are ‘backwards’ and show low addresses at the bottom.
+    //
+    // The order of data in memory is actually:
+    //
+    // • “Below” A5 (0x0000)
+    // [QuickDraw global variables]
+    // [Application global variables] (.data)
+    // • %a5 (CurrentA5)
+    // [Pointer to QuickDraw global variables]
+    // [Application parameters]
+    // [Jump table] (CurrentA5 + 32)
+    // • “Above” A5 (0xFFFF)
+    //
+    // "The jump table is always located at a fixed offset above A5.
+    //  For all applications, the offset to the jump table from the
+    //  location pointed to by A5 is 32. The number of bytes above
+    //  A5 is 32 plus the length of the jump table." - MacOS RT Architectures
+    //
+    // For Palm OS, it really does not matter where anything is located relative
+    // to A5, except that the loader will put SysAppInfoPtr at the start of
+    // .data and thus expects that AboveA5 will be at least 4.
     Block section(out << ".data 0 : ");
     out <<
         "_sdata = .;\n"
-        // TODO: Palm OS will shove loader pointer here
-
         "*(.got.plt)\n"
         "*(.got)\n"
 
-        // TODO: Why so much alignment?
+        // TODO: Why so much alignment? What is this?
         "FILL(0);\n"
         ". = ALIGN(0x20);\n"
-
         // TODO: What is this?
         "LONG(-1);\n"
-
-        // TODO: Why so much alignment?
+        // TODO: Why so much alignment? What is this?
         ". = ALIGN(0x20);\n"
 
         "*(.rodata)\n"
@@ -328,19 +348,19 @@ static void WriteDebugSections(std::ostream &out)
         // Symbols in the DWARF debugging sections are relative to the beginning
         // of the section so we begin them at 0.
 
-        // DWARF 1
+        // DWARF 1.
         ".debug 0 : { *(.debug) }\n"
         ".line 0 : { *(.line) }\n"
 
-        // GNU DWARF 1 extensions
+        // GNU DWARF 1 extensions.
         ".debug_srcinfo 0 : { *(.debug_srcinfo) }\n"
         ".debug_sfnames 0 : { *(.debug_sfnames) }\n"
 
-        // DWARF 1.1 and DWARF 2
+        // DWARF 1.1 and DWARF 2.
         ".debug_aranges 0 : { *(.debug_aranges) }\n"
         ".debug_pubnames 0 : { *(.debug_pubnames) }\n"
 
-        // DWARF 2
+        // DWARF 2.
         ".debug_info 0 : { *(.debug_info .gnu.linkonce.wi.*) }\n"
         ".debug_abbrev 0 : { *(.debug_abbrev) }\n"
         ".debug_line 0 : { *(.debug_line) }\n"
@@ -349,17 +369,17 @@ static void WriteDebugSections(std::ostream &out)
         ".debug_loc 0 : { *(.debug_loc) }\n"
         ".debug_macinfo 0 : { *(.debug_macinfo) }\n"
 
-        // SGI/MIPS DWARF 2 extensions
+        // SGI/MIPS DWARF 2 extensions.
         ".debug_weaknames 0 : { *(.debug_weaknames) }\n"
         ".debug_funcnames 0 : { *(.debug_funcnames) }\n"
         ".debug_typenames 0 : { *(.debug_typenames) }\n"
         ".debug_varnames 0 : { *(.debug_varnames) }\n"
 
-        // DWARF 3
+        // DWARF 3.
         ".debug_pubtypes 0 : { *(.debug_pubtypes) }\n"
         ".debug_ranges   0 : { *(.debug_ranges) }\n"
 
-        // DWARF 5
+        // DWARF 5.
         ".debug_addr     0 : { *(.debug_addr) }\n"
         ".debug_line_str 0 : { *(.debug_line_str) }\n"
         ".debug_loclists 0 : { *(.debug_loclists) }\n"
@@ -396,10 +416,12 @@ static void WriteTextStart(std::ostream &out, const char *entryPoint, bool isMul
 {
     out <<
         "_stext = .;\n"
-        // Code 1 resource always starts with ori.b #1, d0
-        "LONG(1);\n"
-        "FILL(" NOP ");\n"
+#if 0 // This symbol is used only by code that is disabled in relocate.c
         "PROVIDE(_rsrc_start = .);\n"
+#endif
+        "WORD(0);\n" // Offset to first entry in jump table
+        "WORD(1);\n" // Number of entries in jump table
+        "FILL(" NOP ");\n"
         ". = ALIGN(2);\n";
 
     WriteTrampoline(out, entryPoint, isMultiseg);
@@ -414,12 +436,14 @@ static void WriteEHFrame(std::ostream &out, const char *id, const Filters &filte
 {
     out << "__EH_FRAME_BEGIN__" << id << " = .;\n";
     WriteFilters<true>(out, ".eh_frame", filters);
+    // TODO: Why?
     out << "LONG(0);\n";
     WriteFilters<true>(out, ".gcc_except_table", filters);
 }
 
 static void WriteTextEnd(std::ostream &out)
 {
+    // TODO: This comment seems to be not true except maybe for .data + .bss?
     // Elf2Mac expects the sections to be contiguous, so include the
     // alignment before the end of this section.
     out <<
@@ -461,6 +485,7 @@ static void CreateLdScriptSegment(std::ostream &out, const char *entryPoint, con
         WriteTextEnd(out);
     else
         // TODO: Why all this empty space before EH frame?
+        // Should this be SIZEOF(.eh_frame)?
         out <<
             "FILL(0);\n"
             ". += 0x20;\n"
