@@ -26,9 +26,8 @@ static void StartDebug(UInt16 flags)
     if (feature != 0x12BEEF34)
         return;
 
-    // Tell the debugger the location of .text (d0), .bss (d1), .data (d2), and
-    // PilotMain (a0), and call DbgBreak (trap 8). These registers are used by
-    // the custom PalmOS GCC wire protocol. There may be another one.
+    // Set locations of .text (d0), .bss (d1), .data (d2), and PilotMain (a0),
+    // and call DbgBreak (trap 8) to send these offsets to the debugger.
     __asm__(
         "\tlea     %0, %%a0\n"
         "\tmove.l  %%a0, %%d2\n"

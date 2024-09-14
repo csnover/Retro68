@@ -102,9 +102,11 @@ extern void *__deregister_frame_info (const void *)
 typedef struct Retro68RelocState
 {
     Ptr bssPtr;
+#ifndef __palmos__
     Handle codeHandle;
     char hasStripAddr;
     char hasFlushCodeCache;
+#endif
 } Retro68RelocState;
 
 extern Retro68RelocState relocState;

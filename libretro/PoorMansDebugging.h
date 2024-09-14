@@ -43,7 +43,7 @@
 #else
 #define assert(x) do {                      \
         if(!(x)) {                          \
-            unsigned char str[6];           \
+            char str[6];                    \
             int i;                          \
             int l = __LINE__;               \
             for(i = 1; i < 6; i++)          \
@@ -65,7 +65,7 @@
 #else
 #define log(x) do {                                 \
         {                                           \
-            unsigned char str[10];                  \
+            char str[10];                           \
             int ___i;                               \
             unsigned l = (x);                       \
             for(___i = 2; ___i < 10; ___i++)        \
