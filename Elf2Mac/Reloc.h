@@ -28,28 +28,23 @@
 
 enum class RelocBase
 {
+    // A relocation to the current section.
     code = 0,
+    // A relocation to the data section.
     data,
+    // A relocation to the bss section.
     bss,
+    // A relocation to the jump table.
     jumptable,
+    // A relocation to the code 1 section.
     code1
 };
 
-struct RuntimeReloc
-{
-    RuntimeReloc(RelocBase base_, uint32_t offset_, bool relative_ = false)
-        : base(base_)
-        , offset(offset_)
-        , relative(relative_) {}
+using Relocations = std::unordered_map<RelocBase, std::vector<Elf32_Addr>>;
 
-    RelocBase base;
-    uint32_t offset;
-    bool relative;
-};
-
-std::string SerializeRelocs(const std::vector<RuntimeReloc> &relocs);
+std::string SerializeRelocs(const Relocations &relocs);
 #ifdef PALMOS
-std::string SerializeRelocsPalm(const std::vector<RuntimeReloc> &relocs, bool codeSegment);
+std::string SerializeRelocsPalm(const Relocations &relocs, bool codeSegment);
 #endif
 
 #endif // RELOC_H

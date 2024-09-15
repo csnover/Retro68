@@ -22,7 +22,6 @@
 #include "PalmCompressor.h"
 #endif
 #include "SegmentMap.h"
-#include "Symtab.h"
 
 #include <algorithm>
 #include <cassert>
@@ -45,11 +44,11 @@
 
 using namespace std::literals::string_literals;
 
-Object::Object(const std::string &input, bool palmos, uint32_t stackSize)
+Object::Object(const std::string &input, bool palmos, uint32_t stackSize, bool verbose)
     : m_codeOsType(palmos ? "code" : "CODE")
     , m_dataOsType(palmos ? "data" : "DATA")
     , m_applOsType(palmos ? "appl" : "APPL")
-    , m_jtHeaderSize(palmos ? 0 : 0x20)
+    , m_jtHeaderSize(palmos ? 4 : 0x20)
     , m_jtEntrySize(palmos ? 6 : 8)
     , m_jtFirstIndex(palmos ? 0 : 2)
     , m_multiCodeOutputBase(palmos ? 12 : 40)
@@ -72,6 +71,7 @@ Object::Object(const std::string &input, bool palmos, uint32_t stackSize)
         throw std::runtime_error("Reading ELF failed: "s + elf_errmsg(-1));
 
     loadSections();
+    processRelocations();
 }
 
 Object::~Object()
@@ -99,10 +99,6 @@ void Object::loadSections()
     m_shstrtab = static_cast<const char *>(
         elf_getdata(elf_getscn(m_elf, shstrtabIndex), nullptr)->d_buf);
 
-    // Creating symtab indexes requires strtab, which may not be present until
-    // later, depending on the order of the sections in the ELF file
-    Elf_Scn *symtabScn = nullptr;
-
     for(Elf_Scn *scn = nullptr; (scn = elf_nextscn(m_elf, scn)) != nullptr; )
     {
         const Elf32_Shdr &shdr = *elf32_getshdr(scn);
@@ -115,8 +111,15 @@ void Object::loadSections()
                 m_strtab = static_cast<const char *>(elf_getdata(scn, nullptr)->d_buf);
             break;
         case SHT_SYMTAB:
-            symtabScn = scn;
+            m_symtab = scn;
             break;
+        case SHT_REL:
+            // The documented difference between SHT_REL and SHT_RELA is that
+            // the addend is stored at the offset in the .text section for
+            // SHT_REL instead of in the relocation record, so it would be
+            // trivially supportable, but does not need to be if the compiler
+            // never creates these kinds of records to begin with
+            throw std::runtime_error("SHT_REL not supported");
         case SHT_RELA:
             if(shdr.sh_flags & SHF_INFO_LINK)
                 m_rela.emplace_back(scn);
@@ -145,36 +148,99 @@ void Object::loadSections()
         case SHT_NOBITS:
             m_bss = scn;
             break;
+        default:
+            if (m_verbose)
+            {
+                std::cout
+                    << "Skipping section " << elf_ndxscn(scn)
+                    << " (" << m_shstrtab + shdr.sh_name << ")" << std::endl;
+            }
         }
     }
 
-    m_symtab.Load(symtabScn, m_strtab);
+    if (!m_symtab)
+        throw std::runtime_error("Could not find .symtab");
+
+    if (!m_strtab)
+        throw std::runtime_error("Could not find .strtab");
+
+    if (m_code.empty())
+        throw std::runtime_error("No code sections found");
+
+    // TODO: Validate that all code IDs are contiguous on Palm OS
 }
 
-void Object::emitFlatCode(std::ostream &out, Elf32_Addr newBase)
+void Object::emitFlatCode(std::ostream &out)
 {
-    std::vector<RuntimeReloc> relocs;
+    // Technically it would be possible to flatten multiple code sections by
+    // telling the relocation processor to never create indirect xrefs and then
+    // rebase all sections in a linear address space instead of only the data
+    // and bss sections, but since the ld script already only creates a single
+    // .text section, there is no reason to do anything except assert here that
+    // nothing funky happened
+    if (m_code.size() != 1)
+        throw std::runtime_error("Cannot emit flat code with multiple sections");
 
-    for(auto &section : m_rela)
-    {
-        auto sectionRelocs = relocateSection(section, newBase, 1, false);
-        relocs.insert(relocs.cend(), sectionRelocs.begin(), sectionRelocs.end());
-        newBase += section.header->sh_size;
-    }
-
-    for (auto &code : m_code)
-        out << code.view();
+    out << m_code.front().view();
 
     if (m_data)
+    {
         out << m_data.view();
 
-    out << SerializeRelocs(relocs);
+        Relocations combined(m_relocations[m_code.front().index()]);
+
+        const auto &dataReloc = m_relocations[m_data.index()];
+        for (const auto &[section, relocations] : dataReloc)
+        {
+            combined[section].insert(combined[section].end(),
+                relocations.begin(), relocations.end());
+            std::sort(combined[section].begin(), combined[section].end());
+        }
+
+#ifdef PALMOS
+        if (isPalm())
+            out << SerializeRelocsPalm(combined, false);
+        else
+#endif
+            out << SerializeRelocs(combined);
+    }
+    else
+    {
+        const auto &relocs = m_relocations[m_code.front().index()];
+#ifdef PALMOS
+        if (isPalm())
+            out << SerializeRelocsPalm(relocs, false);
+        else
+#endif
+            out << SerializeRelocs(relocs);
+    }
+}
+
+static void word(uint8_t *p, uint16_t value)
+{
+    p[0] = value >> 8;
+    p[1] = value;
+}
+
+static void longword(uint8_t *p, uint32_t value)
+{
+    p[0] = value >> 24;
+    p[1] = value >> 16;
+    p[2] = value >> 8;
+    p[3] = value;
 }
 
 void Object::FlatCode(const std::string &filename)
 {
     std::ofstream out(filename);
-    emitFlatCode(out, 0);
+
+    // To avoid having to rebase the whole section just because there is a
+    // resource header, replace it with some no-ops.
+    enum { kNoOp = 0x4e71 };
+    word(m_code.front().data, kNoOp);
+    word(m_code.front().data + 2, kNoOp);
+
+    emitFlatCode(out);
 }
 
 static inline char hexchar(char c)
@@ -212,50 +278,57 @@ void Object::SingleSegmentApp(const std::string &filename)
 
     {
         std::ostringstream code1;
-        emitFlatCode(code1, secOutputBase(1));
+        emitFlatCode(code1);
         rsrc.addResource(Resource(m_codeOsType, 1, code1.str()));
     }
 
+#ifdef PALMOS
     if (isPalm())
         emitPref(rsrc);
+#endif
 
     finalizeFile(filename, file);
 }
 
-static const Elf32_Sym *FindExceptionInfoStart(const Symtab &symtab, uint16_t codeID)
+const Elf32_Sym *Object::findExceptionInfoStart(uint16_t codeID) const
 {
-    char marker[] = "__EH_FRAME_BEGIN__\0\0\0\0\0";
-    if(codeID > 1)
-        std::sprintf(marker + sizeof(marker - 6), "%05hu", codeID);
-    auto index = symtab.FindSym(marker);
+    if (m_ehFrameCache.empty())
+    {
+        // Hack to avoid constantly trying to create the cache if there are no
+        // EH frames in the symbol table
+        m_ehFrameCache[0] = nullptr;
 
-    const Elf32_Sym *start = nullptr;
-    if(index != -1)
-        start = symtab.GetSym(index);
-    return start;
+        const auto *symbol = m_symtab.data;
+        const auto *end = m_symtab.data + m_symtab.size();
+        for (; symbol != end; ++symbol)
+        {
+            if (!symbol->st_name)
+                continue;
+
+            const char *name = m_strtab + symbol->st_name;
+            constexpr char *prefix = "__EH_FRAME_BEGIN__";
+            constexpr auto len = std::strlen(prefix);
+            if (std::strncmp(name, prefix, len) != 0)
+                continue;
+
+            int frameCodeID;
+            if (name[len] == '\0')
+                frameCodeID = 1;
+            else
+                frameCodeID = std::atoi(name + len);
+            m_ehFrameCache[frameCodeID] = symbol;
+        }
+    }
+
+    return m_ehFrameCache.at(codeID);
 }
 
-/*
-    ld behaves differently depending on whether debug info is present.
-    If debug info is present, .eh_frame sections will contain references
-    to other code segments, if no debug info is generated (or it is
-    stripped at link time), then these pointers are set to 0 during linking.
-
-    In most cases, this has to do with weak symbols; the instance of the
-    symbol that is removed gets a null ptr (with R_68K_NONE relocation) in
-    the .eh_frame section if there is no debug info, but gets remapped to
-    the surviving instance if there is debug info.
-    It also happens with some section symbols, and I *hope* this is related.
-
-    This makes no sense to me, but the reason is probably buried somewhere
-    within a 900-line function of C code within a 15000 line source file
-    in GNU bfd.
-
-    I *hope* that the correct behavior is to just clear those pointers.
-*/
 bool Object::isOffsetInEhFrame(uint16_t codeID, Elf32_Addr vaddr) const
 {
-    auto ehStart = FindExceptionInfoStart(m_symtab, codeID);
+    if (codeID == 0)
+        return false;
+
+    auto ehStart = findExceptionInfoStart(codeID);
 
     if(m_verbose)
     {
@@ -270,14 +343,14 @@ bool Object::isOffsetInEhFrame(uint16_t codeID, Elf32_Addr vaddr) const
                 << m_codeOsType << "," << codeID
                 << " has " << exceptionSize
                 << " bytes of exception info (" << percent << "%)"
-                "\n";
+                << std::endl;
         }
         else
         {
-            std::cout
-                << "exception info marker not found for"
+            std::cerr
+                << "Exception info marker not found for "
                 << m_codeOsType << "," << codeID
-                << "\n";
+                << std::endl;
         }
     }
 
@@ -290,64 +363,165 @@ bool Object::isOffsetInEhFrame(uint16_t codeID, Elf32_Addr vaddr) const
     return true;
 }
 
-uint32_t Object::getU32BE(const SSec<uint8_t> &section, Elf32_Addr vaddr)
-{
-    const uint8_t *p = section.data + vaddr - section.header->sh_addr;
-    return (p[0] << 24) | (p[1] << 16) | (p[2] << 8) | p[3];
-}
-
 void Object::setU32BE(SSec<uint8_t> &section, Elf32_Addr vaddr, uint32_t value)
 {
-    uint8_t *p = section.data + vaddr - section.header->sh_addr;
-    p[0] = value >> 24;
-    p[1] = value >> 16;
-    p[2] = value >> 8;
-    p[3] = value;
+    longword(section.data + vaddr - section.header->sh_addr, value);
 }
 
-Elf32_Addr Object::jumpTableAddress(const Elf32_Sym *symbol, uint16_t codeID)
+Object::XrefKind Object::getXrefKind(uint16_t codeID, Elf32_Section source,
+    const Elf32_Rela *rela, const Elf32_Sym *target) const
 {
-    auto &jumpTable = m_jumpTables[symbol->st_shndx];
-    size_t jtIndex;
-    if (auto it = jumpTable.find(symbol->st_value); it != jumpTable.end())
-        jtIndex = it->second;
-    else
+    if (!target)
+        return XrefKind::Invalid;
+
+    auto targetSection = target->st_shndx;
+
+    if (targetSection != source)
     {
-        const auto *target = elf32_getshdr(elf_getscn(m_elf, symbol->st_shndx));
-        jtIndex = m_jumpTable.size();
-        jumpTable.emplace(symbol->st_value, jtIndex);
-        m_jumpTable.push_back(symbol->st_value - target->sh_addr + secOutputBase(codeID));
+        // ld behaves differently depending on whether debug info is present.
+        // If debug info is present, .eh_frame sections will contain references
+        // to other code segments, if no debug info is generated (or it is
+        // stripped at link time), then these pointers are set to 0 during linking.
+        //
+        // In most cases, this has to do with weak symbols; the instance of the
+        // symbol that is removed gets a null ptr (with R_68K_NONE relocation) in
+        // the .eh_frame section if there is no debug info, but gets remapped to
+        // the surviving instance if there is debug info.
+        // It also happens with some section symbols, and I *hope* this is related.
+        //
+        // This makes no sense to me, but the reason is probably buried somewhere
+        // within a 900-line function of C code within a 15000 line source file
+        // in GNU bfd.
+        //
+        // I *hope* that the correct behavior is to just clear those pointers.
+        if (isOffsetInEhFrame(codeID, rela->r_offset))
+            return XrefKind::InvalidEhFrame;
+
+        // Inter-section PC-relative relocations require extra runtime
+        // arithmetic to calculate a delta between the two loaded sections,
+        // which is not supported by OS native relocation code. For the moment,
+        // mark this kind of relocation as invalid, and reimplement the support
+        // later in the runtime if it turns out to be actually required.
+        else if (ELF32_R_TYPE(rela->r_info) == R_68K_PC32)
+            return XrefKind::Invalid;
     }
 
-    return m_jtHeaderSize + jtIndex * m_jtEntrySize;
+    // Intra-section, data, and code 1 xrefs are always valid since the only
+    // limit on xrefs is whether or not the target section is actually loaded
+    // (and whether the operand is wide enough to store the addend, which should
+    // be ensured by the compiler).
+    if (targetSection == source
+        || targetSection == m_data.index()
+        || targetSection == m_bss.index()
+        || targetSection == m_code.front().index())
+        return XrefKind::Direct;
+
+    // Inter-section xrefs to code are always OK because those can be offset to
+    // the jump table which will call _LoadSeg if needed.
+    if (ELF32_ST_TYPE(target->st_info) == STT_FUNC)
+        return XrefKind::Indirect;
+
+    // Target section is not guaranteed to be loaded so xref is not possible. If
+    // this is an issue it is maybe possible to move the target symbol to the
+    // data segment, but this is not done right now. For Palm OS, maybe it is
+    // also possible to extend the relocation table to include relocations for
+    // all sections instead of just self, data, and code 1, since all the
+    // sections are actually always loaded and so probably the only restriction
+    // is that the OG Palm OS compilers were simple and based on Mac OS code so
+    // did not do this.
+    return XrefKind::Invalid;
 }
 
-static bool IsValidSection(Elf32_Section index)
+void Object::processRelocations()
 {
-    return index != SHN_UNDEF && index < SHN_LORESERVE;
+    for (auto &rela : m_rela)
+        processRelocation(rela);
 }
 
-std::vector<RuntimeReloc> Object::relocateSection(SSec<Elf32_Rela> &relaSection, Elf32_Addr newBase, uint16_t codeID, bool multiSegment)
-{
-    std::vector<RuntimeReloc> outRelocs;
+static const uint8_t *RelaSizes() {
+    static const uint8_t SIZES[R_68K_NUM] = {
+        /* R_68K_NONE */ 0,
+        /* R_68K_32   */ 4,
+        /* R_68K_16   */ 0,
+        /* R_68K_8    */ 0,
+        /* R_68K_PC32 */ 4,
+        /* R_68K_PC16 */ 0,
+        /* R_68K_PC8  */ 0,
+        0
+    };
+    return SIZES;
+}
 
+Object::DebugInfo Object::collectDebugInfo(const Elf32_Shdr *sourceHeader, const Elf32_Sym *targetSymbol) const
+{
+    DebugInfo info;
+
+    const auto *target = targetSymbol
+        ? elf32_getshdr(elf_getscn(m_elf, targetSymbol->st_shndx))
+        : nullptr;
+
+    info.sourceName = sourceHeader ? m_shstrtab + sourceHeader->sh_name : "??";
+    info.targetName = target ? m_shstrtab + target->sh_name : "??";
+    if (targetSymbol)
+    {
+        info.symbolName = m_strtab + targetSymbol->st_name;
+        info.symbolValue = targetSymbol->st_value;
+    }
+    else
+    {
+        info.symbolName = "??";
+        info.symbolValue = -1;
+    }
+
+    return info;
+}
+
+uint16_t Object::getCodeID(Elf32_Section source) const
+{
+    uint16_t codeID = 0;
+    auto name = elf32_getshdr(elf_getscn(m_elf, source))->sh_name;
+    if (name)
+        std::sscanf(".code%05hu", m_shstrtab + name, &codeID);
+    return codeID;
+}
+
+void Object::processRelocation(const SSec<Elf32_Rela> &relaSection)
+{
     auto *rela = relaSection.data;
     const auto *end = rela + relaSection.size();
 
-    const auto sourceIndex = relaSection.header->sh_info;
+    auto sourceIndex = relaSection.header->sh_info;
     SSec<uint8_t> source { elf_getscn(m_elf, sourceIndex) };
 
+    // Needing to handle relocations inside .bss would make generating the data
+    // resource harder for Palm OS since the jump table gets tacked onto the end
+    // of the data section for the compressor. It seems highly unlikely that
+    // .bss would ever have relocations since there would be no way to store an
+    // addend, so just throw an exception if it ever happens since it is
+    // probably a bug.
+    if (m_bss && m_bss.section == source.section)
+        throw std::runtime_error("Unexpected relocations in .bss");
+
     auto base = source.header->sh_addr;
-    auto baseDelta = newBase - base;
-    auto maxOffset = base + source.header->sh_size - sizeof(uint32_t);
+    auto max = source.size();
+    auto codeID = getCodeID(sourceIndex);
 
     for (; rela != end; ++rela)
     {
-        auto relaType = ELF32_R_TYPE(rela->r_info);
-        if (relaType != R_68K_32 && relaType != R_68K_PC32)
-            continue;
+        auto type = ELF32_R_TYPE(rela->r_info);
+        if (type >= R_68K_NUM)
+            throw new std::runtime_error("out of range r_type " + std::to_string(type));
 
-        if(rela->r_offset < base || rela->r_offset > maxOffset)
+        auto relaSize = RelaSizes()[type];
+        if (relaSize == 0)
+        {
+            if (m_verbose)
+                std::cerr << "Unsupported relocation type " << type << std::endl;
+            continue;
+        }
+
+        auto maxOffset = max - relaSize;
+        if (rela->r_offset < base || rela->r_offset > maxOffset)
         {
             if (m_verbose)
             {
@@ -361,151 +535,204 @@ std::vector<RuntimeReloc> Object::relocateSection(SSec<Elf32_Rela> &relaSection,
                     << "0x" << rela->r_offset << " >= "
                     << "0x" << maxOffset
                     << std::dec
-                    << "\n";
+                    << std::endl;
             }
 
             continue;
         }
 
-        const auto *targetSymbol = m_symtab.GetSym(ELF32_R_SYM(rela->r_info));
-        if(!targetSymbol || !IsValidSection(targetSymbol->st_shndx))
-            continue;
+        const auto *targetSymbol = m_symtab[ELF32_R_SYM(rela->r_info)];
+        auto targetSection = targetSymbol ? targetSymbol->st_shndx : SHN_UNDEF;
 
-        if ((source.header->sh_flags & SHT_PROGBITS)
-            && targetSymbol->st_shndx != sourceIndex
-            && isOffsetInEhFrame(codeID, rela->r_offset))
+        switch (getXrefKind(codeID, sourceIndex, rela, targetSymbol))
         {
-            // Case 1:
-            //  references from .eh_frame, with the exception of __gcc_personality_v0.
-            //  Should be direct references within the code segment.
-            if (m_verbose)
-            {
-                const auto *target = elf32_getshdr(elf_getscn(m_elf, targetSymbol->st_shndx));
-                std::cerr
-                    << "Warning: clearing cross-segment reference from .eh_frame:\n"
-                    << m_strtab + targetSymbol->st_name
-                    << " (" << m_shstrtab + source.header->sh_name
-                    << "->" << m_shstrtab + target->sh_name
-                    << ")\n"
-                    << std::hex
-                    << "0x" << int(targetSymbol->st_info)
-                    << " 0x" << int(targetSymbol->st_other)
-                    << std::dec
-                    << "\n";
-            }
-
-            setU32BE(source, rela->r_offset, 0);
-            rela->r_info = 0;
-        }
-        else if (multiSegment
-            && ELF32_ST_TYPE(targetSymbol->st_info) == STT_FUNC
-            && targetSymbol->st_shndx != sourceIndex)
-        {
-            // Case 2: References to code that can go through the jump table.
-            //  If we need an addend, that's a problem and we abort.
-            auto &addend = rela->r_addend;
-            if(addend != 0)
-            {
-                auto candidateIndex = m_symtab.FindSym(targetSymbol->st_shndx,
-                    targetSymbol->st_value + addend);
-                if(candidateIndex != -1)
+            case XrefKind::InvalidEhFrame:
+                // Case 1: References from .eh_frame, with the exception of
+                // __gcc_personality_v0. Should be direct references within the
+                // code segment.
+                if (m_verbose)
                 {
-                    targetSymbol = m_symtab.GetSym(candidateIndex);
-                    if(!IsValidSection(targetSymbol->st_shndx))
-                        continue;
-                    rela->r_info = ELF32_R_INFO(candidateIndex, ELF32_R_TYPE(rela->r_info));
-                    addend = 0;
+                    auto info = collectDebugInfo(source.header, targetSymbol);
+                    std::cerr
+                        << "Clearing cross-segment reference from .eh_frame:\n"
+                        << info.symbolName
+                        << " (" << info.sourceName << " -> " << info.targetName << ")\n"
+                        << std::hex
+                        << "0x" << int(targetSymbol->st_info)
+                        << " 0x" << int(targetSymbol->st_other)
+                        << std::dec
+                        << std::endl;
                 }
-            }
 
-            if (addend == 0)
-                setU32BE(source, rela->r_offset, jumpTableAddress(targetSymbol, codeID));
-            else
+                setU32BE(source, rela->r_offset, 0);
+            break;
+            case XrefKind::Indirect:
             {
-                const auto *target = elf32_getshdr(elf_getscn(m_elf, targetSymbol->st_shndx));
-                std::cerr
-                    << std::hex
-                    << "Invalid ref from " << m_shstrtab + source.header->sh_name
-                    << ":0x" << rela->r_offset - base
-                    << " to " << m_shstrtab + target->sh_name
-                    << "(" << (m_strtab + targetSymbol->st_name) << ")"
-                    << "+0x" << rela->r_offset
-                    << std::dec
-                    << "\n";
-                throw std::runtime_error("Relocation failure");
+                // Case 2: References to code that can go through the jump table.
+                auto targetAddr = targetSymbol->st_value + rela->r_addend;
+                auto &targetJumpTable = m_jumpTables[targetSection];
+                // It will be necessary to do a second pass to insert the
+                // correct addend to the source section since it can only be
+                // calculated after all of the target xrefs are known, since the
+                // jump table for each target section must be contiguous.
+                targetJumpTable[targetAddr].push_back({ sourceIndex, rela->r_offset });
+                m_relocations[sourceIndex][RelocBase::data].push_back(rela->r_offset);
             }
+            break;
+            case XrefKind::Direct:
+            {
+                // Case 3: Direct code and data refs. These are either refs
+                // to the same section or non-PCREL refs to other sections that
+                // are always loaded (data and code 1).
+
+                RelocBase relocBase;
+                if (targetSection == m_data.index())
+                    relocBase = RelocBase::data;
+                else if (targetSection == m_bss.index())
+                    relocBase = RelocBase::bss;
+                else if (targetSection == sourceIndex)
+                    relocBase = RelocBase::code;
+                else if (targetSection == m_code.front().index())
+                    relocBase = RelocBase::code1;
+                else
+                {
+                    auto info = collectDebugInfo(source.header, targetSymbol);
+                    throw std::runtime_error(
+                        "Impossible relocation between "s
+                        + info.sourceName + " and "
+                        + info.targetName + "(" + info.symbolName + ")");
+                }
+
+                auto targetAddr = targetSymbol->st_value + rela->r_addend;
+
+                setU32BE(source, rela->r_offset, targetAddr);
+                m_relocations[sourceIndex][relocBase].push_back(rela->r_offset);
+            }
+            break;
+            case XrefKind::Invalid:
+                // Case 4: Code references that don't go through the jump table
+                // must remain in the current segment.
+                if (m_verbose)
+                {
+                    auto info = collectDebugInfo(source.header, targetSymbol);
+                    std::cerr
+                        << std::hex
+                        << "Invalid ref type " << type << " from " << info.sourceName
+                        << ":0x" << rela->r_offset
+                        << " to " << info.targetName << "(" << info.symbolName << ")"
+                        << "+0x" << info.symbolValue
+                        << " (addend 0x" << rela->r_addend << ")"
+                        << std::dec
+                        << std::endl;
+                }
+            break;
         }
-        else
-            setU32BE(source, rela->r_offset, getU32BE(source, rela->r_offset) + baseDelta);
-
-        uint32_t offset = rela->r_offset;
-        if(multiSegment)
-            offset -= source.header->sh_addr;
-
-        if(relaType == R_68K_PC32 && targetSymbol->st_shndx == sourceIndex)
-            continue;
-
-        // TODO: determine relocBase
-        RelocBase relocBase;
-
-        if(relaType == R_68K_32)
-            outRelocs.emplace_back(relocBase, offset);
-        else if(relaType == R_68K_PC32 && targetSymbol->st_shndx != sourceIndex)
-            outRelocs.emplace_back(relocBase, offset, true);
     }
-
-    return outRelocs;
 }
 
-void Object::emitRes0(Resources &rsrc, uint32_t belowA5)
+std::pair<size_t, std::string> Object::processJumpTables(uint32_t belowA5)
 {
-    uint32_t dataBase = -belowA5;
-    uint32_t bssBase = -m_bss.header->sh_size;
+    auto jtIndex = m_jtFirstIndex;
+    auto jtAddr = belowA5 + m_jtHeaderSize + jtIndex * m_jtEntrySize;
+    std::ostringstream jumpTable;
+    for (const auto &[targetSection, sectionTable] : m_jumpTables)
+    {
+        SSec<uint8_t> target { elf_getscn(m_elf, targetSection) };
+        auto codeID = getCodeID(targetSection);
+        if (codeID == 0)
+            throw std::runtime_error("Cannot create jump table to non-code section");
+        else if (codeID == 1)
+            // The linker script already populates the code 1 header with the
+            // correct values, which are always offset 0, length 1, because
+            // there is only one near jump table entry, and then Retro68 does
+            // its own relocations. If code 1 was given a far model segment
+            // header instead and used the standard Mac OS relocation format so
+            // the OS would do the relocating, then this would need to be
+            // populated correctly. Palm OS always does its own thing; just like
+            // how the code 0 resource is mostly bogus, the code 1 resource
+            // header is also bogus.
+            ;
+        else if (isPalm())
+        {
+            // Since Retro68 handles extra section relocations itself, this
+            // header could be made smaller, but is kept in the same form that
+            // CodeWarrior for Palm OS used, for the sake of debugging tools
+            // that already understand this format (IDA).
+            word(target.data, jtAddr - belowA5);
+            word(target.data + 2, sectionTable.size());
+            longword(target.data + 4, jtAddr - belowA5);
+            longword(target.data + 8, target.size());
+        }
+        else
+        {
+            word(target.data, 0xffff);
+            longword(target.data + 12, jtIndex);
+            longword(target.data + 16, sectionTable.size());
+        }
+
+        for (const auto &[targetAddr, sourceAddrs] : sectionTable)
+        {
+            for (const auto &[sourceSection, offset] : sourceAddrs)
+            {
+                SSec<uint8_t> source { elf_getscn(m_elf, sourceSection) };
+                setU32BE(source, offset, jtAddr);
+            }
+
+#ifdef PALMOS
+            if (isPalm())
+            {
+                enum { kJmpAbsL = 0x4ef9 };
+                word(jumpTable, kJmpAbsL);
+                longword(jumpTable, targetAddr);
+            }
+            else
+#endif
+            {
+                enum { kLoadSeg = 0xa9f0 };
+                word(jumpTable, codeID);
+                word(jumpTable, kLoadSeg);
+                longword(jumpTable, targetAddr);
+            }
+
+            jtAddr += m_jtEntrySize;
+            ++jtIndex;
+        }
+    }
+
+    return { jtIndex, jumpTable.str() };
+}
+
+void Object::emitRes0(Resources &rsrc)
+{
+    auto belowA5 = m_data.size() + m_bss.size();
+    auto [jtNumEntries, jumpTable] = processJumpTables(belowA5);
+    auto jtSize = jtNumEntries * m_jtEntrySize;
+    auto aboveA5 = m_jtHeaderSize + jtSize;
 
     std::ostringstream code0;
-    std::ostringstream data0;
-
-    auto jtDataSize = m_jtEntrySize * (m_jumpTable.size() + m_jtFirstIndex);
-    // TODO: Not totally clear what the fixed value should be on Palm OS.
-    // The loader will always shove a pointer to SysAppInfoType at A5BASE
-    // (same place where Mac OS shoves pointer to QDGlobals).
-    // prc-tools thinks that its data resource should be
-    // `128 + 33 * (data_size / 32)`, but these are all magic numbers and it
-    // seems like it uses some of A5 for its own relocation junk.
-    auto aboveA5 = m_jtHeaderSize + jtDataSize;
 
     longword(code0, aboveA5);
     longword(code0, belowA5);
 
-    // The rest of code0 is ignored by Palm OS, but keep the rest the same
-    // for compatibility with Palm OS disassemblers, utilities, etc.
-    longword(code0, isPalm() ? 8 : jtDataSize);
-    longword(code0, m_jtHeaderSize);
+    // The rest of code 0 is ignored by Palm OS, but keep it for compatibility
+    // with disassemblers, utilities, etc.
+    longword(code0, isPalm() ? 8 : jtSize);
+    longword(code0, isPalm() ? 0x20 : m_jtHeaderSize);
 
-    // Jump table entry for default entrypoint
-    // [function offset].w [move.w #resource id,-(sp)] [LoadSeg].w
-    code0 << fromhex("0000 3F3C 0001 A9F0");
+    // Jump table entry for default entrypoint. Palm OS ignores this and always
+    // jumps directly to the start of code 1.
+    code0 << fromhex(
+        "0000" // function offset
+        "3F3C" // move.w #resID,-(sp)
+        "0001" // resID
+        "A9F0" // _LoadSeg
+    );
 
     if (!isPalm())
-        // flag entry to switch to “new format” 32-bit jump table entries
-        code0 << fromhex("0000 FFFF 0000 0000");
-
-    uint16_t codeID = 0; // TODO: Must emit by each individual jump table
-    for (auto offset : m_jumpTable)
     {
-        enum { kLoadSeg = 0xa9f0, kJmpAbsL = 0x4ef9 };
-
-        if (isPalm())
-        {
-            word(data0, kJmpAbsL);
-            longword(data0, offset);
-        }
-        else
-        {
-            word(code0, codeID);
-            word(code0, kLoadSeg);
-            longword(code0, offset);
-        }
+        // Flag entry to switch to “new format” 32-bit jump table entries.
+        code0 << fromhex("0000 FFFF 0000 0000");
+        code0 << jumpTable;
     }
 
     if(m_verbose)
@@ -522,20 +749,27 @@ void Object::emitRes0(Resources &rsrc, uint32_t belowA5)
 
     rsrc.addResource(Resource(m_codeOsType, 0, code0.str()));
 
-        std::vector<RuntimeReloc> dataRelocs; // TODO
-        std::vector<RuntimeReloc> code1Relocs; // TODO
-
+#ifdef PALMOS
     if (isPalm())
     {
-        data0 << SerializeRelocsPalm(dataRelocs, false);
-        data0 << SerializeRelocsPalm(code1Relocs, false);
+        std::ostringstream data0;
+        {
+            std::ostringstream combined;
+            combined
+                << m_data.view().data()
+                << jumpTable;
+            data0 << CompressPalmData(combined.str());
+        }
+
+        data0 << SerializeRelocsPalm(m_relocations[m_data.index()], false);
+        data0 << SerializeRelocsPalm(m_relocations[m_code.front().index()], false);
         rsrc.addResource(Resource(m_dataOsType, 0, data0.str()));
     }
     else
+#endif
     {
         rsrc.addResource(Resource(m_dataOsType, 0, m_data.view().data()));
-        rsrc.addResource(Resource("RELA", 0, SerializeRelocs(dataRelocs)));
-        rsrc.addResource(Resource("RELA", 1, SerializeRelocs(code1Relocs)));
+        rsrc.addResource(Resource("RELA", 0, SerializeRelocs(m_relocations[m_data.index()])));
     }
 }
 
@@ -544,63 +778,39 @@ void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segm
     ResourceFile file;
     Resources& rsrc = file.resources;
 
-    uint32_t belowA5 = m_data.header->sh_size + m_bss.header->sh_size;
-    emitRes0(rsrc, belowA5);
+    emitRes0(rsrc);
 
-    uint16_t codeID = 1;
     for (auto &section : m_code)
     {
-        const auto &jumpTable = m_jumpTables[elf_ndxscn(section.section)];
-        auto firstIndex = jumpTable.at(0);
-
-        std::ostringstream code;
-        if(codeID == 1)
-        {
-            word(code, 0);
-            word(code, 1);
-        }
-        else if (isPalm())
-        {
-            size_t a5JtOffset = (m_jtEntrySize * firstIndex) - belowA5;
-            word(code, a5JtOffset);
-            word(code, jumpTable.size());
-            longword(code, a5JtOffset);
-            longword(code, section.header->sh_addr + section.header->sh_size);
-        }
-        else
-        {
-            word(code, 0xFFFF);
-            word(code, 0);
-            longword(code, 0);
-            longword(code, 0);
-            longword(code, m_jtEntrySize * firstIndex);
-            longword(code, jumpTable.size());
-            longword(code, 0);    // reloc info for A5
-            longword(code, 0);    // assumed address for A5
-            longword(code, 0);    // reloc info for code
-            longword(code, 0);    // assumed address for start of code resource
-            longword(code, 0);
-        }
-
-        code << section.view();
-        std::vector<RuntimeReloc> codeRelocs; // TODO
+        uint16_t codeID = getCodeID(section.index());
+        size_t size = section.size();
 
         if (isPalm() && codeID != 1)
-            code << SerializeRelocs(codeRelocs);
-        else if (!isPalm())
-            rsrc.addResource(Resource(ResType("RELA"), codeID, SerializeRelocs(codeRelocs)));
+        {
+            std::string code;
+            {
+                std::ostringstream combined;
+                combined << section.view();
+                combined << SerializeRelocsPalm(m_relocations[section.index()], true);
+                code = combined.str();
+            }
+
+            if (m_verbose)
+                size = code.size();
+
+            rsrc.addResource(Resource(m_codeOsType, codeID, std::move(code)));
+        }
+        else
+            rsrc.addResource(Resource(m_codeOsType, codeID,
+                section.view().data(),
+                std::string(segmentMap.GetSegmentName(codeID))));
+
+        if (!isPalm())
+            rsrc.addResource(Resource(ResType("RELA"), codeID,
+                SerializeRelocs(m_relocations[section.index()])));
 
         if(m_verbose)
-        {
-            std::cout
-                << m_codeOsType << " " << codeID << ": "
-                << code.str().size() << " bytes\n";
-        }
-
-        auto segmentName = segmentMap.GetSegmentName(codeID);
-        rsrc.addResource(Resource(m_codeOsType, codeID, code.str(), std::move(segmentName)));
-
-        ++codeID;
+            std::cout << m_codeOsType << " " << codeID << ": " << size << " bytes\n";
     }
 
     if (isPalm())
@@ -618,14 +828,6 @@ void Object::finalizeFile(const std::string &filename, ResourceFile &file)
 }
 
 #ifdef PALMOS
-std::string Object::compressData(std::string &&input)
-{
-    if (!isPalm())
-        return input;
-
-    return CompressPalmData(std::move(input));
-}
-
 void Object::emitPref(Resources &rsrc)
 {
     // 0xd00 is the default value used by Palm OS SysAppLaunch if pref 0 is

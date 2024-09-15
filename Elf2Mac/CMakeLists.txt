@@ -23,11 +23,9 @@ add_executable(Elf2Mac
     Reloc.h
     SegmentMap.cc
     SegmentMap.h
-    Symtab.cc
-    Symtab.h
 )
 
-if (RETRO_PALMOS)
+if(RETRO_PALMOS)
     target_sources(Elf2Mac PRIVATE
         PalmCompressor.h
         PalmCompressor.cc)

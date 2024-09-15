@@ -33,14 +33,13 @@
 #include <libelf.h>
 
 #include "Reloc.h"
-#include "Symtab.h"
 
 class SegmentMap;
 
 class Object
 {
 public:
-    Object(const std::string &inputFilename, bool palmos, uint32_t stackSize);
+    Object(const std::string &inputFilename, bool palmos, uint32_t stackSize, bool verbose);
     ~Object();
 
     // Emits the object as a data resource.
@@ -78,16 +77,28 @@ private:
             );
         }
 
+        inline Elf32_Section index() const {
+            return elf_ndxscn(section);
+        }
+
         inline size_t size() const {
             return header ? header->sh_size / header->sh_entsize : 0;
         }
 
+        inline const T *operator[] (int index) const {
+            if (!data || index < 0 || index >= size())
+                return nullptr;
+            return data + index;
+        }
+
+        inline T *operator[] (int index) {
+            if (!data || index < 0 || index >= size())
+                return nullptr;
+            return data + index;
+        }
+
         explicit inline operator bool () const { return section != nullptr; }
     };
-
-    // Gets a 32-bit big-endian value from the given section at the
-    // given virtual address.
-    static uint32_t getU32BE(const SSec<uint8_t> &section, Elf32_Addr vaddr);
 
     // Sets a 32-bit big-endian value in the given section at the given
     // virtual address.
@@ -100,26 +111,55 @@ private:
     void finalizeFile(const std::string &filename, ResourceFile &file);
 
     // Emits the object as unstructured code and data.
-    void emitFlatCode(std::ostream& out, Elf32_Addr newBase);
+    void emitFlatCode(std::ostream& out);
 
-    // Processes a relocation section, rebasing offsets in the pointed-to
-    // section to the given `newBase` and replacing inter-section function
-    // references with indirect jumps through the jump table, if applicable.
-    std::vector<RuntimeReloc> relocateSection(SSec<Elf32_Rela> &relaSection, Elf32_Addr newBase, uint16_t codeID, bool multiSegment);
+    // Processes relocations from the ELF executable into intermediate jump
+    // table and relocation data suitable for use when emitting resources.
+    void processRelocations();
+
+    // Processes a single relocation table from the ELF executable.
+    void processRelocation(const SSec<Elf32_Rela> &relaSection);
+
+    enum class XrefKind
+    {
+        // A cross-reference that cannot be relocated.
+        Invalid,
+        // A cross-reference to another section inside .eh_frame.
+        InvalidEhFrame,
+        // A cross-reference that can be relocated directly.
+        Direct,
+        // A cross-reference that must be relocated through a jump table.
+        Indirect
+    };
+
+    // Determins which kind of cross-reference is required to go from the given
+    // source section to the given target symbol using the given type of
+    // relocation.
+    XrefKind getXrefKind(uint16_t codeID, Elf32_Section source,
+        const Elf32_Rela *rela, const Elf32_Sym *target) const;
+
+    // Finds the symbol corresponding to the exception handling frame for the
+    // given code resource.
+    const Elf32_Sym *findExceptionInfoStart(uint16_t codeID) const;
 
     // Returns whether the given `vaddr` is within an exception handling
     // frame.
     bool isOffsetInEhFrame(uint16_t codeID, Elf32_Addr vaddr) const;
 
-    // Adds the given symbol to the jump table for its owner section, if
-    // one does not already exist, and returns the offset of the jump table
-    // entry relative to the jump table displacement.
-    Elf32_Addr jumpTableAddress(const Elf32_Sym *symbol, uint16_t codeID);
+    // Returns the code resource ID for the given section.
+    uint16_t getCodeID(Elf32_Section index) const;
 
-    // Returns the appropriate base address for a code section.
-    inline size_t secOutputBase(int codeID) const {
-        return codeID == 1 ? 4 : m_multiCodeOutputBase;
-    }
+    struct DebugInfo
+    {
+        const char *sourceName;
+        const char *targetName;
+        const char *symbolName;
+        int symbolValue;
+    };
+
+    // Returns information used for emitting debugging messages.
+    DebugInfo collectDebugInfo(const Elf32_Shdr *sourceHeader,
+        const Elf32_Sym *targetSymbol) const;
 
     inline bool isPalm() const {
 #ifdef PALMOS
@@ -129,46 +169,51 @@ private:
 #endif
     }
 
-    // Emits the code0 and data0 resources.
-    void emitRes0(Resources &out, uint32_t belowA5);
+    std::pair<size_t, std::string> processJumpTables(uint32_t belowA5);
+
+    // Emits the code 0 and data 0 resources.
+    void emitRes0(Resources &out);
 
 #ifdef PALMOS
-    // Applies the Palm OS data segment compression algorithm to the given
-    // input data.
-    std::string compressData(std::string &&input);
-
     // Emits the Palm OS pref0 resource.
     void emitPref(Resources &out);
 #endif
 
-    // A mapping from a symbol address to an index in m_jumpTable.
-    using JumpTable = std::map<Elf32_Addr, size_t>;
+    // A fully qualified ELF data address.
+    using Address = std::pair<Elf32_Section, Elf32_Addr>;
 
-    // A mapping from an ELF section index to a jump table map.
+    // A reverse map from target address to source xref.
+    using JumpTable = std::map<Elf32_Addr, std::vector<Address>>;
+
+    // A mapping from an ELF section index to its jump table.
     using SectionJumpTables = std::unordered_map<Elf32_Section, JumpTable>;
 
-    // Symbol table with lookup indexes.
-    Symtab m_symtab;
-    // All .text segments.
-    std::vector<SSec<uint8_t>> m_code;
-    // All .rela segments.
-    std::vector<SSec<Elf32_Rela>> m_rela;
-    // The .data segment.
-    SSec<uint8_t> m_data;
-    // The .bss segment.
-    SSec<uint8_t> m_bss;
-    // Jump table. Used only for multi-segment apps.
-    // Each entry in the jump table contains the rebased target address of a
-    // cross-referenced symbol within its output resource.
-    std::vector<Elf32_Addr> m_jumpTable;
-    // Per-section jump table references.
+    // Per-section jump tables. Populated by `processRelocations`.
     SectionJumpTables m_jumpTables;
+
+    // Per-section relocation offsets. Populated by `processRelocations`.
+    std::unordered_map<Elf32_Section, Relocations> m_relocations;
+
+    // The .symtab section.
+    SSec<Elf32_Sym> m_symtab;
+    // All .text sections.
+    std::vector<SSec<uint8_t>> m_code;
+    // All .rela sections.
+    std::vector<SSec<Elf32_Rela>> m_rela;
+    // The .data section.
+    SSec<uint8_t> m_data;
+    // The .bss section.
+    SSec<uint8_t> m_bss;
     // Section header string table.
     const char *m_shstrtab = nullptr;
     // String table.
     const char *m_strtab = nullptr;
     // Input ELF object.
     Elf *m_elf = nullptr;
+
+    // A cache of exception handling frame symbols.
+    mutable std::unordered_map<int, const Elf32_Sym *> m_ehFrameCache;
+
     // OSTypes to use when emitting resources.
     ResType m_codeOsType, m_dataOsType, m_applOsType;
     // Jump table and code resource data sizes.
@@ -184,6 +229,5 @@ private:
     // If true, emit in Palm OS flavour.
     bool m_emitPalm;
 };
-
 
 #endif // OBJECT_H

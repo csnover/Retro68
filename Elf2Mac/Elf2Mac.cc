@@ -44,11 +44,18 @@
  * • Building the jump table and writing it to the appropriate place;
  * • Compressing section data (for Palm OS);
  * • Filling in code resource headers.
+ *
+ * Refer to Inside Macintosh “Mac OS Runtime Architectures” for details on the
+ * Mac OS runtime environment and Apple’s linker architecture. Details on the
+ * Palm OS runtime environment are largely derived from reverse-engineering and
+ * prc-tools since public documentation was either never provided or lost behind
+ * an unarchived login wall.
  */
 
 #include "Object.h"
 #include "SegmentMap.h"
 
+#include <algorithm>
 #include <cstring>
 #include <filesystem>
 #include <fstream>
@@ -132,6 +139,8 @@ static int Elf2Mac(char *argv[])
     bool stripMacsbug = false;
     bool saveLdScript = false;
     bool palmos = std::strstr(argv[0], "palmos") != nullptr;
+    bool verbose = false;
+    char verbosity[16];
 
     SegmentMap segmentMap;
 
@@ -176,6 +185,21 @@ static int Elf2Mac(char *argv[])
             palmos = true;
         else if (flag(p, "--stack"))
             stackSize = std::atoi(nextArg(p, "--stack missing argument"));
+        else if(startsWith(p, "--verbose="))
+        {
+            // Take verbose=1 for Elf2Mac and pass higher numbers to ld
+            uint8_t level = std::clamp(
+                std::atoi(*p + sizeof("--verbose=") - 1), 0, UINT8_MAX);
+            verbose = (level > 0);
+            if (level > 1)
+            {
+                --level;
+                std::sprintf(verbosity, "--verbose=%hhu", level);
+                ldArgv.push_back(verbosity);
+            }
+        }
+        else if (flag(p, "--verbose"))
+            verbose = true;
         else
             ldArgv.push_back(*p);
     }
@@ -227,7 +251,7 @@ static int Elf2Mac(char *argv[])
         if ((result = RealLD(ldArgv)) != 0)
             return result;
 
-        Object theObject(inputFile, palmos, stackSize);
+        Object theObject(inputFile, palmos, stackSize, verbose);
 
         if(flatoutput)
             theObject.FlatCode(outputFile);

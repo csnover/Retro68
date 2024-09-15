@@ -280,6 +280,10 @@ static void WriteDataSection(std::ostream &out)
         // TODO: Why so much alignment? What is this?
         ". = ALIGN(0x20);\n"
 
+        // TODO: Read-only data should probably be kept in the code sections.
+        // At least on Palm OS, there are allegedly OS-level resource size
+        // limits that will prevent resources from being larger than 32K/64K
+        // depending on the OS version.
         "*(.rodata)\n"
         "*(.rodata1)\n"
         "*(.rodata.*)\n"
@@ -419,8 +423,12 @@ static void WriteTextStart(std::ostream &out, const char *entryPoint, bool isMul
 #if 0 // This symbol is used only by code that is disabled in relocate.c
         "PROVIDE(_rsrc_start = .);\n"
 #endif
+
+        // This is a Mac OS near model segment header. (It also exists on Palm
+        // OS but is ignored.)
         "WORD(0);\n" // Offset to first entry in jump table
         "WORD(1);\n" // Number of entries in jump table
+
         "FILL(" NOP ");\n"
         ". = ALIGN(2);\n";
 
@@ -462,9 +470,14 @@ static void CreateLdScriptSegment(std::ostream &out, const char *entryPoint, con
         WriteTextStart(out, entryPoint, true);
     else
     {
+        // This is a Mac OS far model segment header (Mac OS) or a CodeWarrior
+        // for Palm OS section header (Palm OS).
         auto headerSize = palmos ? 12 : 40;
         out << "FILL(0);\n"
-            << ". += " << headerSize << ";\n"
+
+            << "SHORT(0xffff);\n" // Mac OS far model magic number
+            << ". += " << headerSize - 2 << ";\n"
+
             << "FILL(" NOP ");\n";
     }
 
@@ -485,7 +498,7 @@ static void CreateLdScriptSegment(std::ostream &out, const char *entryPoint, con
         WriteTextEnd(out);
     else
         // TODO: Why all this empty space before EH frame?
-        // Should this be SIZEOF(.eh_frame)?
+        // Is this SIZEOF(.eh_frame)?
         out <<
             "FILL(0);\n"
             ". += 0x20;\n"
