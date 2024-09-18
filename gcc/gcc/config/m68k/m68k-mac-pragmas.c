@@ -24,7 +24,7 @@ std::map<std::string, int> pragma_parameter_register_names;
 extern std::map< std::string, std::vector<int> > pragma_parameter_directives;
 
 
-static int lookup_reg(std::string s)
+static int lookup_reg(const std::string &s)
 {
   std::map<std::string, int>::const_iterator p = pragma_parameter_register_names.find(s);
   if(p == pragma_parameter_register_names.end())
