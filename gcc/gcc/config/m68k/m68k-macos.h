@@ -7,6 +7,7 @@
 
 #define LINK_GCC_C_SEQUENCE_SPEC "--start-group -lgcc -lc -lretrocrt -lInterface --end-group"
 
+#define POINTERS_IN_D0 1
 
 #undef STARTFILE_SPEC
 #define STARTFILE_SPEC ""
