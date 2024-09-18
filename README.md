@@ -341,6 +341,7 @@ Various patches and hacks:
 - Change the way 1-byte and 2-byte parameters are passed.
 - added a pascal calling convention (`pascal` or `__attribute__((__pascal__))`)
 - added `__attribute__((__raw_inline__(word1, word2, word3)))` to emulate `ONEWORDINLINE` and friends
+- added `__attribute__((__callseq__("...")))` to support Palm OS SDK
 - added `__attribute__((regparam("...")))` to specify custom register calling conventions
 - added `#pragma parameter` to specify custom register calling conventions
 - added support for the `= { 0x1234 }` syntax for inline machine code.

@@ -293,13 +293,14 @@ prepare_call_address (tree fndecl_or_type, rtx funexp, rtx static_chain_value,
     }
   else
     {
-      int is_magic = 0;
+      bool is_magic = false;
 
       if (fndecl_or_type)
         {
-          tree fntype = TREE_TYPE(fndecl_or_type);
-          if(fntype && lookup_attribute ("raw_inline", TYPE_ATTRIBUTES (fntype)))
-            is_magic = 1;
+          tree fntype = TREE_TYPE (fndecl_or_type);
+          is_magic = (fntype
+              && lookup_attribute ("raw_inline", TYPE_ATTRIBUTES (fntype)))
+          || lookup_attribute ("callseq", DECL_ATTRIBUTES (fndecl_or_type));
         }
     
       if (!is_magic)

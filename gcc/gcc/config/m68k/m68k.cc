@@ -397,6 +397,8 @@ static const struct attribute_spec m68k_attribute_table[] =
     m68k_handle_fndecl_attribute, NULL },
   { "raw_inline", 1, 32, false, true, true, false,
     m68k_handle_fndecl_attribute, NULL },
+  { "callseq", 1, 1, true, false, false, false,
+    m68k_handle_fndecl_attribute, NULL },
   { NULL, 0, 0, false, false, false, false, NULL, NULL }
 };
 
@@ -805,12 +807,12 @@ m68k_get_function_kind (tree func)
    struct attribute_spec.handler.  */
 static tree
 m68k_handle_fndecl_attribute (tree *node, tree name,
-			      tree args ATTRIBUTE_UNUSED,
+			      tree args,
 			      int flags ATTRIBUTE_UNUSED,
 			      bool *no_add_attrs)
 {
-  if (TREE_CODE (*node) != FUNCTION_TYPE && TREE_CODE (*node) != TYPE_DECL)
-  {
+  if (TREE_CODE (*node) == FUNCTION_TYPE || TREE_CODE (*node) == TYPE_DECL)
+    return NULL_TREE;
 
   if (TREE_CODE (*node) != FUNCTION_DECL)
     {
@@ -832,9 +834,54 @@ m68k_handle_fndecl_attribute (tree *node, tree name,
       *no_add_attrs = true;
     }
 
-  return NULL_TREE;
-  }
-  else
+  if (is_attribute_p ("callseq", name))
+    {
+      tree cst;
+      cst = TREE_VALUE (args);
+
+      if (TREE_CODE (cst) != STRING_CST)
+        {
+          warning (OPT_Wattributes,
+            "%qE attribute requires a string constant argument",
+            name);
+          *no_add_attrs = true;
+        }
+
+      /* JWM @@@ This is brutal test code */
+      {
+        const char *fmt = TREE_STRING_POINTER (cst);
+        bool warn = false;
+        const char *s;
+        for (s = fmt; !warn && (s = strchr (s, '#')) != NULL; s++)
+          {
+            while (s[1] == '(')  s++;
+            if (s[1] && !ISDIGIT (s[1]))  warn = true;
+          }
+
+        for (s = fmt; !warn && (s = strstr (s, "dc.w ")) != NULL; s++)
+          {
+            while (s[5] == '(')  s++;
+            if (s[5] && !ISDIGIT (s[5]))  warn = true;
+          }
+
+        if (warn)
+          warning (OPT_Wattributes, "possibly bad __callseq__ `%s'", fmt);
+      }
+
+      if (node[1])
+        {
+          tree prev;
+          prev = lookup_attribute ("callseq", DECL_ATTRIBUTES (node[1]));
+          if (prev && strcmp (
+            TREE_STRING_POINTER (TREE_VALUE (TREE_VALUE (prev))),
+            TREE_STRING_POINTER (cst)) != 0)
+            {
+              error ("calling sequence conflicts with previous declaration");
+              *no_add_attrs = true;
+            }
+        }
+    }
+
   return NULL_TREE;
 }
 
@@ -1425,8 +1472,12 @@ m68k_ok_for_sibcall_p (tree decl, tree exp)
   if (CALL_EXPR_STATIC_CHAIN (exp))
     return false;
 
-  if (decl && lookup_attribute ("raw_inline", TYPE_ATTRIBUTES( TREE_TYPE(decl) )))
-    return false;
+  if (decl)
+    {
+      if (lookup_attribute ("raw_inline", TYPE_ATTRIBUTES (TREE_TYPE (decl) ))
+          || lookup_attribute ("callseq", DECL_ATTRIBUTES (decl)))
+        return false;
+    }
 
   if (!VOID_TYPE_P (TREE_TYPE (DECL_RESULT (cfun->decl))))
     {
@@ -5713,6 +5764,10 @@ output_call (rtx x)
                 if(p < e)
                   return buf;
             }
+
+          attr = lookup_attribute ("callseq", DECL_ATTRIBUTES (decl));
+          if (attr)
+            return TREE_STRING_POINTER (TREE_VALUE (TREE_VALUE (attr)));
         }
     }
 
@@ -7405,9 +7460,8 @@ m68k_rawinline_p (rtx x)
       tree decl = SYMBOL_REF_DECL(x);
       if(decl)
         {
-          tree attr = lookup_attribute ("raw_inline", TYPE_ATTRIBUTES( TREE_TYPE(decl) ));
-          if(attr)
-	    return true;
+          return lookup_attribute ("raw_inline", TYPE_ATTRIBUTES (TREE_TYPE (decl)))
+              || lookup_attribute ("callseq", DECL_ATTRIBUTES (decl));
 	}
     }
   return false;
