@@ -434,6 +434,13 @@ A copy of the PilRC resource compiler, originally version 3.2.90. Updated to
 work correctly in 64-bit host environments, to fix bugs, and to build with
 CMake.
 
+### PalmUtils/poser
+
+A copy of the Palm OS Emulator, originally version 3.5 for Unix, with many
+bug fixes and QOL improvements, including 64-bit host environment support,
+support for modern compilers, native GDB remote protocol support, and builds
+using CMake.
+
 ### PalmUtils/prc-tools
 
 A copy of small parts of prc-tools 2.3 required to generate specs files for
