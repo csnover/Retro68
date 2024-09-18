@@ -2358,19 +2358,19 @@ m68k-*-elf* | fido-*-elf*)
 	esac
 	;;
 m68k-*-macos* | m68k-*-palmos*)
-	default_cf_cpu=5206
+	with_arch=${with_arch:-m68k}
+	# Palm OS devices mostly use MC68328 SoC, which has a 68EC000 CPU, and
+	# most Apple 68K computers used M68000
+	default_m68k_cpu=68000
 	tm_file="${tm_file} m68k/m68k-none.h m68k/m68kelf.h dbxelf.h elfos.h newlib-stdint.h m68k/m68kemb.h"
 	tm_defines="${tm_defines} MOTOROLA=1"
 	tmake_file="m68k/t-floatlib m68k/t-m68kbare m68k/t-m68kelf m68k/t-macos"
 	case ${target} in
 	m68k-*-palmos*)
-		# PalmOS devices mostly use MC68328 SoC, which has a 68EC000 CPU
-		default_m68k_cpu=68000
 		tm_file="${tm_file} m68k/m68k-palmos.h"
 		extra_options="${extra_options} m68k/m68k-palmos.opt"
 		;;
 	*)
-		default_m68k_cpu=68020
 		tm_file="${tm_file} m68k/m68k-macos.h"
 		;;
 	esac

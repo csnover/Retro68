@@ -336,13 +336,13 @@ if [[ -n ${BUILD_THIRDPARTY} ]]; then
 
 	if [[ -n ${BUILD_68K} ]]; then
 		build_binutils binutils-build --target=m68k-apple-macos
-		build_gcc gcc-build --target=m68k-apple-macos --with-arch=m68k --with-cpu=m68000
+		build_gcc gcc-build --target=m68k-apple-macos
 		enable_elf2mac m68k-apple-macos
 	fi
 
 	if [[ -n ${BUILD_PALM} ]]; then
 		build_binutils binutils-build-palm --target=m68k-none-palmos
-		build_gcc gcc-build-palm --target=m68k-none-palmos --with-arch=m68k --with-cpu=m68000
+		build_gcc gcc-build-palm --target=m68k-none-palmos
 		enable_elf2mac m68k-none-palmos
 	fi
 
