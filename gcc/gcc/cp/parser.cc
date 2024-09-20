@@ -4489,11 +4489,11 @@ cp_parser_string_literal (cp_parser *parser, bool translate, bool wide_ok,
       type = CPP_STRING;
     }
 
-  if (!strncmp((const char*)strs[0].text, "\"\\p", 3))
+  if (strncmp ((const char *)strs->text, "\"\\p", 3) == 0)
     {
        pascal_string = true;
        /* replace \p by a valid escape sequence */
-       ((unsigned char*)strs[0].text)[2] = 'n';
+       CONST_CAST (unsigned char *, strs->text)[2] = 'n';
     }
 
   if ((translate ? cpp_interpret_string : cpp_interpret_string_notranslate)
@@ -4502,7 +4502,8 @@ cp_parser_string_literal (cp_parser *parser, bool translate, bool wide_ok,
       if (pascal_string)
         {
           /* put the real string length in */
-          ((unsigned char*)istr.text)[0] = (unsigned char) (istr.len - 2);
+          CONST_CAST (unsigned char *, istr.text)[0] =
+            (unsigned char) (istr.len - 2);
         }
       value = build_string (istr.len, (const char *)istr.text);
       free (CONST_CAST (unsigned char *, istr.text));

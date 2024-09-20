@@ -1519,7 +1519,7 @@ void m68k_init_cumulative_args (CUMULATIVE_ARGS *cum,
     const_tree fntype,
     rtx libname ATTRIBUTE_UNUSED,
     const_tree fndecl,
-    int n_named_args)
+    int n_named_args ATTRIBUTE_UNUSED)
 {
   cum->bytes = 0;
   cum->index = 0;
@@ -1539,7 +1539,6 @@ void m68k_init_cumulative_args (CUMULATIVE_ARGS *cum,
 
           const char *p = paramstr;
 
-          bool ok = true;
           int idx = 0;
           cum->arg_regs[0] = 0;
           if(*p == '(')
@@ -1556,9 +1555,9 @@ void m68k_init_cumulative_args (CUMULATIVE_ARGS *cum,
                 break;
 
               if(*p != 'a' && *p != 'd' && *p != 'A' && *p != 'D')
-                { ok = false; break; }
+                break;
               if(p[1] < '0' || p[1] > '7')
-                { ok = false; break; }
+                break;
               cum->arg_regs[idx++] = p[1] - '0'
                 + (*p == 'a' || *p == 'A' ? 8 : 0);
 
@@ -7388,14 +7387,12 @@ m68k_write_macsbug_name(FILE *file, const char *name, tree decl)
   ASM_OUTPUT_ASCII(file, name, len);
   fprintf(file, "\t.align 2,0\n\t.short 0\n");
   if(flag_function_sections && section_name)
-        fprintf(file, "\t.popsection\n", section_name);
+        fprintf(file, "\t.popsection\n");
 }
 
 static tree
 m68k_mangle_decl_assembler_name (tree decl, tree id)
 {
-  tree new_id = NULL_TREE;
-
   if (TREE_CODE (decl) == FUNCTION_DECL)
     {
       tree attrs = TYPE_ATTRIBUTES ( TREE_TYPE(decl) );
@@ -7404,7 +7401,7 @@ m68k_mangle_decl_assembler_name (tree decl, tree id)
           if (lookup_attribute ("pascal", attrs))
             {
               const char *old_str = IDENTIFIER_POINTER (id != NULL_TREE ? id : DECL_NAME (decl));
-              char *new_str, *p;
+              char *new_str;
               int len = strlen(old_str);
               new_str = XALLOCAVEC (char, 1 + len);
               for(int i = 0; i < len; i++)
@@ -7420,7 +7417,8 @@ m68k_mangle_decl_assembler_name (tree decl, tree id)
 }
 
 static pad_direction
-m68k_function_arg_padding (machine_mode mode, const_tree type)
+m68k_function_arg_padding (machine_mode mode ATTRIBUTE_UNUSED,
+    const_tree type ATTRIBUTE_UNUSED)
 {
   return PAD_UPWARD;
 }

@@ -560,7 +560,7 @@ extern void m68k_init_cumulative_args (CUMULATIVE_ARGS *cum, const_tree fntype, 
    (though the operand list is empty).  */
 #define TRANSFER_FROM_TRAMPOLINE				\
 void								\
-__transfer_from_trampoline ()					\
+__transfer_from_trampoline (void)					\
 {								\
   register char *a0 asm (M68K_STATIC_CHAIN_REG_NAME);		\
   asm (GLOBAL_ASM_OP "___trampoline");				\
