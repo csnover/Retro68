@@ -108,7 +108,7 @@ omni_mutex::omni_mutex(void)
 #endif
 }
 
-omni_mutex::~omni_mutex(void)
+omni_mutex::~omni_mutex(void) throw()
 {
     THROW_ERRORS(pthread_mutex_destroy(&posix_mutex));
 }
@@ -161,7 +161,7 @@ omni_condition::omni_condition(omni_mutex* m) : mutex(m)
 #endif
 }
 
-omni_condition::~omni_condition(void)
+omni_condition::~omni_condition(void) throw()
 {
     THROW_ERRORS(pthread_cond_destroy(&posix_cond));
 }

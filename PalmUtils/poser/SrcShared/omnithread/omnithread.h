@@ -202,7 +202,7 @@ class _OMNITHREAD_NTDLL_ omni_mutex {
 
 public:
     omni_mutex(void);
-    ~omni_mutex(void);
+    ~omni_mutex(void) throw();
 
     void lock(void);
     void unlock(void);
@@ -283,7 +283,7 @@ public:
 	// condition variable is then linked to the mutex, so that there is an
 	// implicit unlock and lock around wait() and timed_wait().
 
-    ~omni_condition(void);
+    ~omni_condition(void) throw();
 
     void wait(void);
 	// wait for the condition variable to be signalled.  The mutex is
