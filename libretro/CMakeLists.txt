@@ -33,11 +33,16 @@ target_compile_options(retrocrt PRIVATE -ffunction-sections)
 install(TARGETS retrocrt)
 
 if(RETRO_68K OR RETRO_PALMOS)
+    include(GNUInstallDirs)
+
     target_sources(retrocrt PRIVATE
+        crtstuff.c
         Retro68Runtime.h
-        relocate.c
     )
-    install(FILES Retro68Runtime.h DESTINATION include)
+
+    target_compile_options(retrocrt PRIVATE -mpcrel)
+
+    install(FILES Retro68Runtime.h DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
 
     if(RETRO_PALMOS)
         target_sources(retrocrt PRIVATE
@@ -45,13 +50,14 @@ if(RETRO_68K OR RETRO_PALMOS)
         )
     else()
         target_sources(retrocrt PRIVATE
-            MultiSegApp.c
             LoadSeg.s
+            MultiSegApp.c
             PoorMansDebugging.h
             qdglobals.c
-            start.c
+            relocate.c
             Retro68.r
             Retro68APPL.r
+            start.c
         )
         install(FILES Retro68.r Retro68APPL.r DESTINATION RIncludes)
     endif()

@@ -26,14 +26,12 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <reent.h>
-#include <string.h>
 #ifdef __palmos__
 #include <Core/System/MemoryMgr.h>
 #else
+#include <string.h>
 #include <MacMemory.h>
 #endif
-
-void referenceMyMalloc(void) {}
 
 #ifdef __palmos__
 typedef MemPtr Ptr;

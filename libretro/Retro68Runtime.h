@@ -25,13 +25,24 @@
 
 #include <stdint.h>
 
-#ifdef __palmos__
-#include <PalmTypes.h>
-typedef MemPtr Ptr;
-typedef MemHandle Handle;
-#else
+/*
+   struct object is an internal data structure in libgcc.
+   Comments in unwind-dw2-fde.h imply that it will not
+   increase in size.
+ */
+struct object { long space[8]; };
+
+extern void __register_frame_info (const void *, struct object *)
+                  __attribute__ ((weak));
+extern void *__deregister_frame_info (const void *)
+                     __attribute__ ((weak));
+
+void Retro68CallPreinit(uint16_t flags);
+void Retro68CallConstructors(void);
+void Retro68CallDestructors(void);
+
+#ifndef __palmos__
 #include <Types.h>
-#endif
 
 #define _RETRO68_GET_DISPLACEMENT(DISPLACEMENT, STRIP) \
     do {    \
@@ -54,11 +65,7 @@ typedef MemHandle Handle;
 // StripAddress24 must not be used on 32-bit systems, or the resulting crashes
 // will be even more mysterious.
 
-#ifdef __palmos__
-#define StripAddress24
-#else
 #define StripAddress24(x) ((char*) ((unsigned long)(x) & 0x00FFFFFF))
-#endif
 #define RETRO68_GET_DISPLACEMENT_STRIP24(DISPLACEMENT) \
     _RETRO68_GET_DISPLACEMENT(DISPLACEMENT, StripAddress24)
 
@@ -74,39 +81,19 @@ typedef MemHandle Handle;
     } while(0)
 
 void Retro68Relocate(void);
-#ifdef __palmos__
-void Retro68CallPreinit(uint16_t flags);
-#endif
-void Retro68CallConstructors(void);
-void Retro68CallDestructors(void);
-void Retro68FreeGlobals(void);
 void Retro68InitMultisegApp(void);
 void Retro68ApplyRelocations(uint8_t *base, uint32_t size, void *relocations, uint32_t displacements[]);
+void Retro68FreeGlobals(void);
 
 #define RETRO68_RELOCATE() RETRO68_CALL_UNRELOCATED(Retro68Relocate,())
-
-
-
-/*
-   struct object is an internal data structure in libgcc.
-   Comments in unwind-dw2-fde.h imply that it will not
-   increase in size.
- */
-struct object { long space[8]; };
-
-extern void __register_frame_info (const void *, struct object *)
-                  __attribute__ ((weak));
-extern void *__deregister_frame_info (const void *)
-                     __attribute__ ((weak));
 
 typedef struct Retro68RelocState
 {
     Ptr bssPtr;
-#ifndef __palmos__
     Handle codeHandle;
     char hasStripAddr;
     char hasFlushCodeCache;
-#endif
 } Retro68RelocState;
 
 extern Retro68RelocState relocState;
+#endif

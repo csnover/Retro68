@@ -194,6 +194,7 @@ static void PrvLoadAndRelocate(MemHandle code1H, Boolean init)
     {
         MemPtr code1P = MemHandleLock(code1H);
 
+        // TODO: DmFindResourceType instead, to allow non-contiguous code IDs?
         for (; (codeH = DmGet1Resource(sysResTAppCode, resID)) != NULL; ++resID)
         {
             char *codeP = (char *) MemHandleLock(codeH);

@@ -1,17 +1,9 @@
+// SPDX-License-Identifier: GPL-3.0-or-later WITH GCC-exception-3.1
+
 #include <assert.h>
 #include <stdint.h>
 
-/*
-   struct object is an internal data structure in libgcc.
-   Comments in unwind-dw2-fde.h imply that it will not
-   increase in size.
- */
-struct object { long space[8]; };
-
-extern void __register_frame_info(const void *, struct object *)
-    __attribute__ ((weak));
-extern void *__deregister_frame_info(const void *)
-    __attribute__ ((weak));
+#include "Retro68Runtime.h"
 
 typedef void (*PreinitFunction)(uint16_t);
 typedef void (*VoidFunction)(void);
@@ -31,7 +23,6 @@ extern GccInitFini __fini_section[], __fini_section_end[];
 extern VoidFunction __CTOR_LIST__[], __CTOR_END__[];
 extern VoidFunction __DTOR_LIST__[], __DTOR_END__[];
 
-// This frame is for
 extern char __EH_FRAME_BEGIN__[];
 
 void Retro68CallPreinit(uint16_t flags)
