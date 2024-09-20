@@ -725,7 +725,7 @@ void CLibrary::DumpUNIX() {
                 // Name refers to long name after the header
                 // This variant is used by Mac and some versions of BSD
                 //HeaderExtra = atoi(Name+3);
-                Name += sizeof(SUNIXLibraryHeader);
+                Name = Header[1].Name;
                 if (strncmp(Name, "__.SYMDEF", 9) == 0) {
                     // Symbol table "__.SYMDEF SORTED" as long name
                     printf("\nSymbol index %i, \"%s\"", ++symindex, Name);
@@ -1035,7 +1035,7 @@ char * CLibrary::ExtractMemberUNIX(CFileBuffer * Destination) {
             // Name refers to long name after the header
             // This variant is used by Mac and some versions of BSD
             HeaderExtra = atoi(Name+3);
-            Name += sizeof(SUNIXLibraryHeader);
+            Name = Header[1].Name;
             if (MemberSize > HeaderExtra) {
                 // The length of the name, HeaderExtra, is included in the 
                 // Header->FileSize field. Subtract to get the real file size
