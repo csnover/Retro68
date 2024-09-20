@@ -70,18 +70,22 @@ private:
 };
 // SPDX-SnippetEnd
 
+static std::initializer_list<std::string> RUNTIME_OBJECTS = {
+    "*/libretrocrt.a:start.c.obj",
+    "*/libretrocrt.a:palmstart.c.obj",
+    "*/libretrocrt.a:crtstuff.c.obj",
+    "*/libretrocrt.a:relocate.c.obj",
+    "*/libretrocrt.a:MultiSegApp.c.obj",
+    "*/libretrocrt.a:LoadSeg.s.obj",
+    "*/libretrocrt.a:*",
+    "*/libInterface.a:*",
+    "*/libgcc.a:*",
+    "*/libc.a:*"
+};
+
 SegmentMap::SegmentMap()
 {
-    m_segments.emplace_back(1, "Runtime",
-                          "*/libretrocrt.a:start.c.obj",
-                          "*/libretrocrt.a:relocate.c.obj",
-                          "*/libretrocrt.a:MultiSegApp.c.obj",
-                          "*/libretrocrt.a:LoadSeg.s.obj",
-                          "*/libretrocrt.a:*",
-                          "*/libInterface.a:*",
-                          "*/libgcc.a:*",
-                          "*/libc.a:*"
-                          );
+    m_segments.emplace_back(1, "Runtime", RUNTIME_OBJECTS);
     m_segments.emplace_back(5, "libstdc++ locale",
                           "*/libstdc++.a:locale.o",
                           "*/libstdc++.a:locale_faces.o",
@@ -103,16 +107,7 @@ SegmentMap::SegmentMap()
 
 SegmentMap::SegmentMap(const std::string &filename)
 {
-    m_segments.emplace_back(1, "Runtime",
-                          "*/libretrocrt.a:start.c.obj",
-                          "*/libretrocrt.a:relocate.c.obj",
-                          "*/libretrocrt.a:MultiSegApp.c.obj",
-                          "*/libretrocrt.a:LoadSeg.s.obj",
-                          "*/libretrocrt.a:*",
-                          "*/libInterface.a:*",
-                          "*/libgcc.a:*",
-                          "*/libc.a:*"
-                          );
+    m_segments.emplace_back(1, "Runtime", RUNTIME_OBJECTS);
 
     std::ifstream in(filename);
     int id = -1;
@@ -398,8 +393,8 @@ static void WriteDebugSections(std::ostream &out)
 
 static void EndSections(std::ostream &out, Block &)
 {
-    WriteDataSection(out);
     WriteBssSection(out);
+    WriteDataSection(out);
     WriteDebugSections(out);
     out << "/DISCARD/ : { *(*) }\n";
 }
@@ -427,8 +422,8 @@ static void WriteTextStart(std::ostream &out, const char *entryPoint, bool isMul
 
         // This is a Mac OS near model segment header. (It also exists on Palm
         // OS but is ignored.)
-        "WORD(0);\n" // Offset to first entry in jump table
-        "WORD(1);\n" // Number of entries in jump table
+        "SHORT(0);\n" // Offset to first entry in jump table
+        "SHORT(1);\n" // Number of entries in jump table
 
         "FILL(" NOP ");\n"
         ". = ALIGN(2);\n";
@@ -534,13 +529,14 @@ void CreateFlatLdScript(std::ostream &out, const char *entryPoint, bool stripMac
     {
         Block section(out << ".text 0 : ");
         WriteTextStart(out, entryPoint, false);
+
+        for (const auto &rt : RUNTIME_OBJECTS)
+            out << rt << "(.text*)\n";
+
         out <<
-            "*/libretrocrt.a:start.c.obj(.text*)\n"
-            "*/libretrocrt.a:relocate.c.obj(.text*)\n"
-            "*/libretrocrt.a:*(.text*)\n"
-            "*/libInterface.a:*(.text*)\n"
             "*(.text*)\n"
             "*(.gnu.linkonce.t*)\n";
+
         WriteInitFini(out);
         WriteEHFrame(out, "", { "*" });
         WriteTextEnd(out);

@@ -178,7 +178,9 @@ void Object::loadSections()
             // it could be changed if this is annoying but there is really no
             // good reason to split up code IDs like this on Palm OS
             if (getCodeID(code.index()) != expected++)
-                throw std::runtime_error("Code segment IDs must be contiguous");
+                throw std::runtime_error("Code segment IDs must be contiguous;"
+                    " expected "s + std::to_string(expected - 1)
+                    + ", got " + std::to_string(getCodeID(code.index())));
         }
     }
 }
