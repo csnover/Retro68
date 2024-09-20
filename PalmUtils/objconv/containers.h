@@ -161,7 +161,7 @@ public:
 protected:
    uint32_t column;                                // Current column
 private:
-   uint32_t PushString(char const * s){return 0;}; // Make PushString private to prevent using it
+   uint32_t PushString(char const *){return 0;}; // Make PushString private to prevent using it
 };
 
 

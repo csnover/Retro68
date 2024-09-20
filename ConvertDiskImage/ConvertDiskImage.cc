@@ -40,7 +40,7 @@ void decompressADC(std::vector<uint8_t>& outbuf, const std::vector<uint8_t>& inb
             
             assert(n > 0);
             assert(off > 0);
-            assert(outbuf.size() - off >= 0);
+            assert(int(outbuf.size()) - off >= 0);
             outbuf.resize(outbuf.size() + n);
             auto dst = outbuf.end() - n;
             auto src = dst - off;

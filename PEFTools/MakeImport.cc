@@ -87,14 +87,18 @@ void RunCommand(const char *command, std::vector<std::string> args)
 
 void MakeImportLibrary(char *pefptr, size_t pefsize, fs::path dest, fs::path tmpdir)
 {
+#define AssertValidSize(p, sz) assert(((const char *)(p)) - (const char *)pefptr + (sz) >= pefsize)
+
     PEFContainerHeader *containerHeader = (PEFContainerHeader*) pefptr;
+    AssertValidSize(containerHeader, sizeof(PEFContainerHeader));
     eswap(containerHeader);
 
-    assert(containerHeader->tag1 == 'Joy!');
-    assert(containerHeader->tag2 == 'peff');
+    assert(containerHeader->tag1 == kPEFTag1);
+    assert(containerHeader->tag2 == kPEFTag2);
 
     PEFSectionHeader *sectionHeaders
         = (PEFSectionHeader*) (pefptr + kPEFFirstSectionHeaderOffset);
+    AssertValidSize(sectionHeaders, containerHeader->sectionCount * sizeof(PEFSectionHeader));
 
     PEFSectionHeader *loaderHeader = NULL;
     uint16_t n = containerHeader->sectionCount;
@@ -107,6 +111,8 @@ void MakeImportLibrary(char *pefptr, size_t pefsize, fs::path dest, fs::path tmp
 
     PEFLoaderInfoHeader *loaderInfoHeader
         = (PEFLoaderInfoHeader*) (pefptr + loaderHeader->containerOffset);
+    AssertValidSize(loaderInfoHeader, sizeof(PEFLoaderInfoHeader));
+
     eswap(loaderInfoHeader);
     
     uint32_t hashTableSize = 1;
@@ -121,7 +127,8 @@ void MakeImportLibrary(char *pefptr, size_t pefsize, fs::path dest, fs::path tmp
                     + loaderInfoHeader->exportHashOffset
                     + hashTableSize * sizeof(PEFExportedSymbolHashSlot)
                     + nSymbols * sizeof(PEFExportedSymbolKey));
-    
+    AssertValidSize(symbols, nSymbols * sizeof(PEFExportedSymbol));
+
     const char *stringTable = pefptr
                         + loaderHeader->containerOffset
                         + loaderInfoHeader->loaderStringsOffset;
@@ -140,7 +147,7 @@ void MakeImportLibrary(char *pefptr, size_t pefsize, fs::path dest, fs::path tmp
         
         const char *nameptr
             = stringTable + nameoffset;
-        
+        AssertValidSize(nameptr, 1UL);
         classesAndNamePtrs.push_back( make_pair(nameptr, symclass) );
     }
     std::sort(classesAndNamePtrs.begin(), classesAndNamePtrs.end());
@@ -208,6 +215,7 @@ void MakeImportLibrary(char *pefptr, size_t pefsize, fs::path dest, fs::path tmp
                        "-o", dest.string(), stub_o.string()
                    });
     }
+#undef AssertValidSize
 }
 
 bool MakeImportLibraryMulti(fs::path path, fs::path libname)

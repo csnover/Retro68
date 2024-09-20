@@ -305,6 +305,7 @@ void CCommandLineInterpreter::InterpretCommandOption(char * string) {
             CDisassembler::CountInstructions();
             exit(0);
         }
+        // fall through
 
     default:    // Unknown option
         err.submit(1002, string);
@@ -984,6 +985,7 @@ int CCommandLineInterpreter::SymbolChange(char const * oldname, char const ** ne
         case SYMA_EXTRACT_MEMBER:
             *newname = psym->Name2;
             // continue in next case
+            // fall through
         case SYMA_DELETE_MEMBER: case SYMA_ADD_MEMBER:
             if (symtype == SYMT_LIBRARYMEMBER) {
                 // Change to library member

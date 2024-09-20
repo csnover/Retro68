@@ -31,7 +31,7 @@ public:
 class Fork
 {
 public:
-     virtual void writeFork(std::ostream& out) const { }
+     virtual void writeFork(std::ostream&) const { }
      virtual ~Fork() {}
 };
 

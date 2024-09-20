@@ -668,7 +668,7 @@ CMACUNIV::CMACUNIV() {
 }
 
 
-void CMACUNIV::Go(int options) {
+void CMACUNIV::Go(int) {
    // Apply command options to all components
 
    // Check file size

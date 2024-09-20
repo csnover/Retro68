@@ -257,6 +257,7 @@ void CELF2COF<ELFSTRUCTURES>::MakeSections() {
                      case R_386_IRELATIVE:
                         err.submit(1063); // Warning: Gnu indirect function cannot be converted
                         // continue in next case?:
+                        // fall through
                      case R_386_32:      // 32-bit absolute virtual address
                         NewRelocation.Type = COFF32_RELOC_DIR32;  
                         *piaddend += uint32_t(OldRelocation.r_addend);  
@@ -305,6 +306,7 @@ void CELF2COF<ELFSTRUCTURES>::MakeSections() {
                      case R_X86_64_IRELATIVE:
                         err.submit(1063); // Warning: Gnu indirect function cannot be converted
                         // continue in next case?:
+                        // fall through
                      case R_X86_64_32S:     // 32 bit absolute virtual address, sign extended
                      case R_X86_64_32:      // 32 bit absolute virtual address, zero extended
                         NewRelocation.Type = COFF64_RELOC_ABS32;  
@@ -390,7 +392,7 @@ static int SymbolOverflow(uint64_t x) {
    }
    return Upper != 0;                  // Check for unsigned overflow
 }
-static int SymbolOverflow(uint32_t x) {  // Overloaded 32 bit version
+static int SymbolOverflow(uint32_t) {  // Overloaded 32 bit version
    return 0;                           // Cannot overflow if already 32 bits
 }
 
@@ -524,6 +526,7 @@ void CELF2COF<ELFSTRUCTURES>::MakeSymbolTable() {
             case STT_GNU_IFUNC:
                err.submit(1063); // Warning: Gnu indirect function cannot be converted
                // continue in next case:
+               // fall through
             case STT_FUNC:
                // Function
                NewSym.s.Type = COFF_TYPE_FUNCTION;  

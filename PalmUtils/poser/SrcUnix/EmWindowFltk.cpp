@@ -118,7 +118,7 @@ static void ParseXPixMap(EmPixMap &pixMap, const char **xpm)
 			EmAssert (isxdigit (color[5]));
 			EmAssert (isxdigit (color[6]));
 
-			int r, g, b;
+			unsigned int r, g, b;
 			i = sscanf (color, "#%2x%2x%2x", &r, &g, &b);
 
 			EmAssert (i == 3);
@@ -402,13 +402,13 @@ int EmWindowFltk::handle (int event)
 					{ FL_Right,		kElement_None, rightArrowChr },
 					{ FL_Up,		kElement_None, upArrowChr },
 					{ FL_Down,		kElement_None, downArrowChr },
-					{ FL_F + 1,		kElement_App1Button },
-					{ FL_F + 2,		kElement_App2Button },
-					{ FL_F + 3,		kElement_App3Button },
-					{ FL_F + 4,		kElement_App4Button },
-					{ FL_F + 9,		kElement_PowerButton },
-					{ FL_Page_Up,	kElement_UpButton },
-					{ FL_Page_Down,	kElement_DownButton }
+					{ FL_F + 1,		kElement_App1Button, 0 },
+					{ FL_F + 2,		kElement_App2Button, 0 },
+					{ FL_F + 3,		kElement_App3Button, 0 },
+					{ FL_F + 4,		kElement_App4Button, 0 },
+					{ FL_F + 9,		kElement_PowerButton, 0 },
+					{ FL_Page_Up,	kElement_UpButton, 0 },
+					{ FL_Page_Down,	kElement_DownButton, 0 }
 				};
 
 				for (size_t ii = 0; ii < countof (kConvert); ++ii)

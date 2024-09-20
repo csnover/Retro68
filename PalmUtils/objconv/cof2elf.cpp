@@ -566,6 +566,7 @@ void CCOF2ELF<ELFSTRUCTURES>::MakeRelocationTables() {
                case COFF32_RELOC_TOKEN:   // .NET common language runtime token
                   err.submit(2014);       // Error message
                   // Continue in next case and insert absolute address as token:
+                  // fall through
                case COFF32_RELOC_DIR32:   // 32-bit absolute virtual address
                   if (BigEndian)
                      err.submit(2030, OldReloc.p->Type);
@@ -646,6 +647,7 @@ void CCOF2ELF<ELFSTRUCTURES>::MakeRelocationTables() {
                case COFF64_RELOC_TOKEN:      // .NET common language runtime token
                   err.submit(2014);          // Error message
                   // Continue in next case and insert absolute address as token:
+                  // fall through
 
                case COFF64_RELOC_ABS64:      // 64 bit absolute virtual address
                   NewRelocEntry.r_type = R_X86_64_64;  break;
@@ -653,6 +655,7 @@ void CCOF2ELF<ELFSTRUCTURES>::MakeRelocationTables() {
                case COFF64_RELOC_PPC_TOKEN:
                   err.submit(2014);          // Error message
                   // Continue in next case and insert absolute address as token:
+                  // fall through
 
                case COFF64_RELOC_ABS32:      // 32 bit absolute address
                   NewRelocEntry.r_type = R_X86_64_32S;  break;

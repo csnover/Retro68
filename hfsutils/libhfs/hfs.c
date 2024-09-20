@@ -137,6 +137,7 @@ hfsvol *hfs_mount(const char *path, int pnum, int mode)
 
       if ((mode & HFS_MODE_MASK) == HFS_MODE_RDWR)
 	goto fail;
+    // fall through
 
     case HFS_MODE_RDONLY:
     default:

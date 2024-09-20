@@ -398,7 +398,7 @@ void PrvWidgetCallback (Fl_Widget* w, void* c)
 }
 
 
-void PrvWindowCallback (Fl_Widget* w, void* c)
+void PrvWindowCallback (Fl_Widget*, void* c)
 {
 	EmDlgContext* context = (EmDlgContext*) c;
 	EmAssert (context);
@@ -926,7 +926,7 @@ EmDlgItemID	EmDlg::HostRunSessionSave (const void* parameters)
  *
  ***********************************************************************/
 
-EmDlgItemID	EmDlg::HostRunAboutBox (const void* parameters)
+EmDlgItemID	EmDlg::HostRunAboutBox (const void*)
 {
 	Fl_Window* aboutWin = ::PrvMakeDialog (kDlgAboutBox);
 	postModalDialog (aboutWin);
@@ -1146,7 +1146,7 @@ EmRect EmDlg::GetDlgBounds (EmDlgRef dlg)
 }
 
 
-void EmDlg::SetDlgDefaultButton (EmDlgContext& context, EmDlgItemID item)
+void EmDlg::SetDlgDefaultButton (EmDlgContext&, EmDlgItemID item)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1160,7 +1160,7 @@ void EmDlg::SetDlgDefaultButton (EmDlgContext& context, EmDlgItemID item)
 }
 
 
-void EmDlg::SetDlgCancelButton (EmDlgContext& context, EmDlgItemID item)
+void EmDlg::SetDlgCancelButton (EmDlgContext&, EmDlgItemID item)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1186,7 +1186,7 @@ void EmDlg::SetDlgCancelButton (EmDlgContext& context, EmDlgItemID item)
  *
  ***********************************************************************/
 
-void EmDlg::SetItemMin (EmDlgRef dlg, EmDlgItemID item, int32 minValue)
+void EmDlg::SetItemMin (EmDlgRef, EmDlgItemID item, int32 minValue)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1318,7 +1318,7 @@ void EmDlg::SetItemValue (EmDlgRef dlg, EmDlgItemID item, int32 value)
  *
  ***********************************************************************/
 
-void EmDlg::SetItemMax (EmDlgRef dlg, EmDlgItemID item, int32 maxValue)
+void EmDlg::SetItemMax (EmDlgRef, EmDlgItemID item, int32 maxValue)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1376,7 +1376,7 @@ void EmDlg::SetItemBounds (EmDlgRef dlg, EmDlgItemID item, const EmRect& bounds)
  *
  ***********************************************************************/
 
-void EmDlg::SetItemText (EmDlgRef dlg, EmDlgItemID item, string str)
+void EmDlg::SetItemText (EmDlgRef, EmDlgItemID item, string str)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1431,7 +1431,7 @@ void EmDlg::SetItemText (EmDlgRef dlg, EmDlgItemID item, string str)
  *
  ***********************************************************************/
 
-int32 EmDlg::GetItemValue (EmDlgRef dlg, EmDlgItemID item)
+int32 EmDlg::GetItemValue (EmDlgRef, EmDlgItemID item)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1524,7 +1524,7 @@ int32 EmDlg::GetItemValue (EmDlgRef dlg, EmDlgItemID item)
  *
  ***********************************************************************/
 
-EmRect EmDlg::GetItemBounds (EmDlgRef dlg, EmDlgItemID item)
+EmRect EmDlg::GetItemBounds (EmDlgRef, EmDlgItemID item)
 {
 	EmRect	result (0, 0, 0, 0);
 
@@ -1550,7 +1550,7 @@ EmRect EmDlg::GetItemBounds (EmDlgRef dlg, EmDlgItemID item)
  *
  ***********************************************************************/
 
-string EmDlg::GetItemText (EmDlgRef dlg, EmDlgItemID item)
+string EmDlg::GetItemText (EmDlgRef, EmDlgItemID item)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1576,7 +1576,7 @@ string EmDlg::GetItemText (EmDlgRef dlg, EmDlgItemID item)
  *
  ***********************************************************************/
 
-void EmDlg::EnableItem (EmDlgRef dlg, EmDlgItemID item)
+void EmDlg::EnableItem (EmDlgRef, EmDlgItemID item)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1598,7 +1598,7 @@ void EmDlg::EnableItem (EmDlgRef dlg, EmDlgItemID item)
  *
  ***********************************************************************/
 
-void EmDlg::DisableItem (EmDlgRef dlg, EmDlgItemID item)
+void EmDlg::DisableItem (EmDlgRef, EmDlgItemID item)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1620,7 +1620,7 @@ void EmDlg::DisableItem (EmDlgRef dlg, EmDlgItemID item)
  *
  ***********************************************************************/
 
-void EmDlg::ShowItem (EmDlgRef dlg, EmDlgItemID item)
+void EmDlg::ShowItem (EmDlgRef, EmDlgItemID item)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1642,7 +1642,7 @@ void EmDlg::ShowItem (EmDlgRef dlg, EmDlgItemID item)
  *
  ***********************************************************************/
 
-void EmDlg::HideItem (EmDlgRef dlg, EmDlgItemID item)
+void EmDlg::HideItem (EmDlgRef, EmDlgItemID item)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1664,7 +1664,7 @@ void EmDlg::HideItem (EmDlgRef dlg, EmDlgItemID item)
  *
  ***********************************************************************/
 
-void EmDlg::ClearMenu (EmDlgRef dlg, EmDlgItemID item)
+void EmDlg::ClearMenu (EmDlgRef, EmDlgItemID item)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1689,7 +1689,7 @@ void EmDlg::ClearMenu (EmDlgRef dlg, EmDlgItemID item)
  *
  ***********************************************************************/
 
-void EmDlg::AppendToMenu (EmDlgRef dlg, EmDlgItemID item, const StringList& strList)
+void EmDlg::AppendToMenu (EmDlgRef, EmDlgItemID item, const StringList& strList)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1727,7 +1727,7 @@ void EmDlg::AppendToMenu (EmDlgRef dlg, EmDlgItemID item, const StringList& strL
  *
  ***********************************************************************/
 
-void EmDlg::ClearList (EmDlgRef dlg, EmDlgItemID item)
+void EmDlg::ClearList (EmDlgRef, EmDlgItemID item)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1752,7 +1752,7 @@ void EmDlg::ClearList (EmDlgRef dlg, EmDlgItemID item)
  *
  ***********************************************************************/
 
-void EmDlg::EnableMenuItem (EmDlgRef dlg, EmDlgItemID item, int32 menuItem)
+void EmDlg::EnableMenuItem (EmDlgRef, EmDlgItemID item, int32 menuItem)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1794,7 +1794,7 @@ void EmDlg::EnableMenuItem (EmDlgRef dlg, EmDlgItemID item, int32 menuItem)
  *
  ***********************************************************************/
 
-void EmDlg::DisableMenuItem (EmDlgRef dlg, EmDlgItemID item, int32 menuItem)
+void EmDlg::DisableMenuItem (EmDlgRef, EmDlgItemID item, int32 menuItem)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1836,7 +1836,7 @@ void EmDlg::DisableMenuItem (EmDlgRef dlg, EmDlgItemID item, int32 menuItem)
  *
  ***********************************************************************/
 
-void EmDlg::AppendToList (EmDlgRef dlg, EmDlgItemID item, const StringList& strList)
+void EmDlg::AppendToList (EmDlgRef, EmDlgItemID item, const StringList& strList)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1866,7 +1866,7 @@ void EmDlg::AppendToList (EmDlgRef dlg, EmDlgItemID item, const StringList& strL
  *
  ***********************************************************************/
 
-void EmDlg::SelectListItems (EmDlgRef dlg, EmDlgItemID item, const EmDlgItemIndexList& itemList)
+void EmDlg::SelectListItems (EmDlgRef, EmDlgItemID item, const EmDlgItemIndexList& itemList)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1896,7 +1896,7 @@ void EmDlg::SelectListItems (EmDlgRef dlg, EmDlgItemID item, const EmDlgItemInde
  *
  ***********************************************************************/
 
-void EmDlg::UnselectListItems (EmDlgRef dlg, EmDlgItemID item, const EmDlgListIndexList& itemList)
+void EmDlg::UnselectListItems (EmDlgRef, EmDlgItemID item, const EmDlgListIndexList& itemList)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)
@@ -1926,7 +1926,7 @@ void EmDlg::UnselectListItems (EmDlgRef dlg, EmDlgItemID item, const EmDlgListIn
  *
  ***********************************************************************/
 
-void EmDlg::GetSelectedItems (EmDlgRef dlg, EmDlgItemID item, EmDlgItemIndexList& itemList)
+void EmDlg::GetSelectedItems (EmDlgRef, EmDlgItemID item, EmDlgItemIndexList& itemList)
 {
 	Fl_Widget* o = ::PrvFindWidgetByID (item);
 	if (!o)

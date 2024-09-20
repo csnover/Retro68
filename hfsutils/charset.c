@@ -132,7 +132,7 @@ UCS2 *cs_unicode(char *mstr, int *lenptr)
   int len, i;
   UCS2 *unicode, *ptr;
 
-  len = lenptr ? *lenptr : strlen(mstr);
+  len = lenptr ? *lenptr : (int)strlen(mstr);
 
   unicode = malloc((len + 1) * sizeof(UCS2));
   if (unicode == 0)
@@ -159,7 +159,7 @@ char *cs_latin1(char *mstr, int *lenptr)
   unsigned char ch;
   UCS2 unicode;
 
-  ilen = lenptr ? *lenptr : strlen(mstr);
+  ilen = lenptr ? *lenptr : (int)strlen(mstr);
 
   olen = 0;
   for (i = 0; i < ilen; ++i)
@@ -239,7 +239,7 @@ char *cs_macroman(char *lstr, int *lenptr)
   if (latin1[0x80] != 0xff)
     mktable();
 
-  ilen = lenptr ? *lenptr : strlen(lstr);
+  ilen = lenptr ? *lenptr : (int)strlen(lstr);
 
   olen = 0;
   for (i = 0; i < ilen; ++i)

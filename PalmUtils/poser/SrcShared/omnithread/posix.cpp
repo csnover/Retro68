@@ -892,6 +892,8 @@ omni_thread::posix_priority(priority_t pri)
 	return highest_priority;
 
     }
+#else
+    (void)pri;
 #endif
 
     throw omni_thread_invalid();

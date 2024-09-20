@@ -146,7 +146,7 @@ void Serial::GetOptions(options_description &desc)
         ;
 }
 
-bool Serial::CheckOptions(variables_map &options)
+bool Serial::CheckOptions(variables_map &)
 {
     return true;
 }

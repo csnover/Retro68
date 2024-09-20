@@ -1007,7 +1007,7 @@ SOpcodeDef OpcodeMap4[] = {
    {"vfixupimmp",0x20  ,0x881200, 0x59  , 0x124F, 0x124F, 0x024F, 0x31  , 0x33  , 0     , 0     , 1     },    // 0F 3A 54
    {"vfixupimms",0x20  ,0x8C1200, 0x59  , 0x104F, 0x104F, 0x004F, 0x31  , 0x32  , 0     , 0     , 1     },    // 0F 3A 55
    {0,           0x14E , 0      , 0     , 0     , 0     , 0     , 0     , 0     , 0     , 9     , 0     },    // 0F 3A 56. link by prefix. vreducep
-   {0,           0x14F , 0      , 0     , 0     , 0     , 0     , 0     , 0     , 0     , 9     ,       },    // 0F 3A 57. link by prefix. vreduces
+   {0,           0x14F , 0      , 0     , 0     , 0     , 0     , 0     , 0     , 0     , 9     , 0     },    // 0F 3A 57. link by prefix. vreduces
    {0,           0     , 0      , 0x2052, 0     , 0     , 0     , 0     , 0     , 0     , 0     , 0     },    // 0F 3A 58
    {0,           0     , 0      , 0x2052, 0     , 0     , 0     , 0     , 0     , 0     , 0     , 0     },    // 0F 3A 59
    {0,           0     , 0      , 0x2052, 0     , 0     , 0     , 0     , 0     , 0     , 0     , 0     },    // 0F 3A 5A
@@ -4338,7 +4338,7 @@ SOpcodeDef OpcodeMapB1[] = {
    {0,           0     , 0      , 0     , 0     , 0     , 0     , 0     , 0     , 0     , 0     , 0     },    // VEX 0F 8E
    {0,           0     , 0      , 0     , 0     , 0     , 0     , 0     , 0     , 0     , 0     , 0     },    // VEX 0F 8F
 //  name         instset prefix   format  dest.   source1 source2 source3 EVEX    MVEX    link    options
-   {0,           0xEB  , 0      , 0x12  , 0     , 0     , 0     , 0     , 0     , 0     , 3     ,       },    // VEX 0F 90. Link to kmov
+   {0,           0xEB  , 0      , 0x12  , 0     , 0     , 0     , 0     , 0     , 0     , 3     , 0     },    // VEX 0F 90. Link to kmov
    {"kmov",      0x20  , 0x35200, 0x13  , 0x2009, 0x1095, 0     , 0     , 0     , 0     , 0     , 1     },    // VEX 0F 91. Name without w in KNC syntax, but code identical
    {0,           0xEC  , 0      , 0x12  , 0     , 0     , 0     , 0     , 0     , 0     , 0x9   , 0     },    // VEX 0F 92. Link to kmov r, k
    {0,           0xEE  , 0      , 0x12  , 0     , 0     , 0     , 0     , 0     , 0     , 0x9   , 0     },    // VEX 0F 93. Link to kmov k, r

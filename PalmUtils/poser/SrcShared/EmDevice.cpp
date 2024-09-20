@@ -232,11 +232,13 @@ static const DeviceInfo kDeviceInfo[] =
 		kDevicePilot, "Pilot",
 		{ "Pilot", "Pilot1000", "Pilot5000", "TD", "Touchdown" },
 		kSupports68328, 128, hwrMiscFlagIDTouchdown, hwrMiscFlagExtSubIDNone,
+		{}
 	},
 	{
 		kDevicePalmPilot, "PalmPilot",
 		{ "PalmPilot", "PalmPilotPersonal", "PalmPilotProfessional", "Striker" },
 		kSupports68328, 128, hwrMiscFlagIDPalmPilot, hwrMiscFlagExtSubIDNone,
+		{}
 	},
 	{
 		kDevicePalmIII, "Palm III",
@@ -254,6 +256,7 @@ static const DeviceInfo kDeviceInfo[] =
 		kDevicePalmIIIe, "Palm IIIe",
 		{ "PalmIIIe", "Robinson" },
 		kSupports68EZ328, 2048, hwrMiscFlagIDBrad, hwrMiscFlagExtSubIDBrad,
+		{}
 	},
 	{
 		kDevicePalmIIIx, "Palm IIIx",
@@ -277,6 +280,7 @@ static const DeviceInfo kDeviceInfo[] =
 		kDevicePalmVII, "Palm VII",
 		{ "PalmVII", "Jerry", "Eleven" },
 		kSupports68328 + kHasFlash, 2048, hwrMiscFlagIDJerry, hwrMiscFlagExtSubIDNone,
+		{}
 	},
 	{
 		kDevicePalmVIIEZ, "Palm VII (EZ)",
@@ -287,12 +291,14 @@ static const DeviceInfo kDeviceInfo[] =
 										// accidentally looking for and using the sub-id. In
 										// order to get the hard keys to work, we need to
 										// return zero here.
+		{}
 	},
 	{
 		kDevicePalmVIIx, "Palm VIIx",
 		{ "PalmVIIx", "Octopus" },
 		kSupports68EZ328 + kHasFlash, 8192, hwrMiscFlagIDJerryEZ, hwrMiscFlagExtSubIDBrad,
 										// David Mai says that he *guesses* that the sub-id is zero
+		{}
 	},
 	{
 		kDevicePalmM100, "Palm m100",
@@ -339,7 +345,8 @@ static const DeviceInfo kDeviceInfo[] =
 	{
 		kDeviceARMRef, "ARM Ref",
 		{ "ARMRef" },
-		kSupportsARM, 0, 0
+		kSupportsARM, 0, 0, 0,
+		{}
 	},
 
 	// ===== Symbol devices =====
@@ -347,16 +354,19 @@ static const DeviceInfo kDeviceInfo[] =
 		kDeviceSymbol1500, "Symbol 1500",
 		{ "Symbol1500" },
 		kSupports68328 + kHasFlash, 2048, hwrMiscFlagIDRocky, hwrMiscFlagExtSubIDNone,
+		{}
 	},
 	{
 		kDeviceSymbol1700, "Symbol 1700",
 		{ "Symbol1700" },
 		kSupports68328 + kHasFlash, 2048, hwrMiscFlagIDRocky, hwrMiscFlagExtSubIDNone,
+		{}
 	},
 	{
 		kDeviceSymbol1740, "Symbol 1740",
 		{ "Symbol1740" },
 		kSupports68328 + kHasFlash, 2048, hwrMiscFlagIDRocky, hwrMiscFlagExtSubIDNone,
+		{}
 	},
 
 	// ===== TRG/HandEra devices =====
@@ -380,21 +390,25 @@ static const DeviceInfo kDeviceInfo[] =
 		kDeviceVisor, "Visor",
 		{ "Visor", "Lego" },
 		kSupports68EZ328, 2048, halModelIDLego, 0,	// Hardware ID for first Visor
+		{}
 	},
 	{
 		kDeviceVisorPlatinum, "Visor Platinum",
 		{ "VisorPlatinum" },
-		kSupports68VZ328, 8192, halModelIDVisorPlatinum, 0
+		kSupports68VZ328, 8192, halModelIDVisorPlatinum, 0,
+		{}
 	},
 	{
 		kDeviceVisorPrism, "Visor Prism",
 		{ "VisorPrism" },
-		kSupports68VZ328, 8192, halModelIDVisorPrism, 0
+		kSupports68VZ328, 8192, halModelIDVisorPrism, 0,
+		{}
 	},
 	{
 		kDeviceVisorEdge, "Visor Edge",
 		{ "VisorEdge" },
-		kSupports68VZ328, 8192, halModelIDVisorEdge, 0
+		kSupports68VZ328, 8192, halModelIDVisorEdge, 0,
+		{}
 	},
 
 	// ===== AlphaSmart Devices =====

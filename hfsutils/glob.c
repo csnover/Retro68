@@ -163,6 +163,7 @@ int doglob(hfsvol *vol, dlist *list, const char *dir, const char *rem)
 	case '\\':
 	  if (*++ptr == 0)
 	    --ptr;
+	  break;
 
 	case '*':
 	case '[':

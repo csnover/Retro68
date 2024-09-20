@@ -83,7 +83,8 @@ static uint32_t MacTime()
     // Calculate Mac-style timestamp (seconds since 1 January 1904 00:00:00)
     std::tm mac_epoch_tm = {
         0, 0, 0, // 00:00:00
-        1, 0, 4  // 1 January 1904
+        1, 0, 4, // 1 January 1904
+        0, 0, 0, 0, 0
     };
     auto mac_epoch = system_clock::from_time_t(std::mktime(&mac_epoch_tm));
     return duration_cast<seconds>(timestamp - mac_epoch).count();

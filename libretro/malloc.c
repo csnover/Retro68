@@ -68,6 +68,7 @@ void *_calloc_r(struct _reent *reent_ptr, size_t sz, size_t sz2)
 
 void _free_r(struct _reent *reent_ptr, void *ptr)
 {
+    (void)reent_ptr;
     if(ptr != NULL)
         DisposePtr(ptr);
 }
@@ -138,6 +139,7 @@ void *calloc(size_t sz1, size_t sz2)
 
 void *memalign(size_t alignment, size_t sz)
 {
+    (void)alignment;
     Ptr p = NewPtr(sz);
 
     if(!p)

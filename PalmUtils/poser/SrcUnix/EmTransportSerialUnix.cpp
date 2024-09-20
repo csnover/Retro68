@@ -571,9 +571,13 @@ void EmTransportSerial::HostGetSerialBaudList (BaudList& results)
 	switch (maxBaud)
 	{
 		case 115200:	results.push_back (115200);
+		// fall through
 		case 57600:		results.push_back (57600);
+		// fall through
 		case 38400:		results.push_back (38400);
+		// fall through
 		case 19200:		results.push_back (19200);
+		// fall through
 		case 9600:		results.push_back (9600);
 	}
 }

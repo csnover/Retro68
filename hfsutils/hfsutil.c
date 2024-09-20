@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
     ++bargv0;
 
   dot = strchr(bargv0, '.');
-  len = dot ? dot - bargv0 : strlen(bargv0);
+  len = dot ? dot - bargv0 : (int)strlen(bargv0);
 
   for (i = 0; list[i].name; ++i)
     {

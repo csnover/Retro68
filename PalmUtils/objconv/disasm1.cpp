@@ -2733,6 +2733,7 @@ void CDisassembler::FindMapEntry() {
                     Byte = 2;  break;
                 }
             // Else continue in case 32:
+            // fall through
             case 32: default:
                 Byte = (s.Prefixes[4] == 0x66) ? 0 : 1;  break;
             case 16:
@@ -4327,8 +4328,8 @@ void CDisassembler::CheckForNops() {
                 }
                 // Displacement is zero. This is a multi-byte NOP
                 s.Warnings1 |= 0x1000000;
-                break;
         }
+        break;
 
     case 0x86: case 0x87:  // XCHG
     case 0x88: case 0x89: case 0x8A: case 0x8B:  // MOV

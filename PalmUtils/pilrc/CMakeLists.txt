@@ -6,16 +6,6 @@ set(CMAKE_C_EXTENSIONS ON)
 
 include(GNUInstallDirs)
 
-add_compile_options(
-    -Wall
-    -Wextra
-    -Wno-unused-parameter
-    -Wpointer-arith
-    -Wcast-qual
-    -Wcast-align
-    -Wsign-compare
-)
-
 add_library(pilrc-common OBJECT
     bitmap.c
     bitmap.h
@@ -32,6 +22,16 @@ add_library(pilrc-common OBJECT
     std.h
     util.c
     util.h
+)
+
+target_compile_options(pilrc-common PUBLIC
+    -Wall
+    -Wextra
+    -Wno-unused-parameter
+    -Wpointer-arith
+    -Wcast-qual
+    -Wcast-align
+    -Wsign-compare
 )
 
 target_include_directories(pilrc-common PUBLIC "${CMAKE_CURRENT_BINARY_DIR}/headers")

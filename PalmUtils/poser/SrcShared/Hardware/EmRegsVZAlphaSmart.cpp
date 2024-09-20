@@ -21,7 +21,7 @@ enum {
 
 	hwrAlphaSmartPortKKeyboardOn  = 0x04, // ?
 	hwrAlphaSmartPortKBacklightOn = 0x10,
-	hwrAlphaSmartPortKLCDEnableOn = 0x80,
+	hwrAlphaSmartPortKLCDEnableOn = 0x80
 };
 
 #undef INSTALL_HANDLER
@@ -71,7 +71,7 @@ void EmRegsVZAlphaSmart::SetSubBankHandlers (void)
 // ---------------------------------------------------------------------------
 // This is mostly copied from EmRegsVZ.
 
-void EmRegsVZAlphaSmart::CycleSlowly (Bool sleeping)
+void EmRegsVZAlphaSmart::CycleSlowly (Bool)
 {
 	// See if there's anything new ("Put the data on the bus")
 
@@ -160,7 +160,7 @@ uint8 EmRegsVZAlphaSmart::GetPortInternalValue (int port)
 //		• EmRegsVZAlphaSmart::GetKeyInfo
 // ---------------------------------------------------------------------------
 
-void EmRegsVZAlphaSmart::GetKeyInfo (int* numRows, int* numCols, uint16* keyMap, Bool* rows)
+void EmRegsVZAlphaSmart::GetKeyInfo (int* numRows, int* numCols, uint16*, Bool* rows)
 {
 	*numRows = EmSPISlaveSTMicro::kNumRows;
 	*numCols = EmSPISlaveSTMicro::kNumCols;

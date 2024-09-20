@@ -5,6 +5,8 @@ include(CheckSymbolExists)
 include(CheckTypeSize)
 include(GNUInstallDirs)
 
+add_compile_options(-Wno-pedantic -Wno-unused-parameter)
+
 add_compile_definitions($<$<CONFIG:Debug>:DEBUG>)
 
 check_include_file(unistd.h HAVE_UNISTD_H)

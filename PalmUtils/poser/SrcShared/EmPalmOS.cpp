@@ -1058,6 +1058,9 @@ Bool EmPalmOS::HandleJSR (emuptr oldpc, emuptr dest)
 			ProfileFnEnter (dest, oldpc);
 		}
 	}
+#else
+	(void)oldpc;
+	(void)dest;
 #endif
 
 #if LOG_FUNCTION_CALLS

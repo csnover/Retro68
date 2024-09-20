@@ -627,8 +627,8 @@ EmDlgFnResult EmDlg::PrvSessionNew (EmDlgContext& context)
 
 					::SkinSetSkinName (cfg.fDevice, skins[menuID]);
 
-					// Fall thru...
 				}
+				// fall through
 
 				case kDlgItemCancel:
 				{
@@ -1049,8 +1049,8 @@ EmDlgFnResult EmDlg::PrvHordeNew (EmDlgContext& context)
 
 					Hordes::New (info);
 
-					// Fall thru...
 				}
+				// fall through
 
 				case kDlgItemCancel:
 				{
@@ -1447,10 +1447,6 @@ EmDlgFnResult EmDlg::PrvDatabaseImport (EmDlgContext& context)
 			switch (context.fItemID)
 			{
 				case kDlgItemOK:
-				{
-					// Fall thru...
-				}
-
 				case kDlgItemCancel:
 				{
 					if (context.fItemID == kDlgItemCancel)
@@ -1681,8 +1677,8 @@ EmDlgFnResult EmDlg::PrvDatabaseExport (EmDlgContext& context)
 					if (cancel)
 						break;
 
-					// Fall thru...
 				}
+				// fall through
 
 				case kDlgItemCancel:
 				{
@@ -1777,8 +1773,8 @@ EmDlgFnResult EmDlg::PrvReset (EmDlgContext& context)
 					{
 						choice = (EmResetType) ((int) choice | kResetNoExt);
 					}
-					// Fall thru...
 				}
+				// fall through
 
 				case kDlgItemCancel:
 				{
@@ -1985,8 +1981,8 @@ EmDlgFnResult EmDlg::PrvROMTransferQuery (EmDlgContext& context)
 							break;
 					}
 
-					// Fall thru...
 				}
+				// fall through
 
 				case kDlgItemCancel:
 				{
@@ -2088,10 +2084,6 @@ EmDlgFnResult EmDlg::PrvROMTransferProgress (EmDlgContext& context)
 			switch (context.fItemID)
 			{
 				case kDlgItemOK:
-				{
-					// Fall thru...
-				}
-
 				case kDlgItemCancel:
 				{
 					transferer.Abort (dlg);
@@ -2545,8 +2537,8 @@ EmDlgFnResult EmDlg::PrvEditPreferences (EmDlgContext& context)
 						}
 					}
 
-					// Fall thru...
 				}
+				// fall through
 
 				case kDlgItemCancel:
 				{
@@ -2739,8 +2731,8 @@ EmDlgFnResult EmDlg::PrvEditLoggingOptions (EmDlgContext& context)
 					EmDlg::PrvLoggingPrefsFromButtons (context);
 					EmDlg::PrvInstallLoggingPrefs (context);
 
-					// Fall thru...
 				}
+				// fall through
 
 				case kDlgItemCancel:
 				{
@@ -2924,8 +2916,8 @@ EmDlgFnResult EmDlg::PrvEditDebuggingOptions (EmDlgContext& context)
 					EmDlg::PrvDebuggingPrefsFromButtons (context);
 					EmDlg::PrvInstallDebuggingPrefs (context);
 
-					// Fall thru...
 				}
+				// fall through
 
 				case kDlgItemCancel:
 				{
@@ -3059,7 +3051,8 @@ EmErrorHandlingMenuBundle	gMenu1 =
 	kDlgItemErrWarningOff,
 	kPrefKeyWarningOff,
 	kPrefKeyLogWarningMessages,
-	kNormalLogging
+	kNormalLogging,
+	false
 };
 
 // Information for the Gremlins Off / On Error menu.
@@ -3071,7 +3064,8 @@ EmErrorHandlingMenuBundle	gMenu2 =
 	kDlgItemErrErrorOff,
 	kPrefKeyErrorOff,
 	kPrefKeyLogErrorMessages,
-	kNormalLogging
+	kNormalLogging,
+	false
 };
 
 // Information for the Gremlins On / On Warning menu.
@@ -3083,7 +3077,8 @@ EmErrorHandlingMenuBundle	gMenu3 =
 	kDlgItemErrWarningOn,
 	kPrefKeyWarningOn,
 	kPrefKeyLogWarningMessages,
-	kGremlinLogging
+	kGremlinLogging,
+	false
 };
 
 // Information for the Gremlins On / On Error menu.
@@ -3095,7 +3090,8 @@ EmErrorHandlingMenuBundle	gMenu4 =
 	kDlgItemErrErrorOn,
 	kPrefKeyErrorOn,
 	kPrefKeyLogErrorMessages,
-	kGremlinLogging
+	kGremlinLogging,
+	false
 };
 
 
@@ -3307,6 +3303,7 @@ EmDlgFnResult EmDlg::PrvErrorHandling (EmDlgContext& context)
 					EmDlg::PrvErrorHandlingFromDialog (context, gMenu3);
 					EmDlg::PrvErrorHandlingFromDialog (context, gMenu4);
 				}
+				// fall through
 
 				case kDlgItemCancel:
 				{
@@ -3512,8 +3509,8 @@ EmDlgFnResult EmDlg::PrvEditSkins (EmDlgContext& context)
 						pref = (GetItemValue (dlg, kDlgItemSknStayOnTop) != 0) ? true : false;
 					}
 
-					// Fall thru...
 				}
+				// fall through
 
 				case kDlgItemCancel:
 				{
@@ -3734,8 +3731,8 @@ EmDlgFnResult EmDlg::PrvEditHostFSOptions (EmDlgContext& context)
 
 					EmDlg::PrvEditHostFSOptionsOK (context);
 
-					// Fall thru...
 				}
+				// fall through
 
 				case kDlgItemCancel:
 				{
@@ -4044,8 +4041,8 @@ EmDlgFnResult EmDlg::PrvEditBreakpoints (EmDlgContext& context)
 						gDebuggerGlobals.watchBytes = EmDlg::GetItemValue (dlg, kDlgItemBrkNumberOfBytes);
 					}
 
-					// Fall thru...
 				}
+				// fall through
 
 				case kDlgItemCancel:
 				{
@@ -4215,8 +4212,8 @@ EmDlgFnResult EmDlg::PrvEditCodeBreakpoint (EmDlgContext& context)
 
 					data.fEnabled = true;
 
-					// Fall thru...
 				}
+				// fall through
 
 				case kDlgItemCancel:
 				{
@@ -4433,8 +4430,8 @@ EmDlgFnResult EmDlg::PrvEditTracingOptions (EmDlgContext& context)
 
 					gTracer.SetCurrentTracerTypeIndex (data.fTracerType, parameterValueChanged);
 
-					// Fall thru...
 				}
+				// fall through
 
 				case kDlgItemCancel:
 				{
@@ -4852,8 +4849,8 @@ EmDlgFnResult EmDlg::PrvSaveBound (EmDlgContext& context)
 						EmAssert (gApplication);
 						gApplication->BindPoser (fullSave, destFile);
 					}
-					// Fall thru...
 				}
+				// fall through
 
 				case kDlgItemCancel:
 				{
@@ -5021,8 +5018,8 @@ EmDlgFnResult EmDlg::PrvGetSocketAddress (EmDlgContext& context)
 				case kDlgItemOK:
 				{
 					*(string*) context.fUserData = EmDlg::GetItemText (dlg, kDlgItemSocketAddress);
-					// Fall thru...
 				}
+				// fall through
 
 				case kDlgItemCancel:
 				{
@@ -6340,10 +6337,6 @@ EmDlgFnResult EmDlg::PrvCallback (EmDlgContext& context)
 			switch (context.fItemID)
 			{
 				case kDlgItemOK:
-				{
-					// Fall thru...
-				}
-
 				case kDlgItemCancel:
 				{
 					return kDlgResultClose;

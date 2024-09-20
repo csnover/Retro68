@@ -970,6 +970,7 @@ void CMAC2ELF<MACSTRUCTURES,ELFSTRUCTURES>::MakeRelocationTables(MAC_header_64&)
                   case MAC64_RELOC_GOT_LOAD: // a rip-relative load of a GOT entry
                      *inlinep = -4;  
                      // Continue into next case
+                     // fall through
                   case MAC64_RELOC_GOT:      // other GOT references
                      // Make fake GOT entry
                      //NewRelocEntry.r_addend = MakeGOTEntry(NewRelocEntry.r_sym) - 4;

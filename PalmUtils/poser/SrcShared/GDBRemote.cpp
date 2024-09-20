@@ -582,7 +582,7 @@ Bool GDBRemote::ByteswapHack (void)
 	return fSocket->ByteswapHack ();
 }
 
-ErrCode GDBRemote::GDBBreakpoint (const char* in, size_t len)
+ErrCode GDBRemote::GDBBreakpoint (const char* in, size_t)
 {
 	enum GDBBreakpointType
 	{
@@ -830,6 +830,7 @@ ErrCode GDBRemote::GDBCommandRead (const char* in, size_t len)
 		case 'q': return GDBQuery (in, len);
 		case kInterrupt:
 			EmASSERT (false && "TODO; like '?' except should stop with signal");
+			return fGDBWriter.Write (fSocket);
 		case '?': return GDBCommand (sysPktStateCmd, in, len);
 		case 'k':
 		case 'c':
@@ -1388,7 +1389,7 @@ ErrCode GDBRemote::GDBSendError (ErrCode code)
 	return fGDBWriter.Write (fSocket);
 }
 
-ErrCode GDBRemote::GDBSingleRegister (bool set, const char* command, size_t len)
+ErrCode GDBRemote::GDBSingleRegister (bool set, const char* command, size_t)
 {
 	int which;
 	uint32 value;
@@ -1431,7 +1432,7 @@ ErrCode GDBRemote::GDBSingleRegister (bool set, const char* command, size_t len)
 	return fGDBWriter.Write (fSocket);
 }
 
-ErrCode GDBRemote::GDBThread (const char* command, size_t len)
+ErrCode GDBRemote::GDBThread (const char* command, size_t)
 {
 	char op;
 	int tid;

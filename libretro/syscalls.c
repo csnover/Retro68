@@ -51,6 +51,7 @@
 
 void *_sbrk_r(struct _reent *reent, ptrdiff_t increment)
 {
+    (void)reent;
 #ifdef __palmos__
     DbgSrcBreak();
     MemPtr p = MemPtrNew(increment);
@@ -65,6 +66,7 @@ void *_sbrk_r(struct _reent *reent, ptrdiff_t increment)
 
 void _exit(int status)
 {
+    (void)status;
 #ifdef __palmos__
     // prc-tools just raised an error when someone tried to call exit. This
     // implementation tries to do the right thing, taken from the Palm OS
@@ -95,6 +97,7 @@ const int kMacRefNumOffset = 10;
 
 ssize_t _write_r(struct _reent *reent, int fd, const void *buf, size_t count)
 {
+    (void)reent;
 #ifdef __palmos__
     return FileWrite((FileHand)fd, buf, 1, count, NULL);
 #else
@@ -112,8 +115,13 @@ ssize_t _write_r(struct _reent *reent, int fd, const void *buf, size_t count)
 ssize_t _read_r(struct _reent *reent, int fd, void *buf, size_t count)
 {
 #ifdef __palmos__
-    return FileRead((FileHand)fd, buf, 1, count, NULL);
+    Err err;
+    long cnt = FileRead((FileHand)fd, buf, 1, count, &err);
+    if (err != errNone)
+        reent->_errno = EIO;
+    return cnt;
 #else
+    (void)reent;
     long cnt = count;
     if(fd >= kMacRefNumOffset)
     {
@@ -195,6 +203,7 @@ int _open_r(struct _reent *reent, const char* name, int flags, int mode)
     if(err == paramErr)
         err = HOpen(0,0,pname,fsRdWrPerm,&ref);
 
+    (void)reent;
     if(err)
         return -1;    // TODO: errno
 
@@ -210,6 +219,7 @@ int _open_r(struct _reent *reent, const char* name, int flags, int mode)
 int _close_r(struct _reent *reent, int fd)
 {
 #ifdef __palmos__
+    (void)fd;
     switch(FileClose((FileHand)fd))
     {
         case errNone: return 0;
@@ -232,11 +242,17 @@ int _close_r(struct _reent *reent, int fd)
 
 int _fstat_r(struct _reent *reent, int fd, struct stat *buf)
 {
+    (void)reent;
+    (void)fd;
+    (void)buf;
     return -1;
 }
 
-extern int _stat_r(struct _reent * reent, const char *fn, struct stat *buf)
+extern int _stat_r(struct _reent *reent, const char *fn, struct stat *buf)
 {
+    (void)reent;
+    (void)fn;
+    (void)buf;
     return -1;
 }
 
@@ -260,6 +276,7 @@ off_t _lseek_r(struct _reent *reent, int fd, off_t offset, int whence)
         reent->_errno = EINVAL;
     return offs;
 #else
+    (void)reent;
     if(fd >= kMacRefNumOffset)
     {
         short posMode;
@@ -288,6 +305,8 @@ off_t _lseek_r(struct _reent *reent, int fd, off_t offset, int whence)
 
 int _kill_r(struct _reent *reent, pid_t pid, int sig)
 {
+    (void)reent;
+    (void)sig;
     if(pid == 42)
         _exit(42);
     else
@@ -296,47 +315,67 @@ int _kill_r(struct _reent *reent, pid_t pid, int sig)
 
 pid_t _getpid_r(struct _reent *reent)
 {
+    (void)reent;
     return 42;
 }
 
 int _fork_r(struct _reent *reent)
 {
+    (void)reent;
     return -1;
 }
 
 int _execve_r(struct _reent *reent, const char *fn, char *const * argv, char *const *envp)
 {
+    (void)reent;
+    (void)fn;
+    (void)argv;
+    (void)envp;
     return -1;
 }
 
 int _fcntl_r(struct _reent *reent, int fd, int cmd, int arg)
 {
+    (void)reent;
+    (void)fd;
+    (void)cmd;
+    (void)arg;
     return -1;
 }
 
 int _isatty_r(struct _reent *reent, int fd)
 {
 #ifdef __palmos__
+    (void)fd;
     reent->_errno = ENOTTY;
     return 0;
 #else
+    (void)reent;
     return fd < kMacRefNumOffset;
 #endif
 }
 
 int _link_r(struct _reent *reent, const char *from, const char *to)
 {
+    (void)from;
+    (void)to;
     reent->_errno = EPERM;
     return -1;
 }
 
 int _mkdir_r(struct _reent *reent, const char *fn, int mode)
 {
+    (void)reent;
+    (void)fn;
+    (void)mode;
     return -1;
 }
 
 int _rename_r(struct _reent *reent, const char *from, const char *to)
 {
+    (void)reent;
+    (void)from;
+    (void)to;
     return -1;
 }
 
@@ -349,24 +388,31 @@ int _unlink_r(struct _reent *reent, const char *fn)
         case fileErrNotFound: reent->_errno = ENOENT; break;
         default: reent->_errno = EIO; break;
     }
+#else
+    (void)reent;
+    (void)fn;
 #endif
     return -1;
 }
 
 _CLOCK_T_ _times_r(struct _reent *reent, struct tms *buf)
 {
+    (void)buf;
     reent->_errno = EACCES;
     return  -1;
 }
 
 int _wait_r(struct _reent *reent, int *wstatus)
 {
+    (void)wstatus;
     reent->_errno = ECHILD;
     return -1;                    /* Always fails */
 }
 
 int _gettimeofday_r(struct _reent *reent, struct timeval *tp, void *__tz)
 {
+    (void)reent;
+    (void)__tz;
     /* Classic MacOS's GetDateTime function returns an integer.
      * TickCount() has a slightly higher resolution, but is independent of the real-time clock.
      */

@@ -1028,6 +1028,7 @@ void CDisassembler::WriteImmediateOperand(uint32_t Type) {
             FieldSize = 2; Value = Get<int16_t>(FieldPointer);  break;
         }
         // else continue in default case to get error message
+        // fall through
 
     default:  // Other sizes should not occur
         err.submit(3000);  Value = -1;

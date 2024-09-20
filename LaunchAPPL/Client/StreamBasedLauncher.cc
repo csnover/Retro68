@@ -44,7 +44,7 @@ void StreamBasedLauncher::write(const void *p, size_t n)
     rStream->write(p, n);
 }
 
-bool StreamBasedLauncher::Go(int timeout)
+bool StreamBasedLauncher::Go(int)
 {
     uint32_t tmp;
 

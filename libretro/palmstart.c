@@ -65,7 +65,10 @@ UInt32 _start(void)
     }
 }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wpedantic"
 register char *A5World asm ("a5");
+#pragma GCC diagnostic pop
 
 typedef struct CodeHeader
 {

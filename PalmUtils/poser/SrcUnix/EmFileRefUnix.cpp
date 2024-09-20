@@ -235,7 +235,7 @@ EmFileRef::IsType (EmFileType type) const
  ***********************************************************************/
 
 void
-EmFileRef::SetCreatorAndType (EmFileCreator creator, EmFileType fileType) const
+EmFileRef::SetCreatorAndType (EmFileCreator, EmFileType) const
 {
 }
 

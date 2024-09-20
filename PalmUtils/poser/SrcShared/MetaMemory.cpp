@@ -785,8 +785,7 @@ void MetaMemory::MarkRange (emuptr start, emuptr end, uint8 v)
 	// LCD -- for a while, the LCD framebuffer range falls off the end
 	// of the dynamic heap.
 
-	if (start >= 0 && start < 0 + gRAMBank_Size
-		&& end >= 0 + gRAMBank_Size)
+	if (start < gRAMBank_Size && end >= gRAMBank_Size)
 	{
 		end = gRAMBank_Size - 1;
 	}
@@ -865,8 +864,7 @@ void MetaMemory::UnmarkRange (emuptr start, emuptr end, uint8 v)
 	// LCD -- for a while, the LCD framebuffer range falls off the end
 	// of the dynamic heap.
 
-	if (start >= 0 && start < 0 + gRAMBank_Size
-		&& end >= 0 + gRAMBank_Size)
+	if (start < gRAMBank_Size && end >= gRAMBank_Size)
 	{
 		end = gRAMBank_Size - 1;
 	}
@@ -948,8 +946,7 @@ void MetaMemory::MarkUnmarkRange (emuptr start, emuptr end,
 	// LCD -- for a while, the LCD framebuffer range falls off the end
 	// of the dynamic heap.
 
-	if (start >= 0 && start < 0 + gRAMBank_Size
-		&& end >= 0 + gRAMBank_Size)
+	if (start < gRAMBank_Size && end >= gRAMBank_Size)
 	{
 		end = gRAMBank_Size - 1;
 	}

@@ -2080,7 +2080,7 @@ FoundIt:
 		case 0:
 			dir->fDirIter = dir->fDirs.begin ();
 			dir->fState = 1;
-			// Fall thru
+			// fall through
 
 		// Iterating over directories; get the next one.  If there
 		// are no more, start iterating over files.
@@ -2095,7 +2095,7 @@ FoundIt:
 
 			dir->fFileIter = dir->fFiles.begin ();
 			dir->fState = 2;
-			// Fall thru
+			// fall through
 
 		// Iterating over files; get the next one.  If there
 		// are no more, stop iterating.
@@ -2108,6 +2108,7 @@ FoundIt:
 				break;
 			}
 			dir->fState = 3;
+			// fall through
 
 		// No longer iterating. Just return NULL.
 

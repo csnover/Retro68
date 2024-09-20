@@ -299,7 +299,7 @@ int Platform::GetIDForError( ErrCode error )
 //		• Platform::GetIDForRecovery
 // ---------------------------------------------------------------------------
 
-int Platform::GetIDForRecovery( ErrCode error )
+int Platform::GetIDForRecovery( ErrCode )
 {
 	return 0;
 }
@@ -775,7 +775,7 @@ void Platform::ExitDebugger( void )
 //		• Platform::ViewDrawLine
 // ---------------------------------------------------------------------------
 
-void Platform::ViewDrawLine( int xStart, int yStart, int xEnd, int yEnd )
+void Platform::ViewDrawLine( int, int, int, int )
 {
 }
 
@@ -784,7 +784,7 @@ void Platform::ViewDrawLine( int xStart, int yStart, int xEnd, int yEnd )
 //		• Platform::ViewDrawPixel
 // ---------------------------------------------------------------------------
 
-void Platform::ViewDrawPixel( int xPos, int yPos )
+void Platform::ViewDrawPixel( int, int )
 {
 }
 

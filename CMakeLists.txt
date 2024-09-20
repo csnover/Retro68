@@ -21,10 +21,17 @@ project(Retro)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
-set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED TRUE)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror=return-type -Wno-multichar")
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror=return-type -Werror=strict-prototypes -Wno-multichar")
+
+add_compile_options(
+    -Wall
+    -Wextra
+    -pedantic
+    -Wno-multichar
+    -Werror=return-type
+    $<$<COMPILE_LANGUAGE:C>:-Werror=strict-prototypes>
+)
 
 enable_testing()
 

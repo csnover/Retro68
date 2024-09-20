@@ -89,6 +89,6 @@ void HostCreatePopupMenu (const EmMenuItemList& menu, Fl_Menu_Item_List& menuLis
 
 	// Add a terminating item.
 
-	Fl_Menu_Item	fltkItem = {0};
+	Fl_Menu_Item	fltkItem = {};
 	menuList.push_back (fltkItem);
 }

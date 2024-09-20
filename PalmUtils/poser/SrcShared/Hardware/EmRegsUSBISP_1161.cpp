@@ -142,7 +142,7 @@ uint32 EmRegsUSBISP_1161::hostDataRead (emuptr address, int size)
 //		• EmRegsUSBISP_1161::hostDataWrite
 // ---------------------------------------------------------------------------
 
-void EmRegsUSBISP_1161::hostDataWrite (emuptr address, int size, uint32 value)
+void EmRegsUSBISP_1161::hostDataWrite (emuptr, int size, uint32 value)
 {
 	if (size == 2 && !fReadOnlyRegs[fCommand])
 	{
@@ -157,7 +157,7 @@ void EmRegsUSBISP_1161::hostDataWrite (emuptr address, int size, uint32 value)
 //		• EmRegsUSBISP_1161::hostCommandWrite
 // ---------------------------------------------------------------------------
 
-void EmRegsUSBISP_1161::hostCommandWrite (emuptr address, int size, uint32 value)
+void EmRegsUSBISP_1161::hostCommandWrite (emuptr, int size, uint32 value)
 {
 	if (size == 2)
 	{

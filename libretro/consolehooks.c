@@ -27,10 +27,16 @@
 
 ssize_t _consolewrite(int fd, const void *buf, size_t count)
 {
+    (void)fd;
+    (void)buf;
+    (void)count;
     return -1;
 }
 
 ssize_t _consoleread(int fd, void *buf, size_t count)
 {
+    (void)fd;
+    (void)buf;
+    (void)count;
     return -1;
 }

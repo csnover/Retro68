@@ -384,7 +384,7 @@ void CELF2MAC<ELFSTRUCTURES,MACSTRUCTURES>::MakeSymbolTable() {
 
 template <class TELF_Header, class TELF_SectionHeader, class TELF_Symbol, class TELF_Relocation,
           class TMAC_header, class TMAC_segment_command, class TMAC_section, class TMAC_nlist, class MInt>
-void CELF2MAC<ELFSTRUCTURES,MACSTRUCTURES>::Elf2MacRelocations(Elf32_Shdr & OldRelHeader, MAC_section_32 & NewHeader, uint32_t NewRawDataOffset, uint32_t oldsec) {
+void CELF2MAC<ELFSTRUCTURES,MACSTRUCTURES>::Elf2MacRelocations(Elf32_Shdr & OldRelHeader, MAC_section_32 & NewHeader, uint32_t NewRawDataOffset, uint32_t) {
    // Convert 32-bit relocations from ELF to MAC
    // (This function has two template instances, only the 32-bit instance is used)
 
@@ -489,6 +489,7 @@ void CELF2MAC<ELFSTRUCTURES,MACSTRUCTURES>::Elf2MacRelocations(Elf32_Shdr & OldR
       case R_386_IRELATIVE:
          err.submit(1063); // Warning: Gnu indirect function cannot be converted
          // continue in next case?:
+         // fall through
       case R_386_32:       // 32-bit absolute virtual address
          r_type  = MAC32_RELOC_VANILLA;  
          break;
@@ -584,7 +585,7 @@ void CELF2MAC<ELFSTRUCTURES,MACSTRUCTURES>::Elf2MacRelocations(Elf32_Shdr & OldR
 
 template <class TELF_Header, class TELF_SectionHeader, class TELF_Symbol, class TELF_Relocation,
           class TMAC_header, class TMAC_segment_command, class TMAC_section, class TMAC_nlist, class MInt>
-void CELF2MAC<ELFSTRUCTURES,MACSTRUCTURES>::Elf2MacRelocations(Elf64_Shdr & OldRelHeader, MAC_section_64 & NewHeader, uint32_t NewRawDataOffset, uint32_t oldsec) {
+void CELF2MAC<ELFSTRUCTURES,MACSTRUCTURES>::Elf2MacRelocations(Elf64_Shdr & OldRelHeader, MAC_section_64 & NewHeader, uint32_t NewRawDataOffset, uint32_t) {
    // Convert 64-bit relocations from ELF to MAC
    // (This function has two template instances, only the 64-bit instance is used)
 
@@ -697,6 +698,7 @@ void CELF2MAC<ELFSTRUCTURES,MACSTRUCTURES>::Elf2MacRelocations(Elf64_Shdr & OldR
       case R_X86_64_IRELATIVE:
          err.submit(1063); // Warning: Gnu indirect function cannot be converted
          // continue in next case?:
+         // fall through
       case R_X86_64_32: case R_X86_64_32S: {
          // 32-bit absolute virtual address
          // Note: The linker doesn't accept a 32-bit absolute address

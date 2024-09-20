@@ -243,6 +243,7 @@ void CELF2ASM<ELFSTRUCTURES>::MakeSymbolList() {
                Scope = 8;
                if (Section > 0) break;
                // Section == 0: continue as global
+               // fall through
             case STB_GLOBAL:
                // Public or external
                Scope = (sym.st_shndx > 0) ? 4 : 0x20;
