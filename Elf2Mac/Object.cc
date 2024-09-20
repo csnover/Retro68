@@ -42,6 +42,8 @@
 #include <ResourceFile.h>
 #include <ResourceFork.h>
 
+enum { kNoOp = 0x4e71 };
+
 using namespace std::literals::string_literals;
 
 Object::Object(const std::string &input, bool palmos, uint32_t stackSize, bool verbose)
@@ -51,7 +53,6 @@ Object::Object(const std::string &input, bool palmos, uint32_t stackSize, bool v
     , m_jtHeaderSize(palmos ? 4 : 0x20)
     , m_jtEntrySize(palmos ? 6 : 8)
     , m_jtFirstIndex(palmos ? 0 : 2)
-    , m_multiCodeOutputBase(palmos ? 12 : 40)
     , m_stackSize(stackSize)
 #ifdef PALMOS
     , m_outputFormat(palmos ? ResourceFile::Format::prc : ResourceFile::Format::autodetect)
@@ -167,17 +168,25 @@ void Object::loadSections()
     if (m_code.empty())
         throw std::runtime_error("No code sections found");
 
-    // TODO: Validate that all code IDs are contiguous on Palm OS
+    if (isPalm())
+    {
+        int expected = 1;
+        for (const auto &code : m_code)
+        {
+            // The code for loading all the resources on Palm OS uses
+            // `DmGet1Resource` because `DmFindResourceType` bloats the runtime;
+            // it could be changed if this is annoying but there is really no
+            // good reason to split up code IDs like this on Palm OS
+            if (getCodeID(code.index()) != expected++)
+                throw std::runtime_error("Code segment IDs must be contiguous");
+        }
+    }
 }
 
 void Object::emitFlatCode(std::ostream &out)
 {
-    // Technically it would be possible to flatten multiple code sections by
-    // telling the relocation processor to never create indirect xrefs and then
-    // rebase all sections in a linear address space instead of only the data
-    // and bss sections, but since the ld script already only creates a single
-    // .text section, there is no reason to do anything except assert here that
-    // nothing funky happened
+    // Since the ld script already only creates a single .text section, there is
+    // no reason to do anything except assert here that nothing funky happened.
     if (m_code.size() != 1)
         throw std::runtime_error("Cannot emit flat code with multiple sections");
 
@@ -190,16 +199,23 @@ void Object::emitFlatCode(std::ostream &out)
         Relocations combined(m_relocations[m_code.front().index()]);
 
         const auto &dataReloc = m_relocations[m_data.index()];
-        for (const auto &[section, relocations] : dataReloc)
+        int relocBase = RelocBaseFirst;
+        for (const auto &relocations : dataReloc)
         {
-            combined[section].insert(combined[section].end(),
-                relocations.begin(), relocations.end());
-            std::sort(combined[section].begin(), combined[section].end());
+            if (!relocations.empty())
+            {
+                auto &group = combined[relocBase];
+                auto middle = group.size();
+                group.insert(group.end(), relocations.begin(), relocations.end());
+                std::inplace_merge(group.begin(), group.begin() + middle, group.end());
+            }
+            ++relocBase;
         }
 
 #ifdef PALMOS
         if (isPalm())
-            out << SerializeRelocsPalm(combined, false);
+            out << SerializeRelocsPalm(combined, false,
+                m_code.front().size(), m_code.front().size() + m_data.size());
         else
 #endif
             out << SerializeRelocs(combined);
@@ -209,7 +225,7 @@ void Object::emitFlatCode(std::ostream &out)
         const auto &relocs = m_relocations[m_code.front().index()];
 #ifdef PALMOS
         if (isPalm())
-            out << SerializeRelocsPalm(relocs, false);
+            out << SerializeRelocsPalm(relocs, false, 0, 0);
         else
 #endif
             out << SerializeRelocs(relocs);
@@ -236,7 +252,6 @@ void Object::FlatCode(const std::string &filename)
 
     // To avoid having to rebase the whole section just because there is a
     // resource header, replace it with some no-ops.
-    enum { kNoOp = 0x4e71 };
     word(m_code.front().data, kNoOp);
     word(m_code.front().data + 2, kNoOp);
 
@@ -363,6 +378,17 @@ bool Object::isOffsetInEhFrame(uint16_t codeID, Elf32_Addr vaddr) const
     return true;
 }
 
+uint16_t Object::getU16BE(const SSec<uint8_t> &section, Elf32_Addr vaddr)
+{
+    uint8_t *p = section.data + vaddr - section.header->sh_addr;
+    return p[0] << 8 | p[1];
+}
+
+void Object::setU16BE(SSec<uint8_t> &section, Elf32_Addr vaddr, uint32_t value)
+{
+    word(section.data + vaddr - section.header->sh_addr, value);
+}
+
 void Object::setU32BE(SSec<uint8_t> &section, Elf32_Addr vaddr, uint32_t value)
 {
     longword(section.data + vaddr - section.header->sh_addr, value);
@@ -402,9 +428,11 @@ Object::XrefKind Object::getXrefKind(uint16_t codeID, Elf32_Section source,
         // which is not supported by OS native relocation code. For the moment,
         // mark this kind of relocation as invalid, and reimplement the support
         // later in the runtime if it turns out to be actually required.
+        // TODO: PCREL to the same section should just addend and emit nothing.
         else if (ELF32_R_TYPE(rela->r_info) == R_68K_PC32)
             return XrefKind::Invalid;
     }
+
 
     // Intra-section, data, and code 1 xrefs are always valid since the only
     // limit on xrefs is whether or not the target section is actually loaded
@@ -576,7 +604,6 @@ void Object::processRelocation(const SSec<Elf32_Rela> &relaSection)
                 // calculated after all of the target xrefs are known, since the
                 // jump table for each target section must be contiguous.
                 targetJumpTable[targetAddr].push_back({ sourceIndex, rela->r_offset });
-                m_relocations[sourceIndex][RelocBase::data].push_back(rela->r_offset);
             }
             break;
             case XrefKind::Direct:
@@ -587,13 +614,13 @@ void Object::processRelocation(const SSec<Elf32_Rela> &relaSection)
 
                 RelocBase relocBase;
                 if (targetSection == m_data.index())
-                    relocBase = RelocBase::data;
+                    relocBase = RelocData;
                 else if (targetSection == m_bss.index())
-                    relocBase = RelocBase::bss;
+                    relocBase = RelocBss;
                 else if (targetSection == sourceIndex)
-                    relocBase = RelocBase::code;
+                    relocBase = RelocCode;
                 else if (targetSection == m_code.front().index())
-                    relocBase = RelocBase::code1;
+                    relocBase = RelocCode1;
                 else
                 {
                     auto info = collectDebugInfo(source.header, targetSymbol);
@@ -606,7 +633,9 @@ void Object::processRelocation(const SSec<Elf32_Rela> &relaSection)
                 auto targetAddr = targetSymbol->st_value + rela->r_addend;
 
                 setU32BE(source, rela->r_offset, targetAddr);
-                m_relocations[sourceIndex][relocBase].push_back(rela->r_offset);
+                auto &table = m_relocations[sourceIndex][relocBase];
+                assert(table.empty() || table.back() < rela->r_offset);
+                table.push_back(rela->r_offset);
             }
             break;
             case XrefKind::Invalid:
@@ -630,10 +659,11 @@ void Object::processRelocation(const SSec<Elf32_Rela> &relaSection)
     }
 }
 
-std::pair<size_t, std::string> Object::processJumpTables(uint32_t belowA5)
+std::pair<size_t, std::string> Object::processJumpTables(int32_t a5JTOffset)
 {
     auto jtIndex = m_jtFirstIndex;
-    auto jtAddr = belowA5 + m_jtHeaderSize + jtIndex * m_jtEntrySize;
+    a5JTOffset += m_jtHeaderSize + jtIndex * m_jtEntrySize;
+
     std::ostringstream jumpTable;
     for (const auto &[targetSection, sectionTable] : m_jumpTables)
     {
@@ -649,18 +679,18 @@ std::pair<size_t, std::string> Object::processJumpTables(uint32_t belowA5)
             // header instead and used the standard Mac OS relocation format so
             // the OS would do the relocating, then this would need to be
             // populated correctly. Palm OS always does its own thing; just like
-            // how the code 0 resource is mostly bogus, the code 1 resource
-            // header is also bogus.
+            // how its code 0 resource is mostly bogus, the code 1 resource
+            // header is also bogus and gets ignored by the Palm OS loader.
             ;
         else if (isPalm())
         {
             // Since Retro68 handles extra section relocations itself, this
             // header could be made smaller, but is kept in the same form that
             // CodeWarrior for Palm OS used, for the sake of debugging tools
-            // that already understand this format (IDA).
-            word(target.data, jtAddr - belowA5);
+            // that already understand this format, like IDA.
+            word(target.data, a5JTOffset);
             word(target.data + 2, sectionTable.size());
-            longword(target.data + 4, jtAddr - belowA5);
+            longword(target.data + 4, a5JTOffset);
             longword(target.data + 8, target.size());
         }
         else
@@ -672,10 +702,60 @@ std::pair<size_t, std::string> Object::processJumpTables(uint32_t belowA5)
 
         for (const auto &[targetAddr, sourceAddrs] : sectionTable)
         {
+            // If the jump table entry is >32k away from a5 and the target
+            // processor is not m68020+ then there is no way to do the jump
+            // without emitting extra code. This is unlikely enough that it is
+            // not supported right now.
+            if (a5JTOffset < INT16_MIN || a5JTOffset > INT16_MAX)
+            {
+                std::cerr
+                    << std::hex
+                    << "Jump table entry $" << a5JTOffset << "(a5)"
+                    << " to target "
+                    << m_shstrtab + target.header->sh_name
+                    << ":0x" << targetAddr
+                    << " displacement is too large"
+                    << std::dec
+                    << std::endl;
+            }
+
             for (const auto &[sourceSection, offset] : sourceAddrs)
             {
                 SSec<uint8_t> source { elf_getscn(m_elf, sourceSection) };
-                setU32BE(source, offset, jtAddr);
+
+                enum {
+                    // kPEAOp = 0b0'100'100'001'000000,
+                    // kLEAOp = 0b0'100'000'111'000000,
+                    // kLEAMask = 0b0'111'000'111'000000,
+                    kJSROp = 0b0'100'111'010'000000,
+                    kJMPOp = 0b0'100'111'011'000000,
+                    kEffAddrMask = 0b111111,
+                    kA5Reg       = 5,
+                    kD16Mode     = 0b101 << 3
+                };
+
+                auto op = getU16BE(source, offset - 2);
+                op &= ~kEffAddrMask;
+                // TODO: Not sure what kinds of other operators might be trying
+                // to displace something that ends up as a xref, but if there
+                // are any, they will need to be handled differently. The most
+                // likely would be PEA/LEA, which would be a problem for
+                // function pointer comparison. Inside Macintosh says that the
+                // operator should always be JSR and also that says its linker
+                // operates thus:
+                //
+                // "If you compile and link units with any option that specifies the far model for
+                //  code, any JSR instruction that references a jump-table entry is generated with
+                //  a 32-bit absolute address. The address of any instruction that makes such a
+                //  reference is recorded in compressed form in the A5 relocation information area.
+                //  The modified _LoadSeg trap adds the value of A5 to the address fields of the JSR
+                //  instruction at load time."
+                assert(op == kJSROp || op == kJMPOp);
+                op |= kD16Mode | kA5Reg;
+
+                setU16BE(source, offset - 2, op);
+                setU16BE(source, offset, a5JTOffset);
+                setU16BE(source, offset + 2, kNoOp);
             }
 
 #ifdef PALMOS
@@ -694,7 +774,7 @@ std::pair<size_t, std::string> Object::processJumpTables(uint32_t belowA5)
                 longword(jumpTable, targetAddr);
             }
 
-            jtAddr += m_jtEntrySize;
+            a5JTOffset += m_jtEntrySize;
             ++jtIndex;
         }
     }
@@ -702,10 +782,22 @@ std::pair<size_t, std::string> Object::processJumpTables(uint32_t belowA5)
     return { jtIndex, jumpTable.str() };
 }
 
-void Object::emitRes0(Resources &rsrc)
+std::pair<size_t, size_t> Object::emitRes0(Resources &rsrc)
 {
     auto belowA5 = m_data.size() + m_bss.size();
-    auto [jtNumEntries, jumpTable] = processJumpTables(belowA5);
+
+    // Because of how the data section compression works on Palm OS, the jump
+    // table gets inserted between .data and .bss so actually exists somewhere
+    // below A5. This is OK because each section header contains the offset of
+    // its own jump table relative to A5, the addends for the jump table are
+    // calculated in `processJumpTables` and do not need any runtime relocation,
+    // and the addends to `.bss` are… oops.
+    // TODO: Probably it is less fine for the addends to BSS which need to be
+    // rebased?! At least this can be done easily by walking the relocation
+    // chain and touching up all of the existing addends.
+    auto jtAddress = isPalm() ? m_data.size() : belowA5;
+
+    auto [jtNumEntries, jumpTable] = processJumpTables(jtAddress);
     auto jtSize = jtNumEntries * m_jtEntrySize;
     auto aboveA5 = m_jtHeaderSize + jtSize;
 
@@ -761,8 +853,8 @@ void Object::emitRes0(Resources &rsrc)
             data0 << CompressPalmData(combined.str());
         }
 
-        data0 << SerializeRelocsPalm(m_relocations[m_data.index()], false);
-        data0 << SerializeRelocsPalm(m_relocations[m_code.front().index()], false);
+        data0 << SerializeRelocsPalm(m_relocations[m_data.index()], false,
+            -belowA5, aboveA5);
         rsrc.addResource(Resource(m_dataOsType, 0, data0.str()));
     }
     else
@@ -771,6 +863,8 @@ void Object::emitRes0(Resources &rsrc)
         rsrc.addResource(Resource(m_dataOsType, 0, m_data.view().data()));
         rsrc.addResource(Resource("RELA", 0, SerializeRelocs(m_relocations[m_data.index()])));
     }
+
+    return { belowA5, aboveA5 };
 }
 
 void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segmentMap)
@@ -778,7 +872,7 @@ void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segm
     ResourceFile file;
     Resources& rsrc = file.resources;
 
-    emitRes0(rsrc);
+    auto [ belowA5, aboveA5 ] = emitRes0(rsrc);
 
     for (auto &section : m_code)
     {
@@ -791,7 +885,8 @@ void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segm
             {
                 std::ostringstream combined;
                 combined << section.view();
-                combined << SerializeRelocsPalm(m_relocations[section.index()], true);
+                combined << SerializeRelocsPalm(m_relocations[section.index()], true,
+                    -belowA5, aboveA5);
                 code = combined.str();
             }
 

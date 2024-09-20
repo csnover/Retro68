@@ -22,29 +22,37 @@
 
 #include <libelf.h>
 
+#include <array>
 #include <cstdint>
 #include <string>
 #include <vector>
 
-enum class RelocBase
+enum RelocBase
 {
+    // The first RelocBase type.
+    RelocBaseFirst = 0,
+
     // A relocation to the current section.
-    code = 0,
+    RelocCode = 0,
+
     // A relocation to the data section.
-    data,
+    RelocData,
+
     // A relocation to the bss section.
-    bss,
-    // A relocation to the jump table.
-    jumptable,
-    // A relocation to the code 1 section.
-    code1
+    RelocBss,
+
+    // A relocation to the code 1 section from another section.
+    RelocCode1,
+
+    // Number of RelocBase types.
+    RelocBaseCount
 };
 
-using Relocations = std::unordered_map<RelocBase, std::vector<Elf32_Addr>>;
+using Relocations = std::array<std::vector<Elf32_Addr>, RelocBaseCount>;
 
 std::string SerializeRelocs(const Relocations &relocs);
 #ifdef PALMOS
-std::string SerializeRelocsPalm(const Relocations &relocs, bool codeSegment);
+std::string SerializeRelocsPalm(const Relocations &relocs, bool codeSection, Elf32_Addr dataAddr, Elf32_Addr bssAddr);
 #endif
 
 #endif // RELOC_H

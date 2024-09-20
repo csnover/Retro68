@@ -100,6 +100,14 @@ private:
         explicit inline operator bool () const { return section != nullptr; }
     };
 
+    // Gets a 16-bit big-endian value in the given section at the given
+    // virtual address.
+    static uint16_t getU16BE(const SSec<uint8_t> &section, Elf32_Addr vaddr);
+
+    // Sets a 16-bit big-endian value in the given section at the given
+    // virtual address.
+    static void setU16BE(SSec<uint8_t> &section, Elf32_Addr vaddr, uint32_t value);
+
     // Sets a 32-bit big-endian value in the given section at the given
     // virtual address.
     static void setU32BE(SSec<uint8_t> &section, Elf32_Addr vaddr, uint32_t value);
@@ -169,10 +177,11 @@ private:
 #endif
     }
 
-    std::pair<size_t, std::string> processJumpTables(uint32_t belowA5);
+    // Builds the main jump table and fixes up all references to the table.
+    std::pair<size_t, std::string> processJumpTables(int32_t a5JTOffset);
 
     // Emits the code 0 and data 0 resources.
-    void emitRes0(Resources &out);
+    std::pair<size_t, size_t> emitRes0(Resources &out);
 
 #ifdef PALMOS
     // Emits the Palm OS pref0 resource.
@@ -217,7 +226,7 @@ private:
     // OSTypes to use when emitting resources.
     ResType m_codeOsType, m_dataOsType, m_applOsType;
     // Jump table and code resource data sizes.
-    size_t m_jtHeaderSize, m_jtEntrySize, m_jtFirstIndex, m_multiCodeOutputBase;
+    size_t m_jtHeaderSize, m_jtEntrySize, m_jtFirstIndex;
     // The preferred runtime stack size.
     uint32_t m_stackSize;
     // Input file descriptor for ELF object.

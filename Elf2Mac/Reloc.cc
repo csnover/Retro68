@@ -19,49 +19,102 @@
 
 #include "Reloc.h"
 
+#include <algorithm>
 #include <cassert>
+#include <optional>
 #include <sstream>
 
 #include "BinaryIO.h"
 
-std::string SerializeRelocs(const std::vector<RuntimeReloc> &relocs)
+// TODO: Change relocation format in libretro to be more efficient and avoid
+// this extra work
+struct RelocIterator
 {
-    std::ostringstream out;
+    using T = std::optional<std::pair<RelocBase, Elf32_Addr>>;
 
-    for(int relative = 0; relative <= 1; relative++)
+    inline RelocIterator(const Relocations &relocs)
     {
-        uint32_t offset = -1;
-
-        for(const auto &r : relocs)
+        int relocBase = RelocBaseFirst;
+        for (const auto &group : relocs)
         {
-            if(r.relative == (bool)relative)
+            if (!group.empty())
             {
-                uint32_t delta = r.offset - offset;
-                offset = r.offset;
+                state[groupCount] = group.data();
+                base[groupCount] = RelocBase(relocBase);
+                end[groupCount++] = group.data() + group.size();
+            }
+            ++relocBase;
+        }
+    }
 
-                uint32_t base = (uint32_t) r.base;
-
-                uint32_t encoded = (delta << 2) | base;
-
-                while(encoded >= 128)
-                {
-                    byte(out, (encoded & 0x7F) | 0x80);
-                    encoded >>= 7;
-                }
-                byte(out, encoded);
+    inline T next()
+    {
+        size_t nextIndex = groupCount;
+        Elf32_Addr nextValue = UINT32_MAX;
+        for (size_t groupIndex = 0; groupIndex < groupCount; ++groupIndex)
+        {
+            auto candidate = *state[groupIndex];
+            if (candidate < nextValue)
+            {
+                nextIndex = groupIndex;
+                nextValue = candidate;
             }
         }
 
-        byte(out, 0);
+        if (nextIndex == groupCount)
+            return {};
+
+        if (++state[nextIndex] == end[nextIndex])
+        {
+            state[nextIndex] = state[--groupCount];
+            base[nextIndex] = base[groupCount];
+            end[nextIndex] = end[groupCount];
+        }
+
+        return { { base[nextIndex], nextValue } };
     }
+
+    size_t groupCount = 0;
+    std::array<const Elf32_Addr *, RelocBaseCount> state;
+    std::array<const Elf32_Addr *, RelocBaseCount> end;
+    std::array<RelocBase, RelocBaseCount> base;
+};
+
+std::string SerializeRelocs(const Relocations &relocs)
+{
+    std::ostringstream out;
+
+    RelocIterator it(relocs);
+
+    Elf32_Addr offset = -1;
+    for (RelocIterator::T r; (r = it.next()); )
+    {
+        Elf32_Addr delta = r->second - offset;
+        offset = r->second;
+
+        Elf32_Addr encoded = (delta << 2) | int(r->first);
+
+        while (encoded >= 0x80)
+        {
+            byte(out, (encoded & 0x7F) | 0x80);
+            encoded >>= 7;
+        }
+
+        byte(out, encoded);
+    }
+
+    byte(out, 0);
+
+    // TODO: Remove PCREL code from libretro, which expects a second loop for
+    // relative relocations, which should never happen now
+    byte(out, 0);
 
     return out.str();
 }
 
 #ifdef PALMOS
-static void EmitPalmReloc(std::ostream &out, uint32_t &count, uint32_t &offset, uint32_t relocAddr)
+static void EmitPalmReloc(std::ostream &out, uint32_t &offset, uint32_t relocAddr)
 {
-    ++count;
     uint32_t delta = relocAddr - offset;
     assert((delta % 2) == 0);
     delta /= 2;
@@ -73,53 +126,34 @@ static void EmitPalmReloc(std::ostream &out, uint32_t &count, uint32_t &offset, 
         byte(out, 0x80 | delta);
 }
 
-std::string SerializeRelocsPalm(const std::vector<RuntimeReloc> &relocs, bool codeSegment)
+std::string SerializeRelocsPalm(const Relocations &relocs, bool codeSection, Elf32_Addr dataAddr, Elf32_Addr bssAddr)
 {
-    std::ostringstream data, code1, codeN;
-    uint32_t dataCount = 0, dataOffset = 0;
-    uint32_t code1Count = 0, code1Offset = 0;
-    uint32_t codeNCount = 0, codeNOffset = 0;
-
-    for (const auto &r : relocs)
-    {
-        // TODO: Not sure what to do with these; they would apply only to
-        // code segments, but code1 is normally relocated by the OS and there
-        // is no pcrel there
-        assert(!r.relative);
-
-        switch (r.base)
-        {
-            case RelocBase::data:
-            case RelocBase::bss:
-            case RelocBase::jumptable:
-                EmitPalmReloc(data, dataCount, dataOffset, r.offset);
-                break;
-            case RelocBase::code:
-                if (codeSegment)
-                {
-                    EmitPalmReloc(codeN, codeNCount, codeNOffset, r.offset);
-                    break;
-                }
-                // fall through
-            case RelocBase::code1:
-                EmitPalmReloc(code1, code1Count, code1Offset, r.offset);
-                break;
-        }
-    }
-
     std::ostringstream out;
-    longword(out, dataCount);
-    out << data.str();
-    if (codeSegment || code1Count != 0)
+
+    uint32_t offset = 0;
+
+    // Palm OS relocations on the data section are relative to %a5, not to
+    // the start of the data, so the offsets have to be adjusted accordingly
+    longword(out, relocs[RelocData].size() + relocs[RelocBss].size());
+    for (auto reloc : relocs[RelocData])
+        EmitPalmReloc(out, offset, reloc + dataAddr);
+    assert(relocs[RelocBss].empty() || relocs[RelocBss].front() > offset);
+    for (auto reloc : relocs[RelocBss])
+        EmitPalmReloc(out, offset, reloc + bssAddr);
+
+    offset = 0;
+    longword(out, relocs[RelocCode1].size());
+    for (auto reloc : relocs[RelocCode1])
+        EmitPalmReloc(out, offset, reloc);
+
+    if (codeSection)
     {
-        longword(out, code1Count);
-        out << code1.str();
+        offset = 0;
+        longword(out, relocs[RelocCode].size());
+        for (auto reloc : relocs[RelocCode])
+            EmitPalmReloc(out, offset, reloc);
     }
-    if (codeSegment)
-    {
-        longword(out, codeNCount);
-        out << codeN.str();
-    }
+
     return out.str();
 }
 #endif

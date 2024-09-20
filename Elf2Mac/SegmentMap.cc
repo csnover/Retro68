@@ -170,8 +170,8 @@ static inline void EnterDebugger(std::ostream &out)
 
 static inline void PushPCToStack(std::ostream &out)
 {
-    // bsr *+2
-    out << "LONG(0x61000002);\n";
+    // pea (4,%pc)
+    out << "LONG(0x487A0004);\n";
 }
 
 static inline void DisplaceStackPCTo(std::ostream &out, const char *entryPoint)
@@ -243,20 +243,21 @@ static Block StartSections(std::ostream &out, const char *entryPoint, bool strip
 static void WriteDataSection(std::ostream &out)
 {
     // The data section has a runtime displacement of
-    // `%a5 - SIZEOF(.data + .bss)`. Jump tables from code 0 are placed at
-    // `%a5 + 32` on Mac OS. This can be confusing because the diagrams in Apple
-    // documentation are ‘backwards’ and show low addresses at the bottom.
+    // `%a5 - SIZEOF(.data + .bss)`. Jump tables from code 0 are conventionally
+    // placed at `%a5 + 32` on Mac OS, though this is configured by values in
+    // the CODE 0 header and stored in the global variable CurJTOffset. The
+    // diagrams in Inside Macintosh are ‘backwards’ and show low addresses at
+    // the bottom.
+    // The order of data in memory is more like:
     //
-    // The order of data in memory is actually:
-    //
-    // • “Below” A5 (0x0000)
+    // • “Below” A5 (negative offset from A5)
     // [QuickDraw global variables]
-    // [Application global variables] (.data)
-    // • %a5 (CurrentA5)
+    // [Application global variables] (.bss + .data)
+    // • %a5 (0, CurrentA5)
     // [Pointer to QuickDraw global variables]
     // [Application parameters]
-    // [Jump table] (CurrentA5 + 32)
-    // • “Above” A5 (0xFFFF)
+    // [Jump table] (CurJTOffset)
+    // • “Above” A5 (positive offset from A5)
     //
     // "The jump table is always located at a fixed offset above A5.
     //  For all applications, the offset to the jump table from the
@@ -266,7 +267,7 @@ static void WriteDataSection(std::ostream &out)
     // For Palm OS, it really does not matter where anything is located relative
     // to A5, except that the loader will put SysAppInfoPtr at the start of
     // .data and thus expects that AboveA5 will be at least 4.
-    Block section(out << ".data 0 : ");
+    Block section(out << ".data ALIGN(4) : ");
     out <<
         "_sdata = .;\n"
         "*(.got.plt)\n"
@@ -313,7 +314,7 @@ static void WriteDataSection(std::ostream &out)
 
 static void WriteBssSection(std::ostream &out)
 {
-    Block section(out << ".bss ALIGN(4) : ");
+    Block section(out << ".bss 0 : ");
     out <<
         "_sbss = .;\n"
         "*(.dynsbss)\n"
