@@ -21,8 +21,6 @@
 #    see the files COPYING and COPYING.RUNTIME respectively.  If not, see
 #    <http://www.gnu.org/licenses/>.
 
-enable_language(ASM)
-
 add_library(retrocrt)
 target_sources(retrocrt PRIVATE
     malloc.c
@@ -49,6 +47,7 @@ if(RETRO_68K OR RETRO_PALMOS)
             palmstart.c
         )
     else()
+        enable_language(ASM)
         target_sources(retrocrt PRIVATE
             LoadSeg.s
             MultiSegApp.c
