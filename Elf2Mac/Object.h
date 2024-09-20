@@ -82,7 +82,7 @@ private:
         }
 
         inline size_t size() const {
-            return header ? header->sh_size / header->sh_entsize : 0;
+            return header ? header->sh_size / std::max<Elf32_Word>(header->sh_entsize, 1) : 0;
         }
 
         inline const T *operator[] (int index) const {
@@ -235,8 +235,6 @@ private:
     ResourceFile::Format m_outputFormat;
     // If true, log more stuff.
     bool m_verbose = false;
-    // If true, emit in Palm OS flavour.
-    bool m_emitPalm;
 };
 
 #endif // OBJECT_H

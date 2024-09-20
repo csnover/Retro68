@@ -59,6 +59,7 @@ Object::Object(const std::string &input, bool palmos, uint32_t stackSize, bool v
 #else
     , m_outputFormat(ResourceFile::Format::autodetect)
 #endif
+    , m_verbose(verbose)
 {
     if(elf_version(EV_CURRENT) == EV_NONE)
         throw std::runtime_error("ELF library initialization failed: "s + elf_errmsg(-1));
@@ -511,7 +512,7 @@ uint16_t Object::getCodeID(Elf32_Section source) const
     uint16_t codeID = 0;
     auto name = elf32_getshdr(elf_getscn(m_elf, source))->sh_name;
     if (name)
-        std::sscanf(".code%05hu", m_shstrtab + name, &codeID);
+        std::sscanf(m_shstrtab + name, ".code%05hu", &codeID);
     return codeID;
 }
 
