@@ -92,7 +92,7 @@ private:
         }
 
         inline T *operator[] (int index) {
-            if (!data || index < 0 || index >= size())
+            if (!data || size_t(index) >= size())
                 return nullptr;
             return data + index;
         }

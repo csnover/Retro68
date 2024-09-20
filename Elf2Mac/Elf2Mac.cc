@@ -219,12 +219,7 @@ static int Elf2Mac(char *argv[])
         auto tmpfile = (temp_directory_path() / "elf2macldXXXXXX").string();
         int fd = mkstemp(tmpfile.data());
         if(fd < 0)
-        {
-            std::cerr
-                << "can't create temp file: "s + strerror(errno)
-                << std::endl;
-            return 1;
-        }
+            throw new std::runtime_error("can't create temp file: "s + strerror(errno));
 
         TempFileGuard guard { saveLdScript ? nullptr : tmpfile.c_str() };
 

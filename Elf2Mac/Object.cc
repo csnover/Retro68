@@ -321,7 +321,7 @@ const Elf32_Sym *Object::findExceptionInfoStart(uint16_t codeID) const
                 continue;
 
             const char *name = m_strtab + symbol->st_name;
-            constexpr char *prefix = "__EH_FRAME_BEGIN__";
+            constexpr const char *prefix = "__EH_FRAME_BEGIN__";
             constexpr auto len = std::strlen(prefix);
             if (std::strncmp(name, prefix, len) != 0)
                 continue;
@@ -570,7 +570,7 @@ void Object::processRelocation(const SSec<Elf32_Rela> &relaSection)
         }
 
         const auto *targetSymbol = m_symtab[ELF32_R_SYM(rela->r_info)];
-        auto targetSection = targetSymbol ? targetSymbol->st_shndx : SHN_UNDEF;
+        Elf32_Section targetSection = targetSymbol ? targetSymbol->st_shndx : SHN_UNDEF;
 
         switch (getXrefKind(codeID, sourceIndex, rela, targetSymbol))
         {
