@@ -20,12 +20,11 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include <cstdlib>
+#include <cstddef>
+#include <cstdint>
 #include <iosfwd>
 #include <map>
 #include <string>
-#include <string_view>
-#include <type_traits>
 #include <unordered_map>
 #include <vector>
 
@@ -33,6 +32,7 @@
 #include <libelf.h>
 
 #include "Reloc.h"
+#include "Section.h"
 
 class SegmentMap;
 
@@ -57,61 +57,6 @@ public:
     void SingleSegmentApp(const std::string &outputFilename);
 
 private:
-    // A convenience wrapper for a single ELF section.
-    template <typename T>
-    struct SSec
-    {
-        Elf_Scn *section = nullptr;
-        Elf32_Shdr *header = nullptr;
-        T *data = nullptr;
-
-        SSec() = default;
-        SSec(Elf_Scn *scn);
-
-        template <typename U = T>
-        inline std::enable_if_t<std::is_same_v<U, uint8_t>, std::string_view>
-        view() const {
-            return std::string_view(
-                reinterpret_cast<char *>(data),
-                header ? header->sh_size : 0
-            );
-        }
-
-        inline Elf32_Section index() const {
-            return elf_ndxscn(section);
-        }
-
-        inline size_t size() const {
-            return header ? header->sh_size / std::max<Elf32_Word>(header->sh_entsize, 1) : 0;
-        }
-
-        inline const T *operator[] (int index) const {
-            if (!data || index < 0 || index >= size())
-                return nullptr;
-            return data + index;
-        }
-
-        inline T *operator[] (int index) {
-            if (!data || size_t(index) >= size())
-                return nullptr;
-            return data + index;
-        }
-
-        explicit inline operator bool () const { return section != nullptr; }
-    };
-
-    // Gets a 16-bit big-endian value in the given section at the given
-    // virtual address.
-    static uint16_t getU16BE(const SSec<uint8_t> &section, Elf32_Addr vaddr);
-
-    // Sets a 16-bit big-endian value in the given section at the given
-    // virtual address.
-    static void setU16BE(SSec<uint8_t> &section, Elf32_Addr vaddr, uint32_t value);
-
-    // Sets a 32-bit big-endian value in the given section at the given
-    // virtual address.
-    static void setU32BE(SSec<uint8_t> &section, Elf32_Addr vaddr, uint32_t value);
-
     // Loads sections into memory from the ELF file.
     void loadSections();
 
@@ -137,7 +82,9 @@ private:
         // A cross-reference that can be relocated directly.
         Direct,
         // A cross-reference that must be relocated through a jump table.
-        Indirect
+        Indirect,
+        // A cross-reference to a weak symbol that is not present.
+        Weak
     };
 
     // Determins which kind of cross-reference is required to go from the given
@@ -152,7 +99,8 @@ private:
 
     // Returns whether the given `vaddr` is within an exception handling
     // frame.
-    bool isOffsetInEhFrame(uint16_t codeID, Elf32_Addr vaddr) const;
+    bool isOffsetInEhFrame(uint16_t codeID, Elf32_Addr vaddr,
+        const Elf32_Sym *target) const;
 
     // Returns the code resource ID for the given section.
     uint16_t getCodeID(Elf32_Section index) const;

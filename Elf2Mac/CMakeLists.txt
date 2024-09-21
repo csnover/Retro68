@@ -21,6 +21,7 @@ add_executable(Elf2Mac
     Object.h
     Reloc.cc
     Reloc.h
+    Section.h
     SegmentMap.cc
     SegmentMap.h
 )
