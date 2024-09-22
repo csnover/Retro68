@@ -26,19 +26,17 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <reent.h>
-#ifdef __palmos__
-#include <Core/System/MemoryMgr.h>
-#else
-#include <string.h>
-#include <MacMemory.h>
-#endif
 
 #ifdef __palmos__
+#include <Core/System/MemoryMgr.h>
 typedef MemPtr Ptr;
 #define NewPtr MemPtrNew
 #define DisposePtr MemPtrFree
 #define GetPtrSize MemPtrSize
 #define memcpy MemMove
+#else
+#include <string.h>
+#include <MacMemory.h>
 #endif
 
 void *_malloc_r(struct _reent *reent_ptr, size_t sz)
