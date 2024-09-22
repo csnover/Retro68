@@ -39,7 +39,8 @@ class SegmentMap;
 class Object
 {
 public:
-    Object(const std::string &inputFilename, bool palmos, uint32_t stackSize, bool verbose);
+    Object(const std::string &inputFilename, bool palmos,
+        const char *creator, uint32_t stackSize, bool verbose);
     ~Object();
 
     // Emits the object as a data resource.
@@ -172,7 +173,7 @@ private:
     mutable std::unordered_map<int, const Elf32_Sym *> m_ehFrameCache;
 
     // OSTypes to use when emitting resources.
-    ResType m_codeOsType, m_dataOsType, m_applOsType;
+    ResType m_codeOsType, m_dataOsType, m_applOsType, m_creator;
     // Jump table and code resource data sizes.
     size_t m_jtHeaderSize, m_jtEntrySize, m_jtFirstIndex;
     // The preferred runtime stack size.

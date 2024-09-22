@@ -46,10 +46,12 @@ enum { kNoOp = 0x4e71 };
 
 using namespace std::literals::string_literals;
 
-Object::Object(const std::string &input, bool palmos, uint32_t stackSize, bool verbose)
+Object::Object(const std::string &input, bool palmos,
+    const char *creator, uint32_t stackSize, bool verbose)
     : m_codeOsType(palmos ? "code" : "CODE")
     , m_dataOsType(palmos ? "data" : "DATA")
     , m_applOsType(palmos ? "appl" : "APPL")
+    , m_creator(creator)
     // Palm OS does not have a jump table header, but it does need 4 bytes at
     // A5 for the OS to put a pointer to SysAppInfoType
     , m_jtHeaderSize(palmos ? 4 : 0x20)
@@ -1137,7 +1139,10 @@ void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segm
 
 void Object::finalizeFile(const std::string &filename, ResourceFile &file)
 {
-    file.creator = ResType("????");
+#ifdef PALMOS
+    file.name = filename;
+#endif
+    file.creator = m_creator;
     file.type = m_applOsType;
     file.data = "Built using Retro68.";
     file.write(filename, m_outputFormat);

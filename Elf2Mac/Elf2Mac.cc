@@ -132,6 +132,7 @@ static int Elf2Mac(char *argv[])
         realLdPath = argv[0] + ".real"s;
     const char *outputFile = "a.out";
     const char *entryPoint = "_start";
+    const char *creator = "????";
     uint32_t stackSize = 0;
     bool elf2mac = false;
     bool flatoutput = false;
@@ -183,6 +184,8 @@ static int Elf2Mac(char *argv[])
             saveLdScript = true;
         else if (flag(p, "--palmos"))
             palmos = true;
+        else if (flag(p, "--creator"))
+            creator = nextArg(p, "--creator missing argument");
         else if (flag(p, "--stack"))
             stackSize = std::atoi(nextArg(p, "--stack missing argument"));
         else if(startsWith(p, "--verbose="))
@@ -248,7 +251,7 @@ static int Elf2Mac(char *argv[])
         if ((result = RealLD(ldArgv)) != 0)
             return result;
 
-        Object theObject(inputFile, palmos, stackSize, verbose);
+        Object theObject(inputFile, palmos, creator, stackSize, verbose);
 
         if(flatoutput)
             theObject.FlatCode(outputFile);
