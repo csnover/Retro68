@@ -126,7 +126,7 @@ private:
     }
 
     // Builds the main jump table and fixes up all references to the table.
-    std::pair<size_t, std::string> processJumpTables(int32_t a5JTOffset);
+    std::pair<size_t, std::string> processJumpTables();
 
     // Emits the code 0 and data 0 resources.
     std::pair<size_t, size_t> emitRes0(Resources &out);
@@ -145,10 +145,10 @@ private:
     // A mapping from an ELF section index to its jump table.
     using SectionJumpTables = std::unordered_map<Elf32_Section, JumpTable>;
 
-    // Per-section jump tables. Populated by `processRelocations`.
+    // Target section jump tables. Populated by `processRelocations`.
     SectionJumpTables m_jumpTables;
 
-    // Per-section relocation offsets. Populated by `processRelocations`.
+    // Source section relocation offsets. Populated by `processRelocations`.
     std::unordered_map<Elf32_Section, Relocations> m_relocations;
 
     // The .symtab section.

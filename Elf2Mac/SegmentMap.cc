@@ -70,6 +70,9 @@ private:
 };
 // SPDX-SnippetEnd
 
+// TODO: Main code should go to code 1, not just Retro68’s stuff. From Inside
+// Macintosh Mac OS Runtime Architectures: “Put your main event loop into the
+// main segment (that is, the segment that contains the main entry point).”
 static std::initializer_list<std::string> RUNTIME_OBJECTS = {
     "*/libretrocrt.a:start.c.obj",
     "*/libretrocrt.a:palmstart.c.obj",
@@ -237,32 +240,7 @@ static Block StartSections(std::ostream &out, const char *entryPoint, bool strip
 
 static void WriteDataSection(std::ostream &out)
 {
-    // The data section has a runtime displacement of
-    // `%a5 - SIZEOF(.data + .bss)`. Jump tables from code 0 are conventionally
-    // placed at `%a5 + 32` on Mac OS, though this is configured by values in
-    // the CODE 0 header and stored in the global variable CurJTOffset. The
-    // diagrams in Inside Macintosh are ‘backwards’ and show low addresses at
-    // the bottom.
-    // The order of data in memory is more like:
-    //
-    // • “Below” A5 (negative offset from A5)
-    // [QuickDraw global variables]
-    // [Application global variables] (.bss + .data)
-    // • %a5 (0, CurrentA5)
-    // [Pointer to QuickDraw global variables]
-    // [Application parameters]
-    // [Jump table] (CurJTOffset)
-    // • “Above” A5 (positive offset from A5)
-    //
-    // "The jump table is always located at a fixed offset above A5.
-    //  For all applications, the offset to the jump table from the
-    //  location pointed to by A5 is 32. The number of bytes above
-    //  A5 is 32 plus the length of the jump table." - MacOS RT Architectures
-    //
-    // For Palm OS, it really does not matter where anything is located relative
-    // to A5, except that the loader will put SysAppInfoPtr at the start of
-    // .data and thus expects that AboveA5 will be at least 4.
-    Block section(out << ".data ALIGN(4) : ");
+    Block section(out << ".data : ");
     out <<
         "_sdata = .;\n"
         "*(.got.plt)\n"
@@ -393,10 +371,15 @@ static void WriteDebugSections(std::ostream &out)
 
 static void EndSections(std::ostream &out, Block &)
 {
+    // On Palm OS, the jump table gets appended to the data section and then the
+    // whole thing gets compressed. The compression strips leading and trailing
+    // NUL bytes, so putting .bss before .data keeps the two sections contiguous
+    // and also allows .bss to be eliminated as part of the leading NUL
+    // sequence. The order does not matter for Mac OS.
     WriteBssSection(out);
     WriteDataSection(out);
     WriteDebugSections(out);
-    out << "/DISCARD/ : { *(*) }\n";
+    // out << "/DISCARD/ : { *(*) }\n";
 }
 
 template <bool KEEP>
@@ -530,6 +513,7 @@ void CreateFlatLdScript(std::ostream &out, const char *entryPoint, bool stripMac
         Block section(out << ".text 0 : ");
         WriteTextStart(out, entryPoint, false);
 
+        // This is just to make sure the runtime code comes before the rest
         for (const auto &rt : RUNTIME_OBJECTS)
             out << rt << "(.text*)\n";
 
@@ -542,5 +526,7 @@ void CreateFlatLdScript(std::ostream &out, const char *entryPoint, bool stripMac
         WriteTextEnd(out);
     }
 
+    // TODO: If everything is just about to get dumped into a single section,
+    // why not just skip the middleman and put it all in a single section?
     EndSections(out, sections);
 }

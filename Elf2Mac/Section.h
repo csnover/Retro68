@@ -6,6 +6,7 @@
 #include <string_view>
 #include <type_traits>
 
+#include <BinaryIO.h>
 #include <libelf.h>
 
 // A convenience wrapper for a single ELF section.
@@ -63,20 +64,14 @@ struct SSec
     inline std::enable_if_t<std::is_same_v<U, uint8_t>, void>
     setU16(Elf32_Addr vaddr, uint16_t value) const
     {
-        uint8_t *p = data + vaddr - header->sh_addr;
-        p[0] = value >> 8;
-        p[1] = value;
+        word(data + vaddr - header->sh_addr, value);
     }
 
     template <typename U = T>
     inline std::enable_if_t<std::is_same_v<U, uint8_t>, void>
     setU32(Elf32_Addr vaddr, uint32_t value) const
     {
-        uint8_t *p = data + vaddr - header->sh_addr;
-        p[0] = value >> 24;
-        p[1] = value >> 16;
-        p[2] = value >> 8;
-        p[3] = value;
+        longword(data + vaddr - header->sh_addr, value);
     }
 
     inline Elf32_Section index() const

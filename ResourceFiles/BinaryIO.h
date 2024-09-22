@@ -6,6 +6,20 @@
 
 class ResType;
 
+inline void word(unsigned char *p, int value)
+{
+    p[0] = value >> 8;
+    p[1] = value;
+}
+
+inline void longword(unsigned char *p, int value)
+{
+    p[0] = value >> 24;
+    p[1] = value >> 16;
+    p[2] = value >> 8;
+    p[3] = value;
+}
+
 void byte(std::ostream& out, int byte);
 void word(std::ostream& out, int word);
 void ostype(std::ostream& out, ResType type);

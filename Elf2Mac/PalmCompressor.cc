@@ -158,37 +158,37 @@ static std::array<FatPtr, 2> FindLongestZeroRuns(const char *start, const char *
 {
     // Input needs to be sorted by length
     std::array<FatPtr, 2> best { FatPtr { end, 0 }, FatPtr { end, 0 } };
-    FatPtr next { nullptr, 0 };
+    const char *candidate = nullptr;
 
     auto update = [&]() {
-        if (next.second > best[0].second)
+        size_t size = start - candidate;
+        if (size > best[0].second)
         {
             best[1] = best[0];
-            best[0] = next;
+            best[0] = { candidate, size };
         }
-        else if (next.second > best[1].second)
-            best[1] = next;
+        else if (size > best[1].second)
+            best[1] = { candidate, size };
     };
 
     while (start != end)
     {
         if (*start == '\0')
         {
-            if (next.first == nullptr)
-                next.first = start;
-            ++next.second;
+            if (candidate == nullptr)
+                candidate = start;
         }
-        else
+        else if (candidate != nullptr)
         {
             update();
-            next.first = nullptr;
-            next.second = 0;
+            candidate = nullptr;
         }
 
         ++start;
     }
 
-    update();
+    if (candidate)
+        update();
 
     // Output needs to be sorted by pointer position
     if (best[0].first > best[1].first)
@@ -197,14 +197,13 @@ static std::array<FatPtr, 2> FindLongestZeroRuns(const char *start, const char *
     return best;
 }
 
-std::string CompressPalmData(std::string &&input)
+std::string CompressPalmData(const std::string &input, uint32_t belowA5)
 {
     std::ostringstream out;
 
     auto base = input.data();
     auto in = base;
-    auto belowA5 = input.size();
-    auto end = in + belowA5;
+    auto end = in + input.size();
 
     while (in != end && *in == '\0')
         ++in;
@@ -215,11 +214,6 @@ std::string CompressPalmData(std::string &&input)
     // For whatever reason this format requires exactly two skips no matter
     // what
     auto [skip1, skip2] = FindLongestZeroRuns(in, end);
-
-    // Decompression starts from offset 4. This field should be populated later
-    // with the offset of the code 1 relocation table (though it is not clear
-    // that anything actually uses this value).
-    longword(out, 0);
 
     CompressRange(out, base, in, skip1.first, belowA5);
     CompressRange(out, base, skip1.first + skip1.second, skip2.first, belowA5);

@@ -4,8 +4,9 @@
 #ifndef PALMCOMPRESSOR_H
 #define PALMCOMPRESSOR_H
 
+#include <cstdint>
 #include <string>
 
-std::string CompressPalmData(std::string &&input);
+std::string CompressPalmData(const std::string &input, uint32_t belowA5);
 
 #endif

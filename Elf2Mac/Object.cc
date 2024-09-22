@@ -50,6 +50,8 @@ Object::Object(const std::string &input, bool palmos, uint32_t stackSize, bool v
     : m_codeOsType(palmos ? "code" : "CODE")
     , m_dataOsType(palmos ? "data" : "DATA")
     , m_applOsType(palmos ? "appl" : "APPL")
+    // Palm OS does not have a jump table header, but it does need 4 bytes at
+    // A5 for the OS to put a pointer to SysAppInfoType
     , m_jtHeaderSize(palmos ? 4 : 0x20)
     , m_jtEntrySize(palmos ? 6 : 8)
     , m_jtFirstIndex(palmos ? 0 : 2)
@@ -163,7 +165,7 @@ void Object::loadSections()
             {
                 std::cout
                     << "Skipping section " << elf_ndxscn(scn)
-                    << " (" << m_shstrtab + shdr.sh_name << ")" << std::endl;
+                    << " (" << m_shstrtab + shdr.sh_name << ")\n";
             }
         }
     }
@@ -225,8 +227,16 @@ void Object::emitFlatCode(std::ostream &out)
 
 #ifdef PALMOS
         if (isPalm())
-            out << SerializeRelocsPalm(combined, false,
-                m_code.front().size(), m_code.front().size() + m_data.size());
+        {
+            // These are normally offsets subtracted from %a5 but in this case
+            // they are positive offsets since they are not actually being used
+            // through A5. TODO: Treating belowA5 as a positive value is
+            // probably unnecessarily confusing. TODO: Combining data like this
+            // makes no sense.
+            auto dataBelowA5 = -m_code.front().size();
+            auto bssBelowA5 = -m_code.front().size() - m_data.size();
+            out << SerializeRelocsPalm(combined, false, dataBelowA5, bssBelowA5);
+        }
         else
 #endif
             out << SerializeRelocs(combined);
@@ -236,25 +246,13 @@ void Object::emitFlatCode(std::ostream &out)
         const auto &relocs = m_relocations[m_code.front().index()];
 #ifdef PALMOS
         if (isPalm())
+            // There is no dataBelowA5/bssBelowA5 here because there should be
+            // no data to relocate
             out << SerializeRelocsPalm(relocs, false, 0, 0);
         else
 #endif
             out << SerializeRelocs(relocs);
     }
-}
-
-static void word(uint8_t *p, uint16_t value)
-{
-    p[0] = value >> 8;
-    p[1] = value;
-}
-
-static void longword(uint8_t *p, uint32_t value)
-{
-    p[0] = value >> 24;
-    p[1] = value >> 16;
-    p[2] = value >> 8;
-    p[3] = value;
 }
 
 void Object::FlatCode(const std::string &filename)
@@ -518,6 +516,28 @@ void Object::processRelocation(const SSec<Elf32_Rela> &relaSection)
         const auto *targetSymbol = m_symtab[ELF32_R_SYM(rela->r_info)];
         Elf32_Section targetSection = targetSymbol ? targetSymbol->st_shndx : SHN_UNDEF;
 
+        // A relocation with an odd address suggests that there is an alignment
+        // issue somewhere that needs to be fixed, since this would cause a bus
+        // error.
+        if (rela->r_offset & 1)
+        {
+            auto info = collectDebugInfo(source.header, targetSymbol);
+            std::cerr
+                << std::hex
+                << "Unaligned ref type " << type
+                << " at " << info.sourceName
+                << "+0x" << rela->r_offset
+                << " to " << info.targetName << "(" << info.symbolName << ")"
+                << "+0x" << info.symbolValue
+                << " (addend 0x" << rela->r_addend << ","
+                << std::dec
+                << " type "
+                << (targetSymbol ? ELF32_ST_TYPE(targetSymbol->st_info) : 0)
+                << ")"
+                << std::endl;
+            continue;
+        }
+
         // TODO: Rewrite pcrel type 5 going to data/bss sections to be
         // a5-relative (this happens when building without -msep-data)
         auto relaSize = RelaSizes()[type];
@@ -529,7 +549,7 @@ void Object::processRelocation(const SSec<Elf32_Rela> &relaSection)
                 std::cerr
                     << std::hex
                     << "Unsupported ref type " << type << " from " << info.sourceName
-                    << ":0x" << rela->r_offset
+                    << "+0x" << rela->r_offset
                     << " to " << info.targetName << "(" << info.symbolName << ")"
                     << "+0x" << info.symbolValue
                     << " (addend 0x" << rela->r_addend << ","
@@ -607,7 +627,7 @@ void Object::processRelocation(const SSec<Elf32_Rela> &relaSection)
                     std::cerr
                         << std::hex
                         << "Creating jump table entry from " << info.sourceName
-                        << ":0x" << rela->r_offset
+                        << "+0x" << rela->r_offset
                         << " to " << info.targetName << "(" << info.symbolName << ")"
                         << "+0x" << info.symbolValue
                         << " (addend 0x" << rela->r_addend << ")"
@@ -658,7 +678,7 @@ void Object::processRelocation(const SSec<Elf32_Rela> &relaSection)
                     std::cerr
                         << std::hex
                         << "Invalid ref type " << type << " from " << info.sourceName
-                        << ":0x" << rela->r_offset
+                        << "+0x" << rela->r_offset
                         << " to " << info.targetName << "(" << info.symbolName << ")"
                         << "+0x" << info.symbolValue
                         << " (addend 0x" << rela->r_addend << ","
@@ -673,23 +693,22 @@ void Object::processRelocation(const SSec<Elf32_Rela> &relaSection)
                 if (m_verbose)
                 {
                     auto info = collectDebugInfo(source.header, targetSymbol);
-                    std::cerr
+                    std::cout
                         << std::hex
                         << "Ignoring weak symbol reference from "
                         << info.sourceName
-                        << ":0x" << rela->r_offset
+                        << "+0x" << rela->r_offset
                         << " to " << info.targetName << "(" << info.symbolName << ")"
                         << "+0x" << info.symbolValue
-                        << " (addend 0x" << rela->r_addend << ")"
-                        << std::dec
-                        << std::endl;
+                        << " (addend 0x" << rela->r_addend << ")\n"
+                        << std::dec;
                 }
             break;
         }
     }
 }
 
-std::pair<size_t, std::string> Object::processJumpTables(int32_t a5JTOffset)
+std::pair<size_t, std::string> Object::processJumpTables()
 {
     // From M68000 Family Programmer’s Reference Manual
     enum {
@@ -720,7 +739,12 @@ std::pair<size_t, std::string> Object::processJumpTables(int32_t a5JTOffset)
     };
 
     auto jtIndex = m_jtFirstIndex;
-    a5JTOffset += m_jtHeaderSize + jtIndex * m_jtEntrySize;
+    // Use signed size since it is possible in the future that jump table might
+    // end up being offset negatively if someone needs to support making it
+    // bigger than the 32k limit and it is just easier to have the correct
+    // checks in place already (the compiler would complain if the type were
+    // unsigned).
+    ssize_t a5JTOffset = m_jtHeaderSize + jtIndex * m_jtEntrySize;
 
     std::ostringstream jumpTable;
     for (const auto &[targetSection, sectionTable] : m_jumpTables)
@@ -796,14 +820,14 @@ std::pair<size_t, std::string> Object::processJumpTables(int32_t a5JTOffset)
                 // section. This is what Apple’s documentation says their linker
                 // did for far model code:
                 //
-                // "If you compile and link units with any option that specifies
+                // “If you compile and link units with any option that specifies
                 //  the far model for code, any JSR instruction that references
                 //  a jump-table entry is generated with a 32-bit absolute
                 //  address. The address of any instruction that makes such a
                 //  reference is recorded in compressed form in the A5
                 //  relocation information area. The modified _LoadSeg trap adds
                 //  the value of A5 to the address fields of the JSR instruction
-                //  at load time." - Mac OS Runtime Architectures
+                //  at load time.” - Mac OS Runtime Architectures
                 //
                 // The correct choice is the fast choice, though currently that
                 // is not always what happens, because changing the code size
@@ -933,21 +957,11 @@ std::pair<size_t, std::string> Object::processJumpTables(int32_t a5JTOffset)
 std::pair<size_t, size_t> Object::emitRes0(Resources &rsrc)
 {
     auto belowA5 = m_data.size() + m_bss.size();
-
-    // Because of how the data section compression works on Palm OS, the jump
-    // table gets inserted between .data and .bss so actually exists somewhere
-    // below A5. This is OK because each section header contains the offset of
-    // its own jump table relative to A5, the addends for the jump table are
-    // calculated in `processJumpTables` and do not need any runtime relocation,
-    // and the addends to `.bss` are… oops.
-    // TODO: Probably it is less fine for the addends to BSS which need to be
-    // rebased?! At least this can be done easily by walking the relocation
-    // chain and touching up all of the existing addends.
-    auto jtAddress = isPalm() ? m_data.size() : belowA5;
-
-    auto [jtNumEntries, jumpTable] = processJumpTables(jtAddress);
+    auto [jtNumEntries, jumpTable] = processJumpTables();
     auto jtSize = jtNumEntries * m_jtEntrySize;
     auto aboveA5 = m_jtHeaderSize + jtSize;
+    auto dataBelowA5 = belowA5 - (m_data ? m_data.header->sh_addr : 0);
+    auto bssBelowA5 = belowA5 - (m_bss ? m_bss.header->sh_addr : 0);
 
     std::ostringstream code0;
 
@@ -959,8 +973,8 @@ std::pair<size_t, size_t> Object::emitRes0(Resources &rsrc)
     longword(code0, isPalm() ? 8 : jtSize);
     longword(code0, isPalm() ? 0x20 : m_jtHeaderSize);
 
-    // Jump table entry for default entrypoint. Palm OS ignores this and always
-    // jumps directly to the start of code 1.
+    // Jump table entry for default entrypoint on Mac OS. Palm OS ignores this
+    // and always jumps directly to the start of code 1.
     code0 << fromhex(
         "0000" // function offset
         "3F3C" // move.w #resID,-(sp)
@@ -970,7 +984,9 @@ std::pair<size_t, size_t> Object::emitRes0(Resources &rsrc)
 
     if (!isPalm())
     {
-        // Flag entry to switch to “new format” 32-bit jump table entries.
+        // This flag entry switches the Mac OS segment manager to expect “new
+        // format” 32-bit jump table entries from here. It is not present in
+        // Palm OS code 0 resources.
         code0 << fromhex("0000 FFFF 0000 0000");
         code0 << jumpTable;
     }
@@ -980,11 +996,17 @@ std::pair<size_t, size_t> Object::emitRes0(Resources &rsrc)
         std::cout
             << m_codeOsType << " 0: " << code0.str().size() << " bytes\n"
             << "above A5: " << aboveA5 << " bytes\n"
-            << "below A5: " << belowA5 << " bytes\n"
-            << ".data: " << m_data.header->sh_size << " bytes at A5-0x"
-            << std::hex << belowA5 << std::dec << "\n"
-            << ".bss: " << m_bss.header->sh_size << " bytes at A5-0x"
-            << std::hex << m_bss.header->sh_size << std::dec << "\n";
+            << "below A5: " << belowA5 << " bytes\n";
+
+        if (m_data)
+            std::cout
+                << ".data: " << m_data.size() << " bytes at A5-0x"
+                << std::hex << dataBelowA5 << std::dec << "\n";
+
+        if (m_bss)
+            std::cout
+                << ".bss: " << m_bss.size() << " bytes at A5-0x"
+                << std::hex << bssBelowA5 << std::dec << "\n";
     }
 
     rsrc.addResource(Resource(m_codeOsType, 0, code0.str()));
@@ -992,27 +1014,49 @@ std::pair<size_t, size_t> Object::emitRes0(Resources &rsrc)
 #ifdef PALMOS
     if (isPalm())
     {
-        std::ostringstream data0;
+        std::string data0;
+
+        // Decompression starts from offset 4. This field is supposed to contain
+        // the offset of the code 1 relocation table in the data resource, so
+        // cannot be populated until the size of the compressed data *and* the
+        // data section’s A5 relocation table size is known.
+        // TODO: It is not clear that anything even uses this value, and it is
+        // annoying to have to split the generation of relocation table in two,
+        // so check and see if it actually matters or not that it gets filled.
+        data0.append(4, '\0');
+
         {
-            std::ostringstream combined;
-            combined
-                << m_data.view().data()
-                << jumpTable;
-            data0 << CompressPalmData(combined.str());
+            std::string combined(m_data.view());
+
+            // This space is reserved for use by Palm OS.
+            combined.append(m_jtHeaderSize, '\0');
+
+            combined += jumpTable;
+            data0 += CompressPalmData(combined, dataBelowA5);
+
+            if (m_verbose)
+            {
+                auto inSize = combined.size();
+                auto outSize = data0.size();
+                std::cout << "Compressed "
+                    << inSize << " bytes to "
+                    << outSize << " bytes "
+                    << "(" << 100.0 * outSize / inSize << "%)\n";
+            }
         }
 
-        data0 << SerializeRelocsPalm(m_relocations[m_data.index()], false,
-            -belowA5, aboveA5);
-        rsrc.addResource(Resource(m_dataOsType, 0, data0.str()));
+        data0 += SerializeRelocsPalm(m_relocations[m_data.index()], false,
+            dataBelowA5, bssBelowA5);
+        rsrc.addResource(Resource(m_dataOsType, 0, std::move(data0)));
     }
     else
 #endif
     {
-        rsrc.addResource(Resource(m_dataOsType, 0, m_data.view().data()));
+        rsrc.addResource(Resource(m_dataOsType, 0, std::string(m_data.view())));
         rsrc.addResource(Resource("RELA", 0, SerializeRelocs(m_relocations[m_data.index()])));
     }
 
-    return { belowA5, aboveA5 };
+    return { dataBelowA5, bssBelowA5 };
 }
 
 void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segmentMap)
@@ -1020,23 +1064,28 @@ void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segm
     ResourceFile file;
     Resources& rsrc = file.resources;
 
-    auto [ belowA5, aboveA5 ] = emitRes0(rsrc);
+    auto [ dataBelowA5, bssBelowA5 ] = emitRes0(rsrc);
 
     for (auto &section : m_code)
     {
         uint16_t codeID = getCodeID(section.index());
         size_t size = section.size();
 
-        if (isPalm() && codeID != 1)
+        if (codeID != 1 && m_jumpTables[section.index()].empty())
         {
-            std::string code;
+            if (m_verbose)
             {
-                std::ostringstream combined;
-                combined << section.view();
-                combined << SerializeRelocsPalm(m_relocations[section.index()], true,
-                    -belowA5, aboveA5);
-                code = combined.str();
+                std::cout
+                    << m_codeOsType << " " << codeID
+                    << " is never referenced; skipping\n";
             }
+            continue;
+        }
+        else if (codeID != 1 && isPalm())
+        {
+            std::string code(section.view());
+            code += SerializeRelocsPalm(m_relocations[section.index()], true,
+                dataBelowA5, bssBelowA5);
 
             if (m_verbose)
                 size = code.size();
@@ -1045,7 +1094,7 @@ void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segm
         }
         else
             rsrc.addResource(Resource(m_codeOsType, codeID,
-                section.view().data(),
+                std::string(section.view()),
                 std::string(segmentMap.GetSegmentName(codeID))));
 
         if (!isPalm())
@@ -1066,8 +1115,7 @@ void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segm
                 std::cout
                     << m_codeOsType << " " << codeID
                     << " has " << exceptionSize
-                    << " bytes of exception info (" << percent << "%)"
-                    << std::endl;
+                    << " bytes of exception info (" << percent << "%)\n";
             }
             else
             {
