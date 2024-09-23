@@ -663,6 +663,8 @@ void Object::processRelocation(const SSec<Elf32_Rela> &relaSection)
                 }
 
                 auto targetAddr = targetSymbol->st_value + rela->r_addend;
+                if (type == R_68K_PC32)
+                    targetAddr -= rela->r_offset;
 
                 source.setU32(rela->r_offset, targetAddr);
                 auto &table = m_relocations[sourceIndex][relocBase];
