@@ -262,8 +262,8 @@ static int Elf2Mac(char *argv[])
     }
     else
     {
-        ldArgv.clear();
-        for (auto p = argv; *p != nullptr; ++p)
+        ldArgv.erase(ldArgv.begin() + 1, ldArgv.end());
+        for (auto p = argv + 1; *p != nullptr; ++p)
             ldArgv.push_back(*p);
         ldArgv.push_back(nullptr);
         result = RealLD(ldArgv);
