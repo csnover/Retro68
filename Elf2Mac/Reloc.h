@@ -52,7 +52,7 @@ using Relocations = std::array<std::vector<Elf32_Addr>, RelocBaseCount>;
 
 std::string SerializeRelocs(const Relocations &relocs);
 #ifdef PALMOS
-std::string SerializeRelocsPalm(const Relocations &relocs, bool codeSection, Elf32_Addr dataBelowA5, Elf32_Addr bssBelowA5);
+std::pair<std::string, size_t> SerializeRelocsPalm(const Relocations &relocs, bool codeSection, Elf32_Addr dataBelowA5, Elf32_Addr bssBelowA5);
 #endif
 
 #endif // RELOC_H

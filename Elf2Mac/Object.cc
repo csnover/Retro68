@@ -237,7 +237,7 @@ void Object::emitFlatCode(std::ostream &out)
             // makes no sense.
             auto dataBelowA5 = -m_code.front().size();
             auto bssBelowA5 = -m_code.front().size() - m_data.size();
-            out << SerializeRelocsPalm(combined, false, dataBelowA5, bssBelowA5);
+            out << SerializeRelocsPalm(combined, false, dataBelowA5, bssBelowA5).first;
         }
         else
 #endif
@@ -250,7 +250,7 @@ void Object::emitFlatCode(std::ostream &out)
         if (isPalm())
             // There is no dataBelowA5/bssBelowA5 here because there should be
             // no data to relocate
-            out << SerializeRelocsPalm(relocs, false, 0, 0);
+            out << SerializeRelocsPalm(relocs, false, 0, 0).first;
         else
 #endif
             out << SerializeRelocs(relocs);
@@ -1022,9 +1022,6 @@ std::pair<size_t, size_t> Object::emitRes0(Resources &rsrc)
         // the offset of the code 1 relocation table in the data resource, so
         // cannot be populated until the size of the compressed data *and* the
         // data section’s A5 relocation table size is known.
-        // TODO: It is not clear that anything even uses this value, and it is
-        // annoying to have to split the generation of relocation table in two,
-        // so check and see if it actually matters or not that it gets filled.
         data0.append(4, '\0');
 
         {
@@ -1047,8 +1044,14 @@ std::pair<size_t, size_t> Object::emitRes0(Resources &rsrc)
             }
         }
 
-        data0 += SerializeRelocsPalm(m_relocations[m_data.index()], false,
-            dataBelowA5, bssBelowA5);
+        auto [relocs, dataRelocsSize] = SerializeRelocsPalm(
+            m_relocations[m_data.index()], false, dataBelowA5, bssBelowA5);
+
+        longword(reinterpret_cast<uint8_t *>(data0.data()),
+            data0.size() + dataRelocsSize);
+
+        data0 += std::move(relocs);
+
         rsrc.addResource(Resource(m_dataOsType, 0, std::move(data0)));
     }
     else
@@ -1087,7 +1090,7 @@ void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segm
         {
             std::string code(section.view());
             code += SerializeRelocsPalm(m_relocations[section.index()], true,
-                dataBelowA5, bssBelowA5);
+                dataBelowA5, bssBelowA5).first;
 
             if (m_verbose)
                 size = code.size();

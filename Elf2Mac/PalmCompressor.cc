@@ -65,17 +65,27 @@ static void EmitPattern(std::ostringstream &out, const char *data)
 static size_t EmitRun(std::ostringstream &out, char c, size_t len)
 {
     uint8_t op;
+    uint8_t min;
     if (c == '\0')
-        op = ZeroRun;
-    else if (c == '\xff' && len <= FFRun)
-        op = FFRun;
-    else
-        op = ValueRun;
-
-    while (len > 1)
     {
-        uint8_t runSize = std::min<size_t>(op, len);
-        out.put(char(op | (runSize - 1)));
+        op = ZeroRun;
+        min = 1;
+    }
+    else if (c == '\xff' && len <= FFRun)
+    {
+        op = FFRun;
+        min = 1;
+    }
+    else
+    {
+        op = ValueRun;
+        min = 2;
+    }
+
+    while (len > min)
+    {
+        uint8_t runSize = std::min<size_t>(op + min - 1, len);
+        out.put(char(op | (runSize - min)));
         if (op == ValueRun)
             out.put(c);
         len -= runSize;
@@ -86,12 +96,11 @@ static size_t EmitRun(std::ostringstream &out, char c, size_t len)
 
 static std::pair<char, size_t> RunLen(const char *start, const char *end)
 {
-    std::pair<char, size_t> run;
-    run.first = *start++;
-    run.second = 1;
-    while (start != end && *start++ == run.first)
-        ++run.second;
-    return run;
+    const char *p = start;
+    char c = *p++;
+    while (p != end && *p == c)
+        ++p;
+    return { c, p - start };
 }
 
 static bool ShouldEmitPattern(char c, size_t runLen, const char *start, const char *end)

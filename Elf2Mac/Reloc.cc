@@ -113,27 +113,29 @@ std::string SerializeRelocs(const Relocations &relocs)
 }
 
 #ifdef PALMOS
-static inline void EmitPalmReloc(std::ostream &out, uint32_t &offset, uint32_t relocAddr)
+static inline void EmitPalmReloc(std::ostream &out, uint32_t &lastAddr, uint32_t relocAddr)
 {
-    uint32_t delta = relocAddr - offset;
-    assert((delta % 2) == 0);
+    int32_t delta = relocAddr - lastAddr;
+    assert((delta & 1) == 0);
     delta /= 2;
-    if (delta >= 0x4000)
-        longword(out, delta);
-    else if (delta >= 0x80)
-        word(out, 0x4000 | delta);
+
+    // The top two bits are control bits, and the top third bit is a sign bit
+    if (delta >= (INT8_MIN >> 2) && delta <= (INT8_MAX >> 2))
+        byte(out, 0x80 | (delta & (UINT8_MAX >> 2)));
+    else if (delta >= (INT16_MIN >> 2) || delta <= (INT16_MAX >> 2))
+        word(out, 0x4000 | (delta & (UINT16_MAX >> 2)));
     else
-        byte(out, 0x80 | delta);
+    {
+        assert((relocAddr & 1) == 0);
+        assert(relocAddr < (UINT32_MAX >> 3));
+        longword(out, (relocAddr / 2) & (UINT32_MAX >> 2));
+    }
+
+    lastAddr = relocAddr;
 }
 
 static void EmitPalmDataRelocs(std::ostream &out, const Relocations &relocs, Elf32_Addr dataBelowA5, Elf32_Addr bssBelowA5)
 {
-    // Palm OS relocations on the data section are done relative to %a5, not to
-    // the start of the data, so the offsets have to be adjusted accordingly
-    // by dataBelowA5 and bssBelowA5. Other sections are relocated from the
-    // start of their data so need no adjustments
-
-    uint32_t offset = 0;
     longword(out, relocs[RelocData].size() + relocs[RelocBss].size());
 
     // In case the relative order of .data and .bss changes later, try to avoid
@@ -142,15 +144,22 @@ static void EmitPalmDataRelocs(std::ostream &out, const Relocations &relocs, Elf
     // order.
     RelocBase first = RelocBss, second = RelocData;
     if (bssBelowA5 < dataBelowA5)
+    {
         std::swap(first, second);
+        std::swap(bssBelowA5, dataBelowA5);
+    }
 
+    // Palm OS relocations on the data section are done relative to %a5, not to
+    // the start of the data, so the offsets have to be adjusted accordingly
+    // by dataBelowA5 and bssBelowA5. Code sections are relocated from the
+    // start of their data so do not need this.
+
+    uint32_t offset = 0;
     for (auto reloc : relocs[first])
-        EmitPalmReloc(out, offset, reloc - dataBelowA5);
-
-    assert(relocs[second].empty() || relocs[second].front() > offset);
+        EmitPalmReloc(out, offset, reloc - bssBelowA5);
 
     for (auto reloc : relocs[second])
-        EmitPalmReloc(out, offset, reloc - bssBelowA5);
+        EmitPalmReloc(out, offset, reloc - dataBelowA5);
 }
 
 static void EmitPalmCodeRelocs(std::ostream &out, const Relocations &relocs, RelocBase which)
@@ -161,17 +170,21 @@ static void EmitPalmCodeRelocs(std::ostream &out, const Relocations &relocs, Rel
         EmitPalmReloc(out, offset, reloc);
 }
 
-std::string SerializeRelocsPalm(const Relocations &relocs, bool codeSection, Elf32_Addr dataBelowA5, Elf32_Addr bssBelowA5)
+std::pair<std::string, size_t> SerializeRelocsPalm(const Relocations &relocs, bool codeSection, Elf32_Addr dataBelowA5, Elf32_Addr bssBelowA5)
 {
     std::ostringstream out;
 
     EmitPalmDataRelocs(out, relocs, dataBelowA5, bssBelowA5);
+
+    auto dataRelocsSize = out.tellp();
+
     EmitPalmCodeRelocs(out, relocs, RelocCode1);
+
     if (codeSection)
         EmitPalmCodeRelocs(out, relocs, RelocCode);
     else
         assert(relocs[RelocCode].empty());
 
-    return out.str();
+    return { out.str(), dataRelocsSize };
 }
 #endif
