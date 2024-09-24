@@ -74,24 +74,40 @@ private:
     // Processes a single relocation table from the ELF executable.
     void processRelocation(const SSec<Elf32_Rela> &relaSection);
 
+    // Possible kinds of cross-references.
     enum class XrefKind
     {
+        // A cross-reference that can be relocated using PC-relative addressing.
+        IntraPC,
+        // A cross-reference that can be relocated using direct addressing.
+        Direct,
+        // A cross-reference that can be relocated using a jump table.
+        Indirect,
+        // A cross-reference that can be relocated using the A5 register.
+        IndirectData,
         // A cross-reference that cannot be relocated.
         Invalid,
         // A cross-reference to another section inside .eh_frame.
         InvalidEhFrame,
-        // A cross-reference that can be relocated directly.
-        Direct,
-        // A cross-reference that must be relocated through a jump table.
-        Indirect,
-        // A cross-reference to a weak symbol that is not present.
+        // A cross-reference that is not aligned to a word boundary.
+        InvalidUnaligned,
+        // An cross-reference with an unsupported relocation record type.
+        InvalidUnsupported,
+        // A cross-reference with an out-of-bounds offset value.
+        InvalidRange,
+        // A cross-reference to a weak symbol that is not present in the object.
         Weak
     };
 
-    // Determins which kind of cross-reference is required to go from the given
+    // Converts an instruction for the given relocation record from a
+    // PC-relative instruction to a direct addressing instruction.
+    void convertPCOpToDirectOp(SSec<uint8_t> &source, const Elf32_Rela *rela,
+        const Elf32_Sym *targetSymbol) const;
+
+    // Determines which kind of cross-reference is required to go from the given
     // source section to the given target symbol using the given type of
     // relocation.
-    XrefKind getXrefKind(uint16_t codeID, Elf32_Section source,
+    XrefKind getXrefKind(uint16_t codeID, const SSec<uint8_t> &source,
         const Elf32_Rela *rela, const Elf32_Sym *target) const;
 
     // Finds the symbol corresponding to the exception handling frame for the
@@ -106,18 +122,28 @@ private:
     // Returns the code resource ID for the given section.
     uint16_t getCodeID(Elf32_Section index) const;
 
+    // Useful information for printing debug messages.
     struct DebugInfo
     {
+        // The name of the source section.
         const char *sourceName;
+        // The name of the target section.
         const char *targetName;
+        // The name of the target symbol.
         const char *symbolName;
+        // The value of the target symbol.
         int symbolValue;
     };
+
+    // Emits information to the given output stream about a relocation.
+    void warnReloc(std::ostream &out, const char *msg, const Elf32_Rela *rela,
+        const Elf32_Shdr *sourceHeader, const Elf32_Sym *targetSymbol) const;
 
     // Returns information used for emitting debugging messages.
     DebugInfo collectDebugInfo(const Elf32_Shdr *sourceHeader,
         const Elf32_Sym *targetSymbol) const;
 
+    // Returns true if the object is being compiled for Palm OS.
     inline bool isPalm() const {
 #ifdef PALMOS
         return m_outputFormat == ResourceFile::Format::prc;
@@ -133,12 +159,12 @@ private:
     std::pair<size_t, size_t> emitRes0(Resources &out);
 
 #ifdef PALMOS
-    // Emits the Palm OS pref0 resource.
+    // Emits the Palm OS pref 0 resource.
     void emitPref(Resources &out);
 #endif
 
     // A fully qualified ELF data address.
-    using Address = std::pair<Elf32_Section, Elf32_Addr>;
+    using Address = std::tuple<Elf32_Section, Elf32_Addr>;
 
     // A reverse map from target address to source xref.
     using JumpTable = std::map<Elf32_Addr, std::vector<Address>>;

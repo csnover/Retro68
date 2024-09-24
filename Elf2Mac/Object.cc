@@ -366,13 +366,137 @@ bool Object::isOffsetInEhFrame(uint16_t codeID, Elf32_Addr vaddr,
     return true;
 }
 
-Object::XrefKind Object::getXrefKind(uint16_t codeID, Elf32_Section source,
+static const uint8_t *RelaSizes() {
+    static const uint8_t SIZES[R_68K_NUM] = {
+        /* R_68K_NONE */ 0,
+        /* R_68K_32   */ 4,
+        /* R_68K_16   */ 0,
+        /* R_68K_8    */ 0,
+        /* R_68K_PC32 */ 4,
+        /* R_68K_PC16 */ 2,
+        /* R_68K_PC8  */ 0,
+        0
+    };
+    return SIZES;
+}
+
+// From M68000 Family Programmer’s Reference Manual
+enum {
+    // Effective address field
+    kEAPC        = 0b0'111'010,     // (d16,%pc)
+    kEAImmL      = 0b0'111'001,     // (xxx).L
+    kEAToSP      = 0b0'010'111,     // (%sp)
+    kEAA5        = 0b0'101'000 | 5, // (d16,%a5)
+    kEAPCIndex   = 0b0'111'011,     // (bd,%pc,Xn)
+    kEAMask      = 0b0'111'111,
+
+    // Branch displacement field
+    kBcc16       = 0,
+    kBcc32       = 0xff,
+
+    // Extension word for 68020+ 32-bit PC-relative instructions.
+    // See Figure 2-2 in the reference manual.
+    kExtPC32     = 0b0'1'0'1'11'0'000,
+
+    kOpAddiL     = 0b0'000'011'010'000'000,
+    kOpAddiL_SP  = kOpAddiL | kEAToSP,
+
+    kOpBra       = 0b0'110'0000'00'000'000,
+    kOpBraL      = kOpBra | kBcc32,
+    kOpBraW      = kOpBra | kBcc16,
+
+    kOpBsr       = 0b0'110'0001'00'000'000,
+    kOpBsrL      = kOpBsr | kBcc32,
+    kOpBsrW      = kOpBsr | kBcc16,
+
+    kOpJmp       = 0b0'100'111'011'000'000,
+    kOpJmpA5     = kOpJmp | kEAA5,
+    kOpJmpI32    = kOpJmp | kEAImmL,
+
+    kOpJsr       = 0b0'100'111'010'000'000,
+    kOpJsrA5     = kOpJmp | kEAA5,
+    kOpJsrI32    = kOpJmp | kEAImmL,
+
+    kOpLea       = 0b0'100'000'111'000'000,
+    kOpLeaA5     = kOpLea | kEAA5,
+    kOpLeaPC16   = kOpLea | kEAPC,
+    kOpLeaPC32   = kOpLea | kEAPCIndex,
+    kOpLeaI32    = kOpLea | kEAImmL,
+    kLeaRegMask  = 0b0'000'111'000'000'000,
+
+    kOpPea       = 0b0'100'100'001'000'000,
+    kOpPeaA5     = kOpPea | kEAA5,
+    kOpPeaPC16   = kOpPea | kEAPC,
+    kOpPeaPC32   = kOpPea | kEAPCIndex,
+    kOpPeaI32    = kOpPea | kEAImmL,
+
+    kOpRts       = 0b0'100'111'001'110'101
+};
+
+void Object::convertPCOpToDirectOp(SSec<uint8_t> &source, const Elf32_Rela *rela, const Elf32_Sym *targetSymbol) const
+{
+    auto op = source.getU16(rela->r_offset - 2, 0);
+    if (ELF32_R_TYPE(rela->r_info) == R_68K_PC32
+        && op == kExtPC32
+        && (source.getU16(rela->r_offset - 4, 0) & kEAMask) == kEAPCIndex)
+    {
+        // pea (bd,%pc) -> pea #xxx
+        // or
+        // lea (bd,%pc),%An -> lea #xxx,%An
+
+        op = source.getU16(rela->r_offset - 4, 0);
+        // There is no longer an extension word for this instruction
+        // after conversion, so shift the operator forward.
+        source.setU16(rela->r_offset - 4, kNoOp);
+        source.setU16(rela->r_offset - 2, (op & ~kEAMask) | kEAImmL);
+    }
+    else if (op == kOpBsrL)
+        // bsr.l #xxx -> jsr.l #xxx
+        source.setU16(rela->r_offset - 2, kOpJsrI32);
+    else if (op == kOpBraL)
+        // bra.l #xxx -> jmp.l #xxx
+        source.setU16(rela->r_offset - 2, kOpJmpI32);
+    else
+    {
+        std::ostringstream msg;
+        msg << "Unknown direct operator 0x" << std::hex << op;
+        warnReloc(std::cerr, msg.str().c_str(), rela, source.header, targetSymbol);
+    }
+}
+
+Object::XrefKind Object::getXrefKind(uint16_t codeID, const SSec<uint8_t> &source,
     const Elf32_Rela *rela, const Elf32_Sym *target) const
 {
-    if (!target)
+    if (!target || !rela)
         return XrefKind::Invalid;
 
-    auto targetSection = target->st_shndx;
+    auto relaSize = RelaSizes()[ELF32_R_TYPE(rela->r_info)];
+    if (relaSize == 0)
+        return XrefKind::InvalidUnsupported;
+
+    // A relocation with an odd address suggests that there is an alignment
+    // issue somewhere that needs to be fixed, since this would normally
+    // cause a bus error. The Palm OS relocation format also mandates word
+    // alignment, so it is not possible to relocate an unaligned xref at all
+    // there without using a custom extended relocation format.
+    if (rela->r_offset & 1)
+        return XrefKind::InvalidUnaligned;
+
+    // In the past, GNU ld was reportedly pointing relocations beyond the end of
+    // a section. This was probably a bug in old Elf2Mac VMA handling, but there
+    // is no harm in checking just in case.
+    if (!source.inRange(rela->r_offset, relaSize))
+        return XrefKind::InvalidRange;
+
+    // References to weak symbols that do not exist can just be ignored. This
+    // can happen with e.g. __cxa_pure_virtual.
+    if (ELF32_ST_BIND(target->st_info) == STB_WEAK
+        && target->st_value == 0
+        && rela->r_addend == 0)
+        return XrefKind::Weak;
+
+    auto targetIndex = target->st_shndx;
+    auto sourceIndex = source.index();
 
     // ld behaves differently depending on whether debug info is present.
     // If debug info is present, .eh_frame sections will contain references
@@ -390,51 +514,50 @@ Object::XrefKind Object::getXrefKind(uint16_t codeID, Elf32_Section source,
     // in GNU bfd.
     //
     // I *hope* that the correct behavior is to just clear those pointers.
-    if (targetSection != source && isOffsetInEhFrame(codeID, rela->r_offset, target))
+    if (targetIndex != sourceIndex && isOffsetInEhFrame(codeID, rela->r_offset, target))
         return XrefKind::InvalidEhFrame;
 
-    // Intra-section, data, and code 1 xrefs are always valid since the only
-    // limit on xrefs is whether or not the target section is actually loaded
-    // (and whether the operand is wide enough to store the addend, which should
-    // be ensured by the compiler).
-    if (targetSection == source
-        || targetSection == m_data.index()
-        || targetSection == m_bss.index()
-        || targetSection == m_code.front().index())
-        return XrefKind::Direct;
+    auto isPC16 = ELF32_R_TYPE(rela->r_info) == R_68K_PC16;
+    auto isPC = isPC16 || ELF32_R_TYPE(rela->r_info) == R_68K_PC32;
 
-    // Inter-section code xrefs are always OK because those can be pointed to
-    // the jump table which will call _LoadSeg if needed. Inter-section
-    // PC-relative relocations will be converted to absolute relocations by
-    // `buildJumpTable`.
+    // Intra-section xrefs are always valid since the only limit on xrefs is
+    // whether or not the target section is actually loaded, and a section
+    // referencing itself is obviously loaded. PC-relative xrefs only need an
+    // addend.
+    if (targetIndex == sourceIndex)
+        return isPC ? XrefKind::IntraPC : XrefKind::Direct;
+
+    // Inter-section xrefs to data are always valid because the data section is
+    // always loaded. A PC16 xref needs to be converted to an A5-relative xref
+    // since there is not enough room to use a direct relocation.
+    if (targetIndex == m_data.index() || targetIndex == m_bss.index())
+        return isPC16 ? XrefKind::IndirectData : XrefKind::Direct;
+
+    // Inter-section xrefs to code 1 are always valid for the same reason that
+    // data xrefs are always valid. A PC16 xref needs to be converted to use
+    // the jump table since there is not enough room to use a direct relocation.
+    if (targetIndex == m_code.front().index())
+        return isPC16 ? XrefKind::Indirect : XrefKind::Direct;
+
+    // Other inter-section code xrefs must always go through the jump table
+    // because the target section may not be loaded. The jump table will call
+    // _LoadSeg first if needed.
     if (ELF32_ST_TYPE(target->st_info) == STT_FUNC)
         return XrefKind::Indirect;
 
-    // Sometimes, references to functions are given as a section + addend
-    // instead of referring directly to a symbol. If necessary, it would be
-    // possible to look up whether there is a function symbol at the final
-    // offset, but for now just assume if it is targeting a code section that
-    // it is referring to code. Because of the resource headers, if something
-    // is referring to a section with no addend, it is definitely not referring
-    // to code.
-    if (ELF32_ST_TYPE(target->st_info) == STT_SECTION && rela->r_addend != 0
-        && targetSection != m_data.index() && targetSection != m_bss.index())
+    // The compiler sometimes gives references to functions as a section +
+    // addend instead of referring directly to a symbol. Since xrefs to the data
+    // section were already handled unconditionally earlier, assume that an
+    // STT_SECTION xref is an inter-section code xref. As an extra sanity check,
+    // verify the addend is not zero, since that would point to the code
+    // resource header.
+    if (ELF32_ST_TYPE(target->st_info) == STT_SECTION && rela->r_addend != 0)
         return XrefKind::Indirect;
 
-    // References to a weak symbol that does not exist can just be ignored. This
-    // can happen with e.g. __cxa_pure_virtual.
-    if (ELF32_ST_BIND(target->st_info) == STB_WEAK
-        && target->st_value == 0 && rela->r_addend == 0)
-        return XrefKind::Weak;
-
-    // Target section is not guaranteed to be loaded so xref is not possible. If
-    // this is an issue it is maybe possible to move the target symbol to the
-    // data segment, but this is not done right now. For Palm OS, maybe it is
-    // also possible to extend the relocation table to include relocations for
-    // all sections instead of just self, data, and code 1, since all the
-    // sections are actually always loaded and so probably the only restriction
-    // is that the OG Palm OS compilers were simple and based on Mac OS code so
-    // did not do this.
+    // The target section is not guaranteed to be loaded and there is no way to
+    // pass through a jump table, so this xref is not possible. The only known
+    // way this could happen is if some data did not make it to the data section
+    // and is the target of an inter-section reference.
     return XrefKind::Invalid;
 }
 
@@ -442,20 +565,6 @@ void Object::processRelocations()
 {
     for (auto &rela : m_rela)
         processRelocation(rela);
-}
-
-static const uint8_t *RelaSizes() {
-    static const uint8_t SIZES[R_68K_NUM] = {
-        /* R_68K_NONE */ 0,
-        /* R_68K_32   */ 4,
-        /* R_68K_16   */ 0,
-        /* R_68K_8    */ 0,
-        /* R_68K_PC32 */ 4,
-        /* R_68K_PC16 */ 0,
-        /* R_68K_PC8  */ 0,
-        0
-    };
-    return SIZES;
 }
 
 Object::DebugInfo Object::collectDebugInfo(const Elf32_Shdr *sourceHeader, const Elf32_Sym *targetSymbol) const
@@ -491,6 +600,31 @@ uint16_t Object::getCodeID(Elf32_Section source) const
     return codeID;
 }
 
+void Object::warnReloc(std::ostream &out, const char *msg, const Elf32_Rela *rela,
+    const Elf32_Shdr *sourceHeader, const Elf32_Sym *targetSymbol) const
+{
+    auto info = collectDebugInfo(sourceHeader, targetSymbol);
+    out << msg
+        << std::hex
+        << " type " << ELF32_R_TYPE(rela->r_info)
+        << " at " << info.sourceName
+        << "+0x" << rela->r_offset
+        << " to " << info.targetName << "(" << info.symbolName << ")"
+        << "+0x" << info.symbolValue
+        << " (addend 0x" << rela->r_addend
+        << std::dec;
+
+    if (targetSymbol)
+    {
+        out
+            << ", type " << ELF32_ST_TYPE(targetSymbol->st_info)
+            << ", bind " << ELF32_ST_BIND(targetSymbol->st_info)
+            << ", vis " << ELF32_ST_VISIBILITY(targetSymbol->st_other);
+    }
+
+    out << ")" << std::endl;
+}
+
 void Object::processRelocation(const SSec<Elf32_Rela> &relaSection)
 {
     auto *rela = relaSection.data;
@@ -508,141 +642,57 @@ void Object::processRelocation(const SSec<Elf32_Rela> &relaSection)
     if (m_bss && m_bss.section == source.section)
         throw std::runtime_error("Unexpected relocations in .bss");
 
+    // Code ID is calculated here and passed around for efficiency, since it
+    // does a string scan, so is a little slow
     auto codeID = getCodeID(sourceIndex);
+
     for (; rela != end; ++rela)
     {
-        auto type = ELF32_R_TYPE(rela->r_info);
-        if (type >= R_68K_NUM)
-            throw new std::runtime_error("out of range r_type " + std::to_string(type));
+        auto relaType = ELF32_R_TYPE(rela->r_info);
+        if (relaType >= R_68K_NUM)
+            throw new std::runtime_error("Out of range r_type " + std::to_string(relaType));
+        auto relaSize = RelaSizes()[relaType];
 
         const auto *targetSymbol = m_symtab[ELF32_R_SYM(rela->r_info)];
         Elf32_Section targetSection = targetSymbol ? targetSymbol->st_shndx : SHN_UNDEF;
 
-        // A relocation with an odd address suggests that there is an alignment
-        // issue somewhere that needs to be fixed, since this would cause a bus
-        // error.
-        if (rela->r_offset & 1)
+        switch (getXrefKind(codeID, source, rela, targetSymbol))
         {
-            auto info = collectDebugInfo(source.header, targetSymbol);
-            std::cerr
-                << std::hex
-                << "Unaligned ref type " << type
-                << " at " << info.sourceName
-                << "+0x" << rela->r_offset
-                << " to " << info.targetName << "(" << info.symbolName << ")"
-                << "+0x" << info.symbolValue
-                << " (addend 0x" << rela->r_addend << ","
-                << std::dec
-                << " type "
-                << (targetSymbol ? ELF32_ST_TYPE(targetSymbol->st_info) : 0)
-                << ")"
-                << std::endl;
-            continue;
-        }
-
-        // TODO: Rewrite pcrel type 5 going to data/bss sections to be
-        // a5-relative (this happens when building without -msep-data)
-        auto relaSize = RelaSizes()[type];
-        if (relaSize == 0 && targetSection != sourceIndex)
-        {
-            if (m_verbose)
+            case XrefKind::IntraPC:
             {
-                auto info = collectDebugInfo(source.header, targetSymbol);
-                std::cerr
-                    << std::hex
-                    << "Unsupported ref type " << type << " from " << info.sourceName
-                    << "+0x" << rela->r_offset
-                    << " to " << info.targetName << "(" << info.symbolName << ")"
-                    << "+0x" << info.symbolValue
-                    << " (addend 0x" << rela->r_addend << ","
-                    << std::dec
-                    << " type "
-                    << (targetSymbol ? ELF32_ST_TYPE(targetSymbol->st_info) : 0)
-                    << ")"
-                    << std::endl;
-            }
-            continue;
-        }
+                // Intra-section PC-relative code or data refs. This is the
+                // simplest xref since it only needs a compile-time fixup.
 
-        if (!source.inRange(rela->r_offset, relaSize))
-        {
-            if (m_verbose)
-            {
-                // FIXME: There are sometimes relocations beyond the end of the sections
-                //        in LD output for some reason. That's bad. Let's ignore it.
-                auto base = source.header->sh_addr;
-                auto max = base + source.size();
-                auto maxOffset = max - relaSize;
-                std::cerr
-                    << "Relocation out of range in "
-                    << m_shstrtab + source.header->sh_name << "; "
-                    << std::hex
-                    << "0x" << base << " >= "
-                    << "0x" << rela->r_offset << " >= "
-                    << "0x" << maxOffset
-                    << std::dec
-                    << std::endl;
-            }
-
-            continue;
-        }
-
-        switch (getXrefKind(codeID, sourceIndex, rela, targetSymbol))
-        {
-            case XrefKind::InvalidEhFrame:
-                // Case 1: References from .eh_frame, with the exception of
-                // __gcc_personality_v0. Should be direct references within the
-                // code segment.
+                assert(relaType != R_68K_32);
 
                 if (m_verbose)
+                    warnReloc(std::cout, "Intra-PC ref", rela, source.header, targetSymbol);
+
+                auto targetAddr = targetSymbol->st_value + rela->r_addend - rela->r_offset;
+                if (relaType == R_68K_PC16)
                 {
-                    auto info = collectDebugInfo(source.header, targetSymbol);
-                    std::cerr
-                        << "Clearing cross-segment reference from .eh_frame:\n"
-                        << info.symbolName
-                        << " (" << info.sourceName << " -> " << info.targetName << ") ["
-                        << std::hex
-                        << "info 0x" << int(targetSymbol->st_info)
-                        << " other 0x" << int(targetSymbol->st_other)
-                        << std::dec
-                        << "]"
-                        << std::endl;
+                    if (int(targetAddr) >= INT16_MIN && int(targetAddr) <= INT16_MAX)
+                        source.setU16(rela->r_offset, targetAddr);
+                    else
+                        // This should never happen since it would mean the
+                        // compiler emitted some garbage it knew was impossible
+                        warnReloc(std::cerr, "Out-of-range intra-section PC16 ref",
+                            rela, source.header, targetSymbol);
                 }
-
-                source.setU32(rela->r_offset, 0);
-            break;
-            case XrefKind::Indirect:
-            {
-                // Case 2: References to code that can go through the jump table.
-
-                auto targetAddr = targetSymbol->st_value + rela->r_addend;
-                auto &targetJumpTable = m_jumpTables[targetSection];
-                // It will be necessary to do a second pass to insert the
-                // correct addend to the source section since it can only be
-                // calculated after all of the target xrefs are known, since the
-                // jump table for each target section must be contiguous.
-                targetJumpTable[targetAddr].push_back({ sourceIndex, rela->r_offset });
-
-                if (m_verbose)
-                {
-                    auto info = collectDebugInfo(source.header, targetSymbol);
-                    std::cerr
-                        << std::hex
-                        << "Creating jump table entry from " << info.sourceName
-                        << "+0x" << rela->r_offset
-                        << " to " << info.targetName << "(" << info.symbolName << ")"
-                        << "+0x" << info.symbolValue
-                        << " (addend 0x" << rela->r_addend << ")"
-                        << std::dec
-                        << std::endl;
-                }
+                else
+                    source.setU32(rela->r_offset, targetAddr);
             }
             break;
             case XrefKind::Direct:
             {
-                // Case 3: Direct code and data refs. These are either refs
-                // to the same section or non-PCREL refs to other sections that
-                // are always loaded (data and code 1).
+                // Direct code and data refs. These are refs to the same section
+                // or refs to other sections that are always loaded (data and
+                // code 1).
+
+                assert(relaType != R_68K_PC16);
+
+                if (m_verbose)
+                    warnReloc(std::cout, "Direct ref", rela, source.header, targetSymbol);
 
                 RelocBase relocBase;
                 if (targetSection == m_data.index())
@@ -655,58 +705,125 @@ void Object::processRelocation(const SSec<Elf32_Rela> &relaSection)
                     relocBase = RelocCode1;
                 else
                 {
+                    // This should never happen
                     auto info = collectDebugInfo(source.header, targetSymbol);
                     throw std::runtime_error(
-                        "Impossible relocation between "s
+                        "Impossible Direct relocation between "s
                         + info.sourceName + " and "
                         + info.targetName + "(" + info.symbolName + ")");
                 }
 
-                auto targetAddr = targetSymbol->st_value + rela->r_addend;
-                if (type == R_68K_PC32)
-                    targetAddr -= rela->r_offset;
+                // PC-relative inter-section references must be converted to
+                // direct references since that is the only kind of runtime
+                // relocation supported without a custom relocation format.
+                if (relaType == R_68K_PC32)
+                    convertPCOpToDirectOp(source, rela, targetSymbol);
 
+                auto targetAddr = targetSymbol->st_value + rela->r_addend;
                 source.setU32(rela->r_offset, targetAddr);
+
                 auto &table = m_relocations[sourceIndex][relocBase];
-                assert(table.empty() || table.back() < rela->r_offset);
+                assert((table.empty() || table.back() < rela->r_offset)
+                    && "Out-of-order relocation");
                 table.push_back(rela->r_offset);
             }
             break;
-            case XrefKind::Invalid:
-                // Case 4: Code references that don't go through the jump table
-                // must remain in the current segment.
+            case XrefKind::Indirect:
+            {
+                // References to code that can go through the jump table.
 
                 if (m_verbose)
-                {
-                    auto info = collectDebugInfo(source.header, targetSymbol);
-                    std::cerr
-                        << std::hex
-                        << "Invalid ref type " << type << " from " << info.sourceName
-                        << "+0x" << rela->r_offset
-                        << " to " << info.targetName << "(" << info.symbolName << ")"
-                        << "+0x" << info.symbolValue
-                        << " (addend 0x" << rela->r_addend << ","
-                        << std::dec
-                        << " type "
-                        << (targetSymbol ? ELF32_ST_TYPE(targetSymbol->st_info) : 0)
-                        << ")"
-                        << std::endl;
-                }
+                    warnReloc(std::cout, "Creating jump table entry", rela, source.header, targetSymbol);
+
+                auto targetAddr = targetSymbol->st_value + rela->r_addend;
+                auto &targetJumpTable = m_jumpTables[targetSection];
+                // It is necessary to do a second pass to insert the correct
+                // addend to the source section since it can only be calculated
+                // after all of the target xrefs are known, since the jump table
+                // for each target section must be contiguous. The second pass
+                // will also correct the operator.
+                targetJumpTable[targetAddr].push_back({ sourceIndex, rela->r_offset });
+
+                // TODO: If the relocation is 32-bit and the source is not code
+                // 1 (since it is near mode on all platforms and never gets any
+                // runtime relocation on at least Palm OS), then it should be
+                // possible to use a direct relocation, and this should be added
+                // to the relocation table
+            }
+            break;
+            case XrefKind::IndirectData:
+            {
+                // PC-relative references to data that can go through A5. This
+                // should only happen when the compiler is not run with
+                // `-msep-data`. Using `-msep-data` is probably better since the
+                // compiler can (at least in theory) switch more easily to using
+                // 32-bit displacement if it needs to to avoid out-of-range
+                // data.
+
+                assert(relaType == R_68K_PC16);
+
+                if (m_verbose)
+                    warnReloc(std::cout, "Indirect data ref", rela, source.header, targetSymbol);
+
+                auto op = source.getU16(rela->r_offset - 2, 0);
+                if ((op & kEAMask) != kEAPC)
+                    throw std::runtime_error("PC-relative operator expected");
+
+                // NOTE: This work will need to be deferred until after jump
+                // tables are built if the jump tables are ever moved into
+                // belowA5, since in that case we will not be able to
+                // calculate the size of belowA5 yet.
+                auto belowA5 = m_data.size() + m_bss.size();
+                auto targetAddr = targetSymbol->st_value + rela->r_addend - belowA5;
+
+                // If the target is out of range, it can only be fixed by
+                // adding more stuff to the code section, which is too much
+                // work for now, since it would require adjusting all of the
+                // symbol and relocation addresses in the section after the
+                // point where the code was changed. Try `-msep-data`.
+                if (int(targetAddr) < INT16_MIN || int(targetAddr) > INT16_MAX)
+                    throw std::runtime_error("Target out-of-range");
+
+                source.setU16(rela->r_offset - 2, (op & ~kEAMask) | kEAA5);
+                source.setU16(rela->r_offset, targetAddr);
+            }
+            break;
+            case XrefKind::Invalid:
+                if (m_verbose)
+                    warnReloc(std::cerr, "Invalid ref", rela, source.header, targetSymbol);
+            break;
+            case XrefKind::InvalidEhFrame:
+                // References from .eh_frame, with the exception of
+                // __gcc_personality_v0. Should be direct references within the
+                // code segment.
+
+                if (m_verbose)
+                    warnReloc(std::cerr, "Clearing .eh_frame ref", rela, source.header, targetSymbol);
+
+                // TODO: Why?
+                source.setU32(rela->r_offset, 0);
+            break;
+            case XrefKind::InvalidUnaligned:
+                warnReloc(std::cerr, "Unaligned ref", rela, source.header, targetSymbol);
+            break;
+            case XrefKind::InvalidUnsupported:
+                warnReloc(std::cerr, "Unsupported ref", rela, source.header, targetSymbol);
+            break;
+            case XrefKind::InvalidRange:
+            {
+                auto base = source.header->sh_addr;
+                auto maxOffset = base + source.size() - relaSize;
+                std::ostringstream msg;
+                msg << std::hex << "Relocation out of range (" << "0x" << base
+                    << " >= 0x" << rela->r_offset
+                    << " >= 0x" << maxOffset << ")";
+                warnReloc(std::cerr, msg.str().c_str(), rela, source.header, targetSymbol);
+            }
             break;
             case XrefKind::Weak:
                 if (m_verbose)
-                {
-                    auto info = collectDebugInfo(source.header, targetSymbol);
-                    std::cout
-                        << std::hex
-                        << "Ignoring weak symbol reference from "
-                        << info.sourceName
-                        << "+0x" << rela->r_offset
-                        << " to " << info.targetName << "(" << info.symbolName << ")"
-                        << "+0x" << info.symbolValue
-                        << " (addend 0x" << rela->r_addend << ")\n"
-                        << std::dec;
-                }
+                    warnReloc(std::cout, "Ignoring weak symbol reference", rela,
+                        source.header, targetSymbol);
             break;
         }
     }
@@ -714,34 +831,6 @@ void Object::processRelocation(const SSec<Elf32_Rela> &relaSection)
 
 std::pair<size_t, std::string> Object::processJumpTables()
 {
-    // From M68000 Family Programmer’s Reference Manual
-    enum {
-        // Effective address field
-        kEAPC     = 0b0'111'010, /* (d16,%pc) */
-        kEAImmL   = 0b0'111'001, /* (xxx).L */
-        kEAToSP   = 0b0'010'111, /* (%sp) */
-        kEAA5     = 0b0'101'000 | 5, /* (d16,%a5) */
-        kEAMask   = 0b0'111'111,
-
-        kOpAddiL     = 0b0'000'011'010'000'000,
-        kOpAddiL_SP  = kOpAddiL | kEAToSP,
-        kOpBraL      = 0b0'110'000'011'111'111,
-        kOpBsrL      = 0b0'110'000'111'111'111,
-        kBccDispMask = 0b0'000'000'011'111'111,
-        kOpJmp       = 0b0'100'111'011'000'000,
-        kOpJmpA5     = kOpJmp | kEAA5,
-        kOpJmpI32    = kOpJmp | kEAImmL,
-        kOpJsr       = 0b0'100'111'010'000'000,
-        kOpJsrA5     = kOpJmp | kEAA5,
-        kOpJsrI32    = kOpJmp | kEAImmL,
-        kOpLea       = 0b0'100'000'111'000'000,
-        kOpLeaPC16   = kOpLea | kEAPC,
-        kLeaRegMask  = 0b0'000'111'000'000'000,
-        kOpPea       = 0b0'100'100'001'000'000,
-        kOpPeaPC16   = kOpPea | kEAPC,
-        kOpRts       = 0b0'100'111'001'110'101,
-    };
-
     auto jtIndex = m_jtFirstIndex;
     // Use signed size since it is possible in the future that jump table might
     // end up being offset negatively if someone needs to support making it
@@ -756,6 +845,7 @@ std::pair<size_t, std::string> Object::processJumpTables()
         SSec<uint8_t> target { elf_getscn(m_elf, targetSection) };
         auto codeID = getCodeID(targetSection);
         if (codeID == 0)
+            // This should never happen
             throw std::runtime_error("Cannot create jump table to non-code section");
         else if (codeID == 1)
             // The linker script already populates the code 1 header with the
@@ -844,10 +934,10 @@ std::pair<size_t, std::string> Object::processJumpTables()
                 // 68020+           | Replacement   | 68000/010        | Replacement
                 // -----------------|---------------|------------------|------------
                 // bra.l d32        | jmp (d16,%a5) | pea (4,%pc)      | jmp (d16,%a5)
-                //                  |               | addi.l d32,(%sp) | nop nop nop
+                // bra.w (d16,%pc)  | "             | addi.l d32,(%sp) | nop nop nop
                 //                  |               | rts              | nop
                 // bsr.l d32        | jsr (d16,%a5) | pea (14,%pc)     | pea (14,%pc)  ; 16+20 cycles
-                //                  |               | pea (4,%pc)      | jmp (d16,%a5) ; jsr+nop would be
+                // bsr.w (d16,%pc)  | "             | pea (4,%pc)      | jmp (d16,%a5) ; jsr+nop would be
                 //                  |               | addi.l d32,(%sp) | nop nop nop   ; 18+24 cycles
                 //                  |               | rts              | nop
                 // jmp.l i32        | jmp (d16,%a5) | same             | same
@@ -862,7 +952,8 @@ std::pair<size_t, std::string> Object::processJumpTables()
                 auto op = source.getU16(offset - 2, 0);
 
                 auto is68000Emu = op == kOpAddiL_SP
-                    // operand of pea (4,%pc) or lea (4,%pc),%an
+                    // This is a check for the operand of pea (4,%pc) or lea
+                    // (4,%pc),%an. The operator will be checked later
                     && source.getU16(offset - 4, 0) == 4;
 
                 if (is68000Emu
@@ -900,17 +991,19 @@ std::pair<size_t, std::string> Object::processJumpTables()
                         << std::dec
                         << std::endl;
                 }
-                else if (op == kOpBraL || op == kOpJmpI32)
+                else if (op == kOpBraL || op == kOpJmpI32 || op == kOpBraW)
                 {
                     source.setU16(offset - 2, kOpJmpA5);
                     source.setU16(offset, a5JTOffset);
-                    source.setU16(offset + 2, kNoOp);
+                    if (op != kOpBraW)
+                        source.setU16(offset + 2, kNoOp);
                 }
-                else if (op == kOpBsrL || op == kOpJsrI32)
+                else if (op == kOpBsrL || op == kOpJsrI32 || op == kOpBsrW)
                 {
                     source.setU16(offset - 2, kOpJsrA5);
                     source.setU16(offset, a5JTOffset);
-                    source.setU16(offset + 2, kNoOp);
+                    if (op != kOpBsrW)
+                        source.setU16(offset + 2, kNoOp);
                 }
                 else if (sourceSection == m_data.index()
                     || isOffsetInEhFrame(getCodeID(sourceSection), offset, nullptr))

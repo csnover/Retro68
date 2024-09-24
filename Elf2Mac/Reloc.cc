@@ -116,7 +116,7 @@ std::string SerializeRelocs(const Relocations &relocs)
 static inline void EmitPalmReloc(std::ostream &out, uint32_t &lastAddr, uint32_t relocAddr)
 {
     int32_t delta = relocAddr - lastAddr;
-    assert((delta & 1) == 0);
+    assert((delta & 1) == 0 && "Unaligned relocation delta");
     delta /= 2;
 
     // The top two bits are control bits, and the top third bit is a sign bit
@@ -126,8 +126,8 @@ static inline void EmitPalmReloc(std::ostream &out, uint32_t &lastAddr, uint32_t
         word(out, 0x4000 | (delta & (UINT16_MAX >> 2)));
     else
     {
-        assert((relocAddr & 1) == 0);
-        assert(relocAddr < (UINT32_MAX >> 3));
+        assert((relocAddr & 1) == 0 && "Unaligned relocation offset");
+        assert(relocAddr < (UINT32_MAX >> 3) && "Out-of-range relocation offset");
         longword(out, (relocAddr / 2) & (UINT32_MAX >> 2));
     }
 
@@ -183,7 +183,7 @@ std::pair<std::string, size_t> SerializeRelocsPalm(const Relocations &relocs, bo
     if (codeSection)
         EmitPalmCodeRelocs(out, relocs, RelocCode);
     else
-        assert(relocs[RelocCode].empty());
+        assert(relocs[RelocCode].empty() && "Found code relocations in data section");
 
     return { out.str(), dataRelocsSize };
 }
