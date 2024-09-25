@@ -41,8 +41,8 @@ struct SSec
     inRange(Elf32_Addr vaddr, Elf32_Word size) const
     {
         return header
-            && vaddr >= header->sh_addr
-            && vaddr + size <= header->sh_addr + header->sh_size;
+            && Elf32_Sword(vaddr) >= Elf32_Sword(header->sh_addr)
+            && Elf32_Sword(vaddr + size) <= Elf32_Sword(header->sh_addr + header->sh_size);
     }
 
     template <typename U = T>

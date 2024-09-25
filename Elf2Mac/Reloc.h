@@ -48,11 +48,16 @@ enum RelocBase
     RelocBaseCount
 };
 
+// Vectors of VMAs that need to be displaced at runtime with the physical
+// address of the kind given in RelocBase.
 using Relocations = std::array<std::vector<Elf32_Addr>, RelocBaseCount>;
 
 std::string SerializeRelocs(const Relocations &relocs);
+
 #ifdef PALMOS
-std::pair<std::string, size_t> SerializeRelocsPalm(const Relocations &relocs, bool codeSection, Elf32_Addr dataBelowA5, Elf32_Addr bssBelowA5);
+// Serialises relocations to the Palm OS relocation format. Returns the size of
+// the data relocation table.
+uint32_t SerializeRelocsPalm(std::ostream &out, const Relocations &relocs, bool codeSection);
 #endif
 
 #endif // RELOC_H

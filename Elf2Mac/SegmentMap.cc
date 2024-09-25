@@ -175,11 +175,9 @@ static inline void PushPCToStack(std::ostream &out)
 static inline void DisplaceStackPCTo(std::ostream &out, const char *entryPoint)
 {
     // addi.l #entryPoint, (sp)
-#   define AddiInstrSize "6"
     out
         << "SHORT(0x0697);\n"
-        << "LONG(" << entryPoint << " - _entry_trampoline - " AddiInstrSize ");\n";
-#   undef AddiInstrSize
+        << "LONG(" << entryPoint << " - _entry_trampoline - 8);\n";
 }
 
 static inline void JumpToEntrypoint(std::ostream &out)
@@ -240,7 +238,12 @@ static Block StartSections(std::ostream &out, const char *entryPoint, bool strip
 
 static void WriteDataSection(std::ostream &out)
 {
-    Block section(out << ".data : ");
+    // Alignments within the data sections use `ALIGN(., n)` because these
+    // sections have a negative base address starting from the end of the
+    // data. `ALIGN` rounds up, so `ALIGN(n)` (i.e. `ALIGN(ABSOLUTE(.), n)`)
+    // will not do the expected thing of extending the section size to an
+    // alignment boundary.
+    Block section(out << ".data : ALIGN(4) SUBALIGN(4) ");
     out <<
         "_sdata = .;\n"
         "*(.got.plt)\n"
@@ -248,11 +251,11 @@ static void WriteDataSection(std::ostream &out)
 
         // TODO: Why so much alignment? What is this?
         "FILL(0);\n"
-        ". = ALIGN(0x20);\n"
+        ". = ALIGN(., 0x20);\n"
         // TODO: What is this?
         "LONG(-1);\n"
         // TODO: Why so much alignment? What is this?
-        ". = ALIGN(0x20);\n"
+        ". = ALIGN(., 0x20);\n"
 
         // TODO: Read-only data should probably be kept in the code sections.
         // At least on Palm OS, there are allegedly OS-level resource size
@@ -267,27 +270,29 @@ static void WriteDataSection(std::ostream &out)
         "*(.data.*)\n"
         "*(.gnu.linkonce.d*)\n"
 
-        ". = ALIGN(4);\n"
+        ". = ALIGN(., 4);\n"
         "__CTOR_LIST__ = .;\n"
         "KEEP (*(.ctors))\n"
         "KEEP (*(SORT(.ctors.*)))\n"
         "__CTOR_END__ = .;\n"
         "LONG(0);\n"
 
-        ". = ALIGN(4);\n"
+        ". = ALIGN(., 4);\n"
         "__DTOR_LIST__ = .;\n"
         "KEEP (*(.dtors))\n"
         "KEEP (*(SORT(.dtors.*)))\n"
         "__DTOR_END__ = .;\n"
         "LONG(0);\n"
-
-        ". = ALIGN(4);\n"
+        ". = ALIGN(., 4);\n"
         "_edata = .;\n";
 }
 
 static void WriteBssSection(std::ostream &out)
 {
-    Block section(out << ".bss 0 : ");
+    // See WriteDataSection for more information about alignment.
+    // The data section goes below A5, so set its base address here so that
+    // Elf2Mac does not need to adjust data offsets itself later.
+    Block section(out << ".bss -SIZEOF(.bss)-SIZEOF(.data) : ALIGN(4) SUBALIGN(4) ");
     out <<
         "_sbss = .;\n"
         "*(.dynsbss)\n"
@@ -300,8 +305,7 @@ static void WriteBssSection(std::ostream &out)
         "*(.bss*)\n"
         "*(.gnu.linkonce.b*)\n"
         "*(COMMON)\n"
-        // TODO: Why so much alignment?
-        ". = ALIGN(0x10);\n"
+        ". = ALIGN(., 4);\n"
         "_ebss = .;\n";
 }
 

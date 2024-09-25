@@ -239,7 +239,6 @@ static int Elf2Mac(char *argv[])
 
         std::string inputFile { outputFile + ".gdb"s };
 
-        ldArgv.push_back("--orphan-handling=warn");
         ldArgv.push_back("--no-check-sections");
         ldArgv.push_back("--no-warn-rwx-segments");
         ldArgv.push_back("-o");

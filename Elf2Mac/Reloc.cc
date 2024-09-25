@@ -134,32 +134,29 @@ static inline void EmitPalmReloc(std::ostream &out, uint32_t &lastAddr, uint32_t
     lastAddr = relocAddr;
 }
 
-static void EmitPalmDataRelocs(std::ostream &out, const Relocations &relocs, Elf32_Addr dataBelowA5, Elf32_Addr bssBelowA5)
+static void EmitPalmDataRelocs(std::ostream &out, const Relocations &relocs)
 {
     longword(out, relocs[RelocData].size() + relocs[RelocBss].size());
 
-    // In case the relative order of .data and .bss changes later, try to avoid
-    // having to remember every single place that may have an ordered dependency
-    // by just being proactive and always emitting them in the appropriate
-    // order.
-    RelocBase first = RelocBss, second = RelocData;
-    if (bssBelowA5 < dataBelowA5)
-    {
-        std::swap(first, second);
-        std::swap(bssBelowA5, dataBelowA5);
-    }
-
-    // Palm OS relocations on the data section are done relative to %a5, not to
-    // the start of the data, so the offsets have to be adjusted accordingly
-    // by dataBelowA5 and bssBelowA5. Code sections are relocated from the
-    // start of their data so do not need this.
-
+    // libretro on Mac OS does a separate allocation for bss, but on Palm OS
+    // there is only one global allocation, so these relocations can be
+    // interleaved into one group for efficiency.
     uint32_t offset = 0;
-    for (auto reloc : relocs[first])
-        EmitPalmReloc(out, offset, reloc - bssBelowA5);
-
-    for (auto reloc : relocs[second])
-        EmitPalmReloc(out, offset, reloc - dataBelowA5);
+    auto a = relocs[RelocData].begin();
+    auto aEnd = relocs[RelocData].end();
+    auto b = relocs[RelocBss].begin();
+    auto bEnd = relocs[RelocBss].end();
+    while (a != aEnd && b != bEnd)
+    {
+        if (*a < *b)
+            EmitPalmReloc(out, offset, *a++);
+        else
+            EmitPalmReloc(out, offset, *b++);
+    }
+    while (a != aEnd)
+        EmitPalmReloc(out, offset, *a++);
+    while (b != bEnd)
+        EmitPalmReloc(out, offset, *b++);
 }
 
 static void EmitPalmCodeRelocs(std::ostream &out, const Relocations &relocs, RelocBase which)
@@ -170,13 +167,13 @@ static void EmitPalmCodeRelocs(std::ostream &out, const Relocations &relocs, Rel
         EmitPalmReloc(out, offset, reloc);
 }
 
-std::pair<std::string, size_t> SerializeRelocsPalm(const Relocations &relocs, bool codeSection, Elf32_Addr dataBelowA5, Elf32_Addr bssBelowA5)
+uint32_t SerializeRelocsPalm(std::ostream &out, const Relocations &relocs, bool codeSection)
 {
-    std::ostringstream out;
 
-    EmitPalmDataRelocs(out, relocs, dataBelowA5, bssBelowA5);
+    auto start = out.tellp();
+    EmitPalmDataRelocs(out, relocs);
+    auto dataRelocsSize = out.tellp() - start;
 
-    auto dataRelocsSize = out.tellp();
 
     EmitPalmCodeRelocs(out, relocs, RelocCode1);
 
@@ -185,6 +182,6 @@ std::pair<std::string, size_t> SerializeRelocsPalm(const Relocations &relocs, bo
     else
         assert(relocs[RelocCode].empty() && "Found code relocations in data section");
 
-    return { out.str(), dataRelocsSize };
+    return dataRelocsSize;
 }
 #endif

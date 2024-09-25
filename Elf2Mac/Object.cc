@@ -31,6 +31,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include <unordered_set>
 #include <utility>
 
 #include <fcntl.h>
@@ -140,17 +141,7 @@ void Object::loadSections()
                     m_data = scn;
                 else
                 {
-                    // The output sections in the linker script have to be
-                    // sorted according to input match order because that
-                    // is how GNU ld works, but the final output should be
-                    // sorted by resource IDs which are given in the output
-                    // section name
-                    auto pos = std::lower_bound(m_code.begin(), m_code.end(), name,
-                        [&](SSec<uint8_t> &section, const char *newName) {
-                            const char *ownName = m_shstrtab + section.header->sh_name;
-                            return std::strcmp(ownName, newName) < 0;
-                        });
-                    m_code.insert(pos, scn);
+                    m_code.emplace_back(scn);
 
                     // All code sections have a header that needs to be filled
                     // with jump table information even if there are no
@@ -180,6 +171,17 @@ void Object::loadSections()
 
     if (m_code.empty())
         throw std::runtime_error("No code sections found");
+
+    // The output sections in the linker script have to be sorted according to
+    // input match order because that is how GNU ld works, but the final output
+    // should be sorted by resource IDs which are given in the output section
+    // name
+    std::sort(m_code.begin(), m_code.end(),
+        [&](const SSec<uint8_t> &a, const SSec<uint8_t> &b) {
+            const char *aName = m_shstrtab + a.header->sh_name;
+            const char *bName = m_shstrtab + b.header->sh_name;
+            return std::strcmp(aName, bName) < 0;
+    });
 
     if (isPalm())
     {
@@ -229,16 +231,7 @@ void Object::emitFlatCode(std::ostream &out)
 
 #ifdef PALMOS
         if (isPalm())
-        {
-            // These are normally offsets subtracted from %a5 but in this case
-            // they are positive offsets since they are not actually being used
-            // through A5. TODO: Treating belowA5 as a positive value is
-            // probably unnecessarily confusing. TODO: Combining data like this
-            // makes no sense.
-            auto dataBelowA5 = -m_code.front().size();
-            auto bssBelowA5 = -m_code.front().size() - m_data.size();
-            out << SerializeRelocsPalm(combined, false, dataBelowA5, bssBelowA5).first;
-        }
+            SerializeRelocsPalm(out, combined, false);
         else
 #endif
             out << SerializeRelocs(combined);
@@ -248,9 +241,7 @@ void Object::emitFlatCode(std::ostream &out)
         const auto &relocs = m_relocations[m_code.front().index()];
 #ifdef PALMOS
         if (isPalm())
-            // There is no dataBelowA5/bssBelowA5 here because there should be
-            // no data to relocate
-            out << SerializeRelocsPalm(relocs, false, 0, 0).first;
+            SerializeRelocsPalm(out, relocs, false);
         else
 #endif
             out << SerializeRelocs(relocs);
@@ -839,6 +830,10 @@ std::pair<size_t, std::string> Object::processJumpTables()
     // unsigned).
     ssize_t a5JTOffset = m_jtHeaderSize + jtIndex * m_jtEntrySize;
 
+    // Source data relocation tables that received late entries and need to be
+    // sorted
+    std::unordered_set<Elf32_Section> unsortedRelocs;
+
     std::ostringstream jumpTable;
     for (const auto &[targetSection, sectionTable] : m_jumpTables)
     {
@@ -898,9 +893,9 @@ std::pair<size_t, std::string> Object::processJumpTables()
                     << std::endl;
             }
 
-            for (const auto &[sourceSection, offset] : sourceAddrs)
+            for (auto [sourceIndex, offset] : sourceAddrs)
             {
-                SSec<uint8_t> source { elf_getscn(m_elf, sourceSection) };
+                SSec<uint8_t> source { elf_getscn(m_elf, sourceIndex) };
 
                 // There are two potential ways to rewrite jump table
                 // relocations.
@@ -1005,14 +1000,15 @@ std::pair<size_t, std::string> Object::processJumpTables()
                     if (op != kOpBsrW)
                         source.setU16(offset + 2, kNoOp);
                 }
-                else if (sourceSection == m_data.index()
-                    || isOffsetInEhFrame(getCodeID(sourceSection), offset, nullptr))
+                else if (sourceIndex == m_data.index()
+                    || isOffsetInEhFrame(getCodeID(sourceIndex), offset, nullptr))
                 {
                     // Assume this is a vtable or similar, rewrite the offset to
                     // point to the corresponding jump table entry, and give it
                     // a relocation
                     source.setU32(offset, a5JTOffset);
-                    m_relocations[sourceSection][RelocData].push_back(offset);
+                    m_relocations[sourceIndex][RelocData].push_back(offset);
+                    unsortedRelocs.insert(sourceIndex);
                 }
                 else
                 {
@@ -1048,17 +1044,21 @@ std::pair<size_t, std::string> Object::processJumpTables()
         }
     }
 
+    for (auto sourceIndex : unsortedRelocs)
+    {
+        auto &table = m_relocations[sourceIndex][RelocData];
+        std::sort(table.begin(), table.end());
+    }
+
     return { jtIndex, jumpTable.str() };
 }
 
-std::pair<size_t, size_t> Object::emitRes0(Resources &rsrc)
+void Object::emitRes0(Resources &rsrc)
 {
     auto belowA5 = m_data.size() + m_bss.size();
     auto [jtNumEntries, jumpTable] = processJumpTables();
     auto jtSize = jtNumEntries * m_jtEntrySize;
     auto aboveA5 = m_jtHeaderSize + jtSize;
-    auto dataBelowA5 = belowA5 - (m_data ? m_data.header->sh_addr : 0);
-    auto bssBelowA5 = belowA5 - (m_bss ? m_bss.header->sh_addr : 0);
 
     std::ostringstream code0;
 
@@ -1098,12 +1098,12 @@ std::pair<size_t, size_t> Object::emitRes0(Resources &rsrc)
         if (m_data)
             std::cout
                 << ".data: " << m_data.size() << " bytes at A5-0x"
-                << std::hex << dataBelowA5 << std::dec << "\n";
+                << std::hex << -m_data.header->sh_addr << std::dec << "\n";
 
         if (m_bss)
             std::cout
                 << ".bss: " << m_bss.size() << " bytes at A5-0x"
-                << std::hex << bssBelowA5 << std::dec << "\n";
+                << std::hex << -m_bss.header->sh_addr << std::dec << "\n";
     }
 
     rsrc.addResource(Resource(m_codeOsType, 0, code0.str()));
@@ -1126,7 +1126,7 @@ std::pair<size_t, size_t> Object::emitRes0(Resources &rsrc)
             combined.append(m_jtHeaderSize, '\0');
 
             combined += jumpTable;
-            data0 += CompressPalmData(combined, dataBelowA5);
+            data0 += CompressPalmData(combined, -m_data.header->sh_addr);
 
             if (m_verbose)
             {
@@ -1139,13 +1139,13 @@ std::pair<size_t, size_t> Object::emitRes0(Resources &rsrc)
             }
         }
 
-        auto [relocs, dataRelocsSize] = SerializeRelocsPalm(
-            m_relocations[m_data.index()], false, dataBelowA5, bssBelowA5);
+        std::ostringstream relocs;
+        auto dataRelocsSize = SerializeRelocsPalm(relocs, m_relocations[m_data.index()], false);
 
         longword(reinterpret_cast<uint8_t *>(data0.data()),
             data0.size() + dataRelocsSize);
 
-        data0 += std::move(relocs);
+        data0 += relocs.str();
 
         rsrc.addResource(Resource(m_dataOsType, 0, std::move(data0)));
     }
@@ -1155,8 +1155,6 @@ std::pair<size_t, size_t> Object::emitRes0(Resources &rsrc)
         rsrc.addResource(Resource(m_dataOsType, 0, std::string(m_data.view())));
         rsrc.addResource(Resource("RELA", 0, SerializeRelocs(m_relocations[m_data.index()])));
     }
-
-    return { dataBelowA5, bssBelowA5 };
 }
 
 void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segmentMap)
@@ -1164,7 +1162,7 @@ void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segm
     ResourceFile file;
     Resources& rsrc = file.resources;
 
-    auto [ dataBelowA5, bssBelowA5 ] = emitRes0(rsrc);
+    emitRes0(rsrc);
 
     for (auto &section : m_code)
     {
@@ -1184,8 +1182,11 @@ void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segm
         else if (codeID != 1 && isPalm())
         {
             std::string code(section.view());
-            code += SerializeRelocsPalm(m_relocations[section.index()], true,
-                dataBelowA5, bssBelowA5).first;
+            {
+                std::ostringstream relocs;
+                SerializeRelocsPalm(relocs, m_relocations[section.index()], true);
+                code += relocs.str();
+            }
 
             if (m_verbose)
                 size = code.size();

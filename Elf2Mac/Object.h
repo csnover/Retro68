@@ -156,7 +156,7 @@ private:
     std::pair<size_t, std::string> processJumpTables();
 
     // Emits the code 0 and data 0 resources.
-    std::pair<size_t, size_t> emitRes0(Resources &out);
+    void emitRes0(Resources &out);
 
 #ifdef PALMOS
     // Emits the Palm OS pref 0 resource.
