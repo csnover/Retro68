@@ -40,6 +40,8 @@ struct SSec
     inline std::enable_if_t<std::is_same_v<U, uint8_t>, bool>
     inRange(Elf32_Addr vaddr, Elf32_Word size) const
     {
+        // Using signed values because the base address of the data section is
+        // negative
         return header
             && Elf32_Sword(vaddr) >= Elf32_Sword(header->sh_addr)
             && Elf32_Sword(vaddr + size) <= Elf32_Sword(header->sh_addr + header->sh_size);

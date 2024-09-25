@@ -405,8 +405,8 @@ enum {
     kOpJmpI32    = kOpJmp | kEAImmL,
 
     kOpJsr       = 0b0'100'111'010'000'000,
-    kOpJsrA5     = kOpJmp | kEAA5,
-    kOpJsrI32    = kOpJmp | kEAImmL,
+    kOpJsrA5     = kOpJsr | kEAA5,
+    kOpJsrI32    = kOpJsr | kEAImmL,
 
     kOpLea       = 0b0'100'000'111'000'000,
     kOpLeaA5     = kOpLea | kEAA5,
@@ -450,7 +450,7 @@ void Object::convertPCOpToDirectOp(SSec<uint8_t> &source, const Elf32_Rela *rela
     else
     {
         std::ostringstream msg;
-        msg << "Unknown direct operator 0x" << std::hex << op;
+        msg << "Unknown PC-relative operator 0x" << std::hex << op;
         warnReloc(std::cerr, msg.str().c_str(), rela, source.header, targetSymbol);
     }
 }
