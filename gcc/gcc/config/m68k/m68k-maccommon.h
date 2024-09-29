@@ -9,8 +9,9 @@
 #undef CPP_SPEC
 #define CPP_SPEC "%{!Wmultichar:-Wno-multichar} %{!Wtrigraphs:-Wno-trigraphs}"
 
+/* Default to -fpic. */
 #undef CC1_SPEC
-#define CC1_SPEC "%{!mno-pcrel:-mpcrel}"
+#define CC1_SPEC "%{!mpcrel:%{!fno-pic:%{" NO_FPIE_AND_FPIC_SPEC ":-fpic}}}"
 
 #undef ENDFILE_SPEC
 #define ENDFILE_SPEC ""
