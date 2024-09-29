@@ -1,23 +1,17 @@
 include(CMakeParseArguments)
 
-cmake_policy(PUSH)
-cmake_policy(SET CMP0012 NEW)
-
 function(add_application name)
-
     set(options DEBUGBREAK CONSOLE)
     set(oneValueArgs TYPE CREATOR)
     set(multiValueArgs FILES MAKEAPPL_ARGS)
 
-    cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN} )
+    cmake_parse_arguments(ARGS "${options}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
     list(APPEND ARGS_FILES ${ARGS_UNPARSED_ARGUMENTS})
 
     set(REZ_FLAGS)
-    if(CMAKE_SYSTEM_NAME MATCHES RetroPPC OR CMAKE_SYSTEM_NAME MATCHES RetroCarbon)
-        if(CMAKE_SYSTEM_NAME MATCHES RetroCarbon)
-            set(REZ_FLAGS -DTARGET_API_MAC_CARBON=1)
-        endif()
+    if(RETRO_CARBON)
+        set(REZ_FLAGS -DTARGET_API_MAC_CARBON=1)
     endif()
     
     set(files)
@@ -52,8 +46,8 @@ function(add_application name)
     if(${ARGS_DEBUGBREAK})
         target_link_options(${name} PRIVATE "LINKER:--defsym=__break_on_entry=1")
     endif()
-    if(${ARGS_CONSOLE})
-        if(TARGET RetroConsole OR NOT (CMAKE_SYSTEM_NAME MATCHES RetroCarbon))    
+    if(${ARGS_CONSOLE} AND NOT RETRO_PALMOS)
+        if(TARGET RetroConsole OR NOT RETRO_CARBON)
             target_link_libraries(${name} RetroConsole)
         else()
             target_link_libraries(${name} RetroConsoleCarbon)
@@ -80,13 +74,7 @@ function(add_application name)
         set(ARGS_CREATOR "????")
     endif()
 
-
-    if(TARGET retrocrt)
-        add_dependencies(${name} retrocrt)
-    endif(TARGET retrocrt)
-
-    if(CMAKE_SYSTEM_NAME MATCHES Retro68)
-
+    if(RETRO_68K)
         set_target_properties(${name} PROPERTIES OUTPUT_NAME ${name}.code.bin)
 
         add_custom_command(
@@ -102,8 +90,8 @@ function(add_application name)
             DEPENDS ${name} ${rsrc_files})
         add_custom_target(${name}_APPL ALL DEPENDS ${name}.bin)
 
-    elseif(CMAKE_SYSTEM_NAME MATCHES RetroPPC OR CMAKE_SYSTEM_NAME MATCHES RetroCarbon)
-        if(CMAKE_SYSTEM_NAME MATCHES RetroCarbon)
+    elseif(RETRO_PPC OR RETRO_CARBON)
+        if(RETRO_CARBON)
             set(REZ_TEMPLATE "${REZ_TEMPLATES_PATH}/RetroCarbonAPPL.r")
         else()
             set(REZ_TEMPLATE "${REZ_TEMPLATES_PATH}/RetroPPCAPPL.r")
@@ -132,5 +120,3 @@ function(add_application name)
     endif()
 
 endfunction()
-
-cmake_policy(POP)
