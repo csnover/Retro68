@@ -36,6 +36,11 @@ add_compile_options(
 enable_testing()
 
 if(CMAKE_CROSSCOMPILING)
+    # Prefer local CMake modules over ones that are installed to the prefix,
+    # since otherwise making changes to e.g. add_application.cmake will silently
+    # not work
+    list(PREPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
+
     message(STATUS "Building cross-compiled libraries")
     add_subdirectory(libretro)
 
