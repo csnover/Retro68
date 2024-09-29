@@ -35,6 +35,7 @@ find_package(Boost COMPONENTS program_options QUIET)
 
 if (NOT TARGET Boost::program_options)
     message(STATUS "Boost::program_options not found. Building ResourceFiles without ResInfo")
+    return()
 endif()
 
 add_executable(ResInfo ResInfo.cc)
