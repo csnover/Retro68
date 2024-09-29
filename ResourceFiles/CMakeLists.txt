@@ -22,7 +22,10 @@ add_library(ResourceFiles
     ResourceFile.h ResourceFile.cc)
 
 target_include_directories(ResourceFiles INTERFACE .)
-target_link_libraries(ResourceFiles PRIVATE hfsutils::hfs)
+
+if(RETRO_MAC)
+    target_link_libraries(ResourceFiles PRIVATE hfsutils::hfs)
+endif()
 
 if (RETRO_PALMOS)
     target_compile_definitions(ResourceFiles PUBLIC PALMOS)

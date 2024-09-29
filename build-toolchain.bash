@@ -290,22 +290,6 @@ function build_gcc()
 	echo "Built gcc"
 }
 
-function enable_elf2mac()
-{
-	local target="$1"
-
-	echo "Enabling Elf2Mac..."
-	# Move the real linker aside and install symlinks to Elf2Mac
-	# (Elf2Mac is built by cmake below)
-	[[ -n ${VERBOSE} ]] && set -x
-	mv "${PREFIX}/bin/${target}-ld"{,.real}
-	mv "${PREFIX}/${target}/bin/ld"{,.real}
-	ln -s Elf2Mac "${PREFIX}/bin/${target}-ld"
-	ln -s ../../bin/Elf2Mac "${PREFIX}/${target}/bin/ld"
-	[[ -n ${VERBOSE} ]] && set +x
-	echo "Enabled Elf2Mac"
-}
-
 if [[ -n ${BUILD_THIRDPARTY} ]]; then
 	[[ -z ${OVERWRITE} && "${PREFIX}" = "${DEFAULT_PREFIX}" ]] && rm -rf "${PREFIX}"
 	[[ ! -d "${PREFIX}" ]] && mkdir -p "${PREFIX}"
@@ -337,13 +321,11 @@ if [[ -n ${BUILD_THIRDPARTY} ]]; then
 	if [[ -n ${BUILD_68K} ]]; then
 		build_binutils binutils-build --target=m68k-apple-macos
 		build_gcc gcc-build --target=m68k-apple-macos
-		enable_elf2mac m68k-apple-macos
 	fi
 
 	if [[ -n ${BUILD_PALM} ]]; then
 		build_binutils binutils-build-palm --target=m68k-none-palmos
 		build_gcc gcc-build-palm --target=m68k-none-palmos
-		enable_elf2mac m68k-none-palmos
 	fi
 
 	if [[ -n ${BUILD_PPC} ]]; then

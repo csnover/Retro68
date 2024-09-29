@@ -80,21 +80,18 @@ else()
     option(RETRO_68K "Enable Mac 68K" OFF)
     option(RETRO_CARBON "Enable Mac Carbon" OFF)
 
-    # TODO: It would be trivial to only build utilities that apply to the
-    # platforms being built; the only reason this is not done currently is
-    # to make sure no Apple stuff is broken by work to add Palm OS support
-    # (Palm and Mac utilities are so close to the same thing that it seems bad
-    # to have two different systems)
-    add_subdirectory(hfsutils.retro68)
-    add_subdirectory(ConvertDiskImage)
-    add_subdirectory(ConvertObj)
-    add_subdirectory(Elf2Mac)
-    add_subdirectory(LaunchAPPL)
-    add_subdirectory(PalmUtils)
-    add_subdirectory(PEFTools)
-    add_subdirectory(ResourceFiles)
-    add_subdirectory(Rez)
-    add_subdirectory(libelf)
+    if(RETRO_CARBON AND NOT RETRO_PPC)
+        message(WARNING "RETRO_CARBON implicitly enables RETRO_PPC")
+        set(RETRO_PPC ON)
+    endif()
+
+    # Match the convenience options set by the toolchain file so there is no
+    # confusion between cross-compiling and host CMake environments
+    if(RETRO_PPC OR RETRO_68K)
+        set(RETRO_MAC ON)
+    endif()
+
+    set(RETRO_SUPPORTED_ABIS)
 
     function(add_legacy_toolchain name RETRO_ABI RETRO_CARBON)
         set(filename ${name}.toolchain.cmake)
@@ -107,6 +104,7 @@ else()
             cmake/Platform/Retro.cmake
             RENAME ${name}.cmake
             DESTINATION share/cmake/Platform)
+        list(APPEND RETRO_SUPPORTED_ABIS "${RETRO_ABI}")
         set(RETRO_SUPPORTED_ABIS "${RETRO_SUPPORTED_ABIS}" PARENT_SCOPE)
     endfunction()
 
@@ -126,10 +124,41 @@ else()
         list(APPEND RETRO_SUPPORTED_ABIS m68k-none-palmos)
     endif()
 
+    if(NOT RETRO_SUPPORTED_ABIS)
+        message(FATAL_ERROR "No ABIs were enabled. Specify one or more of:\n"
+            "  -DRETRO_PALMOS=ON\n  -DRETRO_PPC=ON\n  -DRETRO_68K=ON")
+    endif()
+
     configure_file(cmake/Retro.toolchain.cmake.in Retro.toolchain.cmake @ONLY)
     install(FILES
         ${CMAKE_CURRENT_BINARY_DIR}/Retro.toolchain.cmake
         cmake/add_application.cmake
         DESTINATION share/cmake)
     install(FILES cmake/Platform/Retro.cmake DESTINATION share/cmake/Platform)
+
+    add_subdirectory(ResourceFiles)
+
+    if(RETRO_MAC)
+        add_subdirectory(hfsutils.retro68)
+        add_subdirectory(ConvertDiskImage)
+        add_subdirectory(LaunchAPPL)
+        add_subdirectory(Rez)
+    endif()
+
+    if(RETRO_68K)
+        add_subdirectory(ConvertObj)
+    endif()
+
+    if(RETRO_68K OR RETRO_PALMOS)
+        add_subdirectory(Elf2Mac)
+        add_subdirectory(libelf)
+    endif()
+
+    if(RETRO_PALMOS)
+        add_subdirectory(PalmUtils)
+    endif()
+
+    if(RETRO_PPC)
+        add_subdirectory(PEFTools)
+    endif()
 endif()
