@@ -667,11 +667,11 @@ m68k_option_override (void)
       break;
 
     case M68K_SYMBOLIC_CALL_BSR_C:
-      m68k_symbolic_call = "jra %c0";
+      m68k_symbolic_call = "jbsr %c0";
       break;
 
     case M68K_SYMBOLIC_CALL_BSR_P:
-      m68k_symbolic_call = "jra %p0";
+      m68k_symbolic_call = "jbsr %p0";
       break;
 
     case M68K_SYMBOLIC_CALL_NONE:

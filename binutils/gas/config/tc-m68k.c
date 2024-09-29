@@ -783,9 +783,13 @@ static void m68k_init_arch (void);
    branch and we are in pcrel mode.  We generate a pea/pea/addi.l/rts quad.  */
 #define BRANCHSUB	11      /* Branch byte, word or long to subroutine   */
 
+/* This relaxation is required for 32-bit displacements on 68000.
+   We add the displacement separately.  */
+#define ADDRREL32       12
+
 /* Note that calls to frag_var need to specify the maximum expansion
-   needed; this is currently 12 bytes for bne/beq pair.  */
-#define FRAG_VAR_SIZE 12
+   needed; this is currently 14 bytes for BRANCHSUB.  */
+#define FRAG_VAR_SIZE 16
 
 /* The fields are:
    How far Forward this mode will reach:
@@ -855,6 +859,11 @@ relax_typeS md_relax_table[] =
   { 32767, -32768,  2, TAB (BRANCHSUB, LONG) },
   {     0,	0,  14, 0 },
   {     1,	1,  0, 0 },
+
+  {	1,	1,  0, 0 },		/* ADDRREL32 doesn't come BYTE.  */
+  { 32767, -32768,  2, TAB (ADDRREL32, LONG) },
+  {	0,	0,  8, 0 },
+  {	1,	1,  0, 0 },
 };
 
 /* These are the machine dependent pseudo-ops.  These are included so
@@ -2584,15 +2593,31 @@ m68k_ip (char *instring)
 		    tmpreg = 0x3B;	/* 7.3 */
 		  else
 		    tmpreg = 0x30 + opP->reg - ADDR;	/* 6.areg */
+
+		  if (!HAVE_LONG_DISP(current_architecture))
+		  {
+		    int mode = isvar (&opP->disp) && opP->reg == PC
+			       ? PCREL1632 : ADDRREL32;
+		    int size = (isvar (&opP->disp)
+				&& opP->reg == PC
+				&& opP->disp.size != SIZE_LONG
+				&& opP->disp.pic_reloc == pic_none)
+			       ? SZ_UNDEF : LONG;
+
+		    add_frag (adds (&opP->disp),
+			      SEXT (offs (&opP->disp)),
+			      TAB (mode, size));
+		    break;
+		  }
+
 		  if (isvar (&opP->disp))
 		    {
 		      if (opP->reg == PC)
 			{
-			  if (HAVE_LONG_DISP(current_architecture)
-                              && (opP->disp.size == SIZE_LONG
+			  if (opP->disp.size == SIZE_LONG
 			      /* If the displacement needs pic
 				 relocation it cannot be relaxed.  */
-			      || opP->disp.pic_reloc != pic_none))
+			      || opP->disp.pic_reloc != pic_none)
 			    {
 			      addword (0x0170);
 			      add_fix ('l', &opP->disp, 1, 2);
@@ -2614,9 +2639,6 @@ m68k_ip (char *instring)
 		  else
 		    addword (0x0170);
 		  addword (nextword >> 16);
-		  if (!HAVE_LONG_DISP(current_architecture))
-		    opP->error =
-		      _("displacement too large for this architecture; needs 68020 or higher");
 		}
 	      else
 		{
@@ -3068,12 +3090,12 @@ m68k_ip (char *instring)
 	    case 'b': /* Unconditional branch */
 	      have_disp = HAVE_LONG_BRANCH (current_architecture);
 	      use_pl = LONG_BRANCH_VIA_COND (current_architecture);
-	      emulate_mode = use_pl ? 0 : 1;
+	      emulate_mode = have_disp || use_pl ? 0 : 1;
 	      goto var_branch;
 
 	    case 's': /* Unconditional subroutine */
 	      have_disp = HAVE_LONG_CALL (current_architecture);
-	      emulate_mode = 2;
+	      emulate_mode = have_disp ? 0 : 2;
 
 	      var_branch:
 	      if (subs (&opP->disp)	/* We can't relax it.  */
@@ -3081,7 +3103,15 @@ m68k_ip (char *instring)
 		     relaxed.  */
 		  || opP->disp.pic_reloc != pic_none)
 		{
-		  if (!have_disp)
+		  if (!subs (&opP->disp) && emulate_mode)
+		    {
+		      add_frag (adds (&opP->disp),
+				SEXT (offs (&opP->disp)),
+				(emulate_mode == 2 ? TAB (BRANCHSUB, SZ_UNDEF)
+				 : TAB (BRANCHBWL, SZ_UNDEF)));
+		      break;
+		    }
+		  else if (!have_disp)
 		    as_warn (_("Can't use long branches on this architecture"));
 		  goto long_branch;
 		}
@@ -3115,7 +3145,7 @@ m68k_ip (char *instring)
 		add_frag (adds (&opP->disp),
 			  SEXT (offs (&opP->disp)),
 			  (emulate_mode == 2 ? TAB (BRANCHSUB, SZ_UNDEF)
-                           : TAB (BRANCHBWL, SZ_UNDEF)));
+					     : TAB (BRANCHBWL, SZ_UNDEF)));
 	      else if (! flag_keep_pcrel)
 		{
 		  if ((the_ins.opcode[0] == 0x6000)
@@ -5151,7 +5181,7 @@ md_convert_frag_1 (fragS *fragP)
           else
             as_bad_where (fragP->fr_file, fragP->fr_line,
 	      _("Conversion of PC relative displacement to addi.l: %x"),
-                fragP->fr_opcode[0] << 8 | fragP->fr_opcode[1]);
+              (unsigned char)fragP->fr_opcode[0] << 8 | (unsigned char)fragP->fr_opcode[1]);
           fragP->fr_fix += 4;
         }
       fixP = fix_new (fragP, (int) (fragP->fr_fix), 4, fragP->fr_symbol,
@@ -5184,6 +5214,7 @@ md_convert_frag_1 (fragS *fragP)
       fixP->fx_pcrel_adjust = 2;
       fragP->fr_fix += 4;
       break;
+    case TAB (ADDRREL32, SHORT):
     case TAB (ABSTOPCREL, SHORT):
       fixP = fix_new (fragP, fragP->fr_fix, 2, fragP->fr_symbol,
 		      fragP->fr_offset, 1, RELAX_RELOC_PC16);
@@ -5202,6 +5233,90 @@ md_convert_frag_1 (fragS *fragP)
       fixP = fix_new (fragP, fragP->fr_fix, 4, fragP->fr_symbol,
 		      fragP->fr_offset, 0, RELAX_RELOC_ABS32);
       fragP->fr_fix += 4;
+      break;
+    case TAB (ADDRREL32, LONG):
+      if (fragP->fr_opcode[0] == 0x4a /* tst */
+	  || (fragP->fr_opcode[0] & 0xf0) == 0xb0 /* cmp */
+	  || (fragP->fr_opcode[0] & 0xf0) == 0xd0 /* add */
+	  || (fragP->fr_opcode[0] & 0xf0) == 0x90) /* sub */
+	{
+	  char hi = fragP->fr_opcode[0];
+	  char lo = fragP->fr_opcode[1];
+	  // move.l %An,-(%sp); addi.l #disp,(%sp); <op>.l (%sp)+[,dst]
+	  fragP->fr_opcode[0] = 0x2f;           /* move.l */
+	  fragP->fr_opcode[1] = 8 | (lo & 7);   /* Mode 2.An */
+	  *buffer_address++ = 0x06;             /* Put in addi long (0x0697).  */
+	  *buffer_address++ = (char) 0x97;
+	  fragP->fr_fix += 2;
+	  fixP = fix_new (fragP, fragP->fr_fix, 4, fragP->fr_symbol,
+			  fragP->fr_offset, 0, RELAX_RELOC_ABS32);
+	  fragP->fr_fix += 4;
+	  buffer_address += 4;
+	  *buffer_address++ = hi;                   /* Put in original op.  */
+	  *buffer_address++ = (lo & ~0x3f) | 0x1f;  /* Mode 3.7 ((%sp)+).  */
+	  fragP->fr_fix += 2;
+	}
+      else if ((fragP->fr_opcode[0] & 0xc0) == 0
+		&& (fragP->fr_opcode[0] & 0x30) != 0) /* move */
+	{
+	  // move.l %Rn,%An; add[ai].l #disp,%Rn
+	  int op = ((unsigned char)fragP->fr_opcode[0] << 8) | (unsigned char)fragP->fr_opcode[1];
+	  int src = (op & 0x3f);
+	  int dst = (op >> 6) & 0x3f;
+	  int modeMask = 0x38;
+	  int mode0 = 0 << 3; /* Dn */
+	  int mode1 = 1 << 3; /* An */
+	  int mode2 = 2 << 3; /* (An) */
+	  int mode3 = 3 << 3; /* (An)+ */
+	  int mode4 = 4 << 3; /* -(An) */
+	  int mode6 = 6 << 3; /* (bd,An,Xn) */
+	  int dstMode = dst & modeMask;
+
+	  if ((src & modeMask) != mode6)
+	    as_bad_where (fragP->fr_file, fragP->fr_line,
+	      _("Conversion of long displacement to addi.l: %x"), op);
+
+	  // convert source to non-displaced address register
+	  fragP->fr_opcode[1] &= ~modeMask;
+	  fragP->fr_opcode[1] |= mode2;
+
+	  if (dstMode == mode3)
+	    {
+	      // Remove plus from destination on first insn
+	      // Destination mode straddles bytes but 3 to 2 requires only
+	      // clearing the low bit of the mode
+	      fragP->fr_opcode[0] &= ~0x40;
+	    }
+	  else if (dstMode == mode4)
+	    {
+	      // Remove minus from destination on second insn
+	      dst &= ~modeMask;
+	      dst |= mode2;
+	    }
+
+	  if (dstMode == mode0 || dstMode == mode1)
+	    {
+	      /* adda.l #DISP,Rn */
+	      int dstReg = dst & 7;
+	      *buffer_address++ = (char) 0xd0 | (dstReg << 1);
+	      *buffer_address++ = (char) 0xbc | (dstMode == mode1 ? /* An */ 0x40 : 0);
+	    }
+	  else
+	    {
+	      /* addi.l #DISP,(An) */
+	      *buffer_address++ = 0x06;
+	      *buffer_address++ = (char) 0x80 | dst;
+	    }
+	  fragP->fr_fix += 2;
+
+	  fixP = fix_new (fragP, fragP->fr_fix, 4, fragP->fr_symbol,
+			  fragP->fr_offset, 0, RELAX_RELOC_ABS32);
+	  fragP->fr_fix += 4;
+	}
+      else
+	as_bad_where (fragP->fr_file, fragP->fr_line,
+	  _("Conversion of long displacement: %x"),
+	  (unsigned char)fragP->fr_opcode[0] << 8 | (unsigned char)fragP->fr_opcode[1]);
       break;
     }
   if (fixP)
@@ -5271,6 +5386,7 @@ md_estimate_size_before_relax (fragS *fragP, segT segment)
     case TAB (DBCCLBR, SZ_UNDEF):
     case TAB (DBCCABSJ, SZ_UNDEF):
     case TAB (PCREL1632, SZ_UNDEF):
+    case TAB (ADDRREL32, SZ_UNDEF):
       {
 	if ((S_GET_SEGMENT (fragP->fr_symbol) == segment
 	     && relaxable_symbol (fragP->fr_symbol))
@@ -5344,6 +5460,9 @@ md_estimate_size_before_relax (fragS *fragP, segT segment)
 	    }
 	}
       break;
+    case TAB (ADDRREL32, LONG):
+      if ((fragP->fr_opcode[0] & 0xc0) == 0 && (fragP->fr_opcode[0] & 0x30) != 0) /* move */
+	return md_relax_table[fragP->fr_subtype].rlx_length - 2;
     default:
       break;
     }
