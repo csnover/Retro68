@@ -15,9 +15,20 @@
 #   You should have received a copy of the GNU General Public License
 #   along with Retro68.  If not, see <http://www.gnu.org/licenses/>.
 
-cmake_minimum_required(VERSION 3.15)
-cmake_policy(VERSION 3.15...3.30)
+cmake_minimum_required(VERSION 3.18)
+cmake_policy(VERSION 3.18...3.30)
+
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
+    message(FATAL_ERROR "In-source builds are not allowed. Please specify a "
+        "build directory when running CMake "
+        "(`${CMAKE_COMMAND} -S ${CMAKE_SOURCE_DIR} -B <dir_name>`).\n"
+        "You should also delete these files, which have already been generated:\n"
+        "* ${CMAKE_BINARY_DIR}/CMakeCache.txt\n"
+        "* ${CMAKE_BINARY_DIR}/CMakeFiles")
+endif()
+
 project(Retro)
+enable_testing()
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED TRUE)
@@ -33,22 +44,25 @@ add_compile_options(
     $<$<COMPILE_LANGUAGE:C>:-Werror=strict-prototypes>
 )
 
-enable_testing()
+# Prefer local CMake modules over ones that are installed to the prefix,
+# since otherwise making changes to e.g. add_application.cmake will silently
+# not work
+list(PREPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
-if(CMAKE_CROSSCOMPILING)
-    # Prefer local CMake modules over ones that are installed to the prefix,
-    # since otherwise making changes to e.g. add_application.cmake will silently
-    # not work
-    list(PREPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
-
-    message(STATUS "Building cross-compiled libraries")
+if(CMAKE_CROSSCOMPILING AND RETRO_BOOTSTRAP)
+    message(STATUS "Bootstrapping target")
     add_subdirectory(libretro)
 
-    # add library path so that GCC picks up the freshly-built libretro
-#    link_directories(${CMAKE_CURRENT_BINARY_DIR}/libretro)
-#    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libretro)
-#    set(REZ_INCLUDE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/libretro:${CMAKE_INSTALL_PREFIX}/RIncludes" )
-
+    if(RETRO_MAC)
+        set(RETRO_SDK_DIR "" CACHE STRING "Path to Mac OS SDK. Can be MPW or multiversal")
+        if(NOT RETRO_SDK_DIR)
+            message(WARNING "-DRETRO_SDK_DIR not set. Defaulting to built-in multiversal")
+            set(RETRO_SDK_DIR "${CMAKE_CURRENT_SOURCE_DIR}/multiversal" CACHE STRING "" FORCE)
+        endif()
+        include(RetroMacInterfaces)
+    endif()
+elseif(CMAKE_CROSSCOMPILING)
+    message(STATUS "Building target applications")
     include(add_application)
     add_subdirectory(TestApps)
 
@@ -75,71 +89,16 @@ if(CMAKE_CROSSCOMPILING)
 else()
     message(STATUS "Building host applications")
 
-    option(RETRO_PALMOS "Enable Palm OS" OFF)
-    option(RETRO_PPC "Enable Mac PowerPC" OFF)
-    option(RETRO_68K "Enable Mac 68K" OFF)
-    option(RETRO_CARBON "Enable Mac Carbon" OFF)
+    include(FeatureSummary)
+    include(RetroExtraHelp)
+    include(RetroOptions)
+    include(RetroToolchains)
+    include(RetroBuildCompiler)
 
-    if(RETRO_CARBON AND NOT RETRO_PPC)
-        message(WARNING "RETRO_CARBON implicitly enables RETRO_PPC")
-        set(RETRO_PPC ON)
-    endif()
-
-    # Match the convenience options set by the toolchain file so there is no
-    # confusion between cross-compiling and host CMake environments
-    if(RETRO_PPC OR RETRO_68K)
-        set(RETRO_MAC ON)
-    endif()
-
-    set(RETRO_SUPPORTED_ABIS)
-
-    function(add_legacy_toolchain name RETRO_ABI RETRO_CARBON)
-        set(filename ${name}.toolchain.cmake)
-        string(TOLOWER "${filename}" filename)
-        configure_file(cmake/legacy-toolchain.cmake.in ${filename} @ONLY)
-        install(FILES
-            ${CMAKE_CURRENT_BINARY_DIR}/${filename}
-            DESTINATION share/cmake)
-        install(FILES
-            cmake/Platform/Retro.cmake
-            RENAME ${name}.cmake
-            DESTINATION share/cmake/Platform)
-        list(APPEND RETRO_SUPPORTED_ABIS "${RETRO_ABI}")
-        set(RETRO_SUPPORTED_ABIS "${RETRO_SUPPORTED_ABIS}" PARENT_SCOPE)
-    endfunction()
-
-    if(RETRO_68K)
-        add_legacy_toolchain(Retro68 m68k-apple-macos OFF)
-    endif()
-
-    if(RETRO_PPC)
-        add_legacy_toolchain(RetroPPC powerpc-apple-macos OFF)
-        if(RETRO_CARBON)
-            add_legacy_toolchain(RetroCarbon powerpc-apple-macos ON)
-        endif()
-    endif()
-
-    # No legacy toolchain file for this new target
-    if(RETRO_PALMOS)
-        list(APPEND RETRO_SUPPORTED_ABIS m68k-none-palmos)
-    endif()
-
-    if(NOT RETRO_SUPPORTED_ABIS)
-        message(FATAL_ERROR "No ABIs were enabled. Specify one or more of:\n"
-            "  -DRETRO_PALMOS=ON\n  -DRETRO_PPC=ON\n  -DRETRO_68K=ON")
-    endif()
-
-    configure_file(cmake/Retro.toolchain.cmake.in Retro.toolchain.cmake @ONLY)
-    install(FILES
-        ${CMAKE_CURRENT_BINARY_DIR}/Retro.toolchain.cmake
-        cmake/add_application.cmake
-        DESTINATION share/cmake)
-    install(FILES cmake/Platform/Retro.cmake DESTINATION share/cmake/Platform)
-
+    add_subdirectory(hfsutils.retro68)
     add_subdirectory(ResourceFiles)
 
     if(RETRO_MAC)
-        add_subdirectory(hfsutils.retro68)
         add_subdirectory(ConvertDiskImage)
         add_subdirectory(LaunchAPPL)
         add_subdirectory(Rez)
@@ -161,4 +120,20 @@ else()
     if(RETRO_PPC)
         add_subdirectory(PEFTools)
     endif()
+
+    list(JOIN RETRO_SUPPORTED_ABIS "\n * " abi_string)
+    message(STATUS "Building ABIs:\n\n * ${abi_string}\n")
+
+    include(GetTargets)
+    get_exe_targets(targets "${CMAKE_CURRENT_LIST_DIR}")
+    list(JOIN targets "\n * " targets)
+    feature_summary(
+        DESCRIPTION "Enabled components:\n\n * ${targets}"
+        WHAT ENABLED_FEATURES)
+    feature_summary(
+        DESCRIPTION "Disabled components:\n"
+        WHAT DISABLED_FEATURES)
+    feature_summary(
+        DESCRIPTION "Missing optional packages:\n"
+        WHAT PACKAGES_NOT_FOUND INCLUDE_QUIET_PACKAGES)
 endif()

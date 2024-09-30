@@ -19,10 +19,12 @@ find_package(Boost COMPONENTS wave program_options QUIET)
 
 if(NOT TARGET Boost::program_options)
     message(STATUS "Boost::program_options not found. Not building Rez")
+    add_feature_info("Rez" FALSE "")
     return()
 endif()
 if(NOT TARGET Boost::wave)
     message(STATUS "Boost::wave not found. Not building Rez")
+    add_feature_info("Rez" FALSE "")
     return()
 endif()
 
@@ -30,6 +32,7 @@ find_package(BISON 3.0.2 QUIET)
 
 if(NOT BISON_FOUND)
     message(STATUS "BISON not found. Not building Rez")
+    add_feature_info("Rez" FALSE "")
     return()
 endif()
 

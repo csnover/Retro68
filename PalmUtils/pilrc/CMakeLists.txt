@@ -47,6 +47,7 @@ if(TARGET GTK2::gtk)
     install(TARGETS pilrcui)
 else()
     message(STATUS "GTK not found. Not building PilRC UI")
+    add_feature_info("pilrcui" FALSE "")
 endif()
 
 install(

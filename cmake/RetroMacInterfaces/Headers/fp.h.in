@@ -1,0 +1,17 @@
+#ifndef __FP__WRAP__
+#define __FP__WRAP__
+
+#include "math.h"
+
+#pragma push_macro("__MWERKS__")
+#define __MWERKS__ 0x6666
+#define __cmath__
+
+short relation(double x, double y);
+
+@CONTENT@
+
+#pragma pop_macro("__MWERKS__")
+#undef __cmath__
+
+#endif /* __FP__WRAP__ */

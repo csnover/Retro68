@@ -23,9 +23,9 @@ add_library(ResourceFiles
 
 target_include_directories(ResourceFiles INTERFACE .)
 
-if(RETRO_MAC)
-    target_link_libraries(ResourceFiles PRIVATE hfsutils::hfs)
-endif()
+# Technically Palm OS does not need this but conditionally compiling this code
+# seems like more trouble than it is worth
+target_link_libraries(ResourceFiles PRIVATE hfsutils::hfs)
 
 if (RETRO_PALMOS)
     target_compile_definitions(ResourceFiles PUBLIC PALMOS)
