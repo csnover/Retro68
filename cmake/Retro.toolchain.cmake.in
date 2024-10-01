@@ -64,7 +64,7 @@ if(RETRO_LEGACY_TOOLCHAIN)
 
     set(CMAKE_SYSTEM_PREFIX_PATH "${RETRO_ROOT}/${RETRO_ABI}")
     set(REZ "${RETRO_ROOT}/bin/Rez")
-    set(REZ_INCLUDE_PATH "${RETRO_ROOT}/${RETRO_ABI}/RIncludes")
+    set(REZ_INCLUDE_PATH "${RETRO_ROOT}/share/Retro68/RIncludes;${RETRO_ROOT}/share/Retro68/MacSDK/RIncludes")
     set(REZ_TEMPLATES_PATH ${REZ_INCLUDE_PATH})
     include(add_application)
 else()

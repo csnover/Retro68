@@ -27,6 +27,13 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
         "* ${CMAKE_BINARY_DIR}/CMakeFiles")
 endif()
 
+# In case we are bootstrapping, libretro does not exist yet, so when CMake tries
+# to verify the compiler works when `project` is called, it will explode if it
+# tries to link an executable
+if(RETRO_BOOTSTRAP)
+    set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
+endif()
+
 project(Retro)
 enable_testing()
 
@@ -49,18 +56,21 @@ add_compile_options(
 # not work
 list(PREPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake")
 
+include(FeatureSummary)
+include(RetroOptions)
+include(RetroUtilities)
+
 if(CMAKE_CROSSCOMPILING AND RETRO_BOOTSTRAP)
     message(STATUS "Bootstrapping target")
-    add_subdirectory(libretro)
 
     if(RETRO_MAC)
-        set(RETRO_SDK_DIR "" CACHE STRING "Path to Mac OS SDK. Can be MPW or multiversal")
-        if(NOT RETRO_SDK_DIR)
-            message(WARNING "-DRETRO_SDK_DIR not set. Defaulting to built-in multiversal")
-            set(RETRO_SDK_DIR "${CMAKE_CURRENT_SOURCE_DIR}/multiversal" CACHE STRING "" FORCE)
-        endif()
         include(RetroMacInterfaces)
+    else()
+        include(RetroPalmInterfaces)
     endif()
+
+    add_sdk("${RETRO_SDK_DIR}")
+    add_subdirectory(libretro)
 elseif(CMAKE_CROSSCOMPILING)
     message(STATUS "Building target applications")
     include(add_application)
@@ -89,9 +99,7 @@ elseif(CMAKE_CROSSCOMPILING)
 else()
     message(STATUS "Building host applications")
 
-    include(FeatureSummary)
     include(RetroExtraHelp)
-    include(RetroOptions)
     include(RetroToolchains)
     include(RetroBuildCompiler)
 
@@ -124,7 +132,6 @@ else()
     list(JOIN RETRO_SUPPORTED_ABIS "\n * " abi_string)
     message(STATUS "Building ABIs:\n\n * ${abi_string}\n")
 
-    include(GetTargets)
     get_exe_targets(targets "${CMAKE_CURRENT_LIST_DIR}")
     list(JOIN targets "\n * " targets)
     feature_summary(

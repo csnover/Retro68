@@ -1,0 +1,20 @@
+*cpp:
++ -isystem @CMAKE_INSTALL_PREFIX@/@cincludes@
+
+*cc1:
++ -isystem @CMAKE_INSTALL_PREFIX@/@cincludes@
+
+*link:
++ -L@CMAKE_INSTALL_PREFIX@/@libs@
+
+*rez_compiler:
+ @CMAKE_INSTALL_PREFIX@/bin/Rez
+
+@rez:
+ %(rez_compiler) -I @CMAKE_INSTALL_PREFIX@/@rincludes@ %{o*} %i
+
+.r:
+ @rez
+
+.R:
+ @rez

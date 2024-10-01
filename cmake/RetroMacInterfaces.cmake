@@ -3,35 +3,14 @@
 
 #[=[ Builds the SDK interface and compiler specs files for Mac OS. #]=]
 
-#[[
-Recursively search within a directory to find a file with the given filename.
-Returns the absolute path of the directory containing the file.
-#]]
-function(find_any_path var basedir)
-    get_filename_component(basedir "${basedir}" ABSOLUTE)
-    foreach(file IN LISTS ARGN)
-        if(EXISTS "${basedir}/${file}")
-            set(${var} "${basedir}" PARENT_SCOPE)
-            return()
-        endif()
-    endforeach()
-
-    list(TRANSFORM ARGN PREPEND "${basedir}/*/")
-    file(GLOB_RECURSE file ${ARGN})
-    if(file)
-        list(GET file 0 file)
-        get_filename_component(file "${file}" DIRECTORY)
-        set(${var} "${file}" PARENT_SCOPE)
-    else()
-        set(${var} NOTFOUND PARENT_SCOPE)
-    endif()
-endfunction()
+include(GNUInstallDirs)
+include(RetroUtilities)
 
 #[[
 Tries to find a working copy of MPW in the given directory. If found,
 creates a libinterface target that uses the copy of MPW.
 #]]
-function(_find_libinterface_mpw dir)
+function(_try_add_mpw dir)
     find_any_path(cincludes "${dir}" ConditionalMacros.h)
     find_any_path(rincludes "${dir}" ConditionalMacros.r)
 
@@ -102,45 +81,11 @@ function(_find_libinterface_mpw dir)
     )
 endfunction()
 
-#[[ Adds the libinterface target to the build system. #]]
-function(_add_libinterface_target)
-    set(out_dir "${CMAKE_CURRENT_BINARY_DIR}/libinterface")
-    if(RETRO_68K)
-        set(lib_dir "lib68k")
-    else()
-        set(lib_dir "libppc")
-    endif()
-
-    set(outputs "${out_dir}/CIncludes/ConditionalMacros.h")
-
-    add_custom_command(
-        OUTPUT ${outputs}
-        COMMENT "Running multiversal"
-        COMMAND "${CMAKE_COMMAND}"
-        -E env "PATH=\"${CMAKE_SYSTEM_PROGRAM_PATH}:$ENV{PATH}\""
-        "${CMAKE_COMMAND}"
-        -DRETRO_68K=${RETRO_68K}
-        -DRETRO_PPC=${RETRO_PPC}
-        -DRETRO_CARBON=${RETRO_CARBON}
-        "-DRETRO_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}"
-        "-DRETRO_BINARY_DIR=${out_dir}"
-        "-DCMAKE_AR=${CMAKE_AR}"
-        ${ARGN}
-        -P "${CMAKE_CURRENT_LIST_FILE}"
-    )
-    add_custom_target(libinterface ALL DEPENDS ${outputs})
-    set_target_properties(libinterface PROPERTIES
-        _LI_CINCLUDES "${out_dir}/CIncludes"
-        _LI_RINCLUDES "${out_dir}/RIncludes"
-        _LI_LIBRARIES "${out_dir}/${lib_dir}"
-    )
-endfunction()
-
 #[[
 Tries to find a working copy of multiversal in the given directory. If found,
 creates a libinterface target that uses multiversal.
 #]]
-function(_find_libinterface_multiversal dir)
+function(_try_add_multiversal dir)
     if(NOT EXISTS "${dir}/make-multiverse.rb"
         AND dir STREQUAL "${CMAKE_CURRENT_SOURCE_DIR}/multiversal")
         find_program(git git QUIET)
@@ -184,51 +129,81 @@ function(_find_libinterface_multiversal dir)
 
     message(STATUS "Found multiversal: ${multiverse}")
     _add_libinterface_target(
-        -DRETRO_BUILD_MULTIVERSAL=1
+        "-DRETRO_MULTIVERSAL_DIR=${multiverse}"
         "-DRETRO_RUBY=${ruby}"
     )
 endfunction()
 
-#[[ The configuration step. #]]
-function(configure_libinterface)
-    _find_libinterface_multiversal("${RETRO_SDK_DIR}")
-    if(NOT TARGET libinterface)
-        _find_libinterface_mpw("${RETRO_SDK_DIR}")
-    endif()
-    if(NOT TARGET libinterface)
-        message(FATAL_ERROR "Could not find usable SDK in '${RETRO_SDK_DIR}'.")
-    endif()
-
-    get_target_property(cincludes libinterface _LI_CINCLUDES)
-    get_target_property(rincludes libinterface _LI_RINCLUDES)
-    get_target_property(libs libinterface _LI_LIBRARIES)
-    set(specs
-        "*cpp:\n+ -isystem @cincludes@\n"
-        "*cc1:\n+ -isystem @cincludes@\n"
-        "*link:\n+ -L@libs@\n")
-
-    find_program(REZ Rez QUIET)
-    if(REZ)
-        string(APPEND specs
-            "*rez_compiler:\n ${REZ}\n"
-            "@rez:\n %(rez_compiler) -I @rincludes@ %{o*} %i\n"
-            ".r:\n @rez\n"
-            ".R:\n @rez\n")
+#[[ Adds the libinterface target to the build system. #]]
+function(_add_libinterface_target #[[ extra_args... ]])
+    set(out_dir "${CMAKE_CURRENT_BINARY_DIR}/libinterface")
+    if(RETRO_68K)
+        set(lib_dir "lib68k")
+    else()
+        set(lib_dir "libppc")
     endif()
 
-    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/specs" "${specs}")
+    # Theoretically, all output files should be covered in case any of the
+    # output files get modified, but in practice they are going into the build
+    # directory anyway so it does not need to be super robust
+    set(outputs "${out_dir}/CIncludes/ConditionalMacros.h")
+
+    add_custom_command(
+        OUTPUT ${outputs}
+        COMMENT "Building libinterface"
+        COMMAND "${CMAKE_COMMAND}"
+        -E env "PATH=\"${CMAKE_SYSTEM_PROGRAM_PATH}:$ENV{PATH}\""
+        "${CMAKE_COMMAND}"
+        -DRETRO_68K=${RETRO_68K}
+        -DRETRO_PPC=${RETRO_PPC}
+        -DRETRO_CARBON=${RETRO_CARBON}
+        "-DRETRO_PRECOMPILED_PPCLIBS_DIR=${CMAKE_CURRENT_SOURCE_DIR}/ImportLibraries"
+        "-DRETRO_BINARY_DIR=${out_dir}"
+        "-DCMAKE_AR=${CMAKE_AR}"
+        ${ARGN}
+        -P "${CMAKE_CURRENT_SOURCE_DIR}/ConvertInterfaces/ConvertInterfaces.cmake"
+    )
+
+    # libinterface should always build even if nothing links to it since it is
+    # a valid target for installation on its own
+    add_custom_target(libinterface-build ALL DEPENDS ${outputs})
+
+    # libretro needs an interface target to link to so it can be built before
+    # libinterface has been installed
+    add_library(libinterface INTERFACE)
+    add_dependencies(libinterface libinterface-build)
+    target_include_directories(libinterface SYSTEM INTERFACE "${out_dir}/CIncludes")
+    target_link_directories(libinterface INTERFACE "${out_dir}/${lib_dir}")
+
+    # Install SDK to the side because some header filenames conflict with
+    # standard library headers, they can be shared by all Mac OS targets, and it
+    # makes it easier to upgrade or replace the compiler and SDK in isolation
+    set(install_dir "${CMAKE_INSTALL_DATADIR}/Retro68/MacSDK")
     install(
-        FILES "${CMAKE_CURRENT_BINARY_DIR}/specs"
-        DESTINATION "${CMAKE_INSTALL_LIBDIR}/gcc/${RETRO_ABI}/specs")
-    install(
-        DIRECTORY "${cincludes}" "${rincludes}" "${libs}"
-        DESTINATION "${CMAKE_INSTALL_DATADIR}/libinterface")
+        DIRECTORY "${out_dir}/CIncludes" "${out_dir}/RIncludes" "${out_dir}/${lib_dir}"
+        DESTINATION "${install_dir}")
+
+    # Specs file teaches the compiler to use the SDK
+    set(specs_destination "${CMAKE_INSTALL_LIBDIR}/gcc/${RETRO_ABI}/specs")
+    install(CODE "
+        set(specs_source \"${CMAKE_CURRENT_FUNCTION_LIST_DIR}/RetroMacInterfaces.specs.in\")
+        set(specs_destination \"${specs_destination}\")
+        set(cincludes \"${install_dir}/CIncludes\")
+        set(rincludes \"${install_dir}/RIncludes\")
+        set(libs \"${install_dir}/${libdir}\")")
+    install(CODE [[
+        message(STATUS "Installing: ${CMAKE_INSTALL_PREFIX}/${specs_destination}")
+        configure_file("${specs_source}" "${CMAKE_INSTALL_PREFIX}/${specs_destination}" @ONLY)
+    ]])
 endfunction()
 
-if(CMAKE_SCRIPT_MODE_FILE)
-    include("${CMAKE_CURRENT_LIST_DIR}/RetroMacInterfaces/BuildStep.cmake")
-    build_libinterface()
-else()
-    include(GNUInstallDirs)
-    configure_libinterface()
-endif()
+#[[ Try to detect and add a compatible SDK from the given directory. #]]
+function(add_sdk dir)
+    _try_add_multiversal("${dir}")
+    if(NOT TARGET libinterface)
+        _try_add_mpw("${dir}")
+    endif()
+    if(NOT TARGET libinterface)
+        message(FATAL_ERROR "Could not find usable SDK in '${dir}'.")
+    endif()
+endfunction()

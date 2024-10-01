@@ -21,6 +21,8 @@
 #    see the files COPYING and COPYING.RUNTIME respectively.  If not, see
 #    <http://www.gnu.org/licenses/>.
 
+include(GNUInstallDirs)
+
 add_library(retrocrt)
 target_sources(retrocrt PRIVATE
     malloc.c
@@ -28,6 +30,7 @@ target_sources(retrocrt PRIVATE
     consolehooks.c
 )
 target_compile_options(retrocrt PRIVATE -ffunction-sections)
+target_link_libraries(retrocrt PRIVATE libinterface)
 install(TARGETS retrocrt)
 
 if(RETRO_68K OR RETRO_PALMOS)
@@ -58,7 +61,8 @@ if(RETRO_68K OR RETRO_PALMOS)
             Retro68APPL.r
             start.c
         )
-        install(FILES Retro68.r Retro68APPL.r DESTINATION RIncludes)
+        install(FILES Retro68.r Retro68APPL.r
+            DESTINATION "${CMAKE_INSTALL_DATADIR}/Retro68/RIncludes")
     endif()
 else()
     target_sources(retrocrt PRIVATE
@@ -70,13 +74,13 @@ else()
         target_sources(retrocrt PRIVATE
             qdglobals.c
             RetroPPCAPPL.r)
-        install(FILES RetroPPCAPPL.r DESTINATION RIncludes)
+        install(FILES RetroPPCAPPL.r DESTINATION "${CMAKE_INSTALL_DATADIR}/Retro68/RIncludes")
     else()
         # different library name for Carbon
         # (Carbon shares the powerpc-apple-macos/ directory with Classic PPC)
         set_target_properties(retrocrt PROPERTIES OUTPUT_NAME retrocrt-carbon)
 
         target_sources(retrocrt PRIVATE RetroCarbonAPPL.r)
-        install(FILES RetroCarbonAPPL.r DESTINATION RIncludes)
+        install(FILES RetroCarbonAPPL.r DESTINATION "${CMAKE_INSTALL_DATADIR}/Retro68/RIncludes")
     endif()
 endif()

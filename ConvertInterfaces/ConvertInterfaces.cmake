@@ -1,9 +1,10 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
 # SPDX-FileCopyrightText: © Retro68 contributors
 
-#[=[ The build step for generating Mac OS SDK files. #]=]
+#[=[ A CMake script for transforming Mac OS SDK files into a format usable by
+     modern GCC. #]=]
 
-#[[ Transforms MPW CIncludes to support modern compilers on modern OS. #]]
+#[[ Transforms MPW CIncludes. #]]
 function(build_mpw_cincludes dirs out_dir)
     # Maybe Carbon was detected in a separate directory, causing there to be
     # more than one include directory
@@ -82,7 +83,7 @@ function(build_mpw_cincludes dirs out_dir)
     endforeach()
 endfunction()
 
-#[[ Transforms MPW RIncludes to support modern compilers on modern OS. #]]
+#[[ Transforms MPW RIncludes. #]]
 function(build_mpw_rincludes dir out_dir)
     # Must glob and then filter because glob is case-insensitive on
     # case-insensitive filesystems
@@ -105,12 +106,12 @@ function(build_mpw_libraries_68k dir out_dir)
         get_filename_component(basename "${file}" NAME_WLE)
         set(out_file "lib${basename}.a")
 
-        message(STATUS "  ${file} => ${out_file}")
+        message(STATUS "  ${file} => ${out_dir}/${out_file}")
         execute_process(
             COMMAND "${RETRO_CONVERT_OBJ}" "${dir}/${file}"
             COMMAND "${CMAKE_ASM_COMPILER}" -o "${out_dir}/${file}" -c -x assembler -
             COMMAND_ERROR_IS_FATAL LAST
-            RESULTS_VARIABLE result)
+            RESULTS_VARIABLE results)
         if(results STREQUAL "0;0")
             execute_process(
                 COMMAND "${CMAKE_AR}" cqs
@@ -186,14 +187,14 @@ function(build_mpw_libraries_ppc_static dir out_dir)
     endforeach()
 endfunction()
 
-#[[ Builds libinterface for GCC. #]]
-function(build_libinterface)
-    if(RETRO_BUILD_MULTIVERSAL)
+#[[ The main function. #]]
+function(main)
+    if(RETRO_MULTIVERSAL_DIR)
         execute_process(
             COMMAND "${RETRO_RUBY}" make-multiverse.rb
                 -G CIncludes
                 -o "${RETRO_BINARY_DIR}"
-            WORKING_DIRECTORY "${RETRO_SOURCE_DIR}/multiversal"
+            WORKING_DIRECTORY "${RETRO_MULTIVERSAL_DIR}"
             RESULT_VARIABLE result
         )
         if(NOT result EQUAL 0)
@@ -201,7 +202,7 @@ function(build_libinterface)
         endif()
         if(RETRO_PPC)
             copy_mpw_libraries_ppc_shared(
-                "${RETRO_SOURCE_DIR}/ImportLibraries"
+                "${RETRO_PRECOMPILED_PPCLIBS_DIR}"
                 "${RETRO_BINARY_DIR}/libppc")
         endif()
     else()
@@ -213,10 +214,16 @@ function(build_libinterface)
         elseif(RETRO_PPC)
             file(MAKE_DIRECTORY "${RETRO_BINARY_DIR}/libppc")
             build_mpw_libraries_ppc_shared("${RETRO_SHAREDLIBS_DIR}"
-                "${RETRO_SOURCE_DIR}/ImportLibraries"
+                "${RETRO_PRECOMPILED_PPCLIBS_DIR}"
                 "${RETRO_BINARY_DIR}/libppc")
             build_mpw_libraries_ppc_static("${RETRO_LIBS_DIR}"
                 "${RETRO_BINARY_DIR}/libppc")
         endif()
     endif()
 endfunction()
+
+if(CMAKE_SCRIPT_MODE_FILE)
+    main()
+else()
+    message(FATAL_ERROR "This is a build time script.")
+endif()

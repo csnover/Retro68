@@ -38,8 +38,9 @@ target_link_libraries(Elf2Mac PRIVATE ResourceFiles ELF)
 target_include_directories(Elf2Mac PRIVATE ${CMAKE_INSTALL_PREFIX}/include)
 
 install(TARGETS Elf2Mac)
-install(CODE "set(RETRO_SUPPORTED_ABIS \"${RETRO_SUPPORTED_ABIS}\")")
-install(CODE "set(install_bindir ${CMAKE_INSTALL_BINDIR})")
+install(CODE "
+    set(RETRO_SUPPORTED_ABIS \"${RETRO_SUPPORTED_ABIS}\")
+    set(install_bindir ${CMAKE_INSTALL_BINDIR})")
 install(CODE [[
     foreach(retro_abi IN LISTS RETRO_SUPPORTED_ABIS)
         set(exe_path "${CMAKE_INSTALL_PREFIX}/${install_bindir}")
