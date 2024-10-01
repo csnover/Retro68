@@ -7,6 +7,7 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <vector>
 
 #ifdef __APPLE__
 #include <sys/xattr.h>

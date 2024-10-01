@@ -1179,6 +1179,7 @@ void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segm
             }
             continue;
         }
+#ifdef PALMOS
         else if (codeID != 1 && isPalm())
         {
             std::string code(section.view());
@@ -1193,6 +1194,7 @@ void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segm
 
             rsrc.addResource(Resource(m_codeOsType, codeID, std::move(code)));
         }
+#endif
         else
             rsrc.addResource(Resource(m_codeOsType, codeID,
                 std::string(section.view()),
@@ -1230,8 +1232,10 @@ void Object::MultiSegmentApp(const std::string &filename, const SegmentMap &segm
         }
     }
 
+#ifdef PALMOS
     if (isPalm())
         emitPref(rsrc);
+#endif
 
     finalizeFile(filename, file);
 }
